@@ -1,0 +1,52 @@
+SELECT cartodb_id, the_geom, the_geom_webmercator FROM poets_lines
+UNION
+SELECT 
+	cities.cartodb_id,
+	cities.the_geom,
+	cities.the_geom_webmercator
+FROM cities, 
+	(SELECT 
+		poets.poetid,
+		poets.poet_name,
+		poets.poet_link,
+		poets.sources,
+		poets_cities.cityid
+		FROM poets, poets_cities 
+		WHERE poets.poetid = poets_cities.poetid 
+		AND poets.poetid = 3
+		ORDER BY cityid ASC, poet_name ASC) sorted_poets
+WHERE cities.cityid = sorted_poets.cityid
+GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+,
+	cities.city_name,
+	cities.government,
+	sorted_poets.cityid,
+	COUNT(sorted_poets.cityid) as selected_number,
+	string_agg(sorted_poets.sources, ', ') as selected_sources,
+	string_agg(sorted_poets.poet_name, ', ') as selected_names,
+	string_agg(sorted_poets.poet_link, ', ') as selected_links
+	
+this successfully creates a table but the following css leaves points in the middle of the lines, not at the cities:
+
+/** simple visualization */
+
+#poets_lines{
+  polygon-fill: #FF6600;
+  line-color: #FFFFFF;
+  line-width: 1;
+  polygon-opacity: 0.7;
+  line-opacity: 1;
+}
+
+#cities{
+  marker-fill: #FF6600;
+  marker-opacity: 0.9;
+  marker-allow-overlap: true;
+  marker-placement: point;
+  marker-type: ellipse;
+  marker-width: 12;
+  marker-line-width: 3;
+  marker-line-color: #FFF;
+  marker-line-opacity: 0.9;
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #layer_selector {
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        padding: 0;
+		background-color: #e3e7ea;
+      }
+
+      #layer_selector ul {
+        padding: 0; margin: 0;
+        list-style-type: none;
+      }
+
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 5px 10px;
+        font-family: "Helvetica", Arial;
+        font-size: 13px;
+        color: #444;
+        cursor: auto;
+      }
+
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+
+      #layer_selector li.selected {
+        background-color: #EEE;
+      }
+    </style>
+	
+    <!--Custom html for the infowindow customization-->
+    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
+    <!--Content.data contains the field info-->
+    <script type="infowindow/html" id="infowindow_template">
+      <div class="cartodb-popup">
+        <a href="#close" class="cartodb-popup-close-button close">x</a>
+         <div class="cartodb-popup-content-wrapper">
+           <div class="cartodb-popup-cont">
+            <h4>{{content.data.name}}</h4>
+			<p>{{content.data.total_poets}}</p>
+           </div>
+         </div>
+         <div class="cartodb-popup-tip-container"></div>
+      </div>
+    </script>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+<![endif]-->
+  </head>
+ <body>
+    <div id="map"></div>
+    <div id="layer_selector" class="cartodb-infobox">
+      <ul>
+	    <li data="total_poets" class="selected">All poets</li>
+		<li data="36">Alkaios</li>
+		<li data="35">Alkimakhos</li>
+		<li data="8">Antigenes</li>
+		<li data="37">Arignotos</li>
+		<li data="23">Ariphon</li>
+		<li data="39">Ariphrades</li>
+		<li data="9">Aristarkhos</li>
+		<li data="38">Aristonous</li>
+		<li data="10">Arkhestratos</li>
+		<li data="19">Arrabaios</li>
+		<li data="11">Bakkhiadas</li>
+		<li data="33">Castorion</li>
+		<li data="4">Cinesias</li>
+		<li data="27">Cleomenes</li>
+		<li data="41">Dexitheus</li>
+		<li data="21">Dionysius</li>
+		<li data="18">-es</li>
+		<li data="43">Euangelos</li>
+		<li data="44">Eumelos</li>
+		<li data="42">Exekestides</li>
+		<li data="12">Gnesippos</li>
+		<li data="13">Kedeides</li>
+		<li data="51">Khairis</li>
+		<li data="14">Kinesias</li>
+		<li data="46">Konnos</li>
+		<li data="20">Krateuas</li>
+		<li data="47">Kydides</li>
+		<li data="28">Lamynthius</li>
+		<li data="3">Licymnius</li>
+		<li data="1">Melanippides</li>
+		<li data="48">Meles</li>
+		<li data="49">Moskhos</li>
+		<li data="15">Niko-</li>
+		<li data="16">Nikostratos</li>
+		<li data="29">Oeniades</li>
+		<li data="17">Pantakles</li>
+		<li data="24">Philoxenus of Cythera</li>
+		<li data="25">Philoxenus of Leucas</li>
+		<li data="5">Phrynis</li>
+		<li data="26">Polyidus</li>
+		<li data="2">Pronomus</li>
+		<li data="7">Telestes</li>
+		<li data="22">Tellen</li>
+		<li data="45">Thespis</li>
+		<li data="6">Timotheus</li>
+
+      </ul>
+    </div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+	// create layer selector
+      function createSelector(vis, layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the poet_type of the selected layer
+          var $li = $(e.target);
+          var data = $li.attr('data');
+		  
+          // deselect all and select the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+
+          // create query & css based on data from the layer
+          var query = "SELECT * FROM poets_lines";
+
+          if(poet_type !== 'total_poets') {
+            query = "select * from poets_lines where poetid = "+data;
+          }
+
+          // change the query in the layer to update the map
+          layer.setQuery(query);
+        });
+      }
+	  
+      function main() {
+        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/13670072-09ca-11e3-bd58-e7b5f7a64b4d/viz.json', {
+          tiles_loader: false,
+          center_lat: 38.95,
+          center_lon: 22.38,
+          zoom: 6
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			createSelector(vis, layers[1]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+  </body>
+</html>

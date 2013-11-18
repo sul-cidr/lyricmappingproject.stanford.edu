@@ -1,0 +1,17 @@
+query to merge according to # of poets going between those cities
+
+SELECT
+    birth_cityid,
+    birth_city_name,
+    other_cityid,
+    other_city_name,
+	count(birth_cityid) as number
+FROM
+    poets_lines
+GROUP BY birth_cityid, birth_city_name, other_cityid, other_city_name
+
+results
+
+Thebes->Athens: 2
+Thebes->Delphi: 2
+Chios->Athens: 4

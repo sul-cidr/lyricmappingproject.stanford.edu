@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+<![endif]-->
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+      function main() {
+          var map;
+
+          // create google maps map
+          var mapOptions = {
+            zoom: 6,
+            center: new google.maps.LatLng(38.95, 22.38),
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+          };
+          map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+          // create layer and add to the map, then add some intera
+          cartodb.createLayer(map, 'http://dfdrisco.cartodb.com/api/v1/viz/poets_dataset/viz.json')
+          .addTo(map)
+          .on('done', function(layer) {
+            var sublayer = layer.getSubLayer(0);
+            sublayer.on('featureOver', function(e, pos, latlng, data) {
+              cartodb.log.log(e, pos, latlng, data);
+            });
+
+            sublayer.on('error', function(err) {
+              cartodb.log.log('error: ' + err);
+            });
+
+          })
+          .on('error', function() {
+            cartodb.log.log("some error occurred");
+          });
+
+      }
+
+      window.onload = main;
+    </script>
+  </body>
+</html>

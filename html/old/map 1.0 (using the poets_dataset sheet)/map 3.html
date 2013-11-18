@@ -1,0 +1,46 @@
+<html>
+<head>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+  <![endif]-->
+  <style>
+    html, body {width:100%; height:100%; padding: 0; margin: 0;}
+    #cartodb-map { width: 100%; height:100%; background: black;}
+  </style>
+
+   <script>
+  // get the viz.json url from the CartoDB UI
+  // - click on visualize
+  // - create new visualization
+  // - make visualization public
+  // - click on publish
+  // - go to API tab
+  cartodb.createLayer(map, {
+  user_name: 'dfdrisco',
+  type: 'cartodb',
+  sublayers: [{
+    sql: "SELECT * FROM table_name",
+    cartocss: '#table_name {marker-fill: #F0F0F0;}'
+  }]
+})
+.addTo(map) // add the layer to our map which already contains 1 sublayer
+.done(function(layer) {
+
+  // create and add a new sublayer
+  layer.createSubLayer({
+    sql: "SELECT * FROM table_name limit 200",
+    cartocss: '#table_name {marker-fill: #F0F0F0;}'
+  });
+
+  // change the query for the first layer
+  layer.getSubLayer(0).setSQL("SELECT * FROM table_name limit 10");
+});
+</script>
+</head>
+
+<body>
+  <div id="map"></div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #layer_selector {
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        padding: 0;
+      }
+
+      #layer_selector ul {
+        padding: 0; margin: 0;
+        list-style-type: none;
+      }
+
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 15px 30px;
+        font-family: "Helvetica", Arial;
+        font-size: 13px;
+        color: #444;
+        cursor: auto;
+      }
+
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+
+      #layer_selector li.selected {
+        background-color: #EEE;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+<![endif]-->
+  </head>
+ <body>
+    <div id="map"></div>
+    <div id="layer_selector" class="cartodb-infobox">
+      <ul>
+        <li data="all" class="selected">All poets</li>
+        <li data="dithyramb">Dithyrambic poets</li>
+      </ul>
+    </div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+	// create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'documentation' });
+
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the poet_type of the selected layer
+          var $li = $(e.target);
+          var poet_type = $li.attr('data');
+
+          // deselect all and select the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+
+          // create query based on data from the layer
+          var query = "select * from poets_dataset";
+
+          if(poet_type !== 'all') {
+            query = "select * from poets_dataset where dithyramb != 0";
+          }
+
+          // change the query in the layer to update the map
+          layer.setQuery(query);
+        });
+      }
+	  
+      function main() {
+          var map;
+
+          // create google maps map
+          var mapOptions = {
+            zoom: 6,
+            center: new google.maps.LatLng(38.95, 22.38),
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+          };
+          map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+		cartodb.createLayer(map, {
+		  user_name: 'dfdrisco',
+		  type: 'cartodb',
+		  sublayers: [{
+			sql: "SELECT * FROM poets_dataset",
+			cartocss: '#poets_dataset {marker-fill: #F0F0F0;}#poets_dataset [ total_poets > 1] {  marker-width: 25.0;}'
+		  }]
+		})
+		.addTo(map) // add the layer to our map which already contains 1 sublayer
+		.done(function(layer) {  
+			createSelector(layer);
+		}).on('error', function() {
+          //log the error
+        });
+
+      }
+
+      window.onload = main;
+    </script>
+  </body>
+</html>

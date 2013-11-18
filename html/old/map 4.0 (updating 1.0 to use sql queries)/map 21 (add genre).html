@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+     <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #layer_selector {
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        padding: 0;
+		background-color: #e3e7ea;
+      }
+
+      #layer_selector ul {
+        padding: 0; margin: 0;
+        list-style-type: none;
+      }
+
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 5px 10px;
+        font-family: "Helvetica", Arial;
+        font-size: 13px;
+        color: #444;
+        cursor: auto;
+      }
+
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+
+      #layer_selector li.selected {
+        background-color: #EEE;
+      }
+    </style>
+	
+	    <!--Custom html for the infowindow customization-->
+    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
+    <!--Content.data contains the field info-->
+	<!--Content.data is determined by the UI on the cartodb webpage.-->
+	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
+    <script type="infowindow/html" id="infowindow_template">
+      <div class="cartodb-popup">
+        <a href="#close" class="cartodb-popup-close-button close">x</a>
+         <div class="cartodb-popup-content-wrapper">
+           <div class="cartodb-popup-cont">
+            <h3>{{content.data.city_name}}</h3>
+			<p>Number selected: {{content.data.selected_number}}</p>
+			<p>Names selected: {{content.data.selected_names}}</p>
+           </div>
+         </div>
+         <div class="cartodb-popup-tip-container"></div>
+      </div>
+    </script>
+
+	    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+	    <!--[if lte IE 8]>
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+<![endif]-->
+  </head>
+ <body>
+    <div id="map"></div>
+    <div id="layer_selector" class="cartodb-infobox">
+      <ul>
+        <li type="all" class="selected">All instruments</li>
+        <li type="instrument" data="1">Aulos</li> <!--data = the appropriate instrument-id-->
+		<li type="instrument" data="2">Kithara</li>
+		<li type="instrument" data="3">Lyre</li>
+		<li type="instrument" data="4">Magadis</li>
+		<li type="date" data="poets_active_450">Poets active in 450</li>
+		<li type="date" data="poets_active_425">Poets active in 425</li>
+		<li type="date" data="poets_active_400">Poets active in 400</li>
+		<li type="genre" data="2">Dithyramb</li>
+		<li type="genre" data="3">Elegy</li>
+		<li type="genre" data="5">Epigram</li>
+		<li type="genre" data="10">Prosodion</li>
+		<li type="genre" data="7">Nome</li>
+		<li type="genre" data="9">Prooimion</li>
+		<li type="genre" data="4">Enkomion</li>
+		<li type="genre" data="6">Hymn</li>
+		<li type="genre" data="8">Paean</li>		
+      </ul>
+    </div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+	// create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the data of the selected layer
+          var $li = $(e.target);
+          var data = $li.attr('data');
+		  var type = $li.attr('type');
+
+          // deselect all and select the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+
+          // create query & css based on data from the layer
+          if(type == "instrument") {
+            query = createInstrumentQuery(data);
+			}
+		  else if (type == "genre") {
+			query = createGenreQuery(data);
+			console.log("in genre");
+		  }
+		  else {
+			query = createTotalPoetsQuery();
+		  }
+
+          layer.setQuery(query);
+        });
+      }
+	  
+	  function createTotalPoetsQuery() {
+		var query = [
+		"SELECT ",
+			"cities.cartodb_id, ",
+			"cities.the_geom, ",
+			"cities.the_geom_webmercator, ",
+			"cities.city_name, ",
+			"poets.cityid, ",
+			"COUNT(poets.cityid) as selected_number, ",
+			"string_agg(poets.poet_name, ', ') as selected_names ",
+		"FROM cities, poets ",
+		"WHERE cities.cityid = poets.cityid ",
+		"GROUP BY poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		return query;
+	}
+	
+	function createInstrumentQuery(data) {
+		var query = [
+		"SELECT ",
+			"cities.cartodb_id, ",
+			"cities.the_geom, ",
+			"cities.the_geom_webmercator, ",
+			"cities.city_name, ",
+			"instrument_players.cityid, ",
+			"COUNT(instrument_players.cityid) as selected_number, ",
+			"string_agg(instrument_players.poet_name, ', ') as selected_names ",
+		"FROM cities, ( ",
+			"SELECT * ",
+			"FROM poets, instruments ",
+			"WHERE poets.poetid = instruments.poetid ",
+			"AND instruments.instrumentid = ",data,
+			") instrument_players ",
+		"WHERE cities.cityid = instrument_players.cityid ",
+		"GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+
+		return query;
+	}
+	
+	function createGenreQuery(data) {
+		var query = [
+		"SELECT ",
+		"	cities.cartodb_id, ",
+		"	cities.the_geom, ",
+		"	cities.the_geom_webmercator, ",
+		"	cities.city_name, ",
+		"	genre_players.cityid, ",
+		"	COUNT(genre_players.cityid) as selected_number, ",
+		"	string_agg(genre_players.poet_name, ', ') as selected_names ",
+		"FROM cities, ( ",
+		"	SELECT * ",
+		"	FROM poets, genres ",
+		"	WHERE poets.poetid = genres.poetid ",
+		"	AND genres.genreid = ",data,
+		"	) genre_players ",
+		"WHERE cities.cityid = genre_players.cityid ",
+		"GROUP BY genre_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		return query;
+	}
+
+	  function createBubbleVisualization(selectedData) {
+		var bubble =
+			['#cities{',
+			  'marker-fill: #FF5C00;',
+			  'marker-line-color: #FFF;',
+			  'marker-line-width: 2;',
+			  'marker-line-opacity: 1;',
+			  'marker-opacity: 0.9;',
+			  'marker-placement: point;',
+			  'marker-type: ellipse;',
+			  'marker-allow-overlap: true;',
+			  'marker-clip: false;',
+			  'marker-multi-policy: largest;',
+			'}',
+			'#cities [ ',selectedData,' <= 45.0] {',
+			   'marker-width: 25.0;',
+			'}',
+			'#cities [ ',selectedData,' <= 7.0] {',
+			   'marker-width: 23.3;',
+			'}',
+			'#cities [ ',selectedData,' <= 7.0] {',
+			   'marker-width: 21.7;',
+			'}',
+			'#cities [ ',selectedData,' <= 5.0] {',
+			   'marker-width: 20.0;',
+			'}',
+			'#cities [ ',selectedData,' <= 5.0] {',
+			   'marker-width: 18.3;',
+			'}',
+			'#cities [ ',selectedData,' <= 4.0] {',
+			   'marker-width: 16.7;',
+			'}',
+			'#cities [ ',selectedData,' <= 2.0] {',
+			   'marker-width: 15.0;',
+			'}',
+			'#cities [ ',selectedData,' <= 2.0] {',
+			   'marker-width: 13.3;',
+			'}',
+			'#cities [ ',selectedData,' <= 1.0] {',
+			   'marker-width: 11.7;',
+			'}',
+			'#cities [ ',selectedData,' <= 1.0] {',
+			   'marker-width: 10.0;',
+			'}',
+			].join('');
+		return bubble;
+		}
+	  
+      function main() {
+        cartodb.createVis('map', 'http://dfdrisco.cartodb.com/api/v2/viz/8e1a2ea4-036f-11e3-92aa-d34e8a712f04/viz.json', {
+          tiles_loader: false,
+          center_lat: 38.95,
+          center_lon: 22.38,
+          zoom: 6
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			var query = createTotalPoetsQuery();
+			var css = createBubbleVisualization("selected_number");
+			var sublayer = layers[1].getSubLayer(0);
+			
+			layers[1].setQuery(query);
+			layers[1].setCartoCSS(css);
+			
+			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_names'] });
+
+			sublayer.infowindow.set('template', $('#infowindow_template').html());
+			
+			vis.addOverlay({
+				type: 'infobox',
+				template: "<h3>{{city_name}}</h3><p>Selected number: {{selected_number}}</p><p>Selected names: {{selected_names}}</p>",
+				width: 300,
+				position: 'bottom|left'
+			});			
+			
+			createSelector(layers[1]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+  </body>
+</html>

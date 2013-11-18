@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+	z-index: 1;
+      }
+      
+      #map img{
+	max-width: none;
+      }
+      
+      /* above per https://groups.google.com/forum/#!msg/cartodb/VH9SCtWm2KE/BRDUDaCVEkMJ (last comment) to get bootstrap and google working happily */
+
+      #layer_selector {
+	border: 0;
+	position: absolute;
+	top: 50px;
+        right: 20px;
+        padding: 0;
+	margin: 0;
+	background-color: transparent;
+	box-shadow: 0px 0px 0px;
+	overflow-y: scroll;
+	height: 80%;
+	pointer-events:none;
+      }
+
+      #layer_selector ul {
+	padding: 0; border: 0;
+        list-style-type: none;
+	background-color: #e3e7ea;
+	margin-left: 5px;
+	margin-right: 5px;
+	pointer-events:auto;
+	opacity: .75;	
+      }
+
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 5px 10px;
+        color: #444;
+        cursor: auto;
+      }
+      
+      #layer_selector ul:hover {
+	opacity: 1;
+      }
+
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+
+      #layer_selector li.selected {
+        background-color: #CDC673;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+    <![endif]-->
+    
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> 
+</head>
+  
+ <body>
+      <div class="navbar navbar-fixed-top">  
+      <div class="navbar-inner">  
+        <div class="container">  
+            <ul class="nav">  
+              <li class="active">  
+                <a class="brand" href="http://greeksong.ruhosting.nl">network for greek song</a>  
+              </li>  
+              <li><a href="bubblemap.html">Cities</a></li>  
+              <li><a href="linemap.html">Poets</a></li>  
+              <li><a href="linemapcities.html">Poets-cities</a></li>
+	      <li><a href="linemapgenres.html">Poets criteria</a></li>
+            </ul>   
+        </div>  
+      </div>
+    </div>
+  
+    <div id="map"></div>
+    <div id="layer_selector" class="cartodb-infobox">
+      <ul>
+	  <li id="all_poets">All poets</li>
+	  <li id="poet_18">-es</li>
+	  <li id="poet_36">Alkaios</li>
+	  <li id="poet_35">Alkimakhos</li>
+	  <li id="poet_8">Antigenes</li>
+	  <li id="poet_56">Archelaos</li>
+	  <li id="poet_37">Arignotos</li>
+	  <li id="poet_39">Ariphrades</li>
+	  <li id="poet_23">Ariphron</li>
+	  <li id="poet_9">Aristarkhos</li>
+	  <li id="poet_57">Aristokleides</li>
+	  <li id="poet_38">Aristonous</li>
+	  <li id="poet_10">Arkhestratos</li>
+	  <li id="poet_19">Arrabaios</li>
+	  <li id="poet_11">Bakkhiadas</li>
+	  <li id="poet_33">Castorion</li>
+	  <li id="poet_58">Chares</li>
+	  <li id="poet_4">Cinesias</li>
+	  <li id="poet_27">Cleomenes</li>
+	  <li id="poet_41">Dexitheus</li>
+	  <li id="poet_59">Diagoras</li>
+	  <li id="poet_60">Dikaiogenes</li>
+	  <li id="poet_61">Dion</li>
+	  <li id="poet_62">Dionysius of Chios</li>
+	  <li id="poet_21">Dionysius of Thebes</li>
+	  <li id="poet_63">Diphilos</li>
+	  <li id="poet_64">Epameinondas</li>
+	  <li id="poet_43">Euangelos</li>
+	  <li id="poet_65">Euenos</li>
+	  <li id="poet_44">Eumelos</li>
+	  <li id="poet_66">Euneidai</li>
+	  <li id="poet_67">Euripides the Younger</li>
+	  <li id="poet_42">Exekestides</li>
+	  <li id="poet_68">Exekestos</li>
+	  <li id="poet_12">Gnesippos</li>
+	  <li id="poet_69">Hegemon</li>
+	  <li id="poet_70">Hieronymos</li>
+	  <li id="poet_71">Hippias</li>
+	  <li id="poet_55">Ion of Chios</li>
+	  <li id="poet_72">Ion of Samos</li>
+	  <li id="poet_73">Iophon</li>
+	  <li id="poet_74">Karkinos</li>
+	  <li id="poet_13">Kedeides</li>
+	  <li id="poet_51">Khairis</li>
+	  <li id="poet_14">Kinesias</li>
+	  <li id="poet_75">Kleitagora</li>
+	  <li id="poet_76">Kleomenes</li>
+	  <li id="poet_46">Konnos</li>
+	  <li id="poet_20">Krateuas</li>
+	  <li id="poet_47">Kydides</li>
+	  <li id="poet_28">Lamynthius</li>
+	  <li id="poet_77">Leotrophides</li>
+	  <li id="poet_3">Licymnius</li>
+	  <li id="poet_52">Magnes</li>
+	  <li id="poet_1">Melanippides</li>
+	  <li id="poet_91">Melanthius</li>
+	  <li id="poet_48">Meles</li>
+	  <li id="poet_53">Meletos</li>
+	  <li id="poet_49">Moskhos</li>
+	  <li id="poet_15">Niko-</li>
+	  <li id="poet_16">Nikostratos</li>
+	  <li id="poet_29">Oeniades</li>
+	  <li id="poet_78">Oenopas</li>
+	  <li id="poet_79">Pankrates</li>
+	  <li id="poet_17">Pantakles</li>
+	  <li id="poet_89">Pheidippides</li>
+	  <li id="poet_24">Philoxenus of Cythera</li>
+	  <li id="poet_25">Philoxenus of Leucas</li>
+	  <li id="poet_81">Phrynichos</li>
+	  <li id="poet_5">Phrynis</li>
+	  <li id="poet_82">Pindar (son of Skopelinos)</li>
+	  <li id="poet_26">Polyidus</li>
+	  <li id="poet_83">Praxilla</li>
+	  <li id="poet_2">Pronomus</li>
+	  <li id="poet_84">Skythinos</li>
+	  <li id="poet_85">Sophokles (son of Ariston)</li>
+	  <li id="poet_86">Stesandros</li>
+	  <li id="poet_54">Telesilla</li>
+	  <li id="poet_7">Telestes</li>
+	  <li id="poet_22">Tellen</li>
+	  <li id="poet_87">Theano</li>
+	  <li id="poet_45">Thespis</li>
+	  <li id="poet_88">Timonides</li>
+	  <li id="poet_6">Timotheus</li>
+	  <li id="poet_90">Xenokrates</li>
+      </ul>
+    </div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+	// create layer selector
+      function createSelector(vis, layers) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#layer_selector li');
+	  $options.click(function(e) {
+          // get the button of the selected layer
+          var $li = $(e.target);
+	  var firstCall = true;
+	  var i = 0;
+	  var query1;
+	  var query2;
+	  var sublayer1 = layers[1].getSubLayer(0);
+	  var sublayer2 = layers[1].getSubLayer(1);
+          
+          // deselect all_poets and toggle the clicked one
+          $('#all_poets').removeClass('selected');
+          $li.toggleClass('selected');
+		  
+	  //if all poets selected or nothing selected show all poets; otherwise, update query
+	  if($li.attr('id')=='all_poets' || $options.hasClass('selected')==false) {
+	    $options.removeClass('selected');
+	    $('#all_poets').addClass('selected');
+	    sublayer1.setSQL("select * from poets_lines");
+	    query2 = createTotalPoetsQuery();
+	    sublayer2.setSQL(query2);
+	  }
+	  else {
+	    
+	    // choose query for lines data
+	    firstCall = true;
+	    for (i=1; i <= 100; i++) {		
+		    if($('#poet_'+i).attr('class') == 'selected') {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query1 = [
+					    "select * from poets_lines where poetid = ",
+					    i,
+					    " "
+				    ].join("");
+			    }
+			    else {
+				    query1 = query1 + "OR poetid = " + i + " ";
+			    }
+		    }
+	    }
+	    sublayer1.setSQL(query1);
+	    console.log(query1);
+	    
+	    // choose query for cities data
+	    query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid, COUNT(sorted_poets.cityid) as selected_number, string_agg(sorted_poets.sources, ', ') as selected_sources, string_agg(sorted_poets.poet_name, ', ') as selected_names, string_agg(sorted_poets.poet_link, ', ') as selected_links FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND (";
+	    firstCall = true;
+	    for (i=1; i <= 100; i++) {		
+		    if($('#poet_'+i).attr('class') == 'selected') {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query2 = query2 + [
+					    "poets.poetid = ",
+					    i,
+					    " "
+				    ].join("");
+			    }
+			    else {
+				    query2 = query2 + "OR poets.poetid = " + i + " ";
+			    }
+		    }
+	    }
+	    query2 = query2 + ") ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id";
+	    console.log(query2);
+	    sublayer2.setSQL(query2);
+	  }
+		  
+        });
+      }
+
+	  function createTotalPoetsQuery() {
+		var query = [
+			"SELECT ",
+			"	cities.cartodb_id, ",
+			"	cities.the_geom, ",
+			"	cities.the_geom_webmercator, ",
+			"	cities.city_name, ",
+			"	cities.government, ",
+			"	sorted_poets.cityid, ",
+			"	COUNT(sorted_poets.cityid) as selected_number, ",
+			"	string_agg(sorted_poets.poet_name, ', ') as selected_names, ",
+			"   	string_agg(sorted_poets.sources, ', ') as selected_sources, ",
+			"	string_agg(sorted_poets.poet_link, ', ') as selected_links ",
+			"FROM cities, ",
+			"	(SELECT ",
+			"		poets.poetid, ",
+			"		poets.poet_name, ",
+			"		poets.sources, ",
+			"		poets.poet_link, ",
+			"		poets_cities.cityid ",
+			"		FROM poets, poets_cities ",
+			"		WHERE poets.poetid = poets_cities.poetid ",
+			"		ORDER BY cityid ASC, poet_name ASC) sorted_poets ",
+			"WHERE cities.cityid = sorted_poets.cityid ",
+			"GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		return query;
+	}
+	
+      
+      function getParameterByName(name) {
+	  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+	      results = regex.exec(location.search);
+	  return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }      
+	  
+      function main() {
+        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/5412ef5c-128d-11e3-8b55-8149b805c7e0/viz.json', {
+          tiles_loader: false,
+          center_lat: 38.95,
+          center_lon: 22.38,
+          zoom: 6
+        })
+        .done(function(vis, layers) {
+	  // layer 0 is the base layer, layer 1 is cartodb layer
+	  var sublayer = layers[1].getSubLayer(0);
+	  var sublayer2;
+	  var poetid = getParameterByName("poetid");
+	  
+	  sublayer.set({ 'interactivity': ['cartodb_id', 'poet_name', 'birth_city_name', 'other_city_name', 'instrument_names', 'genre_names', 'date_names', 'sources'] });
+	  
+	  vis.addOverlay({
+		  type: 'infobox',
+		  template: "<h3>{{poet_name}}</h3><p>Place of birth: {{birth_city_name}}</p><p>Other associated city: {{other_city_name}}</p><p>Instruments: {{instrument_names}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
+		  width: 300,
+		  position: 'bottom|left'
+	  });
+
+	  layers[1].createSubLayer({sql: "select * from cities", cartocss: "#cities{ marker-fill: #FF6600; marker-opacity: 0.9; marker-allow-overlap: true; marker-placement: point; marker-type: ellipse; marker-width: 12; marker-line-width: 3; marker-line-color: #FFF; marker-line-opacity: 0.9;}" } );
+	  sublayer2 = layers[1].getSubLayer(1);
+	  
+	  if (poetid != "") {
+	    $("#poet_" + poetid).addClass('selected');
+	    sublayer.setSQL("SELECT * FROM poets_lines WHERE poetid = " + poetid);
+	    sublayer2.setSQL("SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND poets.poetid = " + poetid + " ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id");
+	  }
+	  else {
+	    $('#all_poets').addClass('selected');
+	    sublayer.setSQL("SELECT * FROM poets_lines");
+	  }
+	  	  
+	  createSelector(vis, layers);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+    
+    <script src="bootstrap/js/jquery.js"></script>  
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script> 
+  </body>
+</html>

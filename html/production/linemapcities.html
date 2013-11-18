@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+	z-index: 1;
+      }
+      
+      #map img{
+	max-width: none;
+      }
+      
+      #navbar_selected {
+	background-color: #CDC673
+      }
+      
+      /* above per https://groups.google.com/forum/#!msg/cartodb/VH9SCtWm2KE/BRDUDaCVEkMJ (last comment) to get bootstrap and google working happily */
+
+      #layer_selector {
+	border: 0;
+	position: absolute;
+	top: 50px;
+        right: 20px;
+        padding: 0;
+	margin: 0;
+	background-color: transparent;
+	box-shadow: 0px 0px 0px;
+	pointer-events:none;
+       }
+
+      #layer_selector ul {
+	padding: 0; border: 0;
+        list-style-type: none;
+	background-color: #e3e7ea;
+	margin-left: 5px;
+	margin-right: 5px;
+	pointer-events:auto;
+	opacity: .75;	
+      }
+
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 5px 10px;
+        color: #444;
+        cursor: auto;
+      }
+      
+      #layer_selector ul:hover {
+	opacity: 1;
+      }
+
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+
+      #layer_selector li.selected {
+        background-color: #CDC673;
+      }
+	  
+  	  #list_cols_1_2 {
+		float: left;
+	  }
+	  
+	  #list_col_1 {
+		float: left;
+		padding: 0; border: 0;
+        list-style-type: none;
+		background-color: #e3e7ea;
+		margin-left: 5px;
+		margin-right: 5px;
+	  }
+	  
+	  #list_col_2 {
+		float: right;
+		padding: 0; border: 0;
+        list-style-type: none;
+		background-color: #e3e7ea;
+		margin-left: 5px;
+		margin-right: 5px;
+	  }
+    </style>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+<![endif]-->
+
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> 
+  </head>
+ <body>
+    <div class="navbar navbar-fixed-top">  
+      <div class="navbar-inner">  
+        <div class="container">  
+            <ul class="nav">  
+              <li class="active">  
+                <a class="brand" href="http://greeksong.ruhosting.nl">network for greek song</a>  
+              </li>  
+              <li><a href="bubblemap.html">Cities</a></li>  
+              <li><a href="linemap.html">Poets</a></li>  
+              <li id="navbar_selected"><a href="linemapcities.html">Poets-cities</a></li>
+	      <li><a href="linemapgenres.html">Poets criteria</a></li>
+            </ul>   
+        </div>  
+      </div>
+    </div>
+    <div id="map"></div>
+    <div id="layer_selector" class="cartodb-infobox">
+		<div id="list_cols_1_2">
+			<div id="list_col_1">
+				<h5>BIRTHPLACES</h5>
+				<ul>					
+					<li type="birth_city" data="2">Athens</li>
+					<li type="birth_city" data="6">Chios</li>
+					<li type="birth_city" data="35">Cythera</li>
+					<li type="birth_city" data="32">Elis</li>
+					<li type="birth_city" data="31">Hermione</li>
+					<li type="birth_city" data="1">Melos</li>
+					<li type="birth_city" data="9">Miletus</li>
+					<li type="birth_city" data="8">Mytilene</li>
+					<li type="birth_city" data="12">Selinus</li>
+					<li type="birth_city" data="22">Selymbria</li>
+					<li type="birth_city" data="13">Sicyon</li>
+					<li type="birth_city" data="19">Tarentum</li>
+					<li type="birth_city" data="3">Thebes</li>
+					<li type="birth_city" data="34">Thessaly</li>
+				</ul>
+			</div>
+			<div id="list_col_2">
+				<h5>PERFORMANCE LOCATIONS</h5>
+				<ul>					
+					<li type="other_city" data="2">Athens</li>
+					<li type="other_city" data="4">Chalcis</li>
+					<li type="other_city" data="20">Colophon</li>
+					<li type="other_city" data="5">Delos</li>
+					<li type="other_city" data="30">Delphi</li>
+					<li type="other_city" data="11">Ephesus</li>
+					<li type="other_city" data="7">Leontini</li>
+					<li type="other_city" data="14">Locri</li>
+					<li type="other_city" data="33">Macedonia</li>
+					<li type="other_city" data="15">Rhegium</li>
+					<li type="other_city" data="13">Sicyon</li>
+					<li type="other_city" data="10">Sparta</li>
+					<li type="other_city" data="18">Syracuse</li>
+					<li type="other_city" data="19">Tarentum</li>
+				</ul>
+			</div>
+		</div>
+    </div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+	// create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the button of the selected layer
+          var $li = $(e.target);
+		  var type = $li.attr('type');
+		  var data = $li.attr('data');
+          
+          // deselect all_poets and toggle the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+		  
+		  if(type == 'birth_city') query = 'SELECT * from poets_lines where birth_cityid = ' + data;
+		  else query = 'SELECT * from poets_lines where other_cityid = ' + data;
+		
+		  console.log(query);
+		  layer.setQuery(query);
+
+        });
+      }
+	  
+      function main() {
+        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/5412ef5c-128d-11e3-8b55-8149b805c7e0/viz.json', {
+          tiles_loader: false,
+          center_lat: 38.95,
+          center_lon: 22.38,
+          zoom: 6
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			var sublayer = layers[1].getSubLayer(0);
+			
+			sublayer.set({ 'interactivity': ['cartodb_id', 'poet_name', 'birth_city_name', 'other_city_name', 'instrument_names', 'genre_names', 'date_names', 'sources'] });
+
+			vis.addOverlay({
+				type: 'infobox',
+				template: "<h3>{{poet_name}}</h3><p>Place of birth: {{birth_city_name}}</p><p>Other associated city: {{other_city_name}}</p><p>Instruments: {{instrument_names}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
+				width: 300,
+				position: 'bottom|left'
+			});
+			
+			createSelector(layers[1]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+    
+    <script src="bootstrap/js/jquery.js"></script>  
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script>     
+  </body>
+</html>

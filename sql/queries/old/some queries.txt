@@ -1,0 +1,146 @@
+updates total_poets column with correct information
+
+UPDATE cities as c
+SET total_poets =  (
+  SELECT COUNT(cityid)
+  FROM poets
+  WHERE cityid = c.cityid
+  GROUP BY cityid
+)
+
+dynamic query for total_poets
+
+SELECT 
+	cities.cartodb_id,
+	cities.the_geom,
+	cities.the_geom_webmercator,
+	cities.city_name,
+	poets.cityid,
+	COUNT(poets.cityid) as selected_number,
+	string_agg(poets.poet_name, ', ') as selected_names
+FROM cities, poets
+WHERE cities.cityid = poets.cityid
+GROUP BY poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+on one line:
+
+SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, poets.cityid, COUNT(poets.cityid) as selected_number, string_agg(poets.poet_name, ', ') as selected_names FROM cities, poets WHERE cities.cityid = poets.cityid GROUP BY poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+updates instrument column with instrument players
+
+UPDATE cities as c
+SET instrument =  (
+  SELECT COUNT(cityid)
+  FROM (
+    SELECT *
+    FROM poets, instruments
+    WHERE poets.poetid = instruments.poetid
+    AND instruments.instrumentid = 2
+    ) instrument_players
+  WHERE cityid = c.cityid
+  GROUP BY cityid
+)
+
+dynamic query for instrument players
+SELECT 
+	cities.the_geom,
+	cities.the_geom_webmercator,
+	cities.name,
+	instrument_players.cityid,
+	COUNT(instrument_players.cityid) as instrument_poets
+FROM cities, (
+    SELECT *
+    FROM poets, instruments
+    WHERE poets.poetid = instruments.poetid
+    AND instruments.instrumentid = 2
+    ) instrument_players
+WHERE cities.cityid = instrument_players.cityid
+GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.name
+
+dynamic query for instrument players including poet names
+
+SELECT 
+	cities.cartodb_id,
+	cities.the_geom,
+	cities.the_geom_webmercator,
+	cities.city_name,
+	instrument_players.cityid,
+	COUNT(instrument_players.cityid) as selected_number,
+	string_agg(instrument_players.poet_name, ', ') as selected_names
+FROM cities, (
+    SELECT *
+    FROM poets, instruments
+    WHERE poets.poetid = instruments.poetid
+    AND instruments.instrumentid = 2
+    ) instrument_players
+WHERE cities.cityid = instrument_players.cityid
+GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+on one line:
+
+SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, instrument_players.cityid, COUNT(instrument_players.cityid) as selected_number, string_agg(instrument_players.poet_name, ', ') as selected_names FROM cities, (SELECT * FROM poets, instruments WHERE poets.poetid = instruments.poetid AND instruments.instrumentid = 2) instrument_players WHERE cities.cityid = instrument_players.cityid GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+dynamic query for genre players including poet names
+
+SELECT 
+	cities.cartodb_id,
+	cities.the_geom,
+	cities.the_geom_webmercator,
+	cities.city_name,
+	genre_players.cityid,
+	COUNT(genre_players.cityid) as selected_number,
+	string_agg(genre_players.poet_name, ', ') as selected_names
+FROM cities, (
+    SELECT *
+    FROM poets, genres
+    WHERE poets.poetid = genres.poetid
+    AND genres.genreid = 2
+    ) genre_players
+WHERE cities.cityid = genre_players.cityid
+GROUP BY genre_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+dynamic query for players according to date
+
+SELECT 
+	cities.cartodb_id,
+	cities.the_geom,
+	cities.the_geom_webmercator,
+	cities.city_name,
+	date_players.cityid,
+	COUNT(date_players.cityid) as selected_number,
+	string_agg(date_players.poet_name, ', ') as selected_names
+FROM cities, (
+    SELECT *	
+    FROM poets, dates
+    WHERE poets.poetid = dates.poetid
+    AND dates.date='450'
+    ) date_players
+WHERE cities.cityid = date_players.cityid
+GROUP BY date_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
+
+select multiple instruments
+
+SELECT 
+	cities.cartodb_id,
+	cities.the_geom,
+	cities.the_geom_webmercator,
+	cities.city_name,
+	instrument_players.cityid,
+	COUNT(instrument_players.cityid) as selected_number,
+	string_agg(instrument_players.poet_name, ', ') as selected_names
+FROM cities, (
+	SELECT 
+		poets.poetid,
+		poets.poet_name,
+		poets.cityid
+		FROM poets, instruments
+		WHERE poets.poetid = instruments.poetid
+		AND (
+		instruments.instrumentid = 2
+		OR 
+		instruments.instrumentid = 1
+		)
+		GROUP BY poets.poetid, poets.poet_name, poets.cityid
+    ) instrument_players
+WHERE cities.cityid = instrument_players.cityid
+GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id

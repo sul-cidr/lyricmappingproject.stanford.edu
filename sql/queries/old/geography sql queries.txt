@@ -1,0 +1,94 @@
+pick out birth cities for poets
+
+SELECT 
+sorted_poets.poet_name,
+sorted_poets.cityid,
+cities.city_name
+FROM cities, (SELECT 
+		poets.poet_name,
+		poets_cities.cityid
+		FROM poets, poets_cities 
+		WHERE poets.poetid = poets_cities.poetid 
+		AND poets_cities.relationshipid = 1
+		) sorted_poets		
+WHERE sorted_poets.cityid = cities.cityid
+
+pick out birth cities for poets with geography
+
+SELECT 
+sorted_poets.poet_name,
+sorted_poets.cityid,
+sorted_poets.poetid,
+cities.city_name,
+cities.the_geom,
+cities.the_geom_webmercator
+FROM cities, (SELECT 
+		poets.poet_name,
+		poets_cities.cityid,
+		poets.poetid
+		FROM poets, poets_cities 
+		WHERE poets.poetid = poets_cities.poetid 
+		AND poets_cities.relationshipid = 1
+		) sorted_poets		
+WHERE sorted_poets.cityid = cities.cityid
+
+pick out performance/death cities for poets with geography
+
+SELECT 
+sorted_poets.poet_name,
+sorted_poets.cityid,
+sorted_poets.poetid,
+cities.city_name,
+cities.the_geom,
+cities.the_geom_webmercator
+FROM cities, (SELECT 
+		poets.poet_name,
+		poets_cities.cityid,
+		poets.poetid
+		FROM poets, poets_cities 
+		WHERE poets.poetid = poets_cities.poetid 
+		AND (poets_cities.relationshipid = 2
+		OR poets_cities.relationshipid = 3)
+		) sorted_poets		
+WHERE sorted_poets.cityid = cities.cityid
+
+recombine tables
+
+SELECT ST_Makeline(other_cities.the_geom, birth_cities.the_geom) as the_geom
+FROM
+(SELECT 
+sorted_poets.poet_name,
+sorted_poets.cityid,
+sorted_poets.poetid,
+cities.city_name,
+cities.the_geom,
+cities.the_geom_webmercator
+FROM cities, (SELECT 
+		poets.poet_name,
+		poets_cities.cityid,
+		poets.poetid
+		FROM poets, poets_cities 
+		WHERE poets.poetid = poets_cities.poetid 
+		AND poets_cities.relationshipid = 1
+		) sorted_poets		
+WHERE sorted_poets.cityid = cities.cityid
+AND sorted_poets.poetid = 2) birth_cities,
+(SELECT 
+sorted_poets.poet_name,
+sorted_poets.cityid,
+sorted_poets.poetid,
+cities.city_name,
+cities.the_geom,
+cities.the_geom_webmercator
+FROM cities, (SELECT 
+		poets.poet_name,
+		poets_cities.cityid,
+		poets.poetid
+		FROM poets, poets_cities 
+		WHERE poets.poetid = poets_cities.poetid 
+		AND (poets_cities.relationshipid = 2
+		OR poets_cities.relationshipid = 3)
+		) sorted_poets		
+WHERE sorted_poets.cityid = cities.cityid
+AND sorted_poets.poetid=2) other_cities
+
