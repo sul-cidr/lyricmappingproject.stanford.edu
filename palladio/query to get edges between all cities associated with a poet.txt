@@ -1,0 +1,10 @@
+query to get edges between all cities associated with a poet
+
+SELECT table1.first_cityid, table1.first_city, table2.second_cityid, table2.second_city
+FROM
+(SELECT poets_city_name AS first_city, cityid AS first_cityid, poetid, poets_poet_name FROM people_talks) table1
+JOIN
+(SELECT poets_city_name AS second_city, cityid AS second_cityid, poetid, poets_poet_name FROM people_talks) table2
+ON
+table1.poetid = table2.poetid
+WHERE table1.first_cityid < table2.second_cityid
