@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>381</string>
+	<key>AMApplicationVersion</key>
+	<string>2.4</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	tell application "Terminal"		activate		do script with command "cd /Users/david/seafile/repos/palladio" in window 1		do script with command "python -m SimpleHTTPServer" in window 1	end tellend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>47B3F755-7674-4496-9FB2-52C94AE2DD6A</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>CB77A7FA-C735-4742-8366-41D199BA667D</string>
+				<key>UUID</key>
+				<string>CE806734-8E8B-4A6A-A081-C4D67703C341</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>309.500000:625.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.url</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>2.0.1</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Safari</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>URLlist</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.url</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Get Specified URLs.action</string>
+				<key>ActionName</key>
+				<string>Get Specified URLs</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>URLlist</key>
+					<array>
+						<array>
+							<true/>
+							<string></string>
+							<string>http://localhost:8000</string>
+						</array>
+					</array>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.URLList</string>
+				<key>CFBundleVersion</key>
+				<string>2.0.1</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<true/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryInternet</string>
+				</array>
+				<key>Class Name</key>
+				<string>AMURLListAction</string>
+				<key>InputUUID</key>
+				<string>BE44AFED-71A4-4ECE-A712-B659E30F55AC</string>
+				<key>Keywords</key>
+				<array>
+					<string>Web</string>
+					<string>URL</string>
+					<string>Library</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>3208447C-4E07-4C63-8C60-675A446EE190</string>
+				<key>UUID</key>
+				<string>BE3030F2-9D7B-4CF7-8665-54578D38CA94</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Safari</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<array/>
+						<key>name</key>
+						<string>URLlist</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>309.500000:312.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Get Specified URLs.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<false/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.url</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Safari</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict/>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.url</string>
+					</array>
+				</dict>
+				<key>AMRequiredResources</key>
+				<array/>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Display Webpages 2.action</string>
+				<key>ActionName</key>
+				<string>Display Webpages</string>
+				<key>ActionParameters</key>
+				<dict/>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.Display_Webpages</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<false/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryInternet</string>
+				</array>
+				<key>Class Name</key>
+				<string>Display_Webpages</string>
+				<key>InputUUID</key>
+				<string>45324528-3D83-4729-A8E9-6FCD42CA70A8</string>
+				<key>Keywords</key>
+				<array>
+					<string>URL</string>
+					<string>Web</string>
+					<string>Display</string>
+					<string>Open</string>
+					<string>Show</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>A64E8035-1319-447B-974C-41EF526EC654</string>
+				<key>UUID</key>
+				<string>D8BB5AED-8D0A-4D4C-B81A-74B41D4FF822</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Safari</string>
+				</array>
+				<key>arguments</key>
+				<dict/>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>69B0F466-60F7-4A1B-8EEC-DC2BA12D87B2</key>
+		<dict>
+			<key>from</key>
+			<string>CE806734-8E8B-4A6A-A081-C4D67703C341 - CE806734-8E8B-4A6A-A081-C4D67703C341</string>
+			<key>to</key>
+			<string>BE3030F2-9D7B-4CF7-8665-54578D38CA94 - BE3030F2-9D7B-4CF7-8665-54578D38CA94</string>
+		</dict>
+		<key>A870E751-9807-470A-B976-F60E22389AE7</key>
+		<dict>
+			<key>from</key>
+			<string>BE3030F2-9D7B-4CF7-8665-54578D38CA94 - BE3030F2-9D7B-4CF7-8665-54578D38CA94</string>
+			<key>to</key>
+			<string>D8BB5AED-8D0A-4D4C-B81A-74B41D4FF822 - D8BB5AED-8D0A-4D4C-B81A-74B41D4FF822</string>
+		</dict>
+	</dict>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.application</string>
+	</dict>
+</dict>
+</plist>
