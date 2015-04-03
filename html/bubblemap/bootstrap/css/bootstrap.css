@@ -4543,9 +4543,10 @@ input[type="submit"].btn.btn-mini {
 .navbar-fixed-bottom {
   position: fixed;
   right: 0;
-  left: 0;
+  left: 250px;
   z-index: 1030;
   margin-bottom: 0;
+  opacity: .95;
 }
 
 .navbar-fixed-top .navbar-inner,
