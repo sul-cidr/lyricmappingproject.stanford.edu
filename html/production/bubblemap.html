@@ -109,10 +109,8 @@
             <ul class="nav">  
               <li class="active">    
               </li>  
-              <li id="navbar_selected"><a href="bubblemap.html">Cities</a></li>  
-              <li><a href="linemap.html">Poets</a></li>  
-              <li><a href="linemapcities.html">Poets-cities</a></li>
-	      <li><a href="linemapgenres.html">Poets criteria</a></li>
+              <li id="navbar_selected"><a href="bubblemap.html">Places</a></li>  
+              <li><a href="linemap.html">Movement</a></li>  
             </ul>   
         </div>  
       </div>
@@ -179,9 +177,10 @@
           // get the button of the selected layer
           var $li = $(e.target);
           
-          // deselect all_poets and toggle the clicked one
+          // deselect all_poets, remove all selections, and toggle the clicked one
           $('#all_poets').removeClass('selected');
-          $li.toggleClass('selected');
+	  $options.removeClass('selected');
+          $li.addClass('selected');
 		  
 		  //if all poets selected or nothing selected show all poets; otherwise, update query
 		  if($li.attr('id')=='all_poets' || $options.hasClass('selected')==false) {

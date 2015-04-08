@@ -83,10 +83,8 @@
             <ul class="nav">  
               <li class="active">   
               </li>  
-              <li><a href="bubblemap.html">Cities</a></li>  
-              <li id="navbar_selected"><a href="linemap.html">Poets</a></li>  
-              <li><a href="linemapcities.html">Poets-cities</a></li>
-	      <li><a href="linemapgenres.html">Poets criteria</a></li>
+              <li><a href="bubblemap.html">Places</a></li>  
+              <li id="navbar_selected"><a href="linemap.html">Movement</a></li>  
             </ul>   
         </div>  
       </div>
@@ -96,7 +94,6 @@
     <div id="layer_selector" class="cartodb-infobox">
       <ul>
 	  <li id="all_poets">All poets</li>
-	  <li id="poet_18">-es</li>
 	  <li id="poet_36">Alkaios</li>
 	  <li id="poet_35">Alkimakhos</li>
 	  <li id="poet_8">Antigenes</li>
@@ -180,6 +177,7 @@
 	  <li id="poet_88">Timonides</li>
 	  <li id="poet_6">Timotheus</li>
 	  <li id="poet_90">Xenokrates</li>
+	  <li id="poet_18">-es</li>
       </ul>
     </div>
     
@@ -225,7 +223,8 @@
           
           // deselect all_poets and toggle the clicked one
           $('#all_poets').removeClass('selected');
-          $li.toggleClass('selected');
+	  $options.removeClass('selected');
+          $li.addClass('selected');
 		  
 	  //if all poets selected or nothing selected show all poets; otherwise, update query
 	  if($li.attr('id')=='all_poets' || $options.hasClass('selected')==false) {

@@ -101,7 +101,6 @@
       <h4>SELECT POETS</h1>
       <ul>
 	  <li id="all_poets">All poets</li>
-	  <li id="poet_18">-es</li>
 	  <li id="poet_36">Alkaios</li>
 	  <li id="poet_35">Alkimakhos</li>
 	  <li id="poet_8">Antigenes</li>
@@ -185,6 +184,7 @@
 	  <li id="poet_88">Timonides</li>
 	  <li id="poet_6">Timotheus</li>
 	  <li id="poet_90">Xenokrates</li>
+	  <li id="poet_18">-es</li>
       </ul>
     </div>
     
@@ -230,7 +230,8 @@
           
           // deselect all_poets and toggle the clicked one
           $('#all_poets').removeClass('selected');
-          $li.toggleClass('selected');
+	  $options.removeClass('selected');
+          $li.addClass('selected');
 		  
 	  //if all poets selected or nothing selected show all poets; otherwise, update query
 	  if($li.attr('id')=='all_poets' || $options.hasClass('selected')==false) {

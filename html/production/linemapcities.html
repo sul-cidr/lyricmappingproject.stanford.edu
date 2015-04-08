@@ -172,7 +172,8 @@
 		  var data = $li.attr('data');
           
           // deselect all_poets and toggle the clicked one
-          $options.removeClass('selected');
+          $('#all_poets').removeClass('selected');
+	  $options.removeClass('selected');
           $li.addClass('selected');
 		  
 		  if(type == 'birth_city') query = 'SELECT * from poets_lines where birth_cityid = ' + data;
