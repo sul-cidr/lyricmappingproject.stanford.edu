@@ -2,72 +2,10 @@
 <html>
   <head>
     <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <link type="text/css" rel="stylesheet" href="lyricmapping.css" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
-    <style>
-      html, body, #map {
-        height: 100%;
-        padding: 0;
-        margin: 0;
-	z-index: 1;
-      }
-      
-      #map img{
-	max-width: none;
-      }
-      
-      #navbar_selected {
-	background-color: #CDC673
-      }
-      
-      /* above per https://groups.google.com/forum/#!msg/cartodb/VH9SCtWm2KE/BRDUDaCVEkMJ (last comment) to get bootstrap and google working happily */
-
-      #layer_selector {
-	border: 0;
-	position: absolute;
-	top: 50px;
-        right: 20px;
-        padding: 0;
-	margin: 0;
-	background-color: transparent;
-	box-shadow: 0px 0px 0px;
-	overflow-y: scroll;
-	height: 80%;
-	pointer-events:none;
-      }
-
-      #layer_selector ul {
-	padding: 0; border: 0;
-        list-style-type: none;
-	background-color: #e3e7ea;
-	margin-left: 5px;
-	margin-right: 5px;
-	pointer-events:auto;
-	opacity: .75;	
-      }
-
-      #layer_selector li {
-        border-bottom: 1px solid #999;
-        padding: 5px 10px;
-        color: #444;
-        cursor: auto;
-      }
-      
-      #layer_selector ul:hover {
-	opacity: 1;
-      }
-
-      #layer_selector li:hover {
-        background-color: #F0F0F0;
-        cursor: pointer;
-      }
-
-      #layer_selector li.selected {
-        background-color: #CDC673;
-      }
-    </style>
-
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
