@@ -1,4 +1,4 @@
-html, body, #map {
+#map {
         height: 100%;
         padding: 0;
         margin: 0;
@@ -14,7 +14,7 @@ html, body, #map {
 }
       
 /* above per https://groups.google.com/forum/#!msg/cartodb/VH9SCtWm2KE/BRDUDaCVEkMJ (last comment) to get bootstrap and google working happily */
-
+/*
 #layer_selector {
   border: 0;
   position: absolute;
@@ -79,4 +79,4 @@ html, body, #map {
 
 #list_col_4 {
       float: right;
-}
+} */
