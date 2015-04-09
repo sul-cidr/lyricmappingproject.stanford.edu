@@ -22,39 +22,72 @@
 		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
 	<![endif]-->
 	<!-- bootstrap is not playing well with the orbis box-->
-	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">    
+	<!-- <link href="bootstrap/css/bootstrap.css" rel="stylesheet">    --> 
 </head>
 <body>
     
-    <div class="navbar navbar-fixed-top">  
-      <div class="navbar-inner">  
-        <div class="container">  
-            <ul class="nav">  
-              <li class="active">    
-              </li>  
-              <li id="navbar_selected"><a href="bubblemap.html">Places</a></li>  
-              <li><a href="linemap.html">Travel</a></li>  
-            </ul>   
-        </div>  
-      </div>
-    </div>
-    
+
     <div id="map"></div>
     
   <div class="controlsDiv" id="controlbar">
     <div id="controlbarScroller";>
     <div class="buttonContainer" style="background: white;">
             
-      <fieldset style="border: none;" id="priorityForm" class="priorityForm">
+      <fieldset style="border: none;" id="cityForm" class="priorityForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACE OF: </div>
-        <input onclick="changePriority('f')" type="radio" value="0" name="priority" id="relationship_1" checked>
+        <input type="radio" value="0" name="city" id="relationship_1">
         <label for="relationship_1" class="priority-picker-label">BIRTH</label>
-        <input onclick="changePriority('c')" type="radio" value="1" name="priority" id="relationship_3">
+        <input type="radio" value="1" name="city" id="relationship_3">
         <label for="relationship_3" class="priority-picker-label">PERFORMANCE</label>
-        <input onclick="changePriority('f')" type="radio" value="2" name="priority" id="relationship_2">
+        <input type="radio" value="2" name="city" id="relationship_2">
         <label for="relationship_2" class="priority-picker-label">DEATH</label>
       </fieldset>
+    </div></div>
+      
+          <div class="buttonContainer" style="background: white;">
+            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GENRE: </div>
+        <input type="radio" value="0" name="genre" id="genre_2">
+        <label for="genre_2" class="genre-picker-label">DITHYRAMB</label>
+        <input type="radio" value="1" name="genre" id="genre_3">
+        <label for="genre_3" class="genre-picker-label">ELEGY</label>
+        <input type="radio" value="2" name="genre" id="genre_4">
+        <label for="genre_4" class="genre-picker-label">ENKOMION</label>
+	<input type="radio" value="0" name="genre" id="genre_5">
+        <label for="genre_5" class="genre-picker-label">EPIGRAM</label>
+        <input type="radio" value="1" name="genre" id="genre_6">
+        <label for="genre_6" class="genre-picker-label">HYMN</label>
+        <input type="radio" value="2" name="genre" id="genre_11">
+        <label for="genre_11" class="genre-picker-label">IAMBOS</label>
+	<input type="radio" value="0" name="genre" id="genre_7">
+        <label for="genre_7" class="genre-picker-label">NOME</label>
+        <input type="radio" value="1" name="genre" id="genre_8">
+        <label for="genre_8" class="genre-picker-label">PAEAN</label>
+        <input type="radio" value="2" name="genre" id="genre_9">
+        <label for="genre_9" class="genre-picker-label">PROOIMION</label>
+	<input type="radio" value="2" name="genre" id="genre_10">
+        <label for="genre_10" class="genre-picker-label">PROSODION</label>
+      </fieldset>
+	  </div>
+      
+          <div class="buttonContainer" style="background: white;">
+            
+      <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
+        <input type="radio" value="0" name="instrument" id="instrument_1">
+        <label for="instrument_1" class="instrument-picker-label">AULOS</label>
+        <input type="radio" value="1" name="instrument" id="instrument_2">
+        <label for="instrument_2" class="instrument-picker-label">KITHARA</label>
+        <input type="radio" value="2" name="instrument" id="instrument_3">
+        <label for="instrument_3" class="instrument-picker-label">LYRE</label>
+	<input type="radio" value="2" name="instrument" id="instrument_4">
+        <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
+      </fieldset>
+    </div></div>
     </div>
+  </div>
+    
     
     <!-- include google maps library *before* load cartodb.js -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
