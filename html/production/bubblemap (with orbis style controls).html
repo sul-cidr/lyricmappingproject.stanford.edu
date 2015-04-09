@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    <link type="text/css" rel="stylesheet" href="lyricmapping.css" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+	
+	    <!--Custom html for the infowindow customization-->
+    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
+    <!--Content.data contains the field info-->
+	<!--Content.data is determined by the UI on the cartodb webpage.-->
+	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
+
+	<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+	<![endif]-->
+	    <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> 
+</head>
+<body>
+    
+    <div class="navbar navbar-fixed-top">  
+      <div class="navbar-inner">  
+        <div class="container">  
+            <ul class="nav">  
+              <li class="active">    
+              </li>  
+              <li id="navbar_selected"><a href="bubblemap.html">Places</a></li>  
+              <li><a href="linemap.html">Travel</a></li>  
+            </ul>   
+        </div>  
+      </div>
+    </div>
+    
+    <div id="map"></div>
+    
+    <div id="layer_selector" class="cartodb-infobox">
+		<div id="list_cols_1_2">
+			<div id="list_col_1">
+				<ul>
+					<li id="all_poets" class="selected">All poets</li>
+					<li id="date_450">Poets active around 450</li>
+					<li id="date_425">Poets active around 425</li>
+					<li id="date_400">Poets active around 400</li>
+				</ul>
+			</div>
+			<div id="list_col_2">
+				<ul>
+					<li id="relationship_1">Place of birth</li>
+					<li id="relationship_2">Place of death</li>
+					<li id="relationship_3">Place of performance</li>
+				</ul>
+			</div>
+		</div>
+		<div id="list_cols_3_4">
+			<div id="list_col_3">
+				<ul>
+					<li id="instrument_1">Aulos</li> <!--data = the appropriate instrument-id-->
+					<li id="instrument_2">Kithara</li>
+					<li id="instrument_3">Lyre</li>
+					<li id="instrument_4">Magadis</li>
+				</ul>
+			</div>
+			<div id="list_col_4">
+				<ul>
+					<li id="genre_2">Dithyramb</li>
+					<li id="genre_3">Elegy</li>
+					<li id="genre_4">Enkomion</li>
+					<li id="genre_5">Epigram</li>
+					<li id="genre_6">Hymn</li>
+					<li id="genre_11">Iambos</li>
+					<li id="genre_7">Nome</li>
+					<li id="genre_8">Paean</li>			
+					<li id="genre_9">Prooimion</li>
+					<li id="genre_10">Prosodion</li>					
+				</ul>
+			</div>
+		</div>
+    </div>
+
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+
+    <script>
+	// create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the button of the selected layer
+          var $li = $(e.target);
+          
+          // deselect all_poets, remove all selections, and toggle the clicked one
+          $('#all_poets').removeClass('selected');
+	  $options.removeClass('selected');
+          $li.addClass('selected');
+		  
+		  //if all poets selected or nothing selected show all poets; otherwise, update query
+		  if($li.attr('id')=='all_poets' || $options.hasClass('selected')==false) {
+			$options.removeClass('selected');
+			$('#all_poets').addClass('selected');
+			layer.setQuery(createTotalPoetsQuery());
+		  }
+		  else {
+			updateQuery(layer);
+		  }
+
+        });
+      }
+	  
+	function updateQuery(layer) {
+	
+	/* this function creates and calls a complex sql query based on selected items */
+	/* when an item is clicked, it checks the status of each button and creates an appropriate sql query */
+	/* it is super gross */
+	/* the sql query is composed of several embedded joins. first poets & poet_cities */
+	/* then the result of that with dates, genres, instruments, and cities in turn */
+	/* the code is somewhat repetitive and it's probably possible to shrink it with some function calls but it sounds like too much work */
+		var firstCall = true;
+		var i = 0;
+		var query = [
+			"SELECT ",
+			"	cities.cartodb_id, ",
+			"	cities.the_geom, ",
+			"	cities.the_geom_webmercator, ",
+			"	cities.government, ",
+			"	cities.city_name, ",
+			"	instrument_players.cityid, ",
+			"	COUNT(instrument_players.cityid) as selected_number, ",
+			"	string_agg(instrument_players.poet_name, ', ') as selected_names, ",
+			"	string_agg(instrument_players.poet_link, ', ') as selected_links, ",
+			"	string_agg(instrument_players.sources, ', ') as selected_sources ",
+			"FROM cities, ( ",
+			"	SELECT ",
+			"		genre_players.poetid, ",
+			"		genre_players.poet_name, ",
+			"		genre_players.cityid, ",
+			"		genre_players.poet_link, ",
+			"		genre_players.sources ",
+			"		FROM (",
+			"			SELECT ",
+			"			date_players.poetid, ",
+			"			date_players.poet_name, ",
+			"			date_players.cityid, ",
+			"			date_players.poet_link, ",
+			"			date_players.sources ",
+			"			FROM ( ",
+			"				SELECT ",
+			"				place_players.poetid, ",
+			"				place_players.poet_name, ",
+			"				place_players.cityid, ",
+			"				place_players.poet_link, ",
+			"				place_players.sources ",
+			"				FROM (",
+			"					SELECT ",
+			"					poets.poetid, ",
+			"					poets.poet_name, ",
+			"					poets.sources, ",
+			"					poets.poet_link, ",
+			"					poets_cities.cityid ",
+			"					FROM poets, poets_cities ",
+			"					WHERE poets.poetid = poets_cities.poetid "
+		].join("");
+
+		/* first choose relationship to place */
+		
+		firstCall = true;
+		for (i=1; i <=3; i++) {		
+			if($('#relationship_'+i).attr('class') == 'selected') {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+						"AND (relationshipid = ",
+						i,
+						" "
+					].join("");
+				}
+				else {
+					query = query + "OR relationshipid = " + i + " ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) ";
+		}
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+			"		ORDER BY poet_name DESC ",
+			"	) place_players"
+		].join("");
+		
+		/* then call dates */
+		
+		firstCall = true;
+		for (i=450; i >= 400; i=i-25) {		
+			if($('#date_'+i).attr('class') == 'selected') {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+						", dates ",
+						"WHERE place_players.poetid = dates.poetid ",
+						"AND ( ",
+						"dates.date='",
+						i,
+						"' "
+					].join("");
+				}
+				else {
+					query = query + "OR dates.date = '" + i + "' ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid ";
+		}
+		/* embed this into the next layer up */
+		
+		query = query + [
+		"		ORDER BY place_players.poet_name DESC ",
+		"		) date_players "
+		].join("");
+		
+		/* now the custom genre call depending on what is selected */
+		
+		firstCall = true;
+		for (i=2; i <= 11; i++) {		
+			if($('#genre_'+i).attr('class') == 'selected') {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+					", genres ",
+					"WHERE date_players.poetid = genres.poetid ",
+					"			AND (genres.genreid = ",
+					i,
+					" "].join("");
+				}
+				else {
+					query = query + "OR genres.genreid = " + i + " ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid ";
+		}
+		/* if no genre selected pass all of dates up unaltered */
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+		"	ORDER BY date_players.poet_name DESC ",
+		"	) genre_players " 
+		].join("");
+		
+		/* now add the instruments */
+
+		firstCall = true;
+		for (i=1; i <= 4; i++) {		
+			if($('#instrument_'+i).attr('class') == 'selected') {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [ 
+					", instruments ",
+					"WHERE genre_players.poetid = instruments.poetid ",
+					"AND (instruments.instrumentid = ",
+					i,
+					" "
+					].join("");
+				}
+				else {
+					query = query + "OR instruments.instrumentid = " + i + " ";
+				}
+			}
+		}
+		/* if an instrument has been selected close the call */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.poet_link, genre_players.sources, genre_players.cityid ";
+		}
+		/* if no instrument selected pass up genre players unaltered */		
+		
+		/* close out the query */
+
+		query = query + [
+			"		ORDER BY genre_players.poet_name DESC ",
+			"	) instrument_players ",
+			"WHERE cities.cityid = instrument_players.cityid ",
+			"GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		
+		console.log(query);
+		
+		layer.setQuery(query); 
+	}	  
+	  
+	  function createTotalPoetsQuery() {
+		var query = [
+			"SELECT ",
+			"	cities.cartodb_id, ",
+			"	cities.the_geom, ",
+			"	cities.the_geom_webmercator, ",
+			"	cities.city_name, ",
+			"	cities.government, ",
+			"	sorted_poets.cityid, ",
+			"	COUNT(sorted_poets.cityid) as selected_number, ",
+			"	string_agg(sorted_poets.poet_name, ', ') as selected_names, ",
+			"   	string_agg(sorted_poets.sources, ', ') as selected_sources, ",
+			"	string_agg(sorted_poets.poet_link, ', ') as selected_links ",
+			"FROM cities, ",
+			"	(SELECT ",
+			"		poets.poetid, ",
+			"		poets.poet_name, ",
+			"		poets.sources, ",
+			"		poets.poet_link, ",
+			"		poets_cities.cityid ",
+			"		FROM poets, poets_cities ",
+			"		WHERE poets.poetid = poets_cities.poetid ",
+			"		ORDER BY cityid ASC, poet_name ASC) sorted_poets ",
+			"WHERE cities.cityid = sorted_poets.cityid ",
+			"GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		return query;
+	}
+	
+
+	  
+      function main() {
+        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/476ba7de-1a6d-11e3-a8fe-95749a34fac2/viz.json', {
+          tiles_loader: false,
+          center_lat: 38.95,
+          center_lon: 22.38,
+          zoom: 6,
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			var query = createTotalPoetsQuery();
+			var sublayer = layers[1].getSubLayer(0);
+			
+			layers[1].setQuery(query);
+			
+			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
+			
+			vis.addOverlay({
+				type: 'infobox',
+				template: "<h3>{{city_name}}</h3><p>Number of poets: {{selected_number}}</p><p>Names of poets: {{selected_names}}</p><p>Government (450-400 BCE): {{government}}</p>",
+				width: 300,
+				position: 'bottom|left'
+			});			
+			
+			createSelector(layers[1]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+    
+    <script src="bootstrap/js/jquery.js"></script>  
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script> 
+  </body>
+</html>
