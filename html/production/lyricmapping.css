@@ -1,4 +1,4 @@
-#map {
+html, body, #map {
         height: 100%;
         padding: 0;
         margin: 0;
@@ -12,9 +12,27 @@
 #navbar_selected {
   background-color: #CDC673
 }
+
+.mainlinksDiv {
+	width: 45%;                     /* poor approximation for old browsers    */
+	width: calc(45% - 8px);         /* standards-based answer for IE9+, FF16+ */
+	width: -moz-calc(45% - 8px);    /* support for FF4 - FF15                 */
+	width: -webkit-calc(45% - 8px); /* support for Chrome19+ and Safari6+     */
+	color:white;
+	padding-top: 10px;
+	padding-bottom:10px;
+	display: inline-block;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	text-align: center;
+}
+
+a.mainlinks:link {
+	text-decoration: none;
+}
       
 /* above per https://groups.google.com/forum/#!msg/cartodb/VH9SCtWm2KE/BRDUDaCVEkMJ (last comment) to get bootstrap and google working happily */
-/*
+
 #layer_selector {
   border: 0;
   position: absolute;
@@ -79,4 +97,4 @@
 
 #list_col_4 {
       float: right;
-} */
+} 
