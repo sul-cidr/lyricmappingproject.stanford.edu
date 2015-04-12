@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    
+    <link type="text/css" rel="stylesheet" href="orbis.css" />
+    <link type="text/css" rel="stylesheet" href="lyricmapping.css" />
+      <link type="text/css" rel="stylesheet" href="chosen.min.css" />
+      <link rel="stylesheet" href="css/iThing.css" type="text/css" />
+  <link href='http://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+	
+	    <!--Custom html for the infowindow customization-->
+    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
+    <!--Content.data contains the field info-->
+	<!--Content.data is determined by the UI on the cartodb webpage.-->
+	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
+
+	<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+	<![endif]-->
+	<!-- bootstrap is not playing well with the orbis box-->
+	<!-- <link href="bootstrap/css/bootstrap.css" rel="stylesheet">    --> 
+</head>
+<body>
+  
+    
+
+  <div id="map"></div>
+    
+  <div class="controlsDiv" id="controlbar">
+    <div id="controlbarScroller";>
+      
+    <div id="modeSelection">
+            <div class="mainlinksDiv" id="navbar_selected">
+	    <a class="mainlinks" href="bubblemap.html">PLACES</a>
+	     </div>  
+              <div style="float:right; background: white;" class="mainlinksDiv">
+		<a class="mainlinks" href="linemap.html">TRAVEL</a>
+	      </div>
+    </div>
+    
+      <div style="width: 292px; margin: 0 auto;" id="slider"></div>
+      
+    <div class="buttonContainer" style="background: white;">
+            
+      <fieldset style="border: none;" id="cityForm" class="priorityForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACE OF: </div>
+        <input type="radio" value="0" name="city" id="relationship_1">
+        <label for="relationship_1" class="priority-picker-label">BIRTH</label>
+        <input type="radio" value="1" name="city" id="relationship_3">
+        <label for="relationship_3" class="priority-picker-label">PERFORMANCE</label>
+        <input type="radio" value="2" name="city" id="relationship_2">
+        <label for="relationship_2" class="priority-picker-label">DEATH</label>
+      </fieldset>
+    </div></div>
+      
+      <div class="buttonContainer" style="background: white;">
+            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GENRE: </div>
+        <input type="radio" value="0" name="city" id="genre_2">
+        <label for="genre_2" class="genre-picker-label">DITHYRAMB</label>
+        <input type="radio" value="1" name="city" id="genre_3">
+        <label for="genre_3" class="genre-picker-label">ELEGY</label>
+        <input type="radio" value="2" name="city" id="genre_4">
+        <label for="genre_4" class="genre-picker-label">ENKOMION</label>
+	<input type="radio" value="0" name="city" id="genre_5">
+        <label for="genre_5" class="genre-picker-label">EPIGRAM</label>
+        <input type="radio" value="1" name="city" id="genre_6">
+        <label for="genre_6" class="genre-picker-label">HYMN</label>
+        <input type="radio" value="2" name="city" id="genre_11">
+        <label for="genre_11" class="genre-picker-label">IAMBOS</label>
+	<input type="radio" value="0" name="city" id="genre_7">
+        <label for="genre_7" class="genre-picker-label">NOME</label>
+        <input type="radio" value="1" name="city" id="genre_8">
+        <label for="genre_8" class="genre-picker-label">PAEAN</label>
+        <input type="radio" value="2" name="city" id="genre_9">
+        <label for="genre_9" class="genre-picker-label">PROOIMION</label>
+	<input type="radio" value="2" name="city" id="genre_10">
+        <label for="genre_10" class="genre-picker-label">PROSODION</label>
+      </fieldset>
+	  </div>
+      
+          <div class="buttonContainer" style="background: white;">
+            
+      <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
+        <input type="radio" value="0" name="city" id="instrument_1">
+        <label for="instrument_1" class="instrument-picker-label">AULOS</label>
+        <input type="radio" value="1" name="city" id="instrument_2">
+        <label for="instrument_2" class="instrument-picker-label">KITHARA</label>
+        <input type="radio" value="2" name="city" id="instrument_3">
+        <label for="instrument_3" class="instrument-picker-label">LYRE</label>
+	<input type="radio" value="2" name="city" id="instrument_4">
+        <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
+      </fieldset>
+    </div></div>
+    </div>
+  </div>
+    
+    
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+    
+    <script src="jquery-1.11.2.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="jQRangeSlider-min.js"></script>
+    
+        <script>
+    //<!--
+      $("#slider").rangeSlider({
+        bounds:{min: -450, max: -400},
+	defaultValues:{min: -450, max: -400},
+	step: 25,
+        formatter:function(val){
+          var value = -val;
+          return value.toString() + " BCE";
+        }
+	});
+    //-->
+    </script>    
+
+    <script>
+	// create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#controlbar input');
+        $options.click(function(e) {
+        
+		  //if all poets selected or nothing selected show all poets; otherwise, update query
+//		  if($options!.is(':checked')) {
+//			layer.setQuery(createTotalPoetsQuery());
+//		  }
+//		  else {
+			updateQuery(layer, $("#slider").rangeSlider("values"));
+//		  }
+	$("#slider").bind("valuesChanged", function(e, data) {
+	  console.log("Values just changed. min: " + data.values.min + " max: " + data.values.max);
+	  updateQuery(layer, $("#slider").rangeSlider("values"));
+	  });
+        });
+      }
+	  
+	function updateQuery(layer, dateValues) {
+	
+	/* this function creates and calls a complex sql query based on selected items */
+	/* when an item is clicked, it checks the status of each button and creates an appropriate sql query */
+	/* it is super gross */
+	/* the sql query is composed of several embedded joins. first poets & poet_cities */
+	/* then the result of that with dates, genres, instruments, and cities in turn */
+	/* the code is somewhat repetitive and it's probably possible to shrink it with some function calls but it sounds like too much work */
+		var firstCall = true;
+		var i = 0;
+		var query = [
+			"SELECT ",
+			"	cities.cartodb_id, ",
+			"	cities.the_geom, ",
+			"	cities.the_geom_webmercator, ",
+			"	cities.government, ",
+			"	cities.city_name, ",
+			"	instrument_players.cityid, ",
+			"	COUNT(instrument_players.cityid) as selected_number, ",
+			"	string_agg(instrument_players.poet_name, ', ') as selected_names, ",
+			"	string_agg(instrument_players.poet_link, ', ') as selected_links, ",
+			"	string_agg(instrument_players.sources, ', ') as selected_sources ",
+			"FROM cities, ( ",
+			"	SELECT ",
+			"		genre_players.poetid, ",
+			"		genre_players.poet_name, ",
+			"		genre_players.cityid, ",
+			"		genre_players.poet_link, ",
+			"		genre_players.sources ",
+			"		FROM (",
+			"			SELECT ",
+			"			date_players.poetid, ",
+			"			date_players.poet_name, ",
+			"			date_players.cityid, ",
+			"			date_players.poet_link, ",
+			"			date_players.sources ",
+			"			FROM ( ",
+			"				SELECT ",
+			"				place_players.poetid, ",
+			"				place_players.poet_name, ",
+			"				place_players.cityid, ",
+			"				place_players.poet_link, ",
+			"				place_players.sources ",
+			"				FROM (",
+			"					SELECT ",
+			"					poets.poetid, ",
+			"					poets.poet_name, ",
+			"					poets.sources, ",
+			"					poets.poet_link, ",
+			"					poets_cities.cityid ",
+			"					FROM poets, poets_cities ",
+			"					WHERE poets.poetid = poets_cities.poetid "
+		].join("");
+
+		/* first choose relationship to place */
+		
+		firstCall = true;
+		for (i=1; i <=3; i++) {		
+			if($('#relationship_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+						"AND (relationshipid = ",
+						i,
+						" "
+					].join("");
+				}
+				else {
+					query = query + "OR relationshipid = " + i + " ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) ";
+		}
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+			"		ORDER BY poet_name DESC ",
+			"	) place_players"
+		].join("");
+		
+		/* then call dates */
+		
+		firstCall = true;
+		for (i=-dateValues.min; i >= -dateValues.max; i=i-25) {		
+		  if(firstCall == true) {
+		    firstCall = false;
+		    query = query + [
+		      ", dates ",
+		      "WHERE place_players.poetid = dates.poetid ",
+		      "AND ( ",
+		      "dates.date='",
+		      i,
+		      "' "
+		    ].join("");
+		  }
+		  else {
+			  query = query + "OR dates.date = '" + i + "' ";
+		  }
+		}
+		// if a genre has been selected close the query
+		if(firstCall == false) {
+			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid ";
+		}
+		// embed this into the next layer up
+		
+		query = query + [
+		"		ORDER BY place_players.poet_name DESC ",
+		"		) date_players "
+		].join("");
+		
+		/* now the custom genre call depending on what is selected */
+		
+		firstCall = true;
+		for (i=2; i <= 11; i++) {		
+			if($('#genre_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+					", genres ",
+					"WHERE date_players.poetid = genres.poetid ",
+					"			AND (genres.genreid = ",
+					i,
+					" "].join("");
+				}
+				else {
+					query = query + "OR genres.genreid = " + i + " ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid ";
+		}
+		/* if no genre selected pass all of dates up unaltered */
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+		"	ORDER BY date_players.poet_name DESC ",
+		"	) genre_players " 
+		].join("");
+		
+		/* now add the instruments */
+
+		firstCall = true;
+		for (i=1; i <= 4; i++) {		
+			if($('#instrument_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [ 
+					", instruments ",
+					"WHERE genre_players.poetid = instruments.poetid ",
+					"AND (instruments.instrumentid = ",
+					i,
+					" "
+					].join("");
+				}
+				else {
+					query = query + "OR instruments.instrumentid = " + i + " ";
+				}
+			}
+		}
+		/* if an instrument has been selected close the call */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.poet_link, genre_players.sources, genre_players.cityid ";
+		}
+		/* if no instrument selected pass up genre players unaltered */		
+		
+		/* close out the query */
+
+		query = query + [
+			"		ORDER BY genre_players.poet_name DESC ",
+			"	) instrument_players ",
+			"WHERE cities.cityid = instrument_players.cityid ",
+			"GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		
+		console.log(query);
+		
+		layer.setQuery(query); 
+	}	  
+	  
+	  function createTotalPoetsQuery() {
+		var query = [
+			"SELECT ",
+			"	cities.cartodb_id, ",
+			"	cities.the_geom, ",
+			"	cities.the_geom_webmercator, ",
+			"	cities.city_name, ",
+			"	cities.government, ",
+			"	sorted_poets.cityid, ",
+			"	COUNT(sorted_poets.cityid) as selected_number, ",
+			"	string_agg(sorted_poets.poet_name, ', ') as selected_names, ",
+			"   	string_agg(sorted_poets.sources, ', ') as selected_sources, ",
+			"	string_agg(sorted_poets.poet_link, ', ') as selected_links ",
+			"FROM cities, ",
+			"	(SELECT ",
+			"		poets.poetid, ",
+			"		poets.poet_name, ",
+			"		poets.sources, ",
+			"		poets.poet_link, ",
+			"		poets_cities.cityid ",
+			"		FROM poets, poets_cities ",
+			"		WHERE poets.poetid = poets_cities.poetid ",
+			"		ORDER BY cityid ASC, poet_name ASC) sorted_poets ",
+			"WHERE cities.cityid = sorted_poets.cityid ",
+			"GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+		].join("");
+		return query;
+	}
+	
+
+	  
+      function main() {
+        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/476ba7de-1a6d-11e3-a8fe-95749a34fac2/viz.json', {
+          tiles_loader: false,
+          center_lat: 38.95,
+          center_lon: 22.38,
+          zoom: 6,
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			var query = createTotalPoetsQuery();
+			var sublayer = layers[1].getSubLayer(0);
+			
+			layers[1].setQuery(query);
+			
+			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
+			
+			vis.addOverlay({
+				type: 'infobox',
+				template: "<h3>{{city_name}}</h3><p>Number of poets: {{selected_number}}</p><p>Names of poets: {{selected_names}}</p><p>Government (450-400 BCE): {{government}}</p>",
+				width: 300,
+				position: 'bottom|left'
+			});			
+			
+			createSelector(layers[1]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+    
+    <script src="bootstrap/js/jquery.js"></script>  
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script> 
+  </body>
+</html>
