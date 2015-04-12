@@ -451,15 +451,6 @@
 			
 			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_names', 'selected_sources'] });
 
-			sublayer.infowindow.set('template', $('#infowindow_template').html());
-			
-			vis.addOverlay({
-				type: 'infobox',
-				template: "<h3>{{city_name}}</h3><p>Selected number: {{selected_number}}</p><p>Selected names: {{selected_names}}</p><p>Sources: {{selected_sources}}</p>",
-				width: 300,
-				position: 'bottom|left'
-			});			
-			
 			createSelector(layers[1]);
         })
         .error(function(err) {

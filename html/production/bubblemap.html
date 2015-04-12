@@ -35,18 +35,17 @@
     <div id="controlbarScroller";>
       
     <div id="modeSelection">
-            <div class="mainlinksDiv" id="navbar_selected">
-	    <a class="mainlinks" href="bubblemap.html">PLACES</a>
-	     </div>  
-              <div style="float:right; background: white;" class="mainlinksDiv">
-		<a class="mainlinks" href="linemap.html">TRAVEL</a>
-	      </div>
+      <div class="mainlinksDiv" id="navbar_selected">
+	<a class="mainlinks" href="bubblemap.html">PLACES</a>
+      </div>  
+      <div style="float:right; background: white;" class="mainlinksDiv">
+	<a class="mainlinks" href="linemap.html">TRAVEL</a>
+      </div>
     </div>
     
-      <div style="width: 292px; margin: 0 auto;" id="slider"></div>
+    <div style="width: 292px; margin: 0 auto;" id="slider"></div>
       
-    <div class="buttonContainer" style="background: white;">
-            
+    <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="cityForm" class="priorityForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACE OF: </div>
         <input type="radio" value="0" name="city" id="relationship_1">
@@ -58,8 +57,7 @@
       </fieldset>
     </div></div>
       
-      <div class="buttonContainer" style="background: white;">
-            
+    <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GENRE: </div>
         <input type="radio" value="0" name="city" id="genre_2">
@@ -85,8 +83,7 @@
       </fieldset>
 	  </div>
       
-          <div class="buttonContainer" style="background: white;">
-            
+      <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
         <input type="radio" value="0" name="city" id="instrument_1">
@@ -100,8 +97,7 @@
       </fieldset>
     </div></div>
     </div>
-  </div>
-    
+  </div>    
     
     <!-- include google maps library *before* load cartodb.js -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -112,7 +108,7 @@
     <script src="jquery-ui.js"></script>
     <script src="jQRangeSlider-min.js"></script>
     
-        <script>
+    <script>
     //<!--
       $("#slider").rangeSlider({
         bounds:{min: -450, max: -400},
@@ -127,13 +123,12 @@
     </script>    
 
     <script>
-	// create layer selector
+      // create layer selector
       function createSelector(layer) {
         var sql = new cartodb.SQL({ user: 'dfdrisco' });
 
         var $options = $('#controlbar input');
-        $options.click(function(e) {
-        
+        $options.click(function(e) {        
 		  //if all poets selected or nothing selected show all poets; otherwise, update query
 //		  if($options!.is(':checked')) {
 //			layer.setQuery(createTotalPoetsQuery());
@@ -142,7 +137,6 @@
 			updateQuery(layer, $("#slider").rangeSlider("values"));
 //		  }
 	$("#slider").bind("valuesChanged", function(e, data) {
-	  console.log("Values just changed. min: " + data.values.min + " max: " + data.values.max);
 	  updateQuery(layer, $("#slider").rangeSlider("values"));
 	  });
         });
@@ -362,8 +356,6 @@
 		].join("");
 		return query;
 	}
-	
-
 	  
       function main() {
         cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/476ba7de-1a6d-11e3-a8fe-95749a34fac2/viz.json', {
@@ -374,19 +366,12 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = createTotalPoetsQuery();
+			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources FROM cities";
 			var sublayer = layers[1].getSubLayer(0);
 			
 			layers[1].setQuery(query);
 			
 			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
-			
-			vis.addOverlay({
-				type: 'infobox',
-				template: "<h3>{{city_name}}</h3><p>Number of poets: {{selected_number}}</p><p>Names of poets: {{selected_names}}</p><p>Government (450-400 BCE): {{government}}</p>",
-				width: 300,
-				position: 'bottom|left'
-			});			
 			
 			createSelector(layers[1]);
         })
