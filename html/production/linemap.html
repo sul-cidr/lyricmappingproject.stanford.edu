@@ -2,65 +2,119 @@
 <html>
   <head>
     <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+
+    <link type="text/css" rel="stylesheet" href="orbis.css" />
     <link type="text/css" rel="stylesheet" href="lyricmapping.css" />
+    <link type="text/css" rel="stylesheet" href="chosen.min.css" />
+    <link rel="stylesheet" href="css/iThing.css" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
     <![endif]-->
     
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> 
 </head>
   
- <body>
-      <div class="navbar navbar-fixed-top">  
-      <div class="navbar-inner">  
-        <div class="container">  
-            <ul class="nav">  
-              <li class="active">   
-              </li>  
-              <li><a href="bubblemap.html">Places</a></li>  
-              <li id="navbar_selected"><a href="linemap.html">Travel</a></li>  
-            </ul>   
-        </div>  
+<body>
+  
+  <div id="map"></div>
+
+  <div class="controlsDiv" id="controlbar">
+    <div id="controlbarScroller";>
+      
+    <div id="modeSelection">
+      <div style="background: white" class="mainlinksDiv">
+	<a class="mainlinks" href="bubblemap.html">PLACES</a>
+      </div>  
+      <div style="float:right" class="mainlinksDiv" id="navbar_selected">
+	<a class="mainlinks" href="linemap.html">TRAVEL</a>
       </div>
     </div>
-  
-    <div id="map"></div>
-    <div id="layer_selector" class="cartodb-infobox">
-      <ul>
-	    <li id="all_poets">All poets</li>
-	    <li id="poet_23">Ariphron</li>
-	    <li id="poet_11">Bakkhiadas</li>
-	    <li id="poet_61">Dion</li>
-	    <li id="poet_62">Dionysius of Chios</li>
-	    <li id="poet_43">Euangelos</li>
-	    <li id="poet_44">Eumelos</li>
-	    <li id="poet_55">Ion of Chios</li>
-	    <li id="poet_51">Khairis</li>
-	    <li id="poet_20">Krateuas</li>
-	    <li id="poet_47">Kydides</li>
-	    <li id="poet_3">Licymnius</li>
-	    <li id="poet_52">Magnes</li>		
-	    <li id="poet_1">Melanippides</li>
-	    <li id="poet_24">Philoxenus of Cythera</li>
-	    <li id="poet_5">Phrynis</li>
-	    <li id="poet_26">Polyidus</li>
-	    <li id="poet_2">Pronomus</li>
-	    <li id="poet_7">Telestes</li>
-	    <li id="poet_45">Thespis</li>
-	    <li id="poet_6">Timotheus</li>
-	    <li id="poet_18">-es</li>
-      </ul>
-    </div>
     
-	    <!--Custom html for the infowindow customization-->
+    <div style="width: 292px; margin: 0 auto;" id="slider"></div>
+      
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="cityForm" class="priorityForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POET: </div>
+	
+        <input type="radio" value="0" name="city" id="poet_23">
+        <label for="poet_23" class="priority-picker-label">Ariphron</label>
+	
+        <input type="radio" value="1" name="city" id="poet_11">
+        <label for="poet_11" class="priority-picker-label">Bakkhiadas</label>
+	
+        <input type="radio" value="2" name="city" id="poet_61">
+        <label for="poet_61" class="priority-picker-label">Dion</label>
+	
+	<input type="radio" value="0" name="city" id="poet_62">
+        <label for="poet_62" class="priority-picker-label">Dionysius of Chios</label>
+	
+        <input type="radio" value="1" name="city" id="poet_43">
+        <label for="poet_43" class="priority-picker-label">Euangelos</label>
+	
+        <input type="radio" value="2" name="city" id="poet_44">
+        <label for="poet_44" class="priority-picker-label">Eumelos</label>
+	
+        <input type="radio" value="0" name="city" id="poet_55">
+        <label for="poet_55" class="priority-picker-label">Ion of Chios</label>
+	
+        <input type="radio" value="1" name="city" id="poet_51">
+        <label for="poet_51" class="priority-picker-label">Khairis</label>
+	
+        <input type="radio" value="2" name="city" id="poet_20">
+        <label for="poet_20" class="priority-picker-label">Krateuas</label>
+	
+	<input type="radio" value="0" name="city" id="poet_47">
+        <label for="poet_47" class="priority-picker-label">Kydides</label>
+	
+        <input type="radio" value="1" name="city" id="poet_3">
+        <label for="poet_3" class="priority-picker-label">Licymnius</label>
+	
+        <input type="radio" value="2" name="city" id="poet_52">
+        <label for="poet_52" class="priority-picker-label">Magnes</label>
+
+	<input type="radio" value="0" name="city" id="poet_1">
+        <label for="poet_1" class="priority-picker-label">Melanippides</label>
+	
+        <input type="radio" value="1" name="city" id="poet_24">
+        <label for="poet_24" class="priority-picker-label">Philoxenus of Cythera</label>
+	
+        <input type="radio" value="2" name="city" id="poet_5">
+        <label for="poet_5" class="priority-picker-label">Phrynis</label>
+	
+	<input type="radio" value="0" name="city" id="poet_26">
+        <label for="poet_26" class="priority-picker-label">Polyidus</label>
+	
+        <input type="radio" value="1" name="city" id="poet_2">
+        <label for="poet_2" class="priority-picker-label">Pronomus</label>
+	
+        <input type="radio" value="2" name="city" id="poet_7">
+        <label for="poet_7" class="priority-picker-label">Telestes</label>
+	
+        <input type="radio" value="0" name="city" id="poet_45">
+        <label for="poet_45" class="priority-picker-label">Thespis</label>
+	
+        <input type="radio" value="1" name="city" id="poet_6">
+        <label for="poet_6" class="priority-picker-label">Timotheus</label>
+	
+        <input type="radio" value="2" name="city" id="poet_18">
+        <label for="poet_18" class="priority-picker-label">-es</label>
+      </fieldset>
+    </div></div>
+      
+  </div>
+    </div>
+  </div>  
+    
+    <!--Custom html for the infowindow customization-->
     <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
     <!--Content.data contains the field info-->
-	<!--Content.data is determined by the UI on the cartodb webpage.-->
-	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
+    <!--Content.data is determined by the UI on the cartodb webpage.-->
+    <!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
     <script type="infowindow/html" id="infowindow_template">
       <div class="cartodb-popup">
         <a href="#close" class="cartodb-popup-close-button close">x</a>
@@ -85,7 +139,7 @@
       function createSelector(vis, layers) {
         var sql = new cartodb.SQL({ user: 'dfdrisco' });
 
-        var $options = $('#layer_selector li');
+        var $options = $('#controlbar input');
 	  $options.click(function(e) {
           // get the button of the selected layer
           var $li = $(e.target);
@@ -97,7 +151,7 @@
 	  var sublayer2 = layers[1].getSubLayer(1);
           
           // deselect all_poets and toggle the clicked one
-          $('#all_poets').removeClass('selected');
+/*          $('#all_poets').removeClass('selected');
 	  $options.removeClass('selected');
           $li.addClass('selected');
 		  
@@ -109,12 +163,12 @@
 	    query2 = createTotalPoetsQuery();
 	    sublayer2.setSQL(query2);
 	  }
-	  else {
+	  else { */
 	    
 	    // choose query for lines data
 	    firstCall = true;
 	    for (i=1; i <= 100; i++) {		
-		    if($('#poet_'+i).attr('class') == 'selected') {
+		    if($('#poet_'+i).is(':checked')) {
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query1 = [
@@ -135,7 +189,7 @@
 	    query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid, COUNT(sorted_poets.cityid) as selected_number, string_agg(sorted_poets.sources, ', ') as selected_sources, string_agg(sorted_poets.poet_name, ', ') as selected_names, string_agg(sorted_poets.poet_link, ', ') as selected_links FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND (";
 	    firstCall = true;
 	    for (i=1; i <= 100; i++) {		
-		    if($('#poet_'+i).attr('class') == 'selected') {
+		    if($('#poet_'+i).is(':checked')) {
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query2 = query2 + [
@@ -152,7 +206,7 @@
 	    query2 = query2 + ") ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id";
 	    console.log(query2);
 	    sublayer2.setSQL(query2);
-	  }
+//	  }
 		  
         });
       }
