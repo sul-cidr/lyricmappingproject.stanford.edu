@@ -104,10 +104,107 @@
         <input type="radio" value="2" name="city" id="poet_18">
         <label for="poet_18" class="priority-picker-label">-es</label>
       </fieldset>
-    </div></div>
-      
-  </div>
     </div>
+    
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >ORIGIN: </div>
+	
+        <input type="radio" value="0" name="city" id="origin_2">
+        <label for="origin_2" class="genre-picker-label">Athens</label>
+	
+        <input type="radio" value="1" name="city" id="origin_6">
+        <label for="origin_6" class="genre-picker-label">Chios</label>
+	
+        <input type="radio" value="2" name="city" id="origin_35">
+        <label for="origin_35" class="genre-picker-label">Cythera</label>
+	
+	<input type="radio" value="0" name="city" id="origin_32">
+        <label for="origin_32" class="genre-picker-label">Elis</label>
+	
+        <input type="radio" value="1" name="city" id="origin_31">
+        <label for="origin_31" class="genre-picker-label">Hermione</label>
+	
+        <input type="radio" value="2" name="city" id="origin_1">
+        <label for="origin_1" class="genre-picker-label">Melos</label>
+	
+	<input type="radio" value="0" name="city" id="origin_9">
+        <label for="origin_9" class="genre-picker-label">Miletus</label>
+	
+        <input type="radio" value="1" name="city" id="origin_8">
+        <label for="origin_8" class="genre-picker-label">Mytilene</label>
+	
+        <input type="radio" value="2" name="city" id="origin_12">
+        <label for="origin_12" class="genre-picker-label">Selinus</label>
+	
+	<input type="radio" value="2" name="city" id="origin_22">
+        <label for="origin_22" class="genre-picker-label">Selymbria</label>
+	
+        <input type="radio" value="1" name="city" id="origin_13">
+        <label for="origin_13" class="genre-picker-label">Sicyon</label>
+	
+        <input type="radio" value="2" name="city" id="origin_19">
+        <label for="origin_19" class="genre-picker-label">Tarentum</label>
+	
+	<input type="radio" value="0" name="city" id="origin_3">
+        <label for="origin_3" class="genre-picker-label">Thebes</label>
+	
+        <input type="radio" value="1" name="city" id="origin_34">
+        <label for="origin_34" class="genre-picker-label">Thessaly</label>
+      </fieldset>
+    </div>
+      
+      <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >DESTINATION: </div>
+	
+        <input type="radio" value="0" name="city" id="destination_2">
+        <label for="destination_2" class="instrument-picker-label">Athens</label>
+	
+        <input type="radio" value="1" name="city" id="destination_4">
+        <label for="destination_4" class="instrument-picker-label">Chalcis</label>
+	
+        <input type="radio" value="2" name="city" id="destination_20">
+        <label for="destination_20" class="instrument-picker-label">Colophon</label>
+	
+	<input type="radio" value="2" name="city" id="destination_5">
+        <label for="destination_5" class="instrument-picker-label">Delos</label>
+	
+        <input type="radio" value="0" name="city" id="destination_30">
+        <label for="destination_30" class="instrument-picker-label">Delphi</label>
+	
+        <input type="radio" value="1" name="city" id="destination_11">
+        <label for="destination_11" class="instrument-picker-label">Ephesus</label>
+	
+        <input type="radio" value="2" name="city" id="destination_7">
+        <label for="destination_7" class="instrument-picker-label">Leontini</label>
+	
+	<input type="radio" value="2" name="city" id="destination_14">
+        <label for="destination_14" class="instrument-picker-label">Locri</label>
+	
+        <input type="radio" value="0" name="city" id="destination_33">
+        <label for="destination_33" class="instrument-picker-label">Macedonia</label>
+	
+        <input type="radio" value="1" name="city" id="destination_15">
+        <label for="destination_15" class="instrument-picker-label">Rhegium</label>
+	
+        <input type="radio" value="2" name="city" id="destination_13">
+        <label for="destination_13" class="instrument-picker-label">Sicyon</label>
+	
+	<input type="radio" value="2" name="city" id="destination_10">
+        <label for="destination_10" class="instrument-picker-label">Sparta</label>
+	
+        <input type="radio" value="2" name="city" id="destination_18">
+        <label for="destination_18" class="instrument-picker-label">Syracuse</label>
+	
+	<input type="radio" value="2" name="city" id="destination_19">
+        <label for="destination_19" class="instrument-picker-label">Tarentum</label>
+      </fieldset>
+    </div>
+    
+  </div>
+  </div>
+  </div>
   </div>  
     
     <!--Custom html for the infowindow customization-->
@@ -181,6 +278,32 @@
 				    query1 = query1 + "OR poetid = " + i + " ";
 			    }
 		    }
+		    if($('#origin_'+i).is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query1 = [
+					    "select * from poets_lines where birth_cityid = ",
+					    i,
+					    " "
+				    ].join("");
+			    }
+			    else {
+				    query1 = query1 + "OR birth_cityid = " + i + " ";
+			    }
+		    }
+		    if($('#destination_'+i).is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query1 = [
+					    "select * from poets_lines where other_cityid = ",
+					    i,
+					    " "
+				    ].join("");
+			    }
+			    else {
+				    query1 = query1 + "OR birth_cityid = " + i + " ";
+			    }
+		    }
 	    }
 	    sublayer1.setSQL(query1);
 	    console.log(query1);
@@ -200,6 +323,32 @@
 			    }
 			    else {
 				    query2 = query2 + "OR poets.poetid = " + i + " ";
+			    }
+		    }
+		    if($('#origin_'+i).is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query2 = query2 + [
+					    "poets_cities.cityid = ",
+					    i,
+					    " "
+				    ].join("");
+			    }
+			    else {
+				    query2 = query2 + "OR poets_cities.cityid = " + i + " ";
+			    }
+		    }
+		    if($('#destination_'+i).is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query2 = query2 + [
+					    "poets_cities.cityid = ",
+					    i,
+					    " "
+				    ].join("");
+			    }
+			    else {
+				    query2 = query2 + "OR poets_cities.cityid = " + i + " ";
 			    }
 		    }
 	    }
