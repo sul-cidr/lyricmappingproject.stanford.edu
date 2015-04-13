@@ -1,0 +1,61 @@
+/** color visualization */
+
+#poets_lines {
+   line-width: 3;
+   line-opacity: 0.7;
+}
+
+#poets_lines[poetid=24] {
+   line-color: #FFFF00;
+}
+#poets_lines[poetid=6] {
+   line-color: #FF9900;
+}
+#poets_lines[poetid=7] {
+   line-color: #FF8D70;
+}
+#poets_lines[poetid=2] {
+   line-color: #CC3300;
+}
+#poets_lines[poetid=1] {
+   line-color: #996600;
+}
+#poets_lines[poetid=3] {
+   line-color: #66FF33;
+}
+#poets_lines[poetid=51] {
+   line-color: #8F0000;
+}
+#poets_lines[poetid=18] {
+   line-color: #660033;
+}
+#poets_lines[poetid=11] {
+   line-color: #CC6699;
+}
+#poets_lines[poetid=20] {
+   line-color: #990099;
+}
+#poets_lines[poetid=5] {
+   line-color: #FF66FF;
+}
+#poets_lines[poetid=23] {
+   line-color: #CC99FF;
+}
+#poets_lines[poetid=26] {
+   line-color: #248F8F;
+}
+#poets_lines[poetid=43] {
+   line-color: #000066;
+}
+#poets_lines[poetid=44] {
+   line-color: #33CCFF;
+}
+#poets_lines[poetid=45] {
+   line-color: #00FFCC;
+}
+#poets_lines[poetid=47] {
+   line-color: #00FF99;
+}
+#poets_lines {
+   line-color: #00FF00;
+}

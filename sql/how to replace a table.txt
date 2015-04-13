@@ -3,7 +3,7 @@ replacing tables
 you can't just use sql queries to rename tables (e.g. drop table/rename), because then the cartodb dashboard won't work. you have to use their gui interface
 also insert into ... select * from ... doesn't work.
 
-you can prevent your visualizations from being deleted by adding a blank layer to viz.
+you can prevent your visualizations from being deleted by adding a blank layer to viz. but be sure to delete it afterwards!
 
 upload replacement table
 change numerical data types to numbers (mostly ids) (note the dates.date should be a string)
