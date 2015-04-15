@@ -10,7 +10,7 @@ html, body, #map {
 }
 
 #navbar_selected {
-  background-color: #CDC673
+
 }
 
 .mainlinksDiv {
@@ -25,76 +25,12 @@ html, body, #map {
 	margin-top: 3px;
 	margin-bottom: 3px;
 	text-align: center;
+	background: white;
 }
 
-a.mainlinks:link {
+a.mainlinks {
 	text-decoration: none;
+	color: black;
+	font-family: sans-serif;
+	font-size: 110;
 }
-      
-/* above per https://groups.google.com/forum/#!msg/cartodb/VH9SCtWm2KE/BRDUDaCVEkMJ (last comment) to get bootstrap and google working happily */
-
-#layer_selector {
-  border: 0;
-  position: absolute;
-  top: 50px;
-  right: 20px;
-  padding: 0;
-  margin: 0;
-  background-color: transparent;
-  box-shadow: 0px 0px 0px;
-  pointer-events:none;
-}
-
-#layer_selector ul {
-  padding: 0; border: 0;
-  list-style-type: none;
-  background-color: #e3e7ea;
-  margin-left: 5px;
-  margin-right: 5px;
-  pointer-events:auto;
-  opacity: .75;	
-}
-
-#layer_selector li {
-  border-bottom: 1px solid #999;
-  padding: 5px 10px;
-  color: #444;
-  cursor: auto;
-}
-
-#layer_selector ul:hover {
-  opacity: 1;
-}   
-
-#layer_selector li:hover {
-  background-color: #F0F0F0;
-  cursor: pointer;
-}
-
-#layer_selector li.selected {
-  background-color: #CDC673;
-}
-    
-#list_cols_1_2 {
-      float: left;
-}
-
-#list_col_1 {
-      float: left;
-}
-
-#list_col_2 {
-      float: right;
-}
-
-#list_cols_3_4 {
-      float: right;
-}
-
-#list_col_3 {
-      float: left;
-}
-
-#list_col_4 {
-      float: right;
-} 

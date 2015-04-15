@@ -36,15 +36,13 @@
       
     <div id="modeSelection">
       <div class="mainlinksDiv" id="navbar_selected">
-	<a class="mainlinks" href="bubblemap.html">PLACES</a>
+	<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="bubblemap.html">PLACES</a>
       </div>  
-      <div style="float:right; background: white;" class="mainlinksDiv">
+      <div style="float:right" class="mainlinksDiv">
 	<a class="mainlinks" href="linemap.html">TRAVEL</a>
       </div>
     </div>
     
-    <div style="width: 292px; margin: 0 auto;" id="slider"></div>
-      
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="cityForm" class="priorityForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACE OF: </div>
@@ -55,7 +53,7 @@
         <input type="radio" value="2" name="city" id="relationship_2">
         <label for="relationship_2" class="priority-picker-label">DEATH</label>
       </fieldset>
-    </div></div>
+    </div>
       
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
@@ -83,7 +81,7 @@
       </fieldset>
     </div>
       
-      <div class="buttonContainer" style="background: white;">            
+    <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
         <input type="radio" value="0" name="city" id="instrument_1">
@@ -95,9 +93,12 @@
 	<input type="radio" value="2" name="city" id="instrument_4">
         <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
       </fieldset>
-    </div>
-  
+    </div></div>
+    
+    <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div> 
+
   </div>
+
     </div>
   </div>    
     
@@ -108,18 +109,31 @@
     
     <script src="jquery-1.11.2.js"></script>
     <script src="jquery-ui.js"></script>
-    <script src="jQRangeSlider-min.js"></script>
+    <script src="jQRangeSlider-withRuler-min.js"></script>
     
     <script>
     //<!--
       $("#slider").rangeSlider({
-        bounds:{min: -450, max: -400},
+        bounds:{min: -500, max: -350},
 	defaultValues:{min: -450, max: -400},
+	range: {min: 25},  
 	step: 25,
+	arrows: false,
         formatter:function(val){
           var value = -val;
           return value.toString() + " BCE";
-        }
+        },
+	scales: [
+	// Primary scale
+	{
+	  first: function(val){ return val; },
+	  next: function(val){ return val + 25; },
+	  stop: function(val){ return false; },
+	  label: function(val){ return -val; },
+	  format: function(tickContainer, tickStart, tickEnd){ 
+	    tickContainer.addClass("myCustomClass");
+	  }
+	}]
 	});
     //-->
     </script>    
