@@ -262,7 +262,7 @@
 		/* embed this into the next layer up */
 		
 		query = query + [
-			"		ORDER BY poet_name DESC ",
+			"		ORDER BY poet_name ASC ",
 			"	) place_players"
 		].join("");
 		
@@ -292,7 +292,7 @@
 		// embed this into the next layer up
 		
 		query = query + [
-		"		ORDER BY place_players.poet_name DESC ",
+		"		ORDER BY place_players.poet_name ASC ",
 		"		) date_players "
 		].join("");
 		
@@ -324,7 +324,7 @@
 		/* embed this into the next layer up */
 		
 		query = query + [
-		"	ORDER BY date_players.poet_name DESC ",
+		"	ORDER BY date_players.poet_name ASC ",
 		"	) genre_players " 
 		].join("");
 		
@@ -357,7 +357,7 @@
 		/* close out the query */
 
 		query = query + [
-			"		ORDER BY genre_players.poet_name DESC ",
+			"		ORDER BY genre_players.poet_name ASC ",
 			"	) instrument_players ",
 			"WHERE cities.cityid = instrument_players.cityid ",
 			"GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
