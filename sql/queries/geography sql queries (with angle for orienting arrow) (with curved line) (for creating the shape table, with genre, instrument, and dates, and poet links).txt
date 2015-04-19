@@ -12,6 +12,7 @@ lines.other_cityid,
 lines.the_geom,
 lines.sources,
 lines.poet_link,
+lines.arrow_angle,
 info.instrument_names,
 info.genre_names,
 info.date_names
@@ -27,7 +28,8 @@ FROM
 	ST_Transform(ST_Segmentize(ST_MakeLine(
 		ST_Transform(other_cities.the_geom, 953027),
 		ST_Transform(birth_cities.the_geom, 953027)
-		), 100000 ), 4326 ) as the_geom
+		), 100000 ), 4326 ) as the_geom,
+	degrees(ST_Azimuth(birth_cities.the_geom, other_cities.the_geom)) as arrow_angle
 	FROM
 	
 		(SELECT 
@@ -120,7 +122,13 @@ FROM
 		(SELECT 
 			sorted_poets.poetid,
 			sorted_poets.poet_name,
-			string_agg(sorted_dates.date, ', ') as date_names
+			(
+				cast(min(sorted_dates.date) as text)
+				||
+				'-'
+				||
+				cast(max(sorted_dates.date) as text)
+			) as date_names
 		FROM (SELECT * FROM dates ORDER BY date DESC) sorted_dates, 
 			(SELECT 
 				poets.poetid,
