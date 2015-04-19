@@ -25,6 +25,8 @@ WHERE cities.cityid = sorted_poets.cityid
 GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id
 
 BIGGEST query incorporating relationship to place
+(note that this is still pretty close to the sql query in the bubblemap.html but not the same -- that one has sources and links, for example. the two have diverged from a common source)
+this query actually doesn't really work
 
 SELECT 
 	cities.cartodb_id,
@@ -34,29 +36,39 @@ SELECT
 	instrument_players.cityid,
 	COUNT(instrument_players.cityid) as selected_number,
 	string_agg(instrument_players.poet_name, ', ') as selected_names,
+	string_agg(sorted_poets.poet_name, ', ') as selected_names,
+	string_agg(sorted_poets.poet_link, ', ') as selected_links,
 	'who died' as relationship_text
 FROM cities, (
-	SELECT 
+	SELECT
 		genre_players.poetid,
 		genre_players.poet_name,
-		genre_players.cityid
+		genre_players.cityid,
+		genre_players.poet_link,
+		genre_players.sources
 		FROM (
-			SELECT 
+			SELECT
 			date_players.poetid,
 			date_players.poet_name,
-			date_players.cityid
-			FROM ( 
+			date_players.cityid,
+			date_players.poet_link,
+			date_players.sources
+			FROM (
 				SELECT
 				place_players.poetid,
 				place_players.poet_name,
-				place_players.cityid				
+				place_players.cityid,
+				place_players.poet_link,
+				place_players.sources
 				FROM (
-					SELECT 
+					SELECT
 					poets.poetid,
 					poets.poet_name,
+					poets.sources,
+					poets.poet_link,
 					poets_cities.cityid
-					FROM poets, poets_cities 
-					WHERE poets.poetid = poets_cities.poetid 
+					FROM poets, poets_cities
+					WHERE poets.poetid = poets_cities.poetid
 					AND (
 						relationshipid = 1 
 						OR

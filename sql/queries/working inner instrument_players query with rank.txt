@@ -1,0 +1,55 @@
+SELECT
+    instrument_players.cityid,
+    instrument_players.poetid,
+    instrument_players.poet_name,
+    instrument_players.poet_link,
+    instrument_players.sources,
+    rank() OVER (PARTITION BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) as poets_cities_rank
+FROM (
+    SELECT
+        genre_players.poetid,
+        genre_players.poet_name,
+        genre_players.cityid,
+        genre_players.poet_link,
+        genre_players.sources
+        FROM (
+            SELECT
+                date_players.poetid,
+                date_players.poet_name,
+                date_players.cityid,
+                date_players.poet_link,
+                date_players.sources
+                FROM (
+                    SELECT
+                        place_players.poetid,
+                        place_players.poet_name,
+                        place_players.cityid,
+                        place_players.poet_link,
+                        place_players.sources
+                        FROM (
+                            SELECT
+                                poets.poetid,
+                                poets.poet_name,
+                                poets.sources,
+                                poets.poet_link,
+                                poets_cities.cityid
+                                FROM poets, poets_cities
+                                WHERE poets.poetid = poets_cities.poetid
+                                ORDER BY poet_name ASC
+                        ) place_players,
+                        dates
+                        WHERE place_players.poetid = dates.poetid
+                        AND
+                        ( dates.date='450' OR dates.date = '425' OR dates.date = '400'  )
+                        GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid
+                        ORDER BY place_players.poet_name ASC
+                ) date_players,
+                genres
+                WHERE date_players.poetid = genres.poetid
+                AND (genres.genreid = 2  )
+                GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid
+                ORDER BY date_players.poet_name ASC
+        ) genre_players
+        ORDER BY genre_players.poet_name ASC
+) instrument_players
+ORDER BY instrument_players.cityid, instrument_players.poet_name
