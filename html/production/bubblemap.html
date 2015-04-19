@@ -175,11 +175,11 @@
 			"	cities.the_geom_webmercator, ",
 			"	cities.government, ",
 			"	cities.city_name, ",
-			"	instrument_players.cityid, ",
-			"	COUNT(instrument_players.cityid) as selected_number, ",
-			"	string_agg(instrument_players.poet_name, ', ') as selected_names, ",
-			"	string_agg(instrument_players.poet_link, ', ') as selected_links, ",
-			"	string_agg(instrument_players.sources, ', ') as selected_sources, ",
+			"	rank_players.cityid, ",
+			"	COUNT(rank_players.cityid) as selected_number, ",
+			"	(string_agg(rank_players.poets_cities_rank || '. ' || rank_players.poet_name, ', ')) as selected_names, ",
+			"	string_agg(rank_players.poet_link, ', ') as selected_links, ",
+			"	(string_agg(rank_players.poets_cities_rank || '. ' || rank_players.sources, ', ')) as selected_sources, "
 		].join("");
 
 		//add relationship text based on what's selected
@@ -205,6 +205,14 @@
 		
 		query = query + [
 			"FROM cities, ( ",
+			  "SELECT ",
+			  "    instrument_players.cityid, ",
+			  "    instrument_players.poetid, ",
+			  "    instrument_players.poet_name, ",
+			  "    instrument_players.poet_link, ",
+			  "    instrument_players.sources, ",
+			  "    cast(rank() OVER (PARTITION BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) as text) as poets_cities_rank ",
+			  "    FROM ( ",
 			"	SELECT ",
 			"		genre_players.poetid, ",
 			"		genre_players.poet_name, ",
@@ -359,8 +367,9 @@
 		query = query + [
 			"		ORDER BY genre_players.poet_name ASC ",
 			"	) instrument_players ",
-			"WHERE cities.cityid = instrument_players.cityid ",
-			"GROUP BY instrument_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+			"  ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players ",
+			"  WHERE cities.cityid = rank_players.cityid ",
+			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
 		].join("");
 		
 		console.log(query);
