@@ -90,7 +90,7 @@ FROM
 				sorted_poets.poetid,
 				sorted_poets.poet_name,
 				string_agg(sorted_instruments.instrument, ', ') as instrument_names
-			FROM (SELECT * FROM instruments ORDER BY instrument DESC) sorted_instruments, 
+			FROM (SELECT * FROM instruments ORDER BY instrument ASC) sorted_instruments, 
 				(SELECT 
 					poets.poetid,
 					poets.poet_name
@@ -107,7 +107,7 @@ FROM
 			sorted_poets.poetid,
 			sorted_poets.poet_name,
 			string_agg(sorted_genres.genre, ', ') as genre_names
-		FROM (SELECT * FROM genres ORDER BY genre DESC) sorted_genres, 
+		FROM (SELECT * FROM genres ORDER BY genre ASC) sorted_genres, 
 			(SELECT 
 				poets.poetid,
 				poets.poet_name

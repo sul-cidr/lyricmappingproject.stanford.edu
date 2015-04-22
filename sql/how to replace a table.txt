@@ -6,7 +6,7 @@ also insert into ... select * from ... doesn't work.
 you can prevent your visualizations from being deleted by adding a blank layer to viz. but be sure to delete it afterwards (especially important with the lines)! 
 
 upload replacement table
-change numerical data types to numbers (mostly ids) (note the dates.date should be a string) (looks like converter does a better job of this than it used to)
+change numerical data types to numbers (mostly ids) (note the dates.date should be a string) (looks like converter does a better job of this than it used to, but failed on poets_cities.cityid)
 change private to public
 delete original table on cartodb
 rename replacement table to name of original table

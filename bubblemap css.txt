@@ -1,0 +1,74 @@
+/** bubble visualization */
+Map {
+  buffer-size: 300;
+}
+
+#cities{
+  marker-fill: #B81609;
+  marker-line-color: #FFF;
+  marker-line-width: 2;
+  marker-line-opacity: 1;
+  marker-opacity: 0.9;
+  marker-placement: point;
+  marker-type: ellipse;
+  marker-allow-overlap: true;
+  marker-clip: false;
+  marker-multi-policy: largest;
+}
+#cities [ selected_number <= 46] {
+   marker-width: 25.0;
+}
+#cities [ selected_number <= 8] {
+   marker-width: 23.3;
+}
+#cities [ selected_number <= 8] {
+   marker-width: 21.7;
+}
+#cities [ selected_number <= 6] {
+   marker-width: 20.0;
+}
+#cities [ selected_number <= 6] {
+   marker-width: 18.3;
+}
+#cities [ selected_number <= 4] {
+   marker-width: 16.7;
+}
+#cities [ selected_number <= 3] {
+   marker-width: 15.0;
+}
+#cities [ selected_number <= 2] {
+   marker-width: 13.3;
+}
+#cities [ selected_number <= 1] {
+   marker-width: 10.0;
+}
+
+#cities::labels
+  [selected_number>=8][zoom>5],
+  [selected_number>=2][zoom>6],
+  [selected_number>=1][zoom>7]
+  {
+    text-name: [city_name];
+    text-face-name: 'Open Sans Regular';
+    text-size: 15;
+    text-fill: #000;
+    text-allow-overlap: true;
+    text-halo-fill: #FFF;
+    text-halo-radius: 1;
+    text-placement-type: simple;
+    text-placements: "N,S,E,W,NE,SE,NW,SW,16,14,12";
+    text-dy: 3;
+    text-dx: 3;
+    [cityid=33] {
+    	text-size: 50;
+    	text-orientation: 30;
+    	text-character-spacing: 50;
+    	text-face-name: 'Open Sans Light Italic';
+  	}
+    [cityid=34] {
+    	text-size: 50;
+    	text-orientation: 330;
+    	text-character-spacing: 20;
+    	text-face-name: 'Open Sans Light Italic';
+  	}
+  }

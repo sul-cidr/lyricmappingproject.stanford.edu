@@ -58,26 +58,89 @@
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GENRE: </div>
+        <input type="radio" value="2" name="city" id="genre_20">
+        <label for="genre_20" class="genre-picker-label">CHORAL DANCE</label>
+	
+        <input type="radio" value="2" name="city" id="genre_17">
+        <label for="genre_17" class="genre-picker-label">COMEDY</label>
+	
         <input type="radio" value="0" name="city" id="genre_2">
         <label for="genre_2" class="genre-picker-label">DITHYRAMB</label>
+	
         <input type="radio" value="1" name="city" id="genre_3">
         <label for="genre_3" class="genre-picker-label">ELEGY</label>
+	
         <input type="radio" value="2" name="city" id="genre_4">
         <label for="genre_4" class="genre-picker-label">ENKOMION</label>
+	
+        <input type="radio" value="2" name="city" id="genre_29">
+        <label for="genre_29" class="genre-picker-label">ENOPLION</label>
+	
+        <input type="radio" value="2" name="city" id="genre_15">
+        <label for="genre_15" class="genre-picker-label">EPIC</label>
+	
 	<input type="radio" value="0" name="city" id="genre_5">
         <label for="genre_5" class="genre-picker-label">EPIGRAM</label>
+	
+        <input type="radio" value="2" name="city" id="genre_16">
+        <label for="genre_16" class="genre-picker-label">EPINICIAN</label>
+	
+        <input type="radio" value="2" name="city" id="genre_18">
+        <label for="genre_18" class="genre-picker-label">EPODE</label>
+	
+        <input type="radio" value="2" name="city" id="genre_26">
+        <label for="genre_26" class="genre-picker-label">EULOGY</label>
+	
         <input type="radio" value="1" name="city" id="genre_6">
         <label for="genre_6" class="genre-picker-label">HYMN</label>
+	
+        <input type="radio" value="2" name="city" id="genre_22">
+        <label for="genre_22" class="genre-picker-label">HYPOCHREMATON</label>
+	
         <input type="radio" value="2" name="city" id="genre_11">
         <label for="genre_11" class="genre-picker-label">IAMBOS</label>
+	
+        <input type="radio" value="2" name="city" id="genre_23">
+        <label for="genre_23" class="genre-picker-label">KOMOS</label>
+	
+        <input type="radio" value="2" name="city" id="genre_24">
+        <label for="genre_24" class="genre-picker-label">LAMENT</label>
+	
 	<input type="radio" value="0" name="city" id="genre_7">
         <label for="genre_7" class="genre-picker-label">NOME</label>
+	
         <input type="radio" value="1" name="city" id="genre_8">
         <label for="genre_8" class="genre-picker-label">PAEAN</label>
+	
+        <input type="radio" value="2" name="city" id="genre_19">
+        <label for="genre_19" class="genre-picker-label">PARODY</label>
+	
+        <input type="radio" value="2" name="city" id="genre_13">
+        <label for="genre_13" class="genre-picker-label">PARTHENEION</label>
+	
+        <input type="radio" value="2" name="city" id="genre_28">
+        <label for="genre_28" class="genre-picker-label">POLEMISTERION</label>
+	
         <input type="radio" value="2" name="city" id="genre_9">
         <label for="genre_9" class="genre-picker-label">PROOIMION</label>
+	
+        <input type="radio" value="2" name="city" id="genre_25">
+        <label for="genre_25" class="genre-picker-label">PROSE</label>
+	
 	<input type="radio" value="2" name="city" id="genre_10">
         <label for="genre_10" class="genre-picker-label">PROSODION</label>
+	
+        <input type="radio" value="2" name="city" id="genre_27">
+        <label for="genre_27" class="genre-picker-label">PSOGON</label>
+	
+        <input type="radio" value="2" name="city" id="genre_21">
+        <label for="genre_21" class="genre-picker-label">SATYR</label>
+	
+	<input type="radio" value="2" name="city" id="genre_12">
+        <label for="genre_12" class="genre-picker-label">SKOLIA</label>
+	
+        <input type="radio" value="2" name="city" id="genre_14">
+        <label for="genre_14" class="genre-picker-label">TRAGEDY</label>
       </fieldset>
     </div>
       
@@ -86,12 +149,18 @@
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
         <input type="radio" value="0" name="city" id="instrument_1">
         <label for="instrument_1" class="instrument-picker-label">AULOS</label>
+        <input type="radio" value="0" name="city" id="instrument_5">
+        <label for="instrument_5" class="instrument-picker-label">BARBITOS</label>
         <input type="radio" value="1" name="city" id="instrument_2">
         <label for="instrument_2" class="instrument-picker-label">KITHARA</label>
         <input type="radio" value="2" name="city" id="instrument_3">
         <label for="instrument_3" class="instrument-picker-label">LYRE</label>
 	<input type="radio" value="2" name="city" id="instrument_4">
         <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
+        <input type="radio" value="0" name="city" id="instrument_6">
+        <label for="instrument_6" class="instrument-picker-label">SACADION</label>
+        <input type="radio" value="0" name="city" id="instrument_7">
+        <label for="instrument_7" class="instrument-picker-label">SAMBYKE</label>
       </fieldset>
     </div></div>
     
@@ -114,10 +183,10 @@
     <script>
     //<!--
       $("#slider").rangeSlider({
-        bounds:{min: -500, max: -350},
+        bounds:{min: -750, max: -250},
 	defaultValues:{min: -450, max: -400},
 	range: {min: 25},  
-	step: 25,
+	step: 50,
 	arrows: false,
         formatter:function(val){
           var value = -val;
@@ -127,7 +196,7 @@
 	// Primary scale
 	{
 	  first: function(val){ return val; },
-	  next: function(val){ return val + 25; },
+	  next: function(val){ return val + 100; },
 	  stop: function(val){ return false; },
 	  label: function(val){ return -val; },
 	  format: function(tickContainer, tickStart, tickEnd){ 
@@ -197,11 +266,33 @@
 		if ($('#genre_8').is(':checked')) query = query + "'associated with paean who performed' as relationship_text ";
 		if ($('#genre_9').is(':checked')) query = query + "'associated with prooimion who performed' as relationship_text ";
 		if ($('#genre_10').is(':checked')) query = query + "'associated with prosodion who performed' as relationship_text ";
-
+		if ($('#genre_11').is(':checked')) query = query + "'associated with dithyramb who performed' as relationship_text ";
+		if ($('#genre_12').is(':checked')) query = query + "'associated with skolia who performed' as relationship_text ";
+		if ($('#genre_13').is(':checked')) query = query + "'associated with partheneion who performed' as relationship_text ";
+		if ($('#genre_14').is(':checked')) query = query + "'associated with tragedy who performed' as relationship_text ";
+		if ($('#genre_15').is(':checked')) query = query + "'associated with epic who performed' as relationship_text ";
+		if ($('#genre_16').is(':checked')) query = query + "'associated with epinician who performed' as relationship_text ";
+		if ($('#genre_17').is(':checked')) query = query + "'associated with comedy who performed' as relationship_text ";
+		if ($('#genre_18').is(':checked')) query = query + "'associated with epode who performed' as relationship_text ";
+		if ($('#genre_19').is(':checked')) query = query + "'associated with parody who performed' as relationship_text ";
+		if ($('#genre_20').is(':checked')) query = query + "'associated with choral dance who performed' as relationship_text ";
+		if ($('#genre_21').is(':checked')) query = query + "'associated with satyr who performed' as relationship_text ";
+		if ($('#genre_22').is(':checked')) query = query + "'associated with hypochrematon who performed' as relationship_text ";
+		if ($('#genre_23').is(':checked')) query = query + "'associated with komos who performed' as relationship_text ";
+		if ($('#genre_24').is(':checked')) query = query + "'associated with lament who performed' as relationship_text ";
+		if ($('#genre_25').is(':checked')) query = query + "'associated with prose who performed' as relationship_text ";
+		if ($('#genre_26').is(':checked')) query = query + "'associated with eulogy who performed' as relationship_text ";
+		if ($('#genre_27').is(':checked')) query = query + "'associated with psogon who performed' as relationship_text ";
+		if ($('#genre_28').is(':checked')) query = query + "'associated with polemisterion who performed' as relationship_text ";
+		if ($('#genre_29').is(':checked')) query = query + "'associated with enoplion who performed' as relationship_text ";
+		
 		if ($('#instrument_1').is(':checked')) query = query + "'associated with the aulos who performed' as relationship_text ";
 		if ($('#instrument_2').is(':checked')) query = query + "'associated with the kithera who performed' as relationship_text ";		
 		if ($('#instrument_3').is(':checked')) query = query + "'associated with the lyre who performed' as relationship_text ";
 		if ($('#instrument_4').is(':checked')) query = query + "'associated with the magadis who performed' as relationship_text ";	
+		if ($('#instrument_5').is(':checked')) query = query + "'associated with the barbitos who performed' as relationship_text ";		
+		if ($('#instrument_6').is(':checked')) query = query + "'associated with the sambyke who performed' as relationship_text ";
+		if ($('#instrument_7').is(':checked')) query = query + "'associated with the sacadion who performed' as relationship_text ";	
 		
 		query = query + [
 			"FROM cities, ( ",
@@ -277,7 +368,7 @@
 		/* then call dates */
 		
 		firstCall = true;
-		for (i=-dateValues.min; i >= -dateValues.max; i=i-25) {		
+		for (i=-dateValues.min; i >= -dateValues.max; i=i-50) {		
 		  if(firstCall == true) {
 		    firstCall = false;
 		    query = query + [
@@ -307,7 +398,7 @@
 		/* now the custom genre call depending on what is selected */
 		
 		firstCall = true;
-		for (i=2; i <= 11; i++) {		
+		for (i=2; i <= 30; i++) {		
 			if($('#genre_'+i).is(':checked')) {
 				if(firstCall == true) {
 					firstCall = false;
@@ -339,7 +430,7 @@
 		/* now add the instruments */
 
 		firstCall = true;
-		for (i=1; i <= 4; i++) {		
+		for (i=1; i <= 7; i++) {		
 			if($('#instrument_'+i).is(':checked')) {
 				if(firstCall == true) {
 					firstCall = false;
