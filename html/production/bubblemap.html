@@ -58,12 +58,6 @@
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GENRE: </div>
-        <input type="radio" value="2" name="city" id="genre_20">
-        <label for="genre_20" class="genre-picker-label">CHORAL DANCE</label>
-	
-        <input type="radio" value="2" name="city" id="genre_17">
-        <label for="genre_17" class="genre-picker-label">COMEDY</label>
-	
         <input type="radio" value="0" name="city" id="genre_2">
         <label for="genre_2" class="genre-picker-label">DITHYRAMB</label>
 	
@@ -75,9 +69,6 @@
 	
         <input type="radio" value="2" name="city" id="genre_29">
         <label for="genre_29" class="genre-picker-label">ENOPLION</label>
-	
-        <input type="radio" value="2" name="city" id="genre_15">
-        <label for="genre_15" class="genre-picker-label">EPIC</label>
 	
 	<input type="radio" value="0" name="city" id="genre_5">
         <label for="genre_5" class="genre-picker-label">EPIGRAM</label>
@@ -95,7 +86,7 @@
         <label for="genre_6" class="genre-picker-label">HYMN</label>
 	
         <input type="radio" value="2" name="city" id="genre_22">
-        <label for="genre_22" class="genre-picker-label">HYPOCHREMATON</label>
+        <label for="genre_22" class="genre-picker-label">HYPORCHEMA</label>
 	
         <input type="radio" value="2" name="city" id="genre_11">
         <label for="genre_11" class="genre-picker-label">IAMBOS</label>
@@ -124,23 +115,17 @@
         <input type="radio" value="2" name="city" id="genre_9">
         <label for="genre_9" class="genre-picker-label">PROOIMION</label>
 	
-        <input type="radio" value="2" name="city" id="genre_25">
-        <label for="genre_25" class="genre-picker-label">PROSE</label>
-	
 	<input type="radio" value="2" name="city" id="genre_10">
         <label for="genre_10" class="genre-picker-label">PROSODION</label>
 	
         <input type="radio" value="2" name="city" id="genre_27">
-        <label for="genre_27" class="genre-picker-label">PSOGON</label>
+        <label for="genre_27" class="genre-picker-label">PSOGOS</label>
 	
         <input type="radio" value="2" name="city" id="genre_21">
         <label for="genre_21" class="genre-picker-label">SATYR</label>
 	
 	<input type="radio" value="2" name="city" id="genre_12">
         <label for="genre_12" class="genre-picker-label">SKOLIA</label>
-	
-        <input type="radio" value="2" name="city" id="genre_14">
-        <label for="genre_14" class="genre-picker-label">TRAGEDY</label>
       </fieldset>
     </div>
       
@@ -200,7 +185,7 @@
 	  stop: function(val){ return false; },
 	  label: function(val){ return -val; },
 	  format: function(tickContainer, tickStart, tickEnd){ 
-	    tickContainer.addClass("myCustomClass");
+	  tickContainer.addClass("myCustomClass");
 	  }
 	}]
 	});
@@ -246,9 +231,9 @@
 			"	cities.city_name, ",
 			"	rank_players.cityid, ",
 			"	COUNT(rank_players.cityid) as selected_number, ",
-			"	(string_agg(rank_players.poets_cities_rank || '. ' || rank_players.poet_name, ', ')) as selected_names, ",
+			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ')) as selected_names, ",
 			"	string_agg(rank_players.poet_link, ', ') as selected_links, ",
-			"	(string_agg(rank_players.poets_cities_rank || '. ' || rank_players.sources, ', ')) as selected_sources, "
+			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.sources, ', ')) as selected_sources, "
 		].join("");
 
 		//add relationship text based on what's selected
@@ -256,43 +241,42 @@
 		if ($('#relationship_3').is(':checked')) query = query + "'who performed' as relationship_text ";  
 		if ($('#relationship_2').is(':checked')) query = query + "'who died' as relationship_text ";
 		
-		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who performed' as relationship_text ";
-		if ($('#genre_3').is(':checked')) query = query + "'associated with elegy who performed' as relationship_text ";
-		if ($('#genre_4').is(':checked')) query = query + "'associated with enkomion who performed' as relationship_text ";
-		if ($('#genre_5').is(':checked')) query = query + "'associated with epigram who performed' as relationship_text ";
-		if ($('#genre_6').is(':checked')) query = query + "'associated with hymn who performed' as relationship_text ";
-		if ($('#genre_11').is(':checked')) query = query + "'associated with iambos who performed' as relationship_text ";
-		if ($('#genre_7').is(':checked')) query = query + "'associated with nome who performed' as relationship_text ";
-		if ($('#genre_8').is(':checked')) query = query + "'associated with paean who performed' as relationship_text ";
-		if ($('#genre_9').is(':checked')) query = query + "'associated with prooimion who performed' as relationship_text ";
-		if ($('#genre_10').is(':checked')) query = query + "'associated with prosodion who performed' as relationship_text ";
-		if ($('#genre_11').is(':checked')) query = query + "'associated with dithyramb who performed' as relationship_text ";
-		if ($('#genre_12').is(':checked')) query = query + "'associated with skolia who performed' as relationship_text ";
-		if ($('#genre_13').is(':checked')) query = query + "'associated with partheneion who performed' as relationship_text ";
-		if ($('#genre_14').is(':checked')) query = query + "'associated with tragedy who performed' as relationship_text ";
-		if ($('#genre_15').is(':checked')) query = query + "'associated with epic who performed' as relationship_text ";
-		if ($('#genre_16').is(':checked')) query = query + "'associated with epinician who performed' as relationship_text ";
-		if ($('#genre_17').is(':checked')) query = query + "'associated with comedy who performed' as relationship_text ";
-		if ($('#genre_18').is(':checked')) query = query + "'associated with epode who performed' as relationship_text ";
-		if ($('#genre_19').is(':checked')) query = query + "'associated with parody who performed' as relationship_text ";
-		if ($('#genre_20').is(':checked')) query = query + "'associated with choral dance who performed' as relationship_text ";
-		if ($('#genre_21').is(':checked')) query = query + "'associated with satyr who performed' as relationship_text ";
-		if ($('#genre_22').is(':checked')) query = query + "'associated with hypochrematon who performed' as relationship_text ";
-		if ($('#genre_23').is(':checked')) query = query + "'associated with komos who performed' as relationship_text ";
-		if ($('#genre_24').is(':checked')) query = query + "'associated with lament who performed' as relationship_text ";
-		if ($('#genre_25').is(':checked')) query = query + "'associated with prose who performed' as relationship_text ";
-		if ($('#genre_26').is(':checked')) query = query + "'associated with eulogy who performed' as relationship_text ";
-		if ($('#genre_27').is(':checked')) query = query + "'associated with psogon who performed' as relationship_text ";
-		if ($('#genre_28').is(':checked')) query = query + "'associated with polemisterion who performed' as relationship_text ";
-		if ($('#genre_29').is(':checked')) query = query + "'associated with enoplion who performed' as relationship_text ";
+		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who were born' as relationship_text ";
+		if ($('#genre_3').is(':checked')) query = query + "'associated with elegy who were born' as relationship_text ";
+		if ($('#genre_4').is(':checked')) query = query + "'associated with enkomion who were born' as relationship_text ";
+		if ($('#genre_5').is(':checked')) query = query + "'associated with epigram who were born' as relationship_text ";
+		if ($('#genre_6').is(':checked')) query = query + "'associated with hymn who were born' as relationship_text ";
+		if ($('#genre_11').is(':checked')) query = query + "'associated with iambos who were born' as relationship_text ";
+		if ($('#genre_7').is(':checked')) query = query + "'associated with nome who were born' as relationship_text ";
+		if ($('#genre_8').is(':checked')) query = query + "'associated with paean who were born' as relationship_text ";
+		if ($('#genre_9').is(':checked')) query = query + "'associated with prooimion who were born' as relationship_text ";
+		if ($('#genre_10').is(':checked')) query = query + "'associated with prosodion who were born' as relationship_text ";
+		if ($('#genre_12').is(':checked')) query = query + "'associated with skolia who were born' as relationship_text ";
+		if ($('#genre_13').is(':checked')) query = query + "'associated with partheneion who were born' as relationship_text ";
+		if ($('#genre_14').is(':checked')) query = query + "'associated with tragedy who were born' as relationship_text ";
+		if ($('#genre_15').is(':checked')) query = query + "'associated with epic who were born' as relationship_text ";
+		if ($('#genre_16').is(':checked')) query = query + "'associated with epinician who were born' as relationship_text ";
+		if ($('#genre_17').is(':checked')) query = query + "'associated with comedy who were born' as relationship_text ";
+		if ($('#genre_18').is(':checked')) query = query + "'associated with epode who were born' as relationship_text ";
+		if ($('#genre_19').is(':checked')) query = query + "'associated with parody who were born' as relationship_text ";
+		if ($('#genre_20').is(':checked')) query = query + "'associated with choral dance who were born' as relationship_text ";
+		if ($('#genre_21').is(':checked')) query = query + "'associated with satyr who were born' as relationship_text ";
+		if ($('#genre_22').is(':checked')) query = query + "'associated with hypochrematon who were born' as relationship_text ";
+		if ($('#genre_23').is(':checked')) query = query + "'associated with komos who were born' as relationship_text ";
+		if ($('#genre_24').is(':checked')) query = query + "'associated with lament who were born' as relationship_text ";
+		if ($('#genre_25').is(':checked')) query = query + "'associated with prose who were born' as relationship_text ";
+		if ($('#genre_26').is(':checked')) query = query + "'associated with eulogy who were born' as relationship_text ";
+		if ($('#genre_27').is(':checked')) query = query + "'associated with psogon who were born' as relationship_text ";
+		if ($('#genre_28').is(':checked')) query = query + "'associated with polemisterion who were born' as relationship_text ";
+		if ($('#genre_29').is(':checked')) query = query + "'associated with enoplion who were born' as relationship_text ";
 		
-		if ($('#instrument_1').is(':checked')) query = query + "'associated with the aulos who performed' as relationship_text ";
-		if ($('#instrument_2').is(':checked')) query = query + "'associated with the kithera who performed' as relationship_text ";		
-		if ($('#instrument_3').is(':checked')) query = query + "'associated with the lyre who performed' as relationship_text ";
-		if ($('#instrument_4').is(':checked')) query = query + "'associated with the magadis who performed' as relationship_text ";	
-		if ($('#instrument_5').is(':checked')) query = query + "'associated with the barbitos who performed' as relationship_text ";		
-		if ($('#instrument_6').is(':checked')) query = query + "'associated with the sambyke who performed' as relationship_text ";
-		if ($('#instrument_7').is(':checked')) query = query + "'associated with the sacadion who performed' as relationship_text ";	
+		if ($('#instrument_1').is(':checked')) query = query + "'associated with the aulos who were born' as relationship_text ";
+		if ($('#instrument_2').is(':checked')) query = query + "'associated with the kithera who were born' as relationship_text ";		
+		if ($('#instrument_3').is(':checked')) query = query + "'associated with the lyre who were born' as relationship_text ";
+		if ($('#instrument_4').is(':checked')) query = query + "'associated with the magadis who were born' as relationship_text ";	
+		if ($('#instrument_5').is(':checked')) query = query + "'associated with the barbitos who were born' as relationship_text ";		
+		if ($('#instrument_6').is(':checked')) query = query + "'associated with the sambyke who were born' as relationship_text ";
+		if ($('#instrument_7').is(':checked')) query = query + "'associated with the sacadion who were born' as relationship_text ";	
 		
 		query = query + [
 			"FROM cities, ( ",
@@ -338,7 +322,7 @@
 		/* first choose relationship to place */
 		
 		firstCall = true;
-		for (i=1; i <=3; i++) {		
+		for (i=1; i<=30; i++) {		
 			if($('#relationship_'+i).is(':checked')) {
 				if(firstCall == true) {
 					firstCall = false;
@@ -351,6 +335,9 @@
 				else {
 					query = query + "OR relationshipid = " + i + " ";
 				}
+			}
+			if($('#genre_'+i).is(':checked') || $('#instrument_'+i).is(':checked')) {
+			  query = query + "AND (relationshipid = 1) ";
 			}
 		}
 		/* if a genre has been selected close the query */
@@ -523,7 +510,5 @@
       window.onload = main;
     </script>
     
-    <script src="bootstrap/js/jquery.js"></script>  
-    <script src="bootstrap/js/bootstrap-dropdown.js"></script> 
   </body>
 </html>
