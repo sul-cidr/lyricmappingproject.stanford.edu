@@ -168,8 +168,8 @@
     <script>
     //<!--
       $("#slider").rangeSlider({
-        bounds:{min: -750, max: -250},
-	defaultValues:{min: -450, max: -400},
+        bounds:{min: -700, max: -400},
+	defaultValues:{min: -700, max: -400},
 	range: {min: 25},  
 	step: 50,
 	arrows: false,
@@ -181,7 +181,7 @@
 	// Primary scale
 	{
 	  first: function(val){ return val; },
-	  next: function(val){ return val + 100; },
+	  next: function(val){ return val + 50; },
 	  stop: function(val){ return false; },
 	  label: function(val){ return -val; },
 	  format: function(tickContainer, tickStart, tickEnd){ 
@@ -496,9 +496,9 @@
 			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources FROM cities";
 			var sublayer = layers[1].getSubLayer(0);
 			
-			layers[1].setQuery(query);
-			
 			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
+			
+			layers[1].setQuery(query);
 			
 			createSelector(layers[1]);
         })
