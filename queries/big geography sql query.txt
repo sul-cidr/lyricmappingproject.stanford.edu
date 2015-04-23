@@ -7,8 +7,10 @@ lines.poet_name,
 lines.poetid,
 lines.birth_city_name,
 lines.birth_cityid,
+lines.birth_regionid,
 lines.other_city_name,
 lines.other_cityid,
+lines.other_regionid,
 lines.the_geom,
 lines.sources,
 lines.poet_link,
@@ -19,11 +21,13 @@ info.date_names
 FROM
 	(SELECT birth_cities.poet_name,
 	birth_cities.poetid,
+	birth_cities.regionid as birth_regionid,
 	birth_cities.city_name as birth_city_name,
 	birth_cities.cityid as birth_cityid,
 	birth_cities.poet_link,
 	other_cities.city_name as other_city_name,
 	other_cities.cityid as other_cityid,
+	other_cities.regionid as other_regionid,
 	other_cities.sources,
 	ST_Transform(ST_Segmentize(ST_MakeLine(
 		ST_Transform(other_cities.the_geom, 953027),
@@ -35,6 +39,7 @@ FROM
 		(SELECT
 		birth_cities_with_real_city_name.poet_name,
 		birth_cities_with_real_city_name.cityid,
+		birth_cities_with_real_city_name.regionid,
 		birth_cities_with_real_city_name.poetid,
 		birth_cities_with_real_city_name.poet_link,
 		alternative_birth_cities.city_name,
@@ -48,6 +53,7 @@ FROM
 			sorted_poets.poetid,
 			sorted_poets.poet_link,
 			cities.city_name,
+			cities.regionid,
 			cities.the_geom,
 			cities.the_geom_webmercator
 			FROM cities,
@@ -81,6 +87,7 @@ FROM
 		sorted_poets.poetid,
 		sorted_poets.sources,
 		cities.city_name,
+		cities.regionid,
 		cities.the_geom,
 		cities.the_geom_webmercator
 		FROM cities, (SELECT 
