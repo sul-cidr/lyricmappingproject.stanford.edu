@@ -337,7 +337,7 @@
 				}
 			}
 			if($('#genre_'+i).is(':checked') || $('#instrument_'+i).is(':checked')) {
-			  query = query + "AND (relationshipid = 1) ";
+			  query = query + "AND relationshipid = 1 ";
 			}
 		}
 		/* if a genre has been selected close the query */
@@ -485,7 +485,7 @@
 	}
 	  
       function main() {
-        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/476ba7de-1a6d-11e3-a8fe-95749a34fac2/viz.json', {
+        cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/fec12578-e99f-11e4-bdee-0e853d047bba/viz.json', {
           tiles_loader: false,
           center_lat: 38.95,
           center_lon: 22.38,
