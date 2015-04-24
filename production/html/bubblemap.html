@@ -213,9 +213,9 @@
 			"	cities.city_name, ",
 			"	rank_players.cityid, ",
 			"	COUNT(rank_players.cityid) as selected_number, ",
-			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ')) as selected_names, ",
+			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order by rank_players.poets_cities_rank)) as selected_names, ",
 			"	string_agg(rank_players.poet_link, ', ') as selected_links, ",
-			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.sources, ', ')) as selected_sources, "
+			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.sources, ', ' order by rank_players.poets_cities_rank)) as selected_sources, "
 		].join("");
 
 		//add relationship text based on what's selected

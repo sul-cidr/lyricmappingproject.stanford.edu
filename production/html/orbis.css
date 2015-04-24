@@ -153,4 +153,9 @@ opacity: 1;
   margin-top:10px;
   float: left;
   position: relative;
+  overflow: hidden;
+}
+
+.buttonContainer:hover {
+  overflow-y:scroll;
 }

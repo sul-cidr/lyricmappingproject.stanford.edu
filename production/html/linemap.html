@@ -23,7 +23,7 @@
   
   <div id="map"></div>
 
-  <div class="controlsDiv" id="controlbar"  style="width: 471px; top: 10px;">
+  <div class="controlsDiv" id="controlbar"  style="top: 0px; right: 0px;">
     <div id="controlbarScroller";>
       
     <div id="modeSelection">
@@ -37,7 +37,7 @@
     
     <div style="width: 292px; margin: 0 auto;" id="slider"></div>
       
-    <div class="buttonContainer" style="background: white;">            
+    <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="cityForm" class="priorityForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POET: </div>
 	
@@ -184,7 +184,7 @@
       </fieldset>
     </div>
     
-    <div class="buttonContainer" style="background: white;">            
+    <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >DESTINATION: </div>
 	
@@ -320,7 +320,7 @@
         <input type="radio" value="0" name="city" id="destination_63">
         <label for="destination_63" class="instrument-picker-label">Soli (Cyprus)</label>
 	
-	<input type="radio" value="2" name="city" id="destination_10">
+		<input type="radio" value="2" name="city" id="destination_10">
         <label for="destination_10" class="instrument-picker-label">Sparta</label>
 	
         <input type="radio" value="2" name="city" id="destination_18">
@@ -346,7 +346,7 @@
       </fieldset>
     </div>
     
-    <div class="buttonContainer" style="background: white;">            
+    <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >ORIGIN: </div>
 
@@ -590,8 +590,8 @@
 	    }
 		if($('#region_1').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 7 or birth_regionid = 10 or other_regionid = 7 or other_regionid = 10";
 		if($('#region_2').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 2 or birth_regionid = 3 or birth_regionid = 4 or birth_regionid = 9 or other_regionid = 2 or other_regionid = 3 or other_regionid = 4 or other_regionid = 9";
-		if($('#region_3').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 1 or birth_regionid = 17 or birth_regionid = 13 or other_regionid = 1 or other_regionid = 17 or other_regionid = 13";
-		if($('#region_4').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 6 or birth_regionid = 8 or birth_regionid = 14 or birth_regionid = 15 or birth_regionid = 16 or other_regionid = 6 or other_regionid = 8 or other_regionid = 14 or other_regionid = 15 or other_regionid = 16";
+		if($('#region_3').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 19 or other_regionid = 19 or birth_regionid = 1 or birth_regionid = 8 or birth_regionid = 15 or birth_regionid = 17 or birth_regionid = 13 or other_regionid = 15 or other_regionid = 1 or other_regionid = 8 or other_regionid = 17 or other_regionid = 13";
+		if($('#region_4').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 6 or birth_regionid = 14 or birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16";
 	    sublayer1.setSQL(query1);
 		if (firstCall == false) sublayer1.setCartoCSS("#poets_lines { line-width: 3; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); }");
 	    else sublayer1.setCartoCSS("#poets_lines { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); }");
@@ -648,8 +648,8 @@
 		  query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, cities.cityid, '' as selected_number, '' as selected_sources, '' as selected_names, '' as selected_links from cities where "
 		  if($('#region_1').is(':checked')) query2 = query2 + "regionid = 7 or regionid = 10";
 		  if($('#region_2').is(':checked')) query2 = query2 + "regionid = 2 or regionid = 3 or regionid = 4 or regionid = 9";
-		  if($('#region_3').is(':checked')) query2 = query2 + "regionid = 1 or regionid = 17 or regionid = 13 or regionid = 1 or regionid = 17 or regionid = 13";
-		  if($('#region_4').is(':checked')) query2 = query2 + "regionid = 6 or regionid = 8 or regionid = 14 or regionid = 15 or regionid = 16";
+		  if($('#region_3').is(':checked')) query2 = query2 + "regionid = 1 or regionid = 8 or regionid = 15 or regionid = 17 or regionid = 13 or regionid = 19";
+		  if($('#region_4').is(':checked')) query2 = query2 + "regionid = 6 or regionid = 14 or regionid = 16";
 		}
 	    console.log(query2);
 	    sublayer2.setSQL(query2);
