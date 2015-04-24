@@ -122,7 +122,7 @@
         <label for="instrument_2" class="instrument-picker-label">KITHARA</label>
         <input type="radio" value="2" name="city" id="instrument_3">
         <label for="instrument_3" class="instrument-picker-label">LYRE</label>
-	<input type="radio" value="2" name="city" id="instrument_4">
+		<input type="radio" value="2" name="city" id="instrument_4">
         <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
         <input type="radio" value="0" name="city" id="instrument_6">
         <label for="instrument_6" class="instrument-picker-label">SACADION</label>
@@ -151,26 +151,26 @@
     //<!--
       $("#slider").rangeSlider({
         bounds:{min: -700, max: -400},
-	defaultValues:{min: -700, max: -400},
-	range: {min: 25},  
-	step: 50,
-	arrows: false,
-        formatter:function(val){
-          var value = -val;
-          return value.toString() + " BCE";
-        },
-	scales: [
-	// Primary scale
-	{
-	  first: function(val){ return val; },
-	  next: function(val){ return val + 50; },
-	  stop: function(val){ return false; },
-	  label: function(val){ return -val; },
-	  format: function(tickContainer, tickStart, tickEnd){ 
-	  tickContainer.addClass("myCustomClass");
-	  }
-	}]
-	});
+		defaultValues:{min: -700, max: -400},
+		range: {min: 25},  
+		step: 50,
+		arrows: false,
+		formatter:function(val){
+			  var value = -val;
+			  return value.toString() + " BCE";
+		},
+		scales: [
+		// Primary scale
+		{
+		  first: function(val){ return val; },
+		  next: function(val){ return val + 50; },
+		  stop: function(val){ return false; },
+		  label: function(val){ return -val; },
+		  format: function(tickContainer, tickStart, tickEnd){ 
+		  tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	  });
     //-->
     </script>    
 
