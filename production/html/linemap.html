@@ -553,6 +553,8 @@
 	  var query2;
 	  var sublayer1 = layers[1].getSubLayer(0);
 	  var sublayer2 = layers[1].getSubLayer(1);
+	  var css1;
+	  var css2;
           
           // deselect all_poets and toggle the clicked one
 /*          $('#all_poets').removeClass('selected');
@@ -616,11 +618,27 @@
 		if($('#region_2').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 2 or birth_regionid = 3 or birth_regionid = 4 or birth_regionid = 9 or other_regionid = 2 or other_regionid = 3 or other_regionid = 4 or other_regionid = 9";
 		if($('#region_3').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 19 or other_regionid = 19 or birth_regionid = 1 or birth_regionid = 8 or birth_regionid = 15 or birth_regionid = 17 or birth_regionid = 13 or other_regionid = 15 or other_regionid = 1 or other_regionid = 8 or other_regionid = 17 or other_regionid = 13";
 		if($('#region_4').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 6 or birth_regionid = 14 or birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16";
-	    sublayer1.setSQL(query1);
-		if (firstCall == false) sublayer1.setCartoCSS("#poets_lines { line-width: 3; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); }");
-	    else sublayer1.setCartoCSS("#poets_lines { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); }");
+
+		if (firstCall == false) css1="#poets_lines { line-width: 3; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); }";
+	    else if($('#region_1').is(':checked')) {
+		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 7],[birth_regionid = 10] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 7],[other_regionid = 10] { line-color: #fc1804; marker-fill: #fc1804; } }";
+		}
+	    else if($('#region_2').is(':checked')) {
+		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 2],[birth_regionid = 3],[birth_regionid = 4],[birth_regionid=9] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 2],[other_regionid = 3],[other_regionid = 4],[other_regionid=9] { line-color: #fc1804; marker-fill: #fc1804; } }";
+		}
+	    else if($('#region_3').is(':checked')) {
+		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 19],[birth_regionid = 1],[birth_regionid = 8],[birth_regionid=15],[birth_regionid=17],[birth_regionid=13] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 19],[other_regionid = 15],[other_regionid = 1],[other_regionid=8],[other_regionid=17],[other_regionid=13] { line-color: #fc1804; marker-fill: #fc1804; } }";
+		}
+	    else if($('#region_4').is(':checked')) {
+		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 6],[birth_regionid = 14],[birth_regionid = 16] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 6],[other_regionid = 14],[other_regionid = 16] { line-color: #fc1804; marker-fill: #fc1804; } }";
+		}
+		else css1="#poets_lines { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); }";
+
 		console.log(query1);
-	    
+		console.log(css1);
+	    sublayer1.setSQL(query1);
+		sublayer1.setCartoCSS(css1);
+		
 	    // choose query for cities data
 	    query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid, COUNT(sorted_poets.cityid) as selected_number, string_agg(sorted_poets.sources, ', ') as selected_sources, string_agg(sorted_poets.poet_name, ', ') as selected_names, string_agg(sorted_poets.poet_link, ', ') as selected_links FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND (";
 	    firstCall = true;
@@ -774,7 +792,7 @@
 	  
 	  vis.addOverlay({
 		  type: 'infobox',
-		  template: "<h3>{{poet_name}}</h3><p>Place of birth: {{birth_city_name}}</p><p>Place of Performance: {{other_city_name}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
+		  template: "<h3>{{poet_name}}</h3><p>Place of birth: {{birth_city_name}}</p><p>Place of Activity: {{other_city_name}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
 		  width: 300,
 		  position: 'bottom|left'
 	  });

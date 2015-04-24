@@ -49,7 +49,7 @@
         <input type="radio" value="0" name="city" id="relationship_1">
         <label for="relationship_1" class="priority-picker-label">BIRTH</label>
         <input type="radio" value="1" name="city" id="relationship_3">
-        <label for="relationship_3" class="priority-picker-label">PERFORMANCE</label>
+        <label for="relationship_3" class="priority-picker-label">ACTIVITY</label>
         <input type="radio" value="2" name="city" id="relationship_2">
         <label for="relationship_2" class="priority-picker-label">DEATH</label>
       </fieldset>
@@ -220,7 +220,7 @@
 
 		//add relationship text based on what's selected
 		if ($('#relationship_1').is(':checked')) query = query + "'who were born' as relationship_text ";
-		if ($('#relationship_3').is(':checked')) query = query + "'who performed' as relationship_text ";  
+		if ($('#relationship_3').is(':checked')) query = query + "'who were active' as relationship_text ";  
 		if ($('#relationship_2').is(':checked')) query = query + "'who died' as relationship_text ";
 		
 		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who were born' as relationship_text ";
@@ -268,7 +268,7 @@
 			  "    instrument_players.poet_name, ",
 			  "    instrument_players.poet_link, ",
 			  "    instrument_players.sources, ",
-			  "    cast(rank() OVER (PARTITION BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) as text) as poets_cities_rank ",
+			  "    rank() OVER (PARTITION BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) as poets_cities_rank ",
 			  "    FROM ( ",
 			"	SELECT ",
 			"		genre_players.poetid, ",

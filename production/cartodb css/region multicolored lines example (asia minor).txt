@@ -1,0 +1,18 @@
+/** color visualization */
+
+#poets_lines  {
+    line-width: 1;
+    line-opacity: 0.7;
+    marker-file: url("http://web.stanford.edu/group/lyricmapping/arrow-16.svg");
+    marker-width: 5;
+    marker-placement: point;
+    marker-transform: rotate([arrow_angle]+90, 0, 0);
+    [birth_regionid = 6],[birth_regionid = 14],[birth_regionid = 16] {
+        line-color: #551A8B;
+        marker-fill: #551A8B;   
+    }
+    [other_regionid = 6],[other_regionid = 14],[other_regionid = 16] {
+        line-color: #fc1804;
+        marker-fill: #fc1804;
+    }
+}
