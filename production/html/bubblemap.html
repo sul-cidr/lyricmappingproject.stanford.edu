@@ -219,8 +219,8 @@
 		].join("");
 
 		//add relationship text based on what's selected
-		if ($('#relationship_1').is(':checked')) query = query + "'who were born' as relationship_text ";
-		if ($('#relationship_3').is(':checked')) query = query + "'who were active' as relationship_text ";  
+		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
+		if ($('#relationship_3').is(':checked')) query = query + "'active' as relationship_text ";  
 		if ($('#relationship_2').is(':checked')) query = query + "'who died' as relationship_text ";
 		
 		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who were born' as relationship_text ";
