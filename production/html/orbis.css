@@ -30,8 +30,8 @@ html {
 }
 
 #controlbar {
-  top: 68px;
-  right: 15px;
+  top: 0px;
+  right: 0px;
   width: 320px;
   padding:0px 10px 20px;
 }
