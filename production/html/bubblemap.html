@@ -50,8 +50,6 @@
         <label for="relationship_1" class="priority-picker-label">BIRTH</label>
         <input type="radio" value="1" name="city" id="relationship_3">
         <label for="relationship_3" class="priority-picker-label">ACTIVITY</label>
-        <input type="radio" value="2" name="city" id="relationship_2">
-        <label for="relationship_2" class="priority-picker-label">DEATH</label>
       </fieldset>
     </div>
       
@@ -93,9 +91,6 @@
 	
         <input type="radio" value="1" name="city" id="genre_8">
         <label for="genre_8" class="genre-picker-label">PAEAN</label>
-	
-        <input type="radio" value="2" name="city" id="genre_19">
-        <label for="genre_19" class="genre-picker-label">PARODY</label>
 	
         <input type="radio" value="2" name="city" id="genre_13">
         <label for="genre_13" class="genre-picker-label">PARTHENEION</label>
@@ -221,7 +216,6 @@
 		//add relationship text based on what's selected
 		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
 		if ($('#relationship_3').is(':checked')) query = query + "'active' as relationship_text ";  
-		if ($('#relationship_2').is(':checked')) query = query + "'who died' as relationship_text ";
 		
 		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who were born' as relationship_text ";
 		if ($('#genre_3').is(':checked')) query = query + "'associated with elegy who were born' as relationship_text ";
@@ -303,28 +297,11 @@
 
 		/* first choose relationship to place */
 		
-		firstCall = true;
-		for (i=1; i<=30; i++) {		
-			if($('#relationship_'+i).is(':checked')) {
-				if(firstCall == true) {
-					firstCall = false;
-					query = query + [
-						"AND (relationshipid = ",
-						i,
-						" "
-					].join("");
-				}
-				else {
-					query = query + "OR relationshipid = " + i + " ";
-				}
-			}
-			if($('#genre_'+i).is(':checked') || $('#instrument_'+i).is(':checked')) {
-			  query = query + "AND relationshipid = 1 ";
-			}
+		if($('#relationship_1').is(':checked')) {
+		  query = query + "AND (relationshipid=1) ";
 		}
-		/* if a genre has been selected close the query */
-		if(firstCall == false) {
-			query = query + " ) ";
+		if($('#relationship_3').is(':checked')) {
+		  query = query + "AND (relationshipid=2 or relationshipid=3) ";
 		}
 		
 		/* embed this into the next layer up */

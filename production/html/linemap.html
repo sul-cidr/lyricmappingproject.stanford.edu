@@ -615,7 +615,7 @@
 		    }			
 	    }
 		if($('#region_1').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 7 or birth_regionid = 10 or other_regionid = 7 or other_regionid = 10";
-		if($('#region_2').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 2 or birth_regionid = 3 or birth_regionid = 4 or birth_regionid = 9 or other_regionid = 2 or other_regionid = 3 or other_regionid = 4 or other_regionid = 9";
+		if($('#region_2').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 12 or other_regionid = 12 or birth_regionid = 11 or other_regionid = 11 or birth_regionid = 2 or birth_regionid = 3 or birth_regionid = 4 or birth_regionid = 9 or other_regionid = 2 or other_regionid = 3 or other_regionid = 4 or other_regionid = 9";
 		if($('#region_3').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 19 or other_regionid = 19 or birth_regionid = 1 or birth_regionid = 8 or birth_regionid = 15 or birth_regionid = 17 or birth_regionid = 13 or other_regionid = 15 or other_regionid = 1 or other_regionid = 8 or other_regionid = 17 or other_regionid = 13";
 		if($('#region_4').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 6 or birth_regionid = 14 or birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16";
 
@@ -624,7 +624,7 @@
 		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 7],[birth_regionid = 10] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 7],[other_regionid = 10] { line-color: #fc1804; marker-fill: #fc1804; } }";
 		}
 	    else if($('#region_2').is(':checked')) {
-		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 2],[birth_regionid = 3],[birth_regionid = 4],[birth_regionid=9] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 2],[other_regionid = 3],[other_regionid = 4],[other_regionid=9] { line-color: #fc1804; marker-fill: #fc1804; } }";
+		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 2],[birth_regionid = 3],[birth_regionid = 4],[birth_regionid=9],[birth_regionid=11],[birth_regionid=12] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 2],[other_regionid = 3],[other_regionid = 4],[other_regionid=9],[other_regionid=11],[other_regionid=12] { line-color: #fc1804; marker-fill: #fc1804; } }";
 		}
 	    else if($('#region_3').is(':checked')) {
 		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 19],[birth_regionid = 1],[birth_regionid = 8],[birth_regionid=15],[birth_regionid=17],[birth_regionid=13] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 19],[other_regionid = 15],[other_regionid = 1],[other_regionid=8],[other_regionid=17],[other_regionid=13] { line-color: #fc1804; marker-fill: #fc1804; } }";
@@ -689,7 +689,7 @@
 		else {
 		  query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, cities.cityid, '' as selected_number, '' as selected_sources, '' as selected_names, '' as selected_links from cities where "
 		  if($('#region_1').is(':checked')) query2 = query2 + "regionid = 7 or regionid = 10";
-		  if($('#region_2').is(':checked')) query2 = query2 + "regionid = 2 or regionid = 3 or regionid = 4 or regionid = 9";
+		  if($('#region_2').is(':checked')) query2 = query2 + "regionid = 2 or regionid = 3 or regionid = 4 or regionid = 9 or regionid=11 or regionid=12";
 		  if($('#region_3').is(':checked')) query2 = query2 + "regionid = 1 or regionid = 8 or regionid = 15 or regionid = 17 or regionid = 13 or regionid = 19";
 		  if($('#region_4').is(':checked')) query2 = query2 + "regionid = 6 or regionid = 14 or regionid = 16";
 		}
