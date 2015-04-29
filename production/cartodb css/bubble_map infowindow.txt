@@ -7,7 +7,7 @@
       <p>{{{selected_names}}} (total of {{selected_number}})</span></p>
       <h4 style="color:#AAAAAA">Sources</h4>
       <p>{{{selected_sources}}}</p>
-      <h4 style="color:#AAAAAA">government</h4>
+      <h4 style="color:#AAAAAA">Government</h4>
       <p>{{government}}</p>
     </div>
   </div>
