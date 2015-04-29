@@ -9,10 +9,6 @@ html, body, #map {
   max-width: none;
 }
 
-#navbar_selected {
-
-}
-
 .mainlinksDiv {
 	width: 45%;                     /* poor approximation for old browsers    */
 	width: calc(45% - 8px);         /* standards-based answer for IE9+, FF16+ */

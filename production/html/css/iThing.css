@@ -65,13 +65,13 @@
 .ui-rangeSlider-container,
 .ui-rangeSlider-arrow,
 .ui-rangeSlider-label{
-  background: white;
+  background: #fc1804;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-container,
 .ui-rangeSlider-disabled .ui-rangeSlider-arrow,
 .ui-rangeSlider-disabled .ui-rangeSlider-label{
-  background: white;
+  background: #fc1804;
 }
 
 .ui-rangeSlider-arrow{
@@ -181,11 +181,11 @@
   -moz-border-radius: 4px;
        border-radius: 4px;
 
-  -webkit-box-shadow: 0px 1px 0px #c2c5d6;
-     -moz-box-shadow: 0px 1px 0px #c2c5d6;
-          box-shadow: 0px 1px 0px #c2c5d6;
+  -webkit-box-shadow: 0px 1px 0px #fc1804;
+     -moz-box-shadow: 0px 1px 0px #fc1804;
+          box-shadow: 0px 1px 0px #fc1804;
 
-  color:black;
+  color:white;
   font-size:15px;
 
   cursor:col-resize;
