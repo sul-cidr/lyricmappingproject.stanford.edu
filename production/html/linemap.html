@@ -62,6 +62,9 @@
         <input type="radio" value="0" name="city" id="poet_100">
         <label for="poet_100" class="priority-picker-label">Bacchylides</label>
 	
+        <input type="radio" value="0" name="city" id="poet_11">
+        <label for="poet_11" class="priority-picker-label">Bakkhiadas</label>
+	
         <input type="radio" value="1" name="city" id="poet_107">
         <label for="poet_107" class="priority-picker-label">Demodocus</label>
 	
@@ -107,9 +110,6 @@
         <input type="radio" value="2" name="city" id="poet_117">
         <label for="poet_117" class="priority-picker-label">Ibycus</label>
 	
-        <input type="radio" value="2" name="city" id="poet_118">
-        <label for="poet_118" class="priority-picker-label">Ion</label>
-	
         <input type="radio" value="0" name="city" id="poet_55">
         <label for="poet_55" class="priority-picker-label">Ion of Chios</label>
 	
@@ -145,6 +145,9 @@
 	
         <input type="radio" value="2" name="city" id="poet_5">
         <label for="poet_5" class="priority-picker-label">Phrynis</label>
+	
+        <input type="radio" value="2" name="city" id="poet_149">
+        <label for="poet_149" class="priority-picker-label">Pindar</label>
 	
 		<input type="radio" value="0" name="city" id="poet_26">
         <label for="poet_26" class="priority-picker-label">Polyidus</label>
@@ -277,12 +280,12 @@
 	
         <input type="radio" value="0" name="city" id="destination_16">
         <label for="destination_16" class="instrument-picker-label">Helicon</label>
-		
-        <input type="radio" value="1" name="city" id="destination_31">
-        <label for="destination_31" class="genre-picker-label">Hermione</label>
 	
         <input type="radio" value="0" name="city" id="destination_74">
         <label for="destination_74" class="instrument-picker-label">Heracleia (Trachinea)</label>
+		
+        <input type="radio" value="1" name="city" id="destination_31">
+        <label for="destination_31" class="genre-picker-label">Hermione</label>
 		
         <input type="radio" value="1" name="city" id="destination_23">
         <label for="destination_23" class="genre-picker-label">Himera</label>
@@ -298,6 +301,9 @@
 	
         <input type="radio" value="0" name="city" id="destination_81">
         <label for="destination_81" class="instrument-picker-label">Krannon</label>
+			
+        <input type="radio" value="2" name="city" id="destination_86">
+        <label for="destination_86" class="instrument-picker-label">Kynoskephalai</label>
 	
         <input type="radio" value="2" name="city" id="destination_7">
         <label for="destination_7" class="instrument-picker-label">Leontini</label>
@@ -346,6 +352,9 @@
 	
         <input type="radio" value="0" name="city" id="destination_66">
         <label for="destination_66" class="instrument-picker-label">Naxos</label>
+	
+        <input type="radio" value="0" name="city" id="destination_87">
+        <label for="destination_87" class="instrument-picker-label">Olympia</label>
 	
         <input type="radio" value="0" name="city" id="destination_83">
         <label for="destination_83" class="instrument-picker-label">Pallantion</label>
@@ -736,7 +745,7 @@
 	  
 	  vis.addOverlay({
 		  type: 'infobox',
-		  template: "<h3>{{poet_name}}</h3><p>Place of birth: {{birth_city_name}}</p><p>Place of Activity: {{other_city_name}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
+		  template: "<h3>{{poet_name}}</h3><p>Place of origin: {{birth_city_name}}</p><p>Place of activity: {{other_city_name}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
 		  width: 300,
 		  position: 'bottom|left'
 	  });
