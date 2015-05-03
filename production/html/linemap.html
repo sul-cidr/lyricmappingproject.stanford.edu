@@ -463,6 +463,50 @@
 	
       </fieldset>
     </div>
+	
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >DESTINATION: </div>
+
+        <input type="radio" value="0" name="city" id="gov_destination_3">
+        <label for="gov_destination_3" class="genre-picker-label">Democracy</label>
+
+		<input type="radio" value="0" name="city" id="gov_destination_4">
+        <label for="gov_destination_4" class="genre-picker-label">Kingship</label>
+	
+        <input type="radio" value="0" name="city" id="gov_destination_7">
+        <label for="gov_destination_7" class="genre-picker-label">Mixed</label>
+		
+        <input type="radio" value="0" name="city" id="gov_destination_1">
+        <label for="gov_destination_1" class="genre-picker-label">Oligarchy</label>
+		
+        <input type="radio" value="0" name="city" id="gov_destination_2">
+        <label for="gov_destination_2" class="genre-picker-label">Tyranny</label>		
+	
+      </fieldset>
+    </div>
+	
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >ORIGIN: </div>
+
+        <input type="radio" value="0" name="city" id="gov_origin_3">
+        <label for="gov_origin_3" class="genre-picker-label">Democracy</label>
+
+		<input type="radio" value="0" name="city" id="gov_origin_4">
+        <label for="gov_origin_4" class="genre-picker-label">Kingship</label>
+	
+        <input type="radio" value="0" name="city" id="gov_origin_7">
+        <label for="gov_origin_7" class="genre-picker-label">Mixed</label>
+		
+        <input type="radio" value="0" name="city" id="gov_origin_1">
+        <label for="gov_origin_1" class="genre-picker-label">Oligarchy</label>
+		
+        <input type="radio" value="0" name="city" id="gov_origin_2">
+        <label for="gov_origin_2" class="genre-picker-label">Tyranny</label>		
+	
+      </fieldset>
+    </div>
     
   </div>
   </div>
@@ -564,7 +608,21 @@
 			    else {
 				    query1 = query1 + "OR birth_cityid = " + i + " ";
 			    }
-		    }			
+		    }
+		    if($('#gov_destination_'+i).is(':checked')) {
+			  query1 = [
+				"SELECT poets_lines.* FROM poets_lines, (SELECT all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government FROM (SELECT poets_cities.poets_poet_name, poets_cities.poetid, poets_cities.poets_city_name, poets_cities.cityid, poets_cities.relationshipid, government_cities.governmentid, government_cities.government, government_cities.date as government_date FROM poets_cities, (SELECT * FROM city_politics WHERE governmentid = ",
+				i,
+				") government_cities WHERE poets_cities.cityid = government_cities.cityid AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3) ) all_associated_poets, dates WHERE all_associated_poets.poetid = dates.poetid AND all_associated_poets.government_date = dates.date GROUP BY all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government) democratic_bound_poets WHERE poets_lines.poetid = democratic_bound_poets.poetid"
+			  ].join("");			  
+			}
+		    if($('#gov_origin_'+i).is(':checked')) {
+			  query1 = [
+				"SELECT poets_lines.* FROM poets_lines, (SELECT all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government FROM (SELECT poets_cities.poets_poet_name, poets_cities.poetid, poets_cities.poets_city_name, poets_cities.cityid, poets_cities.relationshipid, government_cities.governmentid, government_cities.government, government_cities.date as government_date FROM poets_cities, (SELECT * FROM city_politics WHERE governmentid = ",
+				i,
+				") government_cities WHERE poets_cities.cityid = government_cities.cityid AND (poets_cities.relationshipid = 1) ) all_associated_poets, dates WHERE all_associated_poets.poetid = dates.poetid AND all_associated_poets.government_date = dates.date GROUP BY all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government) democratic_bound_poets WHERE poets_lines.poetid = democratic_bound_poets.poetid"
+			  ].join("");			  
+			}
 	    }
 		if($('#region_1').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 7 or birth_regionid = 10 or other_regionid = 7 or other_regionid = 10";
 		if($('#region_2').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 12 or other_regionid = 12 or birth_regionid = 11 or other_regionid = 11 or birth_regionid = 2 or birth_regionid = 3 or birth_regionid = 4 or birth_regionid = 9 or other_regionid = 2 or other_regionid = 3 or other_regionid = 4 or other_regionid = 9";
@@ -639,11 +697,11 @@
 	    query2 = query2 + ") ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id";
 		}
 		else {
-		  query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, cities.cityid, '' as selected_number, '' as selected_sources, '' as selected_names, '' as selected_links from cities where "
-		  if($('#region_1').is(':checked')) query2 = query2 + "regionid = 7 or regionid = 10";
-		  if($('#region_2').is(':checked')) query2 = query2 + "regionid = 2 or regionid = 3 or regionid = 4 or regionid = 9 or regionid=11 or regionid=12";
-		  if($('#region_3').is(':checked')) query2 = query2 + "regionid = 1 or regionid = 8 or regionid = 15 or regionid = 17 or regionid = 13 or regionid = 19";
-		  if($('#region_4').is(':checked')) query2 = query2 + "regionid = 6 or regionid = 14 or regionid = 16";
+		  query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, cities.cityid, '' as selected_number, '' as selected_sources, '' as selected_names, '' as selected_links from cities "
+		  if($('#region_1').is(':checked')) query2 = query2 + "where regionid = 7 or regionid = 10";
+		  if($('#region_2').is(':checked')) query2 = query2 + "where regionid = 2 or regionid = 3 or regionid = 4 or regionid = 9 or regionid=11 or regionid=12";
+		  if($('#region_3').is(':checked')) query2 = query2 + "where regionid = 1 or regionid = 8 or regionid = 15 or regionid = 17 or regionid = 13 or regionid = 19";
+		  if($('#region_4').is(':checked')) query2 = query2 + "where regionid = 6 or regionid = 14 or regionid = 16";
 		}
 	    console.log(query2);
 	    sublayer2.setSQL(query2);
