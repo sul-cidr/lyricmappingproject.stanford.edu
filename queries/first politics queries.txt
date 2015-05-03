@@ -113,3 +113,4 @@ FROM
     all_associated_poets.governmentid,
     all_associated_poets.government) democratic_bound_poets
 WHERE poets_lines.poetid = democratic_bound_poets.poetid
+AND poets_lines.cityid = democratic_bound_poets.cityid
