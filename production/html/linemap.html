@@ -34,8 +34,6 @@
 	<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="linemap.html">TRAVEL</a>
       </div>
     </div>
-    
-    <div style="width: 292px; margin: 0 auto;" id="slider"></div>
       
     <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="cityForm" class="priorityForm">
@@ -466,47 +464,27 @@
 	
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >DESTINATION: </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POLITICAL SYSTEM: </div>
 
-        <input type="radio" value="0" name="city" id="gov_destination_3">
-        <label for="gov_destination_3" class="genre-picker-label">Democracy</label>
+        <input type="radio" value="0" name="city" id="gov_3">
+        <label for="gov_3" class="genre-picker-label">Democracy</label>
 
-		<input type="radio" value="0" name="city" id="gov_destination_4">
-        <label for="gov_destination_4" class="genre-picker-label">Kingship</label>
+		<input type="radio" value="0" name="city" id="gov_4">
+        <label for="gov_4" class="genre-picker-label">Kingship</label>
 	
-        <input type="radio" value="0" name="city" id="gov_destination_7">
-        <label for="gov_destination_7" class="genre-picker-label">Mixed</label>
+        <input type="radio" value="0" name="city" id="gov_7">
+        <label for="gov_7" class="genre-picker-label">Mixed</label>
 		
-        <input type="radio" value="0" name="city" id="gov_destination_1">
-        <label for="gov_destination_1" class="genre-picker-label">Oligarchy</label>
+        <input type="radio" value="0" name="city" id="gov_1">
+        <label for="gov_1" class="genre-picker-label">Oligarchy</label>
 		
-        <input type="radio" value="0" name="city" id="gov_destination_2">
-        <label for="gov_destination_2" class="genre-picker-label">Tyranny</label>		
+        <input type="radio" value="0" name="city" id="gov_2">
+        <label for="gov_2" class="genre-picker-label">Tyranny</label>		
 	
       </fieldset>
-    </div>
+    </div></div>
 	
-    <div class="buttonContainer" style="background: white;">            
-      <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >ORIGIN: </div>
-
-        <input type="radio" value="0" name="city" id="gov_origin_3">
-        <label for="gov_origin_3" class="genre-picker-label">Democracy</label>
-
-		<input type="radio" value="0" name="city" id="gov_origin_4">
-        <label for="gov_origin_4" class="genre-picker-label">Kingship</label>
-	
-        <input type="radio" value="0" name="city" id="gov_origin_7">
-        <label for="gov_origin_7" class="genre-picker-label">Mixed</label>
-		
-        <input type="radio" value="0" name="city" id="gov_origin_1">
-        <label for="gov_origin_1" class="genre-picker-label">Oligarchy</label>
-		
-        <input type="radio" value="0" name="city" id="gov_origin_2">
-        <label for="gov_origin_2" class="genre-picker-label">Tyranny</label>		
-	
-      </fieldset>
-    </div>
+    <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
     
   </div>
   </div>
@@ -536,17 +514,46 @@
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <!-- include cartodb.js library -->
     <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+	
+    <script src="jquery-1.11.2.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="jQRangeSlider-withRuler-min.js"></script>
+	
+    <script>
+    //<!--
+      $("#slider").rangeSlider({
+        bounds:{min: -700, max: -400},
+		defaultValues:{min: -700, max: -400},
+		range: {min: 25},  
+		step: 50,
+		arrows: false,
+		formatter:function(val){
+			  var value = -val;
+			  return value.toString() + " BCE";
+		},
+		scales: [
+		// Primary scale
+		{
+		  first: function(val){ return val; },
+		  next: function(val){ return val + 50; },
+		  stop: function(val){ return false; },
+		  label: function(val){ return -val; },
+		  format: function(tickContainer, tickStart, tickEnd){ 
+		  tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	  });
+    //-->
+    </script>  
 
     <script>
 	// create layer selector
-      function createSelector(vis, layers) {
-        var sql = new cartodb.SQL({ user: 'dfdrisco' });
-
-        var $options = $('#controlbar input');
-	  $options.click(function(e) {
+	function updateQuery(vis, layers) {
           // get the button of the selected layer
-          var $li = $(e.target);
+//      var $li = $(e.target);
 	  var firstCall = true;
+	  var govCall = false;
+	  var dateFirstCall;
 	  var i = 0;
 	  var query1;
 	  var query2;
@@ -577,7 +584,7 @@
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query1 = [
-					    "select * from poets_lines where poetid = ",
+					    "select poets_lines.* from poets_lines, dates where poets_lines.poetid = ",
 					    i,
 					    " "
 				    ].join("");
@@ -591,11 +598,11 @@
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query1 = [
-					    "select * from poets_lines where other_cityid = ",
+					    "select poets_lines.* from poets_lines, dates where (poets_lines.other_cityid = ",
 					    i,
-					    " OR birth_cityid = ",
+					    " OR poets_lines.birth_cityid = ",
 						i,
-						" "
+						") "
 				    ].join("");
 					css1= [
 					"#poets_lines { line-width: 3; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_cityid=",
@@ -605,30 +612,50 @@
 					"] { line-color: #fc1804; marker-fill: #fc1804; } }"				
 				    ].join("");
 			    }
-			    else {
-				    query1 = query1 + "OR birth_cityid = " + i + " ";
+		    }
+		    if($('#gov_'+i).is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query1 = [
+					    "select poets_lines.* from poets_lines, dates where (poets_lines.other_city_governmentid = ",
+					    i,
+					    " OR poets_lines.birth_city_governmentid = ",
+						i,
+						") "
+				    ].join("");
+					css1= [
+					"#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_city_governmentid=",
+					i,
+					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_city_governmentid = ",
+					i,
+					"] { line-color: #fc1804; marker-fill: #fc1804; } }"				
+				    ].join("");
 			    }
 		    }
-		    if($('#gov_destination_'+i).is(':checked')) {
-			  query1 = [
-				"SELECT poets_lines.* FROM poets_lines, (SELECT all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government FROM (SELECT poets_cities.poets_poet_name, poets_cities.poetid, poets_cities.poets_city_name, poets_cities.cityid, poets_cities.relationshipid, government_cities.governmentid, government_cities.government, government_cities.date as government_date FROM poets_cities, (SELECT * FROM city_politics WHERE governmentid = ",
-				i,
-				") government_cities WHERE poets_cities.cityid = government_cities.cityid AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3) ) all_associated_poets, dates WHERE all_associated_poets.poetid = dates.poetid AND all_associated_poets.government_date = dates.date GROUP BY all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government) democratic_bound_poets WHERE poets_lines.poetid = democratic_bound_poets.poetid AND poets_lines.other_cityid = democratic_bound_poets.cityid"
-			  ].join("");			  
-			}
-		    if($('#gov_origin_'+i).is(':checked')) {
-			  query1 = [
-				"SELECT poets_lines.* FROM poets_lines, (SELECT all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government FROM (SELECT poets_cities.poets_poet_name, poets_cities.poetid, poets_cities.poets_city_name, poets_cities.cityid, poets_cities.relationshipid, government_cities.governmentid, government_cities.government, government_cities.date as government_date FROM poets_cities, (SELECT * FROM city_politics WHERE governmentid = ",
-				i,
-				") government_cities WHERE poets_cities.cityid = government_cities.cityid AND (poets_cities.relationshipid = 1) ) all_associated_poets, dates WHERE all_associated_poets.poetid = dates.poetid AND all_associated_poets.government_date = dates.date GROUP BY all_associated_poets.poets_poet_name, all_associated_poets.poetid, all_associated_poets.poets_city_name, all_associated_poets.cityid, all_associated_poets.relationshipid, all_associated_poets.governmentid, all_associated_poets.government) democratic_bound_poets WHERE poets_lines.poetid = democratic_bound_poets.poetid AND poets_lines.birth_cityid = democratic_bound_poets.cityid"
-			  ].join("");			  
-			}
 	    }
-		if($('#region_1').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 7 or birth_regionid = 10 or other_regionid = 7 or other_regionid = 10";
-		if($('#region_2').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 12 or other_regionid = 12 or birth_regionid = 11 or other_regionid = 11 or birth_regionid = 2 or birth_regionid = 3 or birth_regionid = 4 or birth_regionid = 9 or other_regionid = 2 or other_regionid = 3 or other_regionid = 4 or other_regionid = 9";
-		if($('#region_3').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 19 or other_regionid = 19 or birth_regionid = 1 or birth_regionid = 8 or birth_regionid = 15 or birth_regionid = 17 or birth_regionid = 13 or other_regionid = 15 or other_regionid = 1 or other_regionid = 8 or other_regionid = 17 or other_regionid = 13";
-		if($('#region_4').is(':checked')) query1 = "SELECT * FROM poets_lines where birth_regionid = 6 or birth_regionid = 14 or birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16";
-
+		if($('#region_1').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 7 or poets_lines.birth_regionid = 10 or poets_lines.other_regionid = 7 or poets_lines.other_regionid = 10) ";
+		if($('#region_2').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) ";
+		if($('#region_3').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) ";
+		if($('#region_4').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) ";
+		dateFirstCall = true;
+		for (i=-$("#slider").rangeSlider("values").min; i >= -$("#slider").rangeSlider("values").max; i=i-50) {		
+		  if(dateFirstCall == true) {
+		    dateFirstCall = false;
+		    query1 = query1 + [
+		      "",
+		      "AND poets_lines.poetid = dates.poetid ",
+		      "AND ( ",
+		      "dates.date='",
+		      i,
+		      "' "
+		    ].join("");
+		  }
+		  else {
+			  query1 = query1 + "OR dates.date = '" + i + "' ";
+		  }
+		}
+		query1 = query1 + ")";
+		
 		if (firstCall == false) {} 
 	    else if($('#region_1').is(':checked')) {
 		  css1="#poets_lines { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 7],[birth_regionid = 10] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 7],[other_regionid = 10] { line-color: #fc1804; marker-fill: #fc1804; } }";
@@ -650,65 +677,29 @@
 		sublayer1.setCartoCSS(css1);
 		
 	    // choose query for cities data
-	    query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid, COUNT(sorted_poets.cityid) as selected_number, string_agg(sorted_poets.sources, ', ') as selected_sources, string_agg(sorted_poets.poet_name, ', ') as selected_names, string_agg(sorted_poets.poet_link, ', ') as selected_links FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND (";
-	    firstCall = true;
-	    for (i=1; i <= 200; i++) {		
-		    if($('#poet_'+i).is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query2 = query2 + [
-					    "poets.poetid = ",
-					    i,
-					    " "
-				    ].join("");
-			    }
-			    else {
-				    query2 = query2 + "OR poets.poetid = " + i + " ";
-			    }
-		    }
-		    if($('#origin_'+i).is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query2 = query2 + [
-					    "poets_cities.cityid = ",
-					    i,
-					    " "
-				    ].join("");
-			    }
-			    else {
-				    query2 = query2 + "OR poets_cities.cityid = " + i + " ";
-			    }
-		    }
-		    if($('#destination_'+i).is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query2 = query2 + [
-					    "poets_cities.cityid = ",
-					    i,
-					    " "
-				    ].join("");
-			    }
-			    else {
-				    query2 = query2 + "OR poets_cities.cityid = " + i + " ";
-			    }
-		    }
-	    }
-		if (firstCall == false) {
-	    query2 = query2 + ") ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id";
-		}
-		else {
-		  query2 = "SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, cities.cityid, '' as selected_number, '' as selected_sources, '' as selected_names, '' as selected_links from cities "
-		  if($('#region_1').is(':checked')) query2 = query2 + "where regionid = 7 or regionid = 10";
-		  if($('#region_2').is(':checked')) query2 = query2 + "where regionid = 2 or regionid = 3 or regionid = 4 or regionid = 9 or regionid=11 or regionid=12";
-		  if($('#region_3').is(':checked')) query2 = query2 + "where regionid = 1 or regionid = 8 or regionid = 15 or regionid = 17 or regionid = 13 or regionid = 19";
-		  if($('#region_4').is(':checked')) query2 = query2 + "where regionid = 6 or regionid = 14 or regionid = 16";
-		}
+	    query2 = "SELECT c.* FROM cities as c, (" + query1 + ") selected_lines where (c.cityid = selected_lines.birth_cityid or c.cityid = selected_lines.other_cityid) ";
+		if($('#region_1').is(':checked')) query2 = query2 + " and (c.regionid = 7 or c.regionid = 10)";
+		if($('#region_2').is(':checked')) query2 = query2 + " and (c.regionid = 2 or c.regionid = 3 or c.regionid = 4 or c.regionid = 9 or c.regionid=11 or c.regionid=12)";
+		if($('#region_3').is(':checked')) query2 = query2 + " and (c.regionid = 1 or c.regionid = 8 or c.regionid = 15 or c.regionid = 17 or c.regionid = 13 or c.regionid = 19)";
+		if($('#region_4').is(':checked')) query2 = query2 + " and (c.regionid = 6 or c.regionid = 14 or c.regionid = 16)";	
+		 
 	    console.log(query2);
-	    sublayer2.setSQL(query2);
+	    sublayer2.setSQL(query2);	  
+	}
+
 //	  }
-		  
-        });
-      }
+	
+    function createSelector(vis, layers) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+        var $options = $('#controlbar input');
+		
+		$options.click(function(e) {
+			updateQuery(vis, layers);		  
+		  });
+		$("#slider").bind("valuesChanged", function(e, data) {
+		  updateQuery(vis, layers);
+		});
+    }
 
 	  function createTotalPoetsQuery() {
 		var query = [
@@ -798,20 +789,20 @@
 	  var query = createTotalPoetsQuery();
 	  var css = createBubbleVisualization("selected_number");
 	  
-	  sublayer.set({ 'interactivity': ['cartodb_id', 'poet_name', 'birth_city_name', 'other_city_name', 'instrument_names', 'genre_names', 'date_names', 'sources'] });
+	  sublayer.set({ 'interactivity': ['cartodb_id', 'poet_name', 'birth_city_name', 'other_city_name', 'birth_city_government', 'other_city_government', 'instrument_names', 'genre_names', 'date_names', 'sources'] });
 	  
 	  
 	  vis.addOverlay({
 		  type: 'infobox',
-		  template: "<h3>{{poet_name}}</h3><p>Place of origin: {{birth_city_name}}</p><p>Place of activity: {{other_city_name}}</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
+		  template: "<h3>{{poet_name}}</h3><p>Place of origin: {{birth_city_name}} ({{birth_city_government}})</p><p>Place of activity: {{other_city_name}}  ({{other_city_government}})</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
 		  width: 300,
 		  position: 'bottom|left'
 	  });
 
 	  layers[1].createSubLayer({sql: query, cartocss: css } );
 	  sublayer2 = layers[1].getSubLayer(1);
-	  sublayer2.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_names', 'selected_sources'] });
-	  sublayer2.infowindow.set('template', $('#infowindow_template').html());
+//	  sublayer2.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_names', 'selected_sources'] });
+//	  sublayer2.infowindow.set('template', $('#infowindow_template').html());
 	  
 	  if (poetid != "") {
 	    $("#poet_" + poetid).addClass('selected');

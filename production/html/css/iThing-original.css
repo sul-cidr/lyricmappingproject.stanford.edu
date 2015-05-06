@@ -50,7 +50,7 @@
 
 .ui-rangeSlider-container,
 .ui-rangeSlider-arrow{
-  height: 30px;
+ 	height: 30px;
 
   border-top: solid 1px #232a32;
   border-bottom: solid 1px #6a7179;
@@ -149,18 +149,18 @@
 }
 
 .ui-rangeSlider-bar{
-  background: #B81609;
+	background: #68a1d6;
   height: 29px;
   margin:1px 0;
   -moz-border-radius: 4px;
   border-radius: 4px;
   cursor:move;
-  cursor:grab;
-  cursor: -moz-grab;
+	cursor:grab;
+	cursor: -moz-grab;
   
-  -webkit-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
-  -moz-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
-  box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
+	-webkit-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
+     -moz-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
+          box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-bar{
@@ -174,7 +174,7 @@
 .ui-rangeSlider-handle{
 	width:10px;
 	height:30px;
-	background: #B81609;
+	background: transparent;
 	cursor:col-resize;
 }
 
@@ -185,11 +185,10 @@
   -moz-border-radius: 4px;
        border-radius: 4px;
 
-  -webkit-box-shadow: 0px 1px 0px #B81609;
-     -moz-box-shadow: 0px 1px 0px #B81609;
-          box-shadow: 0px 1px 0px #B81609;
+  -webkit-box-shadow: 0px 1px 0px #c2c5d6;
+     -moz-box-shadow: 0px 1px 0px #c2c5d6;
+          box-shadow: 0px 1px 0px #c2c5d6;
 
-  background: #B81609;
   color:white;
   font-size:15px;
 
@@ -232,9 +231,9 @@
 }
 
 .ui-rangeSlider .ui-ruler-scale0 .ui-ruler-tick-inner{
-  color:black;
+  color:white;
   margin-top:1px;
-  border-left: 1px solid black;
+  border-left: 1px solid white;
   height:29px;
   padding-left:2px;
   position:relative;
@@ -246,7 +245,7 @@
 }
 
 .ui-rangeSlider .ui-ruler-scale1 .ui-ruler-tick-inner{
-  border-left:1px solid black;
+  border-left:1px solid white;
   margin-top: 25px;
   height: 5px;
 }

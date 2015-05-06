@@ -149,6 +149,44 @@ input:checked + .instrument-picker-label:before {
 opacity: 1;
 }
 
+.sourcesForm > input {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+.sourcesForm > input:checked {
+color: white;
+background: #302e42;
+}
+
+.sourcesForm > a {
+  position: relative;
+  padding: 0 5px;
+  font-size: 14px;
+  text-transform: capitalize;
+  display: inline-block;
+  line-height: 25px;
+  vertical-align: top;
+  text-decoration: none;
+  color:black;
+}
+
+.sources-picker-label:before {
+content: '';
+position: absolute;
+top: -2px;
+bottom: -2px;
+left: -2px;
+right: -2px;
+border-bottom: 4px solid;
+border-color: #205fa4 #205fb4 #c72f2a;
+opacity: 0;
+}
+
+input:checked + .sources-picker-label:before {
+opacity: 1;
+}
+
 .buttonContainer {
   width: 100%;
   margin-top:10px;

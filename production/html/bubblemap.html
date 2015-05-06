@@ -25,9 +25,7 @@
 	<!-- bootstrap is not playing well with the orbis box-->
 	<!-- <link href="bootstrap/css/bootstrap.css" rel="stylesheet">    --> 
 </head>
-<body>
-  
-    
+<body>    
 
   <div id="map"></div>
     
@@ -131,12 +129,14 @@
     
     <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
 	
-    <div class="buttonContainer" style="background: white;">
-	  <div>
-		<a style="color: black; text-decoration: none; padding: 0 5px; font-size: 14px; text-transform: capitalize; display: inline-block; line-height: 25px; vertical-align: top; cursor: pointer;" href="VictorsByName.html">Sources</a>
-	  </div>
-	</div>
-
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" class="sourcesForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SOURCES: </div>
+        <a href="PoetMasterList.html">POET LIST</a>
+        <a href="VictorsByName.html">VICTOR LIST</a>
+      </fieldset>
+    </div></div>
+	
   </div>
 
     </div>
@@ -231,11 +231,11 @@
 		if ($('#genre_4').is(':checked')) query = query + "'associated with enkomion who were born' as relationship_text ";
 		if ($('#genre_5').is(':checked')) query = query + "'associated with epigram who were born' as relationship_text ";
 		if ($('#genre_6').is(':checked')) query = query + "'associated with hymn who were born' as relationship_text ";
-		if ($('#genre_11').is(':checked')) query = query + "'associated with iambos who were born' as relationship_text ";
 		if ($('#genre_7').is(':checked')) query = query + "'associated with nome who were born' as relationship_text ";
 		if ($('#genre_8').is(':checked')) query = query + "'associated with paean who were born' as relationship_text ";
 		if ($('#genre_9').is(':checked')) query = query + "'associated with prooimion who were born' as relationship_text ";
 		if ($('#genre_10').is(':checked')) query = query + "'associated with prosodion who were born' as relationship_text ";
+		if ($('#genre_11').is(':checked')) query = query + "'associated with iambos who were born' as relationship_text ";
 		if ($('#genre_12').is(':checked')) query = query + "'associated with skolia who were born' as relationship_text ";
 		if ($('#genre_13').is(':checked')) query = query + "'associated with partheneion who were born' as relationship_text ";
 		if ($('#genre_14').is(':checked')) query = query + "'associated with tragedy who were born' as relationship_text ";
