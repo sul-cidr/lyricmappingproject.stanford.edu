@@ -127,13 +127,13 @@
       </fieldset>
     </div></div>
     
-    <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
+    <div style="display: none; width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
 	
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" class="sourcesForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SOURCES: </div>
-        <a href="PoetMasterList.html">POET LIST</a>
-        <a href="VictorsByName.html">VICTOR LIST</a>
+        <a target="_blank" href="PoetMasterList.html">POET LIST</a>
+        <a target="_blank" href="VictorsByName.html">VICTOR LIST</a>
       </fieldset>
     </div></div>
 	
@@ -191,6 +191,9 @@
 //		  }
 //		  else {
 			updateQuery(layer, $("#slider").rangeSlider("values"));
+			  $("#slider").show();
+			  $("#slider").rangeSlider("resize");
+
 //		  }
 	$("#slider").bind("valuesChanged", function(e, data) {
 	  updateQuery(layer, $("#slider").rangeSlider("values"));
@@ -311,7 +314,7 @@
 		  query = query + "AND (relationshipid=1) ";
 		}
 		else if($('#relationship_3').is(':checked')) {
-		  query = query + "AND (relationshipid=2 or relationshipid=3) ";
+		  query = query + "AND (relationshipid = 1 or relationshipid=2 or relationshipid=3) ";
 		}
 		else {
 		  query = query + "AND (relationshipid=1) ";
@@ -467,6 +470,7 @@
 			// layer 0 is the base layer, layer 1 is cartodb layer
 			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources FROM cities";
 			var sublayer = layers[1].getSubLayer(0);
+			
 			
 			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
 			

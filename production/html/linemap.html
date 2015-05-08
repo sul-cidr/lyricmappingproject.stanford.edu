@@ -211,7 +211,7 @@
     
     <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >CITY: </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACES: </div>
 	
         <input type="radio" value="0" name="city" id="destination_65">
         <label for="destination_65" class="instrument-picker-label">Abdera</label>
@@ -578,15 +578,17 @@
 	  else { */
 	    
 	    // choose query for lines data
+		query1 = "select poets_lines.* from poets_lines, dates where ";
+		css1 = "/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 	    firstCall = true;
 	    for (i=1; i <= 200; i++) {		
 		    if($('#poet_'+i).is(':checked')) {
 			    if(firstCall == true) {
 				    firstCall = false;
-				    query1 = [
-					    "select poets_lines.* from poets_lines, dates where poets_lines.poetid = ",
+				    query1 = query1 + [
+					    " poets_lines.poetid = ",
 					    i,
-					    " "
+					    " and "
 				    ].join("");
 					css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 3; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 			    }
@@ -598,11 +600,11 @@
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query1 = [
-					    "select poets_lines.* from poets_lines, dates where (poets_lines.other_cityid = ",
+					    " (poets_lines.other_cityid = ",
 					    i,
 					    " OR poets_lines.birth_cityid = ",
 						i,
-						") "
+						") and "
 				    ].join("");
 					css1= [
 					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 3; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_cityid=",
@@ -617,11 +619,11 @@
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query1 = [
-					    "select poets_lines.* from poets_lines, dates where (poets_lines.other_city_governmentid = ",
+					    " (poets_lines.other_city_governmentid = ",
 					    i,
 					    " OR poets_lines.birth_city_governmentid = ",
 						i,
-						") "
+						") and "
 				    ].join("");
 					css1= [
 					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_city_governmentid=",
@@ -633,17 +635,16 @@
 			    }
 		    }
 	    }
-		if($('#region_1').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 7 or poets_lines.birth_regionid = 10 or poets_lines.other_regionid = 7 or poets_lines.other_regionid = 10) ";
-		if($('#region_2').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) ";
-		if($('#region_3').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) ";
-		if($('#region_4').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) ";
+		if($('#region_1').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 7 or poets_lines.birth_regionid = 10 or poets_lines.other_regionid = 7 or poets_lines.other_regionid = 10) and ";
+		if($('#region_2').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) and ";
+		if($('#region_3').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) and ";
+		if($('#region_4').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) and ";
 		dateFirstCall = true;
 		for (i=-$("#slider").rangeSlider("values").min; i >= -$("#slider").rangeSlider("values").max; i=i-50) {		
 		  if(dateFirstCall == true) {
 		    dateFirstCall = false;
 		    query1 = query1 + [
-		      "",
-		      "AND poets_lines.poetid = dates.poetid ",
+		      " poets_lines.poetid = dates.poetid ",
 		      "AND ( ",
 		      "dates.date='",
 		      i,
@@ -786,7 +787,7 @@
 	  var sublayer = layers[1].getSubLayer(0);
 	  var sublayer2;
 	  var poetid = getParameterByName("poetid");
-	  var query = createTotalPoetsQuery();
+	  var query = "select * from cities where cityid = 0";
 	  var css = createBubbleVisualization("selected_number");
 	  
 	  sublayer.set({ 'interactivity': ['cartodb_id', 'poet_name', 'birth_city_name', 'other_city_name', 'birth_city_government', 'other_city_government', 'instrument_names', 'genre_names', 'date_names', 'sources'] });
@@ -814,7 +815,7 @@
 	    $('#all_poets').addClass('selected');
 	    sublayer.setSQL("SELECT * FROM poets_lines");
 		sublayer.setCartoCSS("/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
-	  }
+	  } 
 	  	  
 	  createSelector(vis, layers);
         })
