@@ -421,7 +421,8 @@
 			"	COUNT(sorted_poets.cityid) as selected_number, ",
 			"	string_agg(sorted_poets.poet_name, ', ') as selected_names, ",
 			"   	string_agg(sorted_poets.sources, ', ') as selected_sources, ",
-			"	string_agg(sorted_poets.poet_link, ', ') as selected_links ",
+			"	string_agg(sorted_poets.poet_link, ', ') as selected_links, ",
+			"   'who were associated with ' as relationship_text ",
 			"FROM cities, ",
 			"	(SELECT ",
 			"		poets.poetid, ",
@@ -447,9 +448,8 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources FROM cities";
-			var sublayer = layers[1].getSubLayer(0);
-			
+			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources  FROM cities";
+			var sublayer = layers[1].getSubLayer(0);			
 			
 			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
 			
