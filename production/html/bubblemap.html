@@ -176,8 +176,8 @@
 		}]
 	  });
     //-->
-    </script>    
-
+    </script>
+	
     <script>
       // create layer selector
       function createSelector(layer) {
@@ -211,9 +211,14 @@
 	/* the code is somewhat repetitive and it's probably possible to shrink it with some function calls but it sounds like too much work */
 		var firstCall = true;
 		var i = 0;
+		
+		layer.setInteraction(true);
+		
 		var query = [
-			"SELECT ",
-			"	cities.*, ",
+			"  SELECT  cities_with_poets.*, ",
+			"		  grouped_politics.grouped_government as government ",
+			"  FROM ",
+			"  (SELECT   cities.*, ",
 			"	COUNT(rank_players.cityid) as selected_number, ",
 			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order by rank_players.poets_cities_rank)) as selected_names, ",
 			"	string_agg(rank_players.poet_link, ', ') as selected_links, ",
@@ -401,7 +406,27 @@
 			"	) instrument_players ",
 			"  ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players ",
 			"  WHERE cities.cityid = rank_players.cityid ",
-			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
+			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, ",
+			"			cities.cartodb_id) cities_with_poets, ",
+			"   ",
+			"   ( ",
+			"   select s.cityid, string_agg(s.early_date || '-' || s.late_date || ': ' ||c.government, ', ') as grouped_government from ",
+		"		   (select cityid, max(date) as early_date, min(date) as late_date ",
+			"	   from (select s.*, sum(startflag) over (partition by cityid order by date desc) as grp ",
+		"				 from (select c.*, ",
+		"							  (case when lag(governmentid) over (partition by cityid order by date desc) = governmentid",
+		"									then 0 else 1 ",
+		"							   end) as startflag ",
+		"					   from city_politics as c ",
+		"					  ) s ",
+		"				) s ",
+		"		   group by cityid, grp, city ",
+		"		   order by city asc, early_date desc) s, city_politics as c ",
+		"		   where s.cityid = c.cityid and s.early_date = c.date ",
+		"		   group by s.cityid ",
+		"	   ) grouped_politics ",
+		"	   ",
+		"	   WHERE cities_with_poets.cityid = grouped_politics.cityid"
 		].join("");
 		
 		console.log(query);
@@ -416,7 +441,6 @@
 			"	cities.the_geom, ",
 			"	cities.the_geom_webmercator, ",
 			"	cities.city_name, ",
-			"	cities.government, ",
 			"	sorted_poets.cityid, ",
 			"	COUNT(sorted_poets.cityid) as selected_number, ",
 			"	string_agg(sorted_poets.poet_name, ', ') as selected_names, ",
@@ -448,12 +472,13 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources  FROM cities";
+			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government  FROM cities";
 			var sublayer = layers[1].getSubLayer(0);			
 			
 			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
 			
 			layers[1].setQuery(query);
+			sublayer.setInteraction(false);
 			
 			createSelector(layers[1]);
         })

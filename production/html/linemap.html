@@ -576,9 +576,11 @@
 	    sublayer2.setSQL(query2);
 	  }
 	  else { */
+
+	  sublayer1.setInteraction(true);
 	    
 	    // choose query for lines data
-		query1 = "select poets_lines.* from poets_lines, dates where ";
+		query1 = "SELECT poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, Count(s.poetid) AS poets_count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '. Dates: ' || s.date_names || '. Instrument(s): ' || s.instrument_names || '. Genre(s): ' || s.genre_names , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, poets_lines.arrow_angle, poets_lines.birth_city_name, poets_lines.birth_cityid, poets_lines.birth_regionid, poets_lines.birth_city_governmentid, poets_lines.other_city_name, poets_lines.other_cityid, poets_lines.other_regionid, poets_lines.other_city_governmentid FROM ( SELECT *, row_number() OVER (partition BY the_geom) AS row_number FROM poets_lines) poets_lines, ( SELECT the_geom, the_geom_webmercator, min(cartodb_id) AS cartodb_id, poetid, poet_name, date_names, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, rank() OVER (partition BY p.the_geom ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT poets_lines.* FROM poets_lines, dates WHERE ";
 		css1 = "/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 	    firstCall = true;
 	    for (i=1; i <= 200; i++) {		
@@ -599,7 +601,7 @@
 		    if($('#destination_'+i).is(':checked')) {
 			    if(firstCall == true) {
 				    firstCall = false;
-				    query1 = [
+				    query1 = query1 + [
 					    " (poets_lines.other_cityid = ",
 					    i,
 					    " OR poets_lines.birth_cityid = ",
@@ -618,27 +620,49 @@
 		    if($('#gov_'+i).is(':checked')) {
 			    if(firstCall == true) {
 				    firstCall = false;
-				    query1 = [
+				    query1 = query1 + [
 					    " (poets_lines.other_city_governmentid = ",
 					    i,
 					    " OR poets_lines.birth_city_governmentid = ",
 						i,
-						") and "
+						" "
 				    ].join("");
+					//democracy
+					if($('#gov_3').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 ";
+					// oligarchy
+					if($('#gov_1').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";
+					// tyranny
+					if($('#gov_2').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";					
+					query1 = query1 + ") and"
+					
 					css1= [
 					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_city_governmentid=",
-					i,
+					i].join("");
+					
+					if($('#gov_3').is(':checked')) css1 = css1 + "],[birth_city_governmentid=10";
+					// oligarchy
+					if($('#gov_1').is(':checked')) css1 = css1 + "],[birth_city_governmentid=9],[birth_city_governmentid=10";
+					// tyranny
+					if($('#gov_2').is(':checked')) css1 = css1 + "],[birth_city_governmentid=9";
+					
+					css1 = css1 + [
 					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_city_governmentid = ",
-					i,
-					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
-				    ].join("");
+					i].join("");
+					
+					if($('#gov_3').is(':checked')) css1 = css1 + "],[other_city_governmentid=10";
+					// oligarchy
+					if($('#gov_1').is(':checked')) css1 = css1 + "],[other_city_governmentid=9],[other_city_governmentid=10";
+					// tyranny
+					if($('#gov_2').is(':checked')) css1 = css1 + "],[other_city_governmentid=9";					
+					
+					css1 = css1 + "] { line-color: #fc1804; marker-fill: #fc1804; } } }";				
 			    }
 		    }
 	    }
-		if($('#region_1').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 7 or poets_lines.birth_regionid = 10 or poets_lines.other_regionid = 7 or poets_lines.other_regionid = 10) and ";
-		if($('#region_2').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) and ";
-		if($('#region_3').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) and ";
-		if($('#region_4').is(':checked')) query1 = "SELECT poets_lines.* FROM poets_lines, dates where (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) and ";
+		if($('#region_1').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 7 or poets_lines.birth_regionid = 10 or poets_lines.other_regionid = 7 or poets_lines.other_regionid = 10) and ";
+		if($('#region_2').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) and ";
+		if($('#region_3').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) and ";
+		if($('#region_4').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) and ";
 		dateFirstCall = true;
 		for (i=-$("#slider").rangeSlider("values").min; i >= -$("#slider").rangeSlider("values").max; i=i-50) {		
 		  if(dateFirstCall == true) {
@@ -656,6 +680,7 @@
 		  }
 		}
 		query1 = query1 + ")";
+		query1 = query1 + ") p GROUP BY the_geom, the_geom_webmercator, poetid, poet_name, date_names, instrument_names, genre_names) s WHERE poets_lines.row_number = 1 AND poets_lines.the_geom = s.the_geom GROUP BY poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, poets_lines.arrow_angle, poets_lines.birth_city_name, poets_lines.birth_cityid, poets_lines.birth_regionid, poets_lines.birth_city_governmentid, poets_lines.other_city_name, poets_lines.other_cityid, poets_lines.other_regionid, poets_lines.other_city_governmentid";
 		
 		if (firstCall == false) {} 
 	    else if($('#region_1').is(':checked')) {
@@ -672,6 +697,9 @@
 		}
 		else css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 
+		query1 = "SELECT poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, poets_lines.birth_city_name, poets_lines.other_city_name FROM poets_lines";
+		css1 = "#poets_lines { line-color: #FF6600; line-width: 2; line-opacity: 0.7; }";
+		
 		console.log(query1);
 		console.log(css1);
 	    sublayer1.setSQL(query1);
@@ -682,16 +710,16 @@
 		if($('#region_1').is(':checked')) query2 = query2 + " and (c.regionid = 7 or c.regionid = 10)";
 		if($('#region_2').is(':checked')) query2 = query2 + " and (c.regionid = 2 or c.regionid = 3 or c.regionid = 4 or c.regionid = 9 or c.regionid=11 or c.regionid=12)";
 		if($('#region_3').is(':checked')) query2 = query2 + " and (c.regionid = 1 or c.regionid = 8 or c.regionid = 15 or c.regionid = 17 or c.regionid = 13 or c.regionid = 19)";
-		if($('#region_4').is(':checked')) query2 = query2 + " and (c.regionid = 6 or c.regionid = 14 or c.regionid = 16)";	
+		if($('#region_4').is(':checked')) query2 = query2 + " and (c.regionid = 6 or c.regionid = 14 or c.regionid = 16)";	 
 		 
-	    console.log(query2);
-	    sublayer2.setSQL(query2);	  
+//	    console.log(query2);
+//	    sublayer2.setSQL(query2); 	  
 	}
 
 //	  }
 	
     function createSelector(vis, layers) {
-        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+        var sql = new cartodb.SQL({ user: 'greeklyricpoets' });
         var $options = $('#controlbar input');
 		
 		$options.click(function(e) {
@@ -776,7 +804,7 @@
       }      
 	  
       function main() {
-        cartodb.createVis('map', 'http://greeklyricpoets.cartodb.com/api/v2/viz/5412ef5c-128d-11e3-8b55-8149b805c7e0/viz.json', {
+        cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/2fd4eab8-f72a-11e4-a2d0-0e4fddd5de28/viz.json', {
           tiles_loader: false,
           center_lat: 38.95,
           center_lon: 22.38,
@@ -789,33 +817,34 @@
 	  var poetid = getParameterByName("poetid");
 	  var query = "select * from cities where cityid = 0";
 	  var css = createBubbleVisualization("selected_number");
+
+	  layers[1].setQuery("select *, 'ab' as poets_names, 'ab' as poets_info from poets_lines");	  
+	  sublayer.set({ 'interactivity': ['cartodb_id', 'birth_city_name', 'other_city_name']});
+//	  sublayer.setInteraction(false);
 	  
-	  sublayer.set({ 'interactivity': ['cartodb_id', 'poet_name', 'birth_city_name', 'other_city_name', 'birth_city_government', 'other_city_government', 'instrument_names', 'genre_names', 'date_names', 'sources'] });
-	  
-	  
-	  vis.addOverlay({
+/*	  vis.addOverlay({
 		  type: 'infobox',
 		  template: "<h3>{{poet_name}}</h3><p>Place of origin: {{birth_city_name}} ({{birth_city_government}})</p><p>Place of activity: {{other_city_name}}  ({{other_city_government}})</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
 		  width: 300,
 		  position: 'bottom|left'
-	  });
+	  }); */
 
 	  layers[1].createSubLayer({sql: query, cartocss: css } );
-	  sublayer2 = layers[1].getSubLayer(1);
+//	  sublayer2 = layers[1].getSubLayer(1);
 //	  sublayer2.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_names', 'selected_sources'] });
 //	  sublayer2.infowindow.set('template', $('#infowindow_template').html());
 	  
-	  if (poetid != "") {
+/*	  if (poetid != "") {
 	    $("#poet_" + poetid).addClass('selected');
 	    sublayer.setSQL("SELECT * FROM poets_lines WHERE poetid = " + poetid);
 	    sublayer.setCartoCSS("#poets_lines { line-width: 3; marker-width: 10; }");
 	    sublayer2.setSQL("SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid, COUNT(sorted_poets.cityid) as selected_number, string_agg(sorted_poets.sources, ', ') as selected_sources, string_agg(sorted_poets.poet_name, ', ') as selected_names, string_agg(sorted_poets.poet_link, ', ') as selected_links FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND poets.poetid = " + poetid + " ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id");
 	  }
 	  else {
-	    $('#all_poets').addClass('selected');
+	    $('#all_poets').addClass('selected'); 
 	    sublayer.setSQL("SELECT * FROM poets_lines");
-		sublayer.setCartoCSS("/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
-	  } 
+		sublayer.setCartoCSS("#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
+	  }  */
 	  	  
 	  createSelector(vis, layers);
         })

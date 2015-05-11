@@ -1,0 +1,14 @@
+<div class="cartodb-popup v2">
+  <a href="#close" class="cartodb-popup-close-button close">x</a>
+  <div class="cartodb-popup-content-wrapper">
+    <div class="cartodb-popup-content">
+      <h3>{{birth_city_name}} -> {{other_city_name}}</h3>
+      <br>
+      <h4>Poets</h4>
+      <p>{{{poets_names}}}</p>
+      <h4>Detailed info on Poets</h4>
+      {{{poets_info}}}</p>
+    </div>
+  </div>
+  <div class="cartodb-popup-tip-container"></div>
+</div>
