@@ -408,25 +408,7 @@
 			"  WHERE cities.cityid = rank_players.cityid ",
 			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, ",
 			"			cities.cartodb_id) cities_with_poets, ",
-			"   ",
-			"   ( ",
-			"   select s.cityid, string_agg(s.early_date || '-' || s.late_date || ': ' ||c.government, ', ') as grouped_government from ",
-		"		   (select cityid, max(date) as early_date, min(date) as late_date ",
-			"	   from (select s.*, sum(startflag) over (partition by cityid order by date desc) as grp ",
-		"				 from (select c.*, ",
-		"							  (case when lag(governmentid) over (partition by cityid order by date desc) = governmentid",
-		"									then 0 else 1 ",
-		"							   end) as startflag ",
-		"					   from city_politics as c ",
-		"					  ) s ",
-		"				) s ",
-		"		   group by cityid, grp, city ",
-		"		   order by city asc, early_date desc) s, city_politics as c ",
-		"		   where s.cityid = c.cityid and s.early_date = c.date ",
-		"		   group by s.cityid ",
-		"	   ) grouped_politics ",
-		"	   ",
-		"	   WHERE cities_with_poets.cityid = grouped_politics.cityid"
+			" ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, case when min(date) = max(date) then '' else '-' || min(date) end AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM city_politics AS c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics WHERE cities_with_poets.cityid = grouped_politics.cityid"
 		].join("");
 		
 		console.log(query);

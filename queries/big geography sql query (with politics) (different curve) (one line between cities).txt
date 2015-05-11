@@ -3,8 +3,6 @@ this query will create a table where every row represents one line from a birth 
 this works to create curved lines. 
 
 SELECT
-lines.poet_name,
-lines.poetid,
 lines.birth_city_name,
 lines.birth_cityid,
 lines.birth_regionid,
@@ -12,16 +10,7 @@ lines.other_city_name,
 lines.other_cityid,
 lines.other_regionid,
 lines.the_geom,
-lines.sources,
-lines.poet_link,
-lines.arrow_angle,
-info.instrument_names,
-info.genre_names,
-info.date_names,
-politics_bound_poets.government as other_city_government,
-politics_bound_poets.governmentid as other_city_governmentid,
-politics_origin_poets.government as birth_city_government,
-politics_origin_poets.governmentid as birth_city_governmentid
+lines.arrow_angle
 FROM
 	(SELECT birth_cities.poet_name,
 	birth_cities.poetid,
@@ -55,7 +44,7 @@ FROM
 		birth_cities_with_real_city_name.regionid,
 		birth_cities_with_real_city_name.poetid,
 		birth_cities_with_real_city_name.poet_link,
-		alternative_birth_cities.city_name,
+		birth_cities_with_real_city_name.city_name,
 		birth_cities_with_real_city_name.the_geom,
 		birth_cities_with_real_city_name.the_geom_webmercator
 		FROM
@@ -116,156 +105,12 @@ FROM
 		WHERE sorted_poets.cityid = cities.cityid) other_cities
 		
 	WHERE birth_cities.poetid = other_cities.poetid) lines
-	
-LEFT OUTER JOIN
-	
-	(SELECT
-	poets.poetid,
-	poets.poet_name,
-	poets_instruments.instrument_names,
-	poets_genres.genre_names,
-	poets_dates.date_names
-	FROM
-		poets
-		
-		LEFT OUTER JOIN
-	
-			(SELECT 
-				sorted_poets.poetid,
-				sorted_poets.poet_name,
-				string_agg(sorted_instruments.instrument, ', ') as instrument_names
-			FROM (SELECT * FROM instruments ORDER BY instrument ASC) sorted_instruments, 
-				(SELECT 
-					poets.poetid,
-					poets.poet_name
-					FROM poets
-				GROUP BY poets.poetid, poets.poet_name
-			    ) sorted_poets
-			WHERE sorted_poets.poetid = sorted_instruments.poetid
-			GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_instruments
-		ON poets.poetid = poets_instruments.poetid
-	
-		
-		LEFT OUTER JOIN
-		(SELECT 
-			sorted_poets.poetid,
-			sorted_poets.poet_name,
-			string_agg(sorted_genres.genre, ', ') as genre_names
-		FROM (SELECT * FROM genres ORDER BY genre ASC) sorted_genres, 
-			(SELECT 
-				poets.poetid,
-				poets.poet_name
-				FROM poets
-			GROUP BY poets.poetid, poets.poet_name
-		    ) sorted_poets
-		WHERE sorted_poets.poetid = sorted_genres.poetid
-		GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres
-		on poets.poetid = poets_genres.poetid
-		
-		LEFT OUTER JOIN
-		(SELECT 
-			sorted_poets.poetid,
-			sorted_poets.poet_name,
-			(
-				cast(max(sorted_dates.date) as text)
-				||
-				'-'
-				||
-				cast(min(sorted_dates.date) as text)
-			) as date_names
-		FROM (SELECT * FROM dates ORDER BY date DESC) sorted_dates, 
-			(SELECT 
-				poets.poetid,
-				poets.poet_name
-				FROM poets
-			GROUP BY poets.poetid, poets.poet_name
-		    ) sorted_poets
-		WHERE sorted_poets.poetid = sorted_dates.poetid
-		GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_dates
-		ON poets.poetid = poets_dates.poetid
-	
-	) info
-
-ON lines.poetid = info.poetid
-
-LEFT OUTER JOIN
-
-    (SELECT
-    all_associated_poets.poets_poet_name,
-    all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government
-    FROM
-        (SELECT
-            poets_cities.poets_poet_name,
-            poets_cities.poetid,
-            poets_cities.poets_city_name,
-            poets_cities.cityid,
-            poets_cities.relationshipid,
-            government_cities.governmentid,
-            government_cities.government,
-            government_cities.date as government_date
-            FROM
-            poets_cities,
-            (SELECT * FROM city_politics) government_cities
-            WHERE poets_cities.cityid = government_cities.cityid
-            AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3)
-        ) all_associated_poets,
-        dates
-    WHERE all_associated_poets.poetid = dates.poetid
-    AND
-    all_associated_poets.government_date = dates.date
-    GROUP BY
-    all_associated_poets.poets_poet_name,
-    all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government) politics_bound_poets
-
-ON lines.other_cityid = politics_bound_poets.cityid AND lines.poetid = politics_bound_poets.poetid
-
-LEFT OUTER JOIN
-
-    (SELECT
-    all_associated_poets.poets_poet_name,
-    all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government
-    FROM
-        (SELECT
-            poets_cities.poets_poet_name,
-            poets_cities.poetid,
-            poets_cities.poets_city_name,
-            poets_cities.cityid,
-            poets_cities.relationshipid,
-            government_cities.governmentid,
-            government_cities.government,
-            government_cities.date as government_date
-            FROM
-            poets_cities,
-            (SELECT * FROM city_politics) government_cities
-            WHERE poets_cities.cityid = government_cities.cityid
-            AND (poets_cities.relationshipid = 1)
-        ) all_associated_poets,
-        dates
-    WHERE all_associated_poets.poetid = dates.poetid
-    AND
-    all_associated_poets.government_date = dates.date
-    GROUP BY
-    all_associated_poets.poets_poet_name,
-    all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government) politics_origin_poets
-
-ON lines.birth_cityid = politics_origin_poets.cityid AND lines.poetid = politics_origin_poets.poetid
+GROUP BY
+lines.birth_city_name,
+lines.birth_cityid,
+lines.birth_regionid,
+lines.other_city_name,
+lines.other_cityid,
+lines.other_regionid,
+lines.the_geom,
+lines.arrow_angle
