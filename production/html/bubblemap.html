@@ -185,19 +185,12 @@
 
         var $options = $('#controlbar input');
         $options.click(function(e) {        
-		  //if all poets selected or nothing selected show all poets; otherwise, update query
-//		  if($options!.is(':checked')) {
-//			layer.setQuery(createTotalPoetsQuery());
-//		  }
-//		  else {
+		  updateQuery(layer, $("#slider").rangeSlider("values"));
+		  $("#slider").show();
+		  $("#slider").rangeSlider("resize");
+		  $("#slider").bind("valuesChanged", function(e, data) {
 			updateQuery(layer, $("#slider").rangeSlider("values"));
-			  $("#slider").show();
-			  $("#slider").rangeSlider("resize");
-
-//		  }
-	$("#slider").bind("valuesChanged", function(e, data) {
-	  updateQuery(layer, $("#slider").rangeSlider("values"));
-	  });
+		  });
         });
       }
 	  
@@ -411,39 +404,9 @@
 			" ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, case when min(date) = max(date) then '' else '-' || min(date) end AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM city_politics AS c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics WHERE cities_with_poets.cityid = grouped_politics.cityid"
 		].join("");
 		
-		console.log(query);
-		
+		console.log(query);		
 		layer.setQuery(query); 
 	}	  
-	  
-	  function createTotalPoetsQuery() {
-		var query = [
-			"SELECT ",
-			"	cities.cartodb_id, ",
-			"	cities.the_geom, ",
-			"	cities.the_geom_webmercator, ",
-			"	cities.city_name, ",
-			"	sorted_poets.cityid, ",
-			"	COUNT(sorted_poets.cityid) as selected_number, ",
-			"	string_agg(sorted_poets.poet_name, ', ') as selected_names, ",
-			"   	string_agg(sorted_poets.sources, ', ') as selected_sources, ",
-			"	string_agg(sorted_poets.poet_link, ', ') as selected_links, ",
-			"   'who were associated with ' as relationship_text ",
-			"FROM cities, ",
-			"	(SELECT ",
-			"		poets.poetid, ",
-			"		poets.poet_name, ",
-			"		poets.sources, ",
-			"		poets.poet_link, ",
-			"		poets_cities.cityid ",
-			"		FROM poets, poets_cities ",
-			"		WHERE poets.poetid = poets_cities.poetid ",
-			"		ORDER BY cityid ASC, poet_name ASC) sorted_poets ",
-			"WHERE cities.cityid = sorted_poets.cityid ",
-			"GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id"
-		].join("");
-		return query;
-	}
 	  
       function main() {
         cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/fec12578-e99f-11e4-bdee-0e853d047bba/viz.json', {
@@ -456,8 +419,6 @@
 			// layer 0 is the base layer, layer 1 is cartodb layer
 			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government  FROM cities";
 			var sublayer = layers[1].getSubLayer(0);			
-			
-			sublayer.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_links', 'selected_names', 'selected_sources', 'government'] });
 			
 			layers[1].setQuery(query);
 			sublayer.setInteraction(false);

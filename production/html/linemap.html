@@ -491,25 +491,6 @@
   </div>
   </div>  
     
-    <!--Custom html for the infowindow customization-->
-    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
-    <!--Content.data contains the field info-->
-    <!--Content.data is determined by the UI on the cartodb webpage.-->
-    <!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
-    <script type="infowindow/html" id="infowindow_template">
-      <div class="cartodb-popup">
-        <a href="#close" class="cartodb-popup-close-button close">x</a>
-         <div class="cartodb-popup-content-wrapper">
-           <div class="cartodb-popup-cont">
-            <h3>{{content.data.city_name}}</h3>
-	    <p>Number selected: {{content.data.selected_number}}</p>
-	    <p>Names selected: {{content.data.selected_names}}</p>
-           </div>
-         </div>
-         <div class="cartodb-popup-tip-container"></div>
-      </div>
-    </script>
-
     <!-- include google maps library *before* load cartodb.js -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <!-- include cartodb.js library -->
@@ -547,10 +528,9 @@
     </script>  
 
     <script>
-	// create layer selector
+
 	function updateQuery(vis, layers) {
-          // get the button of the selected layer
-//      var $li = $(e.target);
+
 	  var firstCall = true;
 	  var govCall = false;
 	  var dateFirstCall;
@@ -562,21 +542,6 @@
 	  var css1;
 	  var css2;
           
-          // deselect all_poets and toggle the clicked one
-/*          $('#all_poets').removeClass('selected');
-	  $options.removeClass('selected');
-          $li.addClass('selected');
-		  
-	  //if all poets selected or nothing selected show all poets; otherwise, update query
-	  if($li.attr('id')=='all_poets' || $options.hasClass('selected')==false) {
-	    $options.removeClass('selected');
-	    $('#all_poets').addClass('selected');
-	    sublayer1.setSQL("select * from poets_lines");
-	    query2 = createTotalPoetsQuery();
-	    sublayer2.setSQL(query2);
-	  }
-	  else { */
-
 	  sublayer1.setInteraction(true);
 	    
 	    // choose query for lines data
@@ -818,29 +783,7 @@
 	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, 1 as count from poets_lines");	  
 	  sublayer.setInteraction(false);
 	  
-/*	  vis.addOverlay({
-		  type: 'infobox',
-		  template: "<h3>{{poet_name}}</h3><p>Place of origin: {{birth_city_name}} ({{birth_city_government}})</p><p>Place of activity: {{other_city_name}}  ({{other_city_government}})</p><p>Genres: {{genre_names}}</p><p>Dates: {{date_names}}</p><p>Sources: {{sources}}</p>",
-		  width: 300,
-		  position: 'bottom|left'
-	  }); */
-
 	  layers[1].createSubLayer({sql: query, cartocss: css } );
-//	  sublayer2 = layers[1].getSubLayer(1);
-//	  sublayer2.set({ 'interactivity': ['cartodb_id', 'city_name', 'selected_number', 'selected_names', 'selected_sources'] });
-//	  sublayer2.infowindow.set('template', $('#infowindow_template').html());
-	  
-/*	  if (poetid != "") {
-	    $("#poet_" + poetid).addClass('selected');
-	    sublayer.setSQL("SELECT * FROM poets_lines WHERE poetid = " + poetid);
-	    sublayer.setCartoCSS("#poets_lines { line-width: 3; marker-width: 10; }");
-	    sublayer2.setSQL("SELECT cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.government, sorted_poets.cityid, COUNT(sorted_poets.cityid) as selected_number, string_agg(sorted_poets.sources, ', ') as selected_sources, string_agg(sorted_poets.poet_name, ', ') as selected_names, string_agg(sorted_poets.poet_link, ', ') as selected_links FROM cities, (SELECT poets.poetid, poets.poet_name, poets.poet_link, poets.sources, poets_cities.cityid FROM poets, poets_cities WHERE poets.poetid = poets_cities.poetid AND poets.poetid = " + poetid + " ORDER BY cityid ASC, poet_name ASC) sorted_poets WHERE cities.cityid = sorted_poets.cityid GROUP BY sorted_poets.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id");
-	  }
-	  else {
-	    $('#all_poets').addClass('selected'); 
-	    sublayer.setSQL("SELECT * FROM poets_lines");
-		sublayer.setCartoCSS("#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { line-width: 1; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
-	  }  */
 	  	  
 	  createSelector(vis, layers);
         })
