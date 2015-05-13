@@ -205,13 +205,13 @@
         <label for="poet_148" class="priority-picker-label">Xenophanes</label>
 	
         <input type="radio" value="2" name="city" id="poet_18">
-        <label for="poet_18" class="priority-picker-label">-es</label>
+        <label for="poet_18" class="priority-picker-label" style="text-transform: none;">-es</label>
       </fieldset>
     </div>
     
     <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACES: </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACES (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
 	
         <input type="radio" value="0" name="city" id="destination_65">
         <label for="destination_65" class="instrument-picker-label">Abdera</label>
@@ -445,7 +445,7 @@
     
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GEOGRAPHICAL REGION: </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
 
         <input type="radio" value="0" name="city" id="region_1">
         <label for="region_1" class="genre-picker-label">Magna Graecia</label>
@@ -462,9 +462,67 @@
       </fieldset>
     </div>
 	
+    <div class="buttonContainer" style="background: white; height: 100px;">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SMALL GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
+
+		<input type="radio" value="0" name="city" id="small_region_2">
+        <label for="small_region_2" class="genre-picker-label">Attica</label>
+	
+        <input type="radio" value="0" name="city" id="small_region_3">
+        <label for="small_region_3" class="genre-picker-label">Boeotia</label>
+		
+        <input type="radio" value="0" name="city" id="small_region_4">
+        <label for="small_region_4" class="genre-picker-label">Central Greece</label>
+		
+        <input type="radio" value="0" name="city" id="small_region_17">
+        <label for="small_region_17" class="genre-picker-label">Crete</label>
+		
+        <input type="radio" value="0" name="city" id="small_region_1">
+        <label for="small_region_1" class="genre-picker-label">Cyclades & western Aegean Islands</label>
+		
+        <input type="radio" value="0" name="city" id="small_region_18">
+        <label for="small_region_18" class="genre-picker-label">Cyprus</label>	
+		
+        <input type="radio" value="0" name="city" id="small_region_13">
+        <label for="small_region_13" class="genre-picker-label">Cythera</label>
+		
+		<input type="radio" value="0" name="city" id="small_region_15">
+        <label for="small_region_15" class="genre-picker-label">Dodecanese</label>
+	  
+        <input type="radio" value="0" name="city" id="small_region_6">
+        <label for="small_region_6" class="genre-picker-label">Ionia</label>
+		
+       <input type="radio" value="0" name="city" id="small_region_10">
+        <label for="small_region_10" class="genre-picker-label">Italy</label>
+		
+        <input type="radio" value="0" name="city" id="small_region_8">
+        <label for="small_region_8" class="genre-picker-label">Lesbos & other Asia Minor islands (Samos, Chios)</label>
+
+        <input type="radio" value="0" name="city" id="small_region_14">
+        <label for="small_region_14" class="genre-picker-label">Lydia</label>
+		
+        <input type="radio" value="0" name="city" id="small_region_16">
+        <label for="small_region_16" class="genre-picker-label">Mysia</label>
+
+		<input type="radio" value="0" name="city" id="small_region_11">
+        <label for="small_region_11" class="genre-picker-label">Northern Greece</label>
+
+        <input type="radio" value="0" name="city" id="small_region_9">
+        <label for="small_region_9" class="genre-picker-label">Peloponnese</label>
+
+		<input type="radio" value="0" name="city" id="small_region_7">
+        <label for="small_region_7" class="genre-picker-label">Sicily</label>
+	
+        <input type="radio" value="0" name="city" id="small_region_12">
+        <label for="small_region_12" class="genre-picker-label">Thessaly</label>
+		
+      </fieldset>
+    </div>
+	
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POLITICAL SYSTEM: </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POLITICAL SYSTEM (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
 
         <input type="radio" value="0" name="city" id="gov_3">
         <label for="gov_3" class="genre-picker-label">Democracy</label>
@@ -545,7 +603,7 @@
 	  sublayer1.setInteraction(true);
 	    
 	    // choose query for lines data
-		query1 = "SELECT city_city_lines.*, s.count, s.poets_names, s.poets_info, s.birth_city_governmentid, s.other_city_governmentid FROM   city_city_lines  JOIN (SELECT poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '. Dates: ' || s.date_names || '. Instrument(s): ' || s.instrument_names || '. Genre(s): ' || s.genre_names , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, poets_lines.arrow_angle, poets_lines.birth_city_name, poets_lines.birth_cityid, poets_lines.birth_regionid, poets_lines.birth_city_governmentid, poets_lines.other_city_name, poets_lines.other_cityid, poets_lines.other_regionid, poets_lines.other_city_governmentid FROM ( SELECT *, row_number() OVER (partition BY the_geom) AS row_number FROM poets_lines) poets_lines, ( SELECT the_geom, the_geom_webmercator, min(cartodb_id) AS cartodb_id, poetid, poet_name, date_names, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, rank() OVER (partition BY p.the_geom ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT poets_lines.* FROM poets_lines, dates WHERE ";
+		query1 = "SELECT city_city_lines.*, s.count, s.poets_names, s.poets_info, s.birth_city_governmentid, s.other_city_governmentid FROM city_city_lines JOIN ( SELECT poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '. Dates: ' || s.date_names || '. Genre(s): ' || s.genre_names || '. Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, poets_lines.arrow_angle, poets_lines.birth_city_name, poets_lines.birth_cityid, poets_lines.birth_regionid, poets_lines.birth_city_governmentid, poets_lines.other_city_name, poets_lines.other_cityid, poets_lines.other_regionid, poets_lines.other_city_governmentid FROM ( SELECT *, row_number() OVER (partition BY the_geom) AS row_number FROM poets_lines) poets_lines, ( SELECT the_geom, the_geom_webmercator, min(cartodb_id) AS cartodb_id, poetid, poet_name, date_names, sources, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, rank() OVER (partition BY p.the_geom ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT poets_lines.* FROM poets_lines, dates WHERE ";
 		css1 = "/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 	    firstCall = true;
 	    for (i=1; i <= 200; i++) {		
@@ -577,6 +635,25 @@
 					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; }  line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_cityid=",
 					i,
 					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_cityid = ",
+					i,
+					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
+				    ].join("");
+			    }
+		    }
+		    if($('#small_region_'+i).is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query1 = query1 + [
+					    " (poets_lines.birth_regionid = ",
+					    i,
+					    " OR poets_lines.other_regionid = ",
+						i,
+						") and "
+				    ].join("");
+					css1= [
+					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; }  line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid=",
+					i,
+					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = ",
 					i,
 					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
 				    ].join("");
@@ -645,7 +722,7 @@
 		  }
 		}
 		query1 = query1 + ")";
-		query1 = query1 + ") p GROUP BY the_geom, the_geom_webmercator, poetid, poet_name, date_names, instrument_names, genre_names) s WHERE poets_lines.row_number = 1 AND poets_lines.the_geom = s.the_geom GROUP BY poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, poets_lines.arrow_angle, poets_lines.birth_city_name, poets_lines.birth_cityid, poets_lines.birth_regionid, poets_lines.birth_city_governmentid, poets_lines.other_city_name, poets_lines.other_cityid, poets_lines.other_regionid, poets_lines.other_city_governmentid) s ON city_city_lines.the_geom = s.the_geom";
+		query1 = query1 + ") p GROUP BY the_geom, the_geom_webmercator, poetid, poet_name, date_names, instrument_names, sources, genre_names) s WHERE poets_lines.row_number = 1 AND poets_lines.the_geom = s.the_geom GROUP BY poets_lines.the_geom, poets_lines.the_geom_webmercator, poets_lines.cartodb_id, poets_lines.arrow_angle, poets_lines.birth_city_name, poets_lines.birth_cityid, poets_lines.birth_regionid, poets_lines.birth_city_governmentid, poets_lines.other_city_name, poets_lines.other_cityid, poets_lines.other_regionid, poets_lines.other_city_governmentid) s ON city_city_lines.the_geom = s.the_geom";
 		
 		if (firstCall == false) {} 
 	    else if($('#region_1').is(':checked')) {

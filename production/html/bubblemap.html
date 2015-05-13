@@ -127,7 +127,7 @@
       </fieldset>
     </div></div>
     
-    <div style="display: none; width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
+    <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
 	
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" class="sourcesForm">
@@ -186,12 +186,14 @@
         var $options = $('#controlbar input');
         $options.click(function(e) {        
 		  updateQuery(layer, $("#slider").rangeSlider("values"));
-		  $("#slider").show();
-		  $("#slider").rangeSlider("resize");
-		  $("#slider").bind("valuesChanged", function(e, data) {
-			updateQuery(layer, $("#slider").rangeSlider("values"));
-		  });
+//		  $("#slider").show();
+//		  $("#slider").rangeSlider("resize");
         });
+		$("#slider").bind("valuesChanged", function(e, data) {
+		  if ($("#controlbar input:checked").length > 0) {}
+		  else $('#relationship_3').prop('checked', true);
+		  updateQuery(layer, $("#slider").rangeSlider("values"));
+		});
       }
 	  
 	function updateQuery(layer, dateValues) {
