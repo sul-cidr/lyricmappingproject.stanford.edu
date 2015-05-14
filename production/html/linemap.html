@@ -38,6 +38,9 @@
     <div class="buttonContainer" style="background: white; height: 150px;">            
       <fieldset style="border: none;" id="cityForm" class="priorityForm">
         <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POET: </div>
+		
+        <input type="radio" value="0" name="city" id="poet_92">
+        <label for="poet_92" class="priority-picker-label">Alcaeus</label>
 	
         <input type="radio" value="0" name="city" id="poet_93">
         <label for="poet_93" class="priority-picker-label">Alcman</label>
@@ -488,7 +491,7 @@
         <label for="small_region_15" class="genre-picker-label">Dodecanese</label>
 		
         <input type="radio" value="0" name="city" id="small_region_19">
-        <label for="small_region_14" class="genre-picker-label">Ionian Sea</label>
+        <label for="small_region_19" class="genre-picker-label">Ionian Sea</label>
 		
         <input type="radio" value="0" name="city" id="small_region_14">
         <label for="small_region_14" class="genre-picker-label">Lydia</label>
@@ -848,7 +851,7 @@
 	  var query = "select * from cities where cityid = 0";
 	  var css = createBubbleVisualization("selected_number");
 
-	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, 1 as count from poets_lines");	  
+	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, 1 as count from city_city_lines");	  
 	  sublayer.setInteraction(false);
 	  
 	  layers[1].createSubLayer({sql: query, cartocss: css } );
