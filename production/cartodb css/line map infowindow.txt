@@ -3,9 +3,9 @@
   <div class="cartodb-popup-content-wrapper">
     <div class="cartodb-popup-content">
       <h3 style="color:#AAAAAA">{{birth_city_name}} -> {{other_city_name}}</h3>
-      <h4 style="color:#AAAAAA">Poets</h4>
+      <h4 style="color:#AAAAAA">Poet(s)</h4>
       <p>{{{poets_names}}}</p>
-      <h4 style="color:#AAAAAA">Detailed info on Poets</h4>
+      <h4 style="color:#AAAAAA">Details</h4>
       {{{poets_info}}}</p>
     </div>
   </div>
