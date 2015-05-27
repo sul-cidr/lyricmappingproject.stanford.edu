@@ -325,7 +325,7 @@
 		}
 		/* if a genre has been selected close the query */
 		if(firstCall == false) {
-			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid ";
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid, date_players.date_names, date_players.genre_names ";
 		}
 		/* if no genre selected pass all of dates up unaltered */
 		
@@ -358,7 +358,7 @@
 		}
 		/* if an instrument has been selected close the call */
 		if(firstCall == false) {
-			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.poet_link, genre_players.sources, genre_players.cityid ";
+			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.poet_link, genre_players.sources, genre_players.cityid, genre_players.date_names, genre_players.genre_names ";
 		}
 		/* if no instrument selected pass up genre players unaltered */		
 		
