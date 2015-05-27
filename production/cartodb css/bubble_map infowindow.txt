@@ -5,8 +5,8 @@
       <h2 style="color:#AAAAAA">{{city_name}}</h2>
       <h4 style="color:#AAAAAA">Poets {{relationship_text}} in {{city_name}}</h4>
       <p>{{{selected_names}}} (total of {{selected_number}})</span></p>
-      <h4 style="color:#AAAAAA">Sources</h4>
-      <p>{{{selected_sources}}}</p>
+      <h4 style="color:#AAAAAA">Details</h4>
+      {{{selected_sources}}}</p>
       <h4 style="color:#AAAAAA">Government</h4>
       <p>{{government}}</p>
     </div>

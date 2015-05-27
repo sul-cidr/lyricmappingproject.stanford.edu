@@ -209,16 +209,7 @@
 		
 		layer.setInteraction(true);
 		
-		var query = [
-			"  SELECT  cities_with_poets.*, ",
-			"		  grouped_politics.grouped_government as government ",
-			"  FROM ",
-			"  (SELECT   cities.*, ",
-			"	COUNT(rank_players.cityid) as selected_number, ",
-			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order by rank_players.poets_cities_rank)) as selected_names, ",
-			"	string_agg(rank_players.poet_link, ', ') as selected_links, ",
-			"	(string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.sources, ', ' order by rank_players.poets_cities_rank)) as selected_sources, "
-		].join("");
+		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources, '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
 
 		//add relationship text based on what's selected
 		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
@@ -262,31 +253,8 @@
 		if ($('#instrument_6').is(':checked')) query = query + "'associated with the sambyke who were born' as relationship_text ";
 		if ($('#instrument_7').is(':checked')) query = query + "'associated with the sacadion who were born' as relationship_text ";	
 		
-		query = query + [
-			"FROM cities, ( ",
-			  "SELECT ",
-			  "    instrument_players.*, ",
-			  "    rank() OVER (PARTITION BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) as poets_cities_rank ",
-			  "    FROM ( ",
-			"	SELECT ",
-			"		genre_players.* ",
-			"		FROM (",
-			"			SELECT ",
-			"			date_players.* ",
-			"			FROM ( ",
-			"				SELECT ",
-			"				place_players.* ",
-			"				FROM (",
-			"					SELECT ",
-			"					poets.poetid, ",
-			"					poets.poet_name, ",
-			"					poets.sources, ",
-			"					poets.poet_link, ",
-			"					poets_cities.cityid ",
-			"					FROM poets, poets_cities ",
-			"					WHERE poets.poetid = poets_cities.poetid "
-		].join("");
-
+		query = query + " FROM cities, ( SELECT instrument_players.*, rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank FROM ( SELECT genre_players.* FROM ( SELECT date_players.* FROM ( SELECT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates as date_names, poets_cities.cityid FROM (SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown')      AS genre_names FROM poets LEFT OUTER JOIN (SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') as genre_names FROM (SELECT * FROM genres where genreid = '2' or genreid = '3' or genreid = '4' or genreid = '5' or genreid = '16' or genreid = '18' or genreid = '6' or genreid = '22' or genreid = '11' or genreid = '24' or genreid = '7' or genreid = '8' or genreid = '13' or genreid = '9' or genreid = '10' or genreid = '12' or genreid = '30' ORDER BY genre ASC) sorted_genres, (SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres on poets.poetid = poets_genres.poetid) poets, poets_cities WHERE poets.poetid = poets_cities.poetid ";
+		
 		/* first choose relationship to place */
 		
 		if($('#relationship_1').is(':checked')) {
@@ -327,7 +295,7 @@
 		}
 		// if a genre has been selected close the query
 		if(firstCall == false) {
-			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid ";
+			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid, place_players.date_names, place_players.genre_names ";
 		}
 		// embed this into the next layer up
 		
