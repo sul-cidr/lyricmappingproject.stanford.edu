@@ -12,7 +12,7 @@
         marker-width: 10;
         marker-placement: point;
         marker-transform: rotate([arrow_angle]+90, 0, 0);
-        [other_cityid = 21] {
+        [other_cityid = 21],[other_cityid=67] {
             line-dasharray: 10, 4;
         }
     }
