@@ -597,13 +597,13 @@
 	  sublayer1.setInteraction(true);
 	    
 	    // choose query for lines data
-		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, Min(s.birth_city_governmentid) AS birth_city_governmentid, Min(s.other_city_governmentid) AS other_city_governmentid, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name";
+		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info, s.poets_birth_sources, s.poets_other_sources FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, Min(s.birth_city_governmentid) AS birth_city_governmentid, Min(s.other_city_governmentid) AS other_city_governmentid, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name ";
 		for(i=1; i<=10; i++) {
 		    if($('#gov_'+i).is(':checked')) {
 			  query1 = query1 + " || '<br>Governments (data from Hansen and Nielsen): ' || s.grouped_government ";
 			}
 		}
-		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info FROM ( SELECT birth_cityid, other_cityid, poetid, poet_name, date_names, sources, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '->' || other_city_government, ', ') AS grouped_government, min(birth_city_governmentid) AS birth_city_governmentid, min(other_city_governmentid) AS other_city_governmentid, rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* FROM poets_lines, dates WHERE ";
+		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>Source: ' || s.birth_source_translation || '. trans. ' || s.birth_source_translator || '; ' || s.birth_source_citation || ': ' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>Source: ' || s.other_source_translation || '. trans. ' || s.other_source_translator || '; ' || s.other_source_citation || ': ' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '->' || other_city_government, ', ') AS grouped_government, min(birth_city_governmentid) AS birth_city_governmentid, min(other_city_governmentid) AS other_city_governmentid, rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* FROM poets_lines, dates WHERE ";
 		css1 = "/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {  [other_cityid = 21],[other_cityid=67] { line-dasharray: 10, 4; } [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 	    firstCall = true;
 	    for (i=1; i <= 200; i++) {		
@@ -722,7 +722,7 @@
 		  }
 		}
 		query1 = query1 + ")";
-		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, poetid, poet_name, date_names, instrument_names, sources, genre_names) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid and city_city_lines.other_cityid = s.other_cityid";
+		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
 		
 		if (firstCall == false) {} 
 	    else if($('#region_1').is(':checked')) {
@@ -857,7 +857,7 @@
 	  var query = "select * from cities where cityid = 0";
 	  var css = createBubbleVisualization("selected_number");
 
-	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, 1 as count from city_city_lines");
+	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, '' as poets_birth_sources, '' as poets_other_sources, 1 as count from city_city_lines");
 	  layers[1].setCartoCSS("/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {  [other_cityid = 21],[other_cityid=67] { line-dasharray: 10, 4; } [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
 	  sublayer.setInteraction(false);
 	  

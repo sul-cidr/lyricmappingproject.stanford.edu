@@ -1,0 +1,16 @@
+SELECT c.*, gi.selected_number, gi.references FROM cities as c, (
+select
+    cityid,
+    count(*) as selected_number,
+(string_agg(geographical_imaginary.source_poem
+         || '.'
+         || geographical_imaginary.source_citation
+         || ': "' 
+         || geographical_imaginary.source_translation
+         || '" ('
+         || geographical_imaginary.source_greektext 
+         || ')'
+         , '<br><br>')) AS references    
+from geographical_imaginary
+group by cityid
+) as gi WHERE c.cityid = gi.cityid
