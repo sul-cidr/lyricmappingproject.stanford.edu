@@ -178,6 +178,21 @@
     //-->
     </script>
 	
+	<script type="text/javascript" language="JavaScript"><!--
+	function HideContent(d) {
+	  document.getElementById(d).style.display = "none";
+	}
+	function ShowContent(d) {
+	  document.getElementById(d).style.display = "block";
+	}
+	function ReverseDisplay(d) {
+	  if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
+	  else { document.getElementById(d).style.display = "none"; }
+	}
+	//--></script>
+
+
+	
     <script>
       // create layer selector
       function createSelector(layer) {
@@ -209,7 +224,7 @@
 		
 		layer.setInteraction(true);
 		
-		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br>' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" \(trans. ' || rank_players.source_translator || '\)<br>' || rank_players.source_greektext , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources,";
+		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
 
 		//add relationship text based on what's selected
 		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
