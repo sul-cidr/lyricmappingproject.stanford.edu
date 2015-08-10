@@ -3,7 +3,8 @@
   <div class="cartodb-popup-content-wrapper">
     <div class="cartodb-popup-content">
       <h2 style="color:#AAAAAA">{{city_name}}</h2>
-      <h4 style="color:#AAAAAA">{{selected_number}} references to {{city_name}}</h4>
+      <h4 style="color:#AAAAAA">{{selected_number}} reference(s) to {{city_name}}</h4>
+      <p>{{{selected_names}}}</p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{selected_sources}}}</p>
       <h4 style="color:#AAAAAA">Government</h4>

@@ -10,10 +10,10 @@ html, body, #map {
 }
 
 .mainlinksDiv {
-	width: 45%;                     /* poor approximation for old browsers    */
-	width: calc(45% - 8px);         /* standards-based answer for IE9+, FF16+ */
-	width: -moz-calc(45% - 8px);    /* support for FF4 - FF15                 */
-	width: -webkit-calc(45% - 8px); /* support for Chrome19+ and Safari6+     */
+	width: 35%;                     /* poor approximation for old browsers    */
+	width: calc(35% - 8px);         /* standards-based answer for IE9+, FF16+ */
+	width: -moz-calc(35% - 8px);    /* support for FF4 - FF15                 */
+	width: -webkit-calc(35% - 8px); /* support for Chrome19+ and Safari6+     */
 	color:white;
 	padding-top: 10px;
 	padding-bottom:10px;
