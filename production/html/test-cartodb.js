@@ -25062,8 +25062,6 @@ cdb.geo.ui.Infowindow = cdb.core.View.extend({
 
     if(this.template) {
       
-      console.log(this);
-
       // If there is content, destroy the jscrollpane first, then remove the content.
       var $jscrollpane = this.$(".cartodb-popup-content");
       if ($jscrollpane.length > 0 && $jscrollpane.data() != null) {
@@ -25134,6 +25132,10 @@ cdb.geo.ui.Infowindow = cdb.core.View.extend({
         this.model.trigger('domready', this, this.$el);
         this.trigger('domready', this, this.$el);
       }
+      
+      // David Driscoll hack to get global api to reset scrolling when view changed
+      var element = self.$(".cartodb-popup-content").jScrollPane();
+      api = element.data('jsp');
     }
 
     return this;

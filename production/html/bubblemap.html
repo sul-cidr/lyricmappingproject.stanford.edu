@@ -148,8 +148,8 @@
     <!-- include google maps library *before* load cartodb.js -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <!-- include cartodb.js library -->
-<!--	<script src="test-cartodb.js"></script> -->
-    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script>
+	<script src="test-cartodb.js"></script> 
+<!--    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script> -->
     
     <script src="jquery-1.11.2.js"></script>
     <script src="jquery-ui.js"></script>
@@ -183,6 +183,8 @@
     </script>
 	
 	<script type="text/javascript" language="JavaScript"><!--
+	var api;
+  
 	function HideContent(d) {
 	  document.getElementById(d).style.display = "none";
 	}
@@ -192,9 +194,15 @@
 	function ReverseDisplay(d) {
 	  if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
 	  else { document.getElementById(d).style.display = "none"; }
-/*	  var pane = $("view12 .cartodb-popup-content");
-	  var api = pane.data('jsp');
-	  api.reinitialise(); */
+	  var cartodb_popup = $("#map").find(".cartodb-popup-content");
+	  console.log(cartodb_popup);
+	  var element = cartodb_popup.jScrollPane();
+	  api = element.data('jsp');
+	  console.log(api);
+	  api.reinitialise({
+            maintainPosition:       true,
+            verticalDragMinHeight:  20
+          }); 
 	}
 	//--></script>
 
@@ -398,8 +406,9 @@
 		
 		console.log(query);		
 		layer.setQuery(query); 
-	}	  
-	  
+	}
+	
+
       function main() {
         cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/bebd1b2e-fa45-11e4-a8a0-0e9d821ea90d/viz.json', {
           tiles_loader: true,
@@ -409,11 +418,10 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government, '' as relationship_text  FROM cities";
-			var sublayer = layers[1].getSubLayer(0);			
+			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government, '' as relationship_text  FROM cities";	
 			
 			layers[1].setQuery(query);
-			sublayer.setInteraction(false);
+			layers[1].setInteraction(false);
 			
 			createSelector(layers[1]);
         })
