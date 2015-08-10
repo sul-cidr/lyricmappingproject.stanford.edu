@@ -194,11 +194,11 @@
 	function ReverseDisplay(d) {
 	  if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
 	  else { document.getElementById(d).style.display = "none"; }
-	  var cartodb_popup = $("#map").find(".cartodb-popup-content");
+/*	  var cartodb_popup = $("#map").find(".cartodb-popup-content");
 	  console.log(cartodb_popup);
 	  var element = cartodb_popup.jScrollPane();
 	  api = element.data('jsp');
-	  console.log(api);
+	  console.log(api); */
 	  api.reinitialise({
             maintainPosition:       true,
             verticalDragMinHeight:  20
