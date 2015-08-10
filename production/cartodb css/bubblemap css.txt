@@ -15,7 +15,7 @@ Map {
   marker-clip: false;
   marker-multi-policy: largest;
 }
-#cities [ selected_number <= 46] {
+#cities [ selected_number <= 80] {
    marker-width: 25.0;
 }
 #cities [ selected_number <= 8] {
