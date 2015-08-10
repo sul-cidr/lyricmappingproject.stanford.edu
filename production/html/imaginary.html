@@ -83,26 +83,24 @@
         <label for="poet_138" class="genre-picker-label">Stesichorus</label>
       </fieldset>
     </div>
-  <!--     
+       
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
-        <input type="radio" value="0" name="city" id="instrument_1">
-        <label for="instrument_1" class="instrument-picker-label">AULOS</label>
-        <input type="radio" value="0" name="city" id="instrument_5">
-        <label for="instrument_5" class="instrument-picker-label">BARBITOS</label>
-        <input type="radio" value="1" name="city" id="instrument_2">
-        <label for="instrument_2" class="instrument-picker-label">KITHARA</label>
-        <input type="radio" value="2" name="city" id="instrument_3">
-        <label for="instrument_3" class="instrument-picker-label">LYRE</label>
-		<input type="radio" value="2" name="city" id="instrument_4">
-        <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
-        <input type="radio" value="0" name="city" id="instrument_6">
-        <label for="instrument_6" class="instrument-picker-label">SACADION</label>
-        <input type="radio" value="0" name="city" id="instrument_7">
-        <label for="instrument_7" class="instrument-picker-label">SAMBYKE</label>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >REFERENT: </div>
+        <input type="radio" value="0" name="city" id="referent_2">
+        <label for="referent_2" class="instrument-picker-label">Achilles</label>
+        <input type="radio" value="0" name="city" id="referent_3">
+        <label for="referent_3" class="instrument-picker-label">Aphrodite</label>
+        <input type="radio" value="1" name="city" id="referent_4">
+        <label for="referent_4" class="instrument-picker-label">Apollo</label>
+        <input type="radio" value="2" name="city" id="referent_5">
+        <label for="referent_5" class="instrument-picker-label">Helen</label>
+		<input type="radio" value="2" name="city" id="referent_6">
+        <label for="referent_6" class="instrument-picker-label">Polynices</label>
+        <input type="radio" value="0" name="city" id="referent_7">
+        <label for="referent_7" class="instrument-picker-label">Zeus</label>
       </fieldset>
-    </div> -->
+    </div>
   
   </div>
     
@@ -214,10 +212,13 @@
 					firstCall = false;
 					query = query + "and poets.poetid = " + i + " ";
 				}
-				else {
-					query = query + "OR poets.poetid = " + i + " ";
-				}
 			}
+			if($('#referent_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + "and geographical_imaginary_group.referentid = " + i + " ";
+				}
+			}			
 		}		
 		
 	
@@ -318,7 +319,7 @@
 		
 		/* close out the query */
 
-		query = query + " ORDER BY genre_players.poet_name ASC) instrument_players GROUP BY cityid, poetid, date_names, poet_name ) grouped_players ORDER BY grouped_players.cityid, grouped_players.poet_name) rank_players WHERE cities.cityid = rank_players.cityid GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id) cities_with_poets, ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, CASE WHEN min(date) = max(date) THEN '' ELSE '-' || min(date) END AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM ( SELECT * FROM city_politics WHERE date >= 400) c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics WHERE cities_with_poets.cityid = grouped_politics.cityid";
+		query = query + " ORDER BY genre_players.poet_name ASC) instrument_players GROUP BY cityid, poetid, date_names, poet_name ) grouped_players ORDER BY grouped_players.cityid, grouped_players.poet_name) rank_players WHERE cities.cityid = rank_players.cityid GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id) cities_with_poets LEFT OUTER JOIN ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, CASE WHEN min(date) = max(date) THEN '' ELSE '-' || min(date) END AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM ( SELECT * FROM city_politics WHERE date >= 400) c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics ON cities_with_poets.cityid = grouped_politics.cityid";
 		
 		console.log(query);		
 		layer.setQuery(query); 
