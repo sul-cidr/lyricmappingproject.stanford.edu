@@ -201,7 +201,7 @@
   top: 100%;
   left: 50%;
   display: block;
-  z-index:99;
+/*  z-index:99; */
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
 

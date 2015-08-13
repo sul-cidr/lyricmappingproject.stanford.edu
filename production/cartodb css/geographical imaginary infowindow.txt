@@ -7,8 +7,6 @@
       <p>{{{selected_names}}}</p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{selected_sources}}}</p>
-      <h4 style="color:#AAAAAA">Government</h4>
-      <p>{{government}}</p>
     </div>
   </div>
   <div class="cartodb-popup-tip-container"></div>

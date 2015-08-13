@@ -7,7 +7,7 @@
       <p>{{{selected_names}}} (total of {{selected_number}})</span></p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{selected_sources}}}</p>
-      <h4 style="color:#AAAAAA">Government</h4>
+      <h4 style="color:#AAAAAA">Government (Hansen and Nielsen 2004)</h4>
       <p>{{government}}</p>
     </div>
   </div>
