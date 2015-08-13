@@ -434,7 +434,7 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = "SELECT *, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government, '' as relationship_text  FROM cities";	
+			var query = "SELECT cities.*, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government, '' as relationship_text  FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
 			
 			layers[1].setQuery(query);
 			layers[1].setInteraction(false);
