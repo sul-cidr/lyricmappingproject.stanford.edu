@@ -16,8 +16,8 @@ html, body, #map {
 
 .mainlinksDiv {
 	color:white;
-	padding-top: 10px;
-	padding-bottom:10px;
+	padding-top: 5px;
+	padding-bottom:5x;
 	display: flex;
 	flex: 1;
 	margin-top: 3px;
@@ -26,6 +26,7 @@ html, body, #map {
 	margin-right: 5px;
 	justify-content: center;
 	text-align: center;
+	align-items: center;
 	background: white;
 }
 
