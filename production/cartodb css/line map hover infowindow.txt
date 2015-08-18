@@ -1,5 +1,5 @@
 <div class="cartodb-tooltip-content-wrapper">
   <div class="cartodb-tooltip-content">
-<p>{{birth_city_name}} -> {{other_city_name}}</h3>
+    <p>{{birth_city_name}} -> {{other_city_name}}</p>
   </p>
 </div>
