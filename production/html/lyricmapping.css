@@ -54,7 +54,7 @@ a.mainlinks {
 	height: 15%;
 	padding: 16px;
 	border: 1px solid grey;
-	background-color: rgba(230,231,232,0.75);
+	background-color: rgba(230,231,232,0.75); /* this is the orbis popup background converted to rgb */
 	opacity: .8;
 	overflow: auto;
 }
