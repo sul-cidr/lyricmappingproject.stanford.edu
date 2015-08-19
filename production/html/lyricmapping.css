@@ -21,7 +21,7 @@ html, body, #map {
 .mainlinksDiv {
 	color:white;
 	padding-top: 5px;
-	padding-bottom:5x;
+	padding-bottom:5px;
 	display: flex;
 	-webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
 	-moz-box-flex: 1;         /* OLD - Firefox 19- */
@@ -42,4 +42,5 @@ a.mainlinks {
 	text-decoration: none;
 	color: black;
 	font-family: sans-serif;
+	line-height: 150%;
 }
