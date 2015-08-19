@@ -230,7 +230,7 @@
 	
         <input type="radio" value="0" name="city" id="destination_77">
         <label for="destination_77" class="instrument-picker-label">Amorgos</label>
-
+		
         <input type="radio" value="0" name="city" id="destination_59">
         <label for="destination_59" class="genre-picker-label">Antissa</label>
 		
@@ -239,7 +239,7 @@
 	
         <input type="radio" value="0" name="city" id="destination_38">
         <label for="destination_38" class="instrument-picker-label">Argos</label>
-	
+		
         <input type="radio" value="0" name="city" id="destination_2">
         <label for="destination_2" class="instrument-picker-label">Athens</label>
 	
@@ -266,6 +266,9 @@
 	
         <input type="radio" value="0" name="city" id="destination_30">
         <label for="destination_30" class="instrument-picker-label">Delphi</label>
+		
+        <input type="radio" value="0" name="city" id="destination_91">
+        <label for="destination_91" class="instrument-picker-label">Egypt</label>
 		
 		<input type="radio" value="0" name="city" id="destination_32">
         <label for="destination_32" class="genre-picker-label">Elis</label>
@@ -294,14 +297,17 @@
         <input type="radio" value="1" name="city" id="destination_31">
         <label for="destination_31" class="genre-picker-label">Hermione</label>
 		
-        <input type="radio" value="1" name="city" id="destination_23">
-        <label for="destination_23" class="genre-picker-label">Himera</label>
-	
         <input type="radio" value="0" name="city" id="destination_73">
         <label for="destination_73" class="instrument-picker-label">Ikaros</label>
 		
         <input type="radio" value="1" name="city" id="destination_46">
         <label for="destination_46" class="genre-picker-label">Ioulis (Ceos)</label>
+		
+        <input type="radio" value="1" name="city" id="destination_29">
+        <label for="destination_29" class="genre-picker-label">Isthmia</label>
+	
+        <input type="radio" value="0" name="city" id="destination_92">
+        <label for="destination_92" class="instrument-picker-label">Italy</label>
 	
         <input type="radio" value="0" name="city" id="destination_64">
         <label for="destination_64" class="instrument-picker-label">Katane</label>
@@ -341,6 +347,9 @@
 	
         <input type="radio" value="1" name="city" id="destination_17">
         <label for="destination_17" class="genre-picker-label">Megara</label>
+	  
+        <input type="radio" value="1" name="city" id="destination_225">
+        <label for="destination_225" class="genre-picker-label">Megara Hyblaia</label>
 	
         <input type="radio" value="2" name="city" id="destination_1">
         <label for="destination_1" class="genre-picker-label">Melos</label>
@@ -353,12 +362,12 @@
 	
         <input type="radio" value="0" name="city" id="destination_9">
         <label for="destination_9" class="instrument-picker-label">Miletus</label>
-		
+
         <input type="radio" value="1" name="city" id="destination_8">
         <label for="destination_8" class="genre-picker-label">Mytilene</label>
 	
-        <input type="radio" value="0" name="city" id="destination_66">
-        <label for="destination_66" class="instrument-picker-label">Naxos</label>
+        <input type="radio" value="0" name="city" id="destination_27">
+        <label for="destination_27" class="instrument-picker-label">Nemea</label>
 	
         <input type="radio" value="0" name="city" id="destination_87">
         <label for="destination_87" class="instrument-picker-label">Olympia</label>
@@ -380,6 +389,9 @@
 		
         <input type="radio" value="1" name="city" id="destination_55">
         <label for="destination_55" class="genre-picker-label">Phleious</label>
+
+        <input type="radio" value="1" name="city" id="destination_55">
+        <label for="destination_55" class="genre-picker-label">Pyrrha</label>
 	
         <input type="radio" value="1" name="city" id="destination_15">
         <label for="destination_15" class="instrument-picker-label">Rhegium</label>
@@ -392,6 +404,9 @@
 	
         <input type="radio" value="0" name="city" id="destination_41">
         <label for="destination_41" class="instrument-picker-label">Samos</label>
+		
+        <input type="radio" value="0" name="city" id="destination_94">
+        <label for="destination_94" class="instrument-picker-label">Sanctuary of Poseidon Petraios</label>
 	
         <input type="radio" value="0" name="city" id="destination_43">
         <label for="destination_43" class="instrument-picker-label">Sardis</label>
@@ -428,6 +443,9 @@
 	
         <input type="radio" value="0" name="city" id="destination_69">
         <label for="destination_69" class="instrument-picker-label">Tainaron</label>
+
+        <input type="radio" value="0" name="city" id="destination_57">
+        <label for="destination_57" class="instrument-picker-label">Tanagra</label>
 	
 		<input type="radio" value="2" name="city" id="destination_19">
         <label for="destination_19" class="instrument-picker-label">Tarentum</label>
@@ -627,7 +645,7 @@
 		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '->' || other_city_government, ', ') AS grouped_government, min(birth_city_governmentid) AS birth_city_governmentid, min(other_city_governmentid) AS other_city_governmentid, rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* FROM poets_lines, dates WHERE ";
 		css1 = "/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {  [other_cityid = 21],[other_cityid=67] { line-dasharray: 10, 4; } [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
 	    firstCall = true;
-	    for (i=1; i <= 200; i++) {		
+	    for (i=1; i <= 300; i++) {		
 		    if($('#poet_'+i).is(':checked')) {
 			    if(firstCall == true) {
 				    firstCall = false;
