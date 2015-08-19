@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NETWORK FOR THE STUDY OF ARCHAIC AND CLASSICAL GREEK SONG -- GREEK LYRIC POETS MAP | CartoDB.js</title>
+    
+    <link type="text/css" rel="stylesheet" href="orbis-v2.css" />
+    <link type="text/css" rel="stylesheet" href="lyricmapping.css" />
+    <link type="text/css" rel="stylesheet" href="chosen.min.css" />
+    <link rel="stylesheet" href="css/iThing.css" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+	
+	    <!--Custom html for the infowindow customization-->
+    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
+    <!--Content.data contains the field info-->
+	<!--Content.data is determined by the UI on the cartodb webpage.-->
+	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
+
+	<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+	<![endif]-->
+	<!-- bootstrap is not playing well with the orbis box-->
+	<!-- <link href="bootstrap/css/bootstrap.css" rel="stylesheet">    --> 
+</head>
+<body>
+
+  <div id="essayBox">
+    <div id="essayTitle" onclick="closeEssay()"></div>
+    <div id="essayContent">
+    </div>
+    <div id="essayCloseButton" onclick="closeEssay()" >X</div>
+    <div style="width:100%;height:100%;" onclick="closeEssay()">
+    </div>
+  </div>
+
+  <div id="map"></div>
+    
+  <div class="controlsDiv" id="controlbar">
+    <div id="controlbarScroller";>
+      
+    <div id="modeSelection">
+      <div class="mainlinksDiv" >
+		<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="bubblemap.html?visited=1">PLACES</a>
+      </div>
+      <div class="mainlinksDiv">
+		<a class="mainlinks" href="linemap.html">TRAVEL</a>
+      </div>
+      <div class="mainlinksDiv">
+		<a class="mainlinks" href="imaginary.html" style="font-size:75%">GEOGRAPHICAL IMAGINARY</a>
+      </div>
+    </div>
+    
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="cityForm" class="priorityForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACE OF: </div>
+        <input type="radio" value="0" name="city" id="relationship_1">
+        <label for="relationship_1" class="priority-picker-label">ORIGIN</label>
+        <input type="radio" value="1" name="city" id="relationship_3">
+        <label for="relationship_3" class="priority-picker-label">ACTIVITY</label>
+      </fieldset>
+    </div>
+      
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GENRE: </div>
+        <input type="radio" value="0" name="city" id="genre_2">
+        <label for="genre_2" class="genre-picker-label">DITHYRAMB</label>
+	
+        <input type="radio" value="1" name="city" id="genre_3">
+        <label for="genre_3" class="genre-picker-label">ELEGY</label>
+	
+        <input type="radio" value="2" name="city" id="genre_4">
+        <label for="genre_4" class="genre-picker-label">ENKOMION</label>
+	
+		<input type="radio" value="0" name="city" id="genre_5">
+        <label for="genre_5" class="genre-picker-label">EPIGRAM</label>
+	
+        <input type="radio" value="2" name="city" id="genre_16">
+        <label for="genre_16" class="genre-picker-label">EPINICIAN</label>
+	
+        <input type="radio" value="2" name="city" id="genre_18">
+        <label for="genre_18" class="genre-picker-label">EPODE</label>
+	
+        <input type="radio" value="1" name="city" id="genre_6">
+        <label for="genre_6" class="genre-picker-label">HYMN</label>
+	
+        <input type="radio" value="2" name="city" id="genre_22">
+        <label for="genre_22" class="genre-picker-label">HYPORCHEMA</label>
+	
+        <input type="radio" value="2" name="city" id="genre_11">
+        <label for="genre_11" class="genre-picker-label">IAMBOS</label>
+	
+        <input type="radio" value="2" name="city" id="genre_24">
+        <label for="genre_24" class="genre-picker-label">LAMENT</label>
+	
+		<input type="radio" value="0" name="city" id="genre_7">
+        <label for="genre_7" class="genre-picker-label">NOME</label>
+	
+        <input type="radio" value="1" name="city" id="genre_8">
+        <label for="genre_8" class="genre-picker-label">PAEAN</label>
+	
+        <input type="radio" value="2" name="city" id="genre_13">
+        <label for="genre_13" class="genre-picker-label">PARTHENEION</label>
+	
+        <input type="radio" value="2" name="city" id="genre_9">
+        <label for="genre_9" class="genre-picker-label">PROOIMION</label>
+	
+		<input type="radio" value="2" name="city" id="genre_10">
+        <label for="genre_10" class="genre-picker-label">PROSODION</label>
+	
+		<input type="radio" value="2" name="city" id="genre_12">
+        <label for="genre_12" class="genre-picker-label">SKOLIA</label>
+		
+		<input type="radio" value="2" name="city" id="genre_30">
+        <label for="genre_30" class="genre-picker-label">UNCLASSIFIED MELIC</label>
+      </fieldset>
+    </div>
+      
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >INSTRUMENT: </div>
+        <input type="radio" value="0" name="city" id="instrument_1">
+        <label for="instrument_1" class="instrument-picker-label">AULOS</label>
+        <input type="radio" value="0" name="city" id="instrument_5">
+        <label for="instrument_5" class="instrument-picker-label">BARBITOS</label>
+        <input type="radio" value="1" name="city" id="instrument_2">
+        <label for="instrument_2" class="instrument-picker-label">KITHARA</label>
+        <input type="radio" value="2" name="city" id="instrument_3">
+        <label for="instrument_3" class="instrument-picker-label">LYRE</label>
+		<input type="radio" value="2" name="city" id="instrument_4">
+        <label for="instrument_4" class="instrument-picker-label">MAGADIS</label>
+        <input type="radio" value="0" name="city" id="instrument_6">
+        <label for="instrument_6" class="instrument-picker-label">SACADION</label>
+        <input type="radio" value="0" name="city" id="instrument_7">
+        <label for="instrument_7" class="instrument-picker-label">SAMBYKE</label>
+      </fieldset>
+    </div></div>
+    
+    <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>
+	
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" class="sourcesForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >RESOURCES: </div>
+        <a target="_blank" href="PoetMasterList.html"></a>
+        <a target="_blank" href="VictorsByName.html"></a>
+      </fieldset>
+    </div></div>
+	
+  </div>
+
+    </div>
+  </div>    
+    
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+	<script src="test-cartodb.js"></script> 
+<!--    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.uncompressed.js"></script> -->
+    
+    <script src="jquery-1.11.2.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="jQRangeSlider-withRuler-min.js"></script>
+	<script src="d3.v3.min.js" type="text/javascript"></script>
+	<script src="orbis.js" type="text/javascript"></script>
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	  ga('create', 'UA-66510812-1', 'auto');
+	  ga('send', 'pageview');
+	
+	</script>
+    
+    <script>
+    //<!--
+      $("#slider").rangeSlider({
+        bounds:{min: -700, max: -400},
+		defaultValues:{min: -700, max: -400},
+		range: {min: 25},  
+		step: 50,
+		arrows: false,
+		formatter:function(val){
+			  var value = -val;
+			  return value.toString() + " BCE";
+		},
+		scales: [
+		// Primary scale
+		{
+		  first: function(val){ return val; },
+		  next: function(val){ return val + 50; },
+		  stop: function(val){ return false; },
+		  label: function(val){ return -val; },
+		  format: function(tickContainer, tickStart, tickEnd){ 
+		  tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	  });
+    //-->
+    </script>
+	
+	<script type="text/javascript" language="JavaScript"><!--
+	var api;
+  
+	function HideContent(d) {
+	  document.getElementById(d).style.display = "none";
+	}
+	function ShowContent(d) {
+	  document.getElementById(d).style.display = "block";
+	}
+	function ReverseDisplay(d) {
+	  if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
+	  else { document.getElementById(d).style.display = "none"; }
+/*	  var cartodb_popup = $("#map").find(".cartodb-popup-content");
+	  console.log(cartodb_popup);
+	  var element = cartodb_popup.jScrollPane();
+	  api = element.data('jsp');
+	  console.log(api); */
+	  api.reinitialise({
+            maintainPosition:       true,
+            verticalDragMinHeight:  20
+          }); 
+	}
+	//--></script>
+
+
+	
+    <script>
+      // create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+
+        var $options = $('#controlbar input');
+        $options.click(function(e) {        
+		  updateQuery(layer, $("#slider").rangeSlider("values"));
+//		  $("#slider").show();
+//		  $("#slider").rangeSlider("resize");
+        });
+		$("#slider").bind("valuesChanged", function(e, data) {
+		  if ($("#controlbar input:checked").length > 0) {}
+		  else $('#relationship_3').prop('checked', true);
+		  updateQuery(layer, $("#slider").rangeSlider("values"));
+		});
+      }
+	  
+	function getParameterByName(name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			results = regex.exec(location.search);
+		return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+	  
+	function updateQuery(layer, dateValues) {
+	
+	/* this function creates and calls a complex sql query based on selected items */
+	/* when an item is clicked, it checks the status of each button and creates an appropriate sql query */
+	/* it is super gross */
+	/* the sql query is composed of several embedded joins. first poets & poet_cities */
+	/* then the result of that with dates, genres, instruments, and cities in turn */
+	/* the code is somewhat repetitive and it's probably possible to shrink it with some function calls but it sounds like too much work */
+		var firstCall = true;
+		var i = 0;
+		
+		layer.setInteraction(true);
+		
+		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
+
+		//add relationship text based on what's selected
+		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
+		if ($('#relationship_3').is(':checked')) query = query + "'active' as relationship_text ";  
+		
+		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who were born' as relationship_text ";
+		if ($('#genre_3').is(':checked')) query = query + "'associated with elegy who were born' as relationship_text ";
+		if ($('#genre_4').is(':checked')) query = query + "'associated with enkomion who were born' as relationship_text ";
+		if ($('#genre_5').is(':checked')) query = query + "'associated with epigram who were born' as relationship_text ";
+		if ($('#genre_6').is(':checked')) query = query + "'associated with hymn who were born' as relationship_text ";
+		if ($('#genre_7').is(':checked')) query = query + "'associated with nome who were born' as relationship_text ";
+		if ($('#genre_8').is(':checked')) query = query + "'associated with paean who were born' as relationship_text ";
+		if ($('#genre_9').is(':checked')) query = query + "'associated with prooimion who were born' as relationship_text ";
+		if ($('#genre_10').is(':checked')) query = query + "'associated with prosodion who were born' as relationship_text ";
+		if ($('#genre_11').is(':checked')) query = query + "'associated with iambos who were born' as relationship_text ";
+		if ($('#genre_12').is(':checked')) query = query + "'associated with skolia who were born' as relationship_text ";
+		if ($('#genre_13').is(':checked')) query = query + "'associated with partheneion who were born' as relationship_text ";
+		if ($('#genre_14').is(':checked')) query = query + "'associated with tragedy who were born' as relationship_text ";
+		if ($('#genre_15').is(':checked')) query = query + "'associated with epic who were born' as relationship_text ";
+		if ($('#genre_16').is(':checked')) query = query + "'associated with epinician who were born' as relationship_text ";
+		if ($('#genre_17').is(':checked')) query = query + "'associated with comedy who were born' as relationship_text ";
+		if ($('#genre_18').is(':checked')) query = query + "'associated with epode who were born' as relationship_text ";
+		if ($('#genre_19').is(':checked')) query = query + "'associated with parody who were born' as relationship_text ";
+		if ($('#genre_20').is(':checked')) query = query + "'associated with choral dance who were born' as relationship_text ";
+		if ($('#genre_21').is(':checked')) query = query + "'associated with satyr who were born' as relationship_text ";
+		if ($('#genre_22').is(':checked')) query = query + "'associated with hypochrematon who were born' as relationship_text ";
+		if ($('#genre_23').is(':checked')) query = query + "'associated with komos who were born' as relationship_text ";
+		if ($('#genre_24').is(':checked')) query = query + "'associated with lament who were born' as relationship_text ";
+		if ($('#genre_25').is(':checked')) query = query + "'associated with prose who were born' as relationship_text ";
+		if ($('#genre_26').is(':checked')) query = query + "'associated with eulogy who were born' as relationship_text ";
+		if ($('#genre_27').is(':checked')) query = query + "'associated with psogon who were born' as relationship_text ";
+		if ($('#genre_28').is(':checked')) query = query + "'associated with polemisterion who were born' as relationship_text ";
+		if ($('#genre_29').is(':checked')) query = query + "'associated with enoplion who were born' as relationship_text ";
+		if ($('#genre_30').is(':checked')) query = query + "'associated with another unclassified melic genre who were born' as relationship_text ";
+		
+		if ($('#instrument_1').is(':checked')) query = query + "'associated with the aulos who were born' as relationship_text ";
+		if ($('#instrument_2').is(':checked')) query = query + "'associated with the kithera who were born' as relationship_text ";		
+		if ($('#instrument_3').is(':checked')) query = query + "'associated with the lyre who were born' as relationship_text ";
+		if ($('#instrument_4').is(':checked')) query = query + "'associated with the magadis who were born' as relationship_text ";	
+		if ($('#instrument_5').is(':checked')) query = query + "'associated with the barbitos who were born' as relationship_text ";		
+		if ($('#instrument_6').is(':checked')) query = query + "'associated with the sambyke who were born' as relationship_text ";
+		if ($('#instrument_7').is(':checked')) query = query + "'associated with the sacadion who were born' as relationship_text ";	
+		
+		query = query + "  FROM cities, ( SELECT instrument_players.*, rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank FROM ( SELECT genre_players.* FROM ( SELECT date_players.* FROM ( SELECT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates AS date_names, poets_cities.cityid, poets_cities.source_citation, poets_cities.source_explicit, poets_cities.source_greektext, poets_cities.source_notes, poets_cities.source_translation, poets_cities.source_translator, poets_cities.source_work FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, ";
+		
+		/* first choose relationship to place; choose death or activity over birth if multiple activities associated with one city */
+		
+		if($('#relationship_3').is(':checked')) {
+		  query = query + " (select poets_cities.* from poets_cities, (SELECT poetid, cityid, max(relationshipid) as relationshipid from poets_cities group by poetid, cityid) poets_cities_max where poets_cities.poetid = poets_cities_max.poetid and poets_cities.cityid = poets_cities_max.cityid and poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities "
+		}
+		else {
+		  query = query + "poets_cities ";
+		}
+		
+		query = query + " WHERE poets.poetid = poets_cities.poetid ";
+		
+		if($('#relationship_3').is(':checked')) {
+		}
+		else {
+		  query = query + "AND (relationshipid=1) ";
+		}
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+			"		ORDER BY poet_name ASC ",
+			"	) place_players"
+		].join("");
+		
+		/* then call dates */
+		
+		firstCall = true;
+		for (i=-dateValues.min; i >= -dateValues.max; i=i-50) {		
+		  if(firstCall == true) {
+		    firstCall = false;
+		    query = query + [
+		      ", dates ",
+		      "WHERE place_players.poetid = dates.poetid ",
+		      "AND ( ",
+		      "dates.date='",
+		      i,
+		      "' "
+		    ].join("");
+		  }
+		  else {
+			  query = query + "OR dates.date = '" + i + "' ";
+		  }
+		}
+		// if a genre has been selected close the query
+		if(firstCall == false) {
+			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid, place_players.date_names, place_players.genre_names, place_players.source_citation, place_players.source_explicit, place_players.source_greektext, place_players.source_notes, place_players.source_translation, place_players.source_translator, place_players.source_work ";
+		}
+		// embed this into the next layer up
+		
+		query = query + [
+		"		ORDER BY place_players.poet_name ASC ",
+		"		) date_players "
+		].join("");
+		
+		/* now the custom genre call depending on what is selected */
+		
+		firstCall = true;
+		for (i=2; i <= 30; i++) {		
+			if($('#genre_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+					", genres ",
+					"WHERE date_players.poetid = genres.poetid ",
+					"			AND (genres.genreid = ",
+					i,
+					" "].join("");
+				}
+				else {
+					query = query + "OR genres.genreid = " + i + " ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid, date_players.date_names, date_players.genre_names ";
+		}
+		/* if no genre selected pass all of dates up unaltered */
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+		"	ORDER BY date_players.poet_name ASC ",
+		"	) genre_players " 
+		].join("");
+		
+		/* now add the instruments */
+
+		firstCall = true;
+		for (i=1; i <= 7; i++) {		
+			if($('#instrument_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [ 
+					", instruments ",
+					"WHERE genre_players.poetid = instruments.poetid ",
+					"AND (instruments.instrumentid = ",
+					i,
+					" "
+					].join("");
+				}
+				else {
+					query = query + "OR instruments.instrumentid = " + i + " ";
+				}
+			}
+		}
+		/* if an instrument has been selected close the call */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.poet_link, genre_players.sources, genre_players.cityid, genre_players.date_names, genre_players.genre_names ";
+		}
+		/* if no instrument selected pass up genre players unaltered */		
+		
+		/* close out the query */
+
+		query = query + [
+			"		ORDER BY genre_players.poet_name ASC ",
+			"	) instrument_players ",
+			"  ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players ",
+			"  WHERE cities.cityid = rank_players.cityid ",
+			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, ",
+			"			cities.cartodb_id) cities_with_poets LEFT OUTER JOIN ",
+			"  ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, CASE WHEN min(date) = max(date) THEN '' ELSE '-' || min(date) END AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM (SELECT * from city_politics where date >= 400) c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics ON cities_with_poets.cityid = grouped_politics.cityid "
+		].join("");
+		
+		console.log(query);		
+		layer.setQuery(query); 
+	}
+	
+
+      function main() {
+        cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/bebd1b2e-fa45-11e4-a8a0-0e9d821ea90d/viz.json', {
+          tiles_loader: true,
+          center_lat: 38.9,
+          center_lon: 26.38,
+          zoom: 6,
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			var query = "SELECT cities.*, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government, '' as relationship_text  FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
+			
+			layers[1].setQuery(query);
+			layers[1].setInteraction(false);
+			
+			createSelector(layers[1]);
+			if(getParameterByName('visited') != 1) createEssay("home");
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+    
+  </body>
+</html>
