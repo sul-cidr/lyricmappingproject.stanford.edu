@@ -43,7 +43,7 @@
       
     <div id="modeSelection">
       <div class="mainlinksDiv" >
-		<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="bubblemap.html">PLACES</a>
+		<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="bubblemap.html?visited=1">PLACES</a>
       </div>
       <div class="mainlinksDiv">
 		<a class="mainlinks" href="linemap.html">TRAVEL</a>
@@ -248,6 +248,13 @@
 		});
       }
 	  
+	function getParameterByName(name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			results = regex.exec(location.search);
+		return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+	  
 	function updateQuery(layer, dateValues) {
 	
 	/* this function creates and calls a complex sql query based on selected items */
@@ -451,7 +458,7 @@
 			layers[1].setInteraction(false);
 			
 			createSelector(layers[1]);
-			createEssay("home");
+			if(getParameterByName('visited') != 1) createEssay("home");
         })
         .error(function(err) {
           console.log(err);
