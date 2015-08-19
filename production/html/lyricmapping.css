@@ -44,3 +44,17 @@ a.mainlinks {
 	font-family: sans-serif;
 	line-height: 150%;
 }
+
+.corner_popup_content {
+	display: block;
+	position: absolute;
+	bottom: 10%;
+	left: 10%;
+	width: 20%;
+	height: 15%;
+	padding: 16px;
+	border: 1px solid grey;
+	background-color: rgba(230,231,232,0.75);
+	opacity: .8;
+	overflow: auto;
+}
