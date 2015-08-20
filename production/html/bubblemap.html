@@ -392,7 +392,7 @@
 		}
 		/* if a genre has been selected close the query */
 		if(firstCall == false) {
-			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid, date_players.date_names, date_players.genre_names ";
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid, date_players.date_names, date_players.genre_names, date_players.source_citation, date_players.source_explicit, date_players.source_greektext, date_players.source_notes, date_players.source_translation, date_players.source_translator, date_players.source_work ";
 		}
 		/* if no genre selected pass all of dates up unaltered */
 		
