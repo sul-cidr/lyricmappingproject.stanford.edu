@@ -2,13 +2,11 @@
   <a href="#close" class="cartodb-popup-close-button close">x</a>
   <div class="cartodb-popup-content-wrapper">
     <div class="cartodb-popup-content">
-      <h2 style="color:#AAAAAA">{{city_name}}</h2>
+      <h2 style="color:#AAAAAA">{{infowindow_name}}</h2>
       <h4 style="color:#AAAAAA">Poets {{relationship_text}} in {{city_name}}</h4>
       <p>{{{selected_names}}} (total of {{selected_number}})</span></p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{selected_sources}}}</p>
-      <h4 style="color:#AAAAAA">Government (Hansen and Nielsen 2004)</h4>
-      <p>{{government}}</p>
     </div>
   </div>
   <div class="cartodb-popup-tip-container"></div>
