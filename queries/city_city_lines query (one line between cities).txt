@@ -104,7 +104,7 @@ FROM
 				) sorted_poets		
 		WHERE sorted_poets.cityid = cities.cityid) other_cities
 		
-	WHERE birth_cities.poetid = other_cities.poetid) lines
+	WHERE birth_cities.poetid = other_cities.poetid AND birth_cities.cityid != other_cities.cityid) lines
 GROUP BY
 lines.birth_city_name,
 lines.birth_cityid,

@@ -1,5 +1,5 @@
 <div class="cartodb-tooltip-content-wrapper">
   <div class="cartodb-tooltip-content">
-    <p>{{city_name}}</p>
+    <p>{{infowindow_name}}</p>
   </div>
 </div>
