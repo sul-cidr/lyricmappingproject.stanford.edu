@@ -90,7 +90,6 @@ background: #302e42;
   position: relative;
   padding: 0 5px;
   font-size: 14px;
-  text-transform: capitalize;
   display: inline-block;
   line-height: 25px;
   vertical-align: top;
@@ -143,6 +142,7 @@ right: -2px;
 border-bottom: 4px solid;
 border-color: #205fa4 #205fb4 #c72f2a;
 opacity: 0;
+text-transform: capitalize;
 }
 
 input:checked + .instrument-picker-label:before {
