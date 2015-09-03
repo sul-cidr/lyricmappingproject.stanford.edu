@@ -260,7 +260,7 @@
 		
 		layer.setInteraction(true);
 		
-		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
+		var query = "SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
 
 		//add relationship text based on what's selected
 		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
@@ -426,8 +426,7 @@
 			"  ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players ",
 			"  WHERE cities.cityid = rank_players.cityid ",
 			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, ",
-			"			cities.cartodb_id) cities_with_poets LEFT OUTER JOIN ",
-			"  ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, CASE WHEN min(date) = max(date) THEN '' ELSE '-' || min(date) END AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM (SELECT * from city_politics where date >= 400) c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics ON cities_with_poets.cityid = grouped_politics.cityid "
+			"			cities.cartodb_id "
 		].join("");
 		
 		console.log(query);		
@@ -444,7 +443,7 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = "SELECT cities.*, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as government, '' as relationship_text  FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
+			var query = "SELECT cities.*, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as relationship_text  FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
 			
 			layers[1].setQuery(query);
 			layers[1].setInteraction(false);
