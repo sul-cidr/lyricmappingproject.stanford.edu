@@ -260,174 +260,181 @@
 		
 		layer.setInteraction(true);
 		
-		var query = "SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
-
-		//add relationship text based on what's selected
-		if ($('#relationship_1').is(':checked')) query = query + "'born' as relationship_text ";
-		if ($('#relationship_3').is(':checked')) query = query + "'active' as relationship_text ";  
-		
-		if ($('#genre_2').is(':checked')) query = query + "'associated with dithyramb who were born' as relationship_text ";
-		if ($('#genre_3').is(':checked')) query = query + "'associated with elegy who were born' as relationship_text ";
-		if ($('#genre_4').is(':checked')) query = query + "'associated with enkomion who were born' as relationship_text ";
-		if ($('#genre_5').is(':checked')) query = query + "'associated with epigram who were born' as relationship_text ";
-		if ($('#genre_6').is(':checked')) query = query + "'associated with hymn who were born' as relationship_text ";
-		if ($('#genre_7').is(':checked')) query = query + "'associated with nome who were born' as relationship_text ";
-		if ($('#genre_8').is(':checked')) query = query + "'associated with paean who were born' as relationship_text ";
-		if ($('#genre_9').is(':checked')) query = query + "'associated with prooimion who were born' as relationship_text ";
-		if ($('#genre_10').is(':checked')) query = query + "'associated with prosodion who were born' as relationship_text ";
-		if ($('#genre_11').is(':checked')) query = query + "'associated with iambos who were born' as relationship_text ";
-		if ($('#genre_12').is(':checked')) query = query + "'associated with skolia who were born' as relationship_text ";
-		if ($('#genre_13').is(':checked')) query = query + "'associated with partheneion who were born' as relationship_text ";
-		if ($('#genre_14').is(':checked')) query = query + "'associated with tragedy who were born' as relationship_text ";
-		if ($('#genre_15').is(':checked')) query = query + "'associated with epic who were born' as relationship_text ";
-		if ($('#genre_16').is(':checked')) query = query + "'associated with epinician who were born' as relationship_text ";
-		if ($('#genre_17').is(':checked')) query = query + "'associated with comedy who were born' as relationship_text ";
-		if ($('#genre_18').is(':checked')) query = query + "'associated with epode who were born' as relationship_text ";
-		if ($('#genre_19').is(':checked')) query = query + "'associated with parody who were born' as relationship_text ";
-		if ($('#genre_20').is(':checked')) query = query + "'associated with choral dance who were born' as relationship_text ";
-		if ($('#genre_21').is(':checked')) query = query + "'associated with satyr who were born' as relationship_text ";
-		if ($('#genre_22').is(':checked')) query = query + "'associated with hypochrematon who were born' as relationship_text ";
-		if ($('#genre_23').is(':checked')) query = query + "'associated with komos who were born' as relationship_text ";
-		if ($('#genre_24').is(':checked')) query = query + "'associated with lament who were born' as relationship_text ";
-		if ($('#genre_25').is(':checked')) query = query + "'associated with prose who were born' as relationship_text ";
-		if ($('#genre_26').is(':checked')) query = query + "'associated with eulogy who were born' as relationship_text ";
-		if ($('#genre_27').is(':checked')) query = query + "'associated with psogon who were born' as relationship_text ";
-		if ($('#genre_28').is(':checked')) query = query + "'associated with polemisterion who were born' as relationship_text ";
-		if ($('#genre_29').is(':checked')) query = query + "'associated with enoplion who were born' as relationship_text ";
-		if ($('#genre_30').is(':checked')) query = query + "'associated with another unclassified melic genre who were born' as relationship_text ";
-		
-		if ($('#instrument_1').is(':checked')) query = query + "'associated with the aulos who were born' as relationship_text ";
-		if ($('#instrument_2').is(':checked')) query = query + "'associated with the kithera who were born' as relationship_text ";		
-		if ($('#instrument_3').is(':checked')) query = query + "'associated with the lyre who were born' as relationship_text ";
-		if ($('#instrument_4').is(':checked')) query = query + "'associated with the magadis who were born' as relationship_text ";	
-		if ($('#instrument_5').is(':checked')) query = query + "'associated with the barbitos who were born' as relationship_text ";		
-		if ($('#instrument_6').is(':checked')) query = query + "'associated with the sambyke who were born' as relationship_text ";
-		if ($('#instrument_7').is(':checked')) query = query + "'associated with the sacadion who were born' as relationship_text ";	
-		
-		query = query + "  FROM cities, ( SELECT instrument_players.*, rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT genre_players.* FROM ( SELECT DISTINCT date_players.* FROM ( SELECT DISTINCT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates AS date_names, poets_cities.cityid, poets_cities.source_citation, poets_cities.source_explicit, poets_cities.source_greektext, poets_cities.source_notes, poets_cities.source_translation, poets_cities.source_translator, poets_cities.source_work, poets_cities.alternative_birth_cities FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, (select poets_cities.*, coalesce(alternative_birth_cities.alternative_birth_cities, '') as alternative_birth_cities from ";
-		
-		/* first choose relationship to place; choose death or activity over birth if multiple activities associated with one city */
+		var query;
 		
 		if($('#relationship_3').is(':checked')) {
-		  query = query + " (select poets_cities.* from poets_cities, (SELECT poetid, cityid, max(relationshipid) as relationshipid from poets_cities group by poetid, cityid) poets_cities_max where poets_cities.poetid = poets_cities_max.poetid and poets_cities.cityid = poets_cities_max.cityid and poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities "
+		  query = "select cities.*, totality.selected_number, totality.selected_names, totality.selected_sources, totality.relationship_text from cities, (select distinct cityid, the_geom, the_geom_webmercator, city_name, infowindow_name, cartodb_id, sum(selected_number) as selected_number, string_agg(selected_names, '</p>') as selected_names, string_agg(selected_sources, '</p>') as selected_sources, 'NON-NATIVE POETS ACTIVE' as relationship_text FROM (SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, ('<h4>Non-native Poets</h4>' || string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation_o' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation_o' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, 'active' AS relationship_text FROM cities, ( SELECT instrument_players.*, rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT genre_players.* FROM ( SELECT DISTINCT date_players.* FROM ( SELECT DISTINCT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates AS date_names, poets_cities.cityid, poets_cities.source_citation, poets_cities.source_explicit, poets_cities.source_greektext, poets_cities.source_notes, poets_cities.source_translation, poets_cities.source_translator, poets_cities.source_work, poets_cities.alternative_birth_cities FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, ( SELECT poets_cities.*, COALESCE(alternative_birth_cities.alternative_birth_cities, '') AS alternative_birth_cities FROM ( SELECT poets_cities.* FROM poets_cities, ( SELECT poetid, cityid, max(relationshipid) AS relationshipid FROM poets_cities GROUP BY poetid, cityid) poets_cities_max WHERE poets_cities.poetid = poets_cities_max.poetid AND poets_cities.cityid = poets_cities_max.cityid AND poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities LEFT OUTER JOIN ( SELECT poets_cities.poetid, poets_cities.cityid, ('<br>See also: ' || string_agg(birth_cities.city_name, ', ' ORDER BY birth_cities.city_name ASC)) AS alternative_birth_cities FROM ( SELECT * FROM poets_cities WHERE poets_cities.relationshipid = 1) poets_cities, ( SELECT cities.city_name, poets_cities.cityid, poets_cities.poetid FROM cities, poets_cities WHERE cities.cityid = poets_cities.cityid AND poets_cities.relationshipid = 1 ) birth_cities WHERE poets_cities.poetid = birth_cities.poetid AND poets_cities.cityid != birth_cities.cityid GROUP BY poets_cities.poetid, poets_cities.cityid) alternative_birth_cities ON poets_cities.poetid = alternative_birth_cities.poetid AND poets_cities.cityid = alternative_birth_cities.cityid ) poets_cities WHERE poets.poetid = poets_cities.poetid AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3) ORDER BY poet_name ASC ) place_players, dates WHERE place_players.poetid = dates.poetid AND ( dates.date='700' OR dates.date = '675' OR dates.date = '650' OR dates.date = '625' OR dates.date = '600' OR dates.date = '575' OR dates.date = '550' OR dates.date = '525' OR dates.date = '500' OR dates.date = '475' OR dates.date = '450' OR dates.date = '425' OR dates.date = '400' ) ORDER BY place_players.poet_name ASC ) date_players ORDER BY date_players.poet_name ASC ) genre_players ORDER BY genre_players.poet_name ASC ) instrument_players ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players WHERE cities.cityid = rank_players.cityid GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id UNION ALL SELECT cities.*, Count(rank_players.cityid) AS selected_number, ('<h4>Native poets active in ' || cities.city_name || '</h4><p>' || string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, ('<h4>Native poets</h4>' || string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation_b' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation_b' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, 'active' AS relationship_text FROM cities, ( SELECT instrument_players.*, rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT genre_players.* FROM ( SELECT DISTINCT date_players.* FROM ( SELECT DISTINCT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates AS date_names, poets_cities.cityid, poets_cities.source_citation, poets_cities.source_explicit, poets_cities.source_greektext, poets_cities.source_notes, poets_cities.source_translation, poets_cities.source_translator, poets_cities.source_work, poets_cities.alternative_birth_cities FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, ( SELECT poets_cities.*, COALESCE(alternative_birth_cities.alternative_birth_cities, '') AS alternative_birth_cities FROM ( SELECT poets_cities.* FROM poets_cities, ( SELECT poetid, cityid, max(relationshipid) AS relationshipid FROM poets_cities GROUP BY poetid, cityid) poets_cities_max WHERE poets_cities.poetid = poets_cities_max.poetid AND poets_cities.cityid = poets_cities_max.cityid AND poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities LEFT OUTER JOIN ( SELECT poets_cities.poetid, poets_cities.cityid, ('<br>See also: ' || string_agg(birth_cities.city_name, ', ' ORDER BY birth_cities.city_name ASC)) AS alternative_birth_cities FROM ( SELECT * FROM poets_cities WHERE poets_cities.relationshipid = 1) poets_cities, ( SELECT cities.city_name, poets_cities.cityid, poets_cities.poetid FROM cities, poets_cities WHERE cities.cityid = poets_cities.cityid AND poets_cities.relationshipid = 1 ) birth_cities WHERE poets_cities.poetid = birth_cities.poetid AND poets_cities.cityid != birth_cities.cityid GROUP BY poets_cities.poetid, poets_cities.cityid) alternative_birth_cities ON poets_cities.poetid = alternative_birth_cities.poetid AND poets_cities.cityid = alternative_birth_cities.cityid ) poets_cities WHERE poets.poetid = poets_cities.poetid AND (poets_cities.relationshipid = 1) ORDER BY poet_name ASC ) place_players, dates WHERE place_players.poetid = dates.poetid AND ( dates.date='700' OR dates.date = '675' OR dates.date = '650' OR dates.date = '625' OR dates.date = '600' OR dates.date = '575' OR dates.date = '550' OR dates.date = '525' OR dates.date = '500' OR dates.date = '475' OR dates.date = '450' OR dates.date = '425' OR dates.date = '400' ) ORDER BY place_players.poet_name ASC ) date_players ORDER BY date_players.poet_name ASC ) genre_players ORDER BY genre_players.poet_name ASC ) instrument_players ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players WHERE cities.cityid = rank_players.cityid GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id) joined_cities GROUP BY cityid, the_geom, the_geom_webmercator, city_name, cartodb_id, infowindow_name) totality where cities.cityid = totality.cityid";
 		}
 		else {
-		  query = query + "poets_cities ";
-		}
-		
-		query = query + " LEFT OUTER JOIN (select poets_cities.poetid, poets_cities.cityid, ('<br>See also: ' || string_agg(birth_cities.city_name, ', ' order by birth_cities.city_name asc)) as alternative_birth_cities from (select * from poets_cities where poets_cities.relationshipid = 1) poets_cities, (SELECT cities.city_name, poets_cities.cityid, poets_cities.poetid FROM cities, poets_cities WHERE cities.cityid = poets_cities.cityid AND poets_cities.relationshipid = 1 ) birth_cities where poets_cities.poetid = birth_cities.poetid and poets_cities.cityid != birth_cities.cityid group by poets_cities.poetid, poets_cities.cityid) alternative_birth_cities ON poets_cities.poetid = alternative_birth_cities.poetid and poets_cities.cityid = alternative_birth_cities.cityid ) poets_cities WHERE poets.poetid = poets_cities.poetid ";
-		
-		if($('#relationship_3').is(':checked')) {
-		}
-		else {
-		  query = query + "AND (relationshipid=1) ";
-		}
-		
-		/* embed this into the next layer up */
-		
-		query = query + [
-			"		ORDER BY poet_name ASC ",
-			"	) place_players"
-		].join("");
-		
-		/* then call dates */
-		
-		firstCall = true;
-		for (i=-dateValues.min; i >= -dateValues.max; i=i-25) {		
-		  if(firstCall == true) {
-		    firstCall = false;
-		    query = query + [
-		      ", dates ",
-		      "WHERE place_players.poetid = dates.poetid ",
-		      "AND ( ",
-		      "dates.date='",
-		      i,
-		      "' "
-		    ].join("");
+		  query = "SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
+  
+		  //add relationship text based on what's selected
+		  if ($('#relationship_1').is(':checked')) query = query + "'Poets born' as relationship_text ";
+		  if ($('#relationship_3').is(':checked')) query = query + "'Poets active' as relationship_text ";  
+		  
+		  if ($('#genre_2').is(':checked')) query = query + "'Poets associated with dithyramb who were born' as relationship_text ";
+		  if ($('#genre_3').is(':checked')) query = query + "'Poets associated with elegy who were born' as relationship_text ";
+		  if ($('#genre_4').is(':checked')) query = query + "'Poets associated with enkomion who were born' as relationship_text ";
+		  if ($('#genre_5').is(':checked')) query = query + "'Poets associated with epigram who were born' as relationship_text ";
+		  if ($('#genre_6').is(':checked')) query = query + "'Poets associated with hymn who were born' as relationship_text ";
+		  if ($('#genre_7').is(':checked')) query = query + "'Poets associated with nome who were born' as relationship_text ";
+		  if ($('#genre_8').is(':checked')) query = query + "'Poets associated with paean who were born' as relationship_text ";
+		  if ($('#genre_9').is(':checked')) query = query + "'Poets associated with prooimion who were born' as relationship_text ";
+		  if ($('#genre_10').is(':checked')) query = query + "'Poets associated with prosodion who were born' as relationship_text ";
+		  if ($('#genre_11').is(':checked')) query = query + "'Poets associated with iambos who were born' as relationship_text ";
+		  if ($('#genre_12').is(':checked')) query = query + "'Poets associated with skolia who were born' as relationship_text ";
+		  if ($('#genre_13').is(':checked')) query = query + "'Poets associated with partheneion who were born' as relationship_text ";
+		  if ($('#genre_14').is(':checked')) query = query + "'Poets associated with tragedy who were born' as relationship_text ";
+		  if ($('#genre_15').is(':checked')) query = query + "'Poets associated with epic who were born' as relationship_text ";
+		  if ($('#genre_16').is(':checked')) query = query + "'Poets associated with epinician who were born' as relationship_text ";
+		  if ($('#genre_17').is(':checked')) query = query + "'Poets associated with comedy who were born' as relationship_text ";
+		  if ($('#genre_18').is(':checked')) query = query + "'Poets associated with epode who were born' as relationship_text ";
+		  if ($('#genre_19').is(':checked')) query = query + "'Poets associated with parody who were born' as relationship_text ";
+		  if ($('#genre_20').is(':checked')) query = query + "'Poets associated with choral dance who were born' as relationship_text ";
+		  if ($('#genre_21').is(':checked')) query = query + "'Poets associated with satyr who were born' as relationship_text ";
+		  if ($('#genre_22').is(':checked')) query = query + "'Poets associated with hypochrematon who were born' as relationship_text ";
+		  if ($('#genre_23').is(':checked')) query = query + "'Poets associated with komos who were born' as relationship_text ";
+		  if ($('#genre_24').is(':checked')) query = query + "'Poets associated with lament who were born' as relationship_text ";
+		  if ($('#genre_25').is(':checked')) query = query + "'Poets associated with prose who were born' as relationship_text ";
+		  if ($('#genre_26').is(':checked')) query = query + "'Poets associated with eulogy who were born' as relationship_text ";
+		  if ($('#genre_27').is(':checked')) query = query + "'Poets associated with psogon who were born' as relationship_text ";
+		  if ($('#genre_28').is(':checked')) query = query + "'Poets associated with polemisterion who were born' as relationship_text ";
+		  if ($('#genre_29').is(':checked')) query = query + "'Poets associated with enoplion who were born' as relationship_text ";
+		  if ($('#genre_30').is(':checked')) query = query + "'Poets associated with another unclassified melic genre who were born' as relationship_text ";
+		  
+		  if ($('#instrument_1').is(':checked')) query = query + "'Poets associated with the aulos who were born' as relationship_text ";
+		  if ($('#instrument_2').is(':checked')) query = query + "'Poets associated with the kithera who were born' as relationship_text ";		
+		  if ($('#instrument_3').is(':checked')) query = query + "'Poets associated with the lyre who were born' as relationship_text ";
+		  if ($('#instrument_4').is(':checked')) query = query + "'Poets associated with the magadis who were born' as relationship_text ";	
+		  if ($('#instrument_5').is(':checked')) query = query + "'Poets associated with the barbitos who were born' as relationship_text ";		
+		  if ($('#instrument_6').is(':checked')) query = query + "'Poets associated with the sambyke who were born' as relationship_text ";
+		  if ($('#instrument_7').is(':checked')) query = query + "'Poets associated with the sacadion who were born' as relationship_text ";	
+		  
+		  query = query + "  FROM cities, ( SELECT instrument_players.*, rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT genre_players.* FROM ( SELECT DISTINCT date_players.* FROM ( SELECT DISTINCT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates AS date_names, poets_cities.cityid, poets_cities.source_citation, poets_cities.source_explicit, poets_cities.source_greektext, poets_cities.source_notes, poets_cities.source_translation, poets_cities.source_translator, poets_cities.source_work, poets_cities.alternative_birth_cities FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, (select poets_cities.*, coalesce(alternative_birth_cities.alternative_birth_cities, '') as alternative_birth_cities from ";
+		  
+		  /* first choose relationship to place; choose death or activity over birth if multiple activities associated with one city */
+		  
+		  if($('#relationship_3').is(':checked')) {
+			query = query + " (select poets_cities.* from poets_cities, (SELECT poetid, cityid, max(relationshipid) as relationshipid from poets_cities group by poetid, cityid) poets_cities_max where poets_cities.poetid = poets_cities_max.poetid and poets_cities.cityid = poets_cities_max.cityid and poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities "
 		  }
 		  else {
-			  query = query + "OR dates.date = '" + i + "' ";
+			query = query + "poets_cities ";
 		  }
-		}
-		// if a genre has been selected close the query
-		if(firstCall == false) {
-			query = query + " ) ";
-		}
-		// embed this into the next layer up
-		
-		query = query + [
-		"		ORDER BY place_players.poet_name ASC ",
-		"		) date_players "
-		].join("");
-		
-		/* now the custom genre call depending on what is selected */
-		
-		firstCall = true;
-		for (i=2; i <= 30; i++) {		
-			if($('#genre_'+i).is(':checked')) {
-				if(firstCall == true) {
-					firstCall = false;
-					query = query + [
-					", genres ",
-					"WHERE date_players.poetid = genres.poetid ",
-					"			AND (genres.genreid = ",
-					i,
-					" "].join("");
-				}
-				else {
-					query = query + "OR genres.genreid = " + i + " ";
-				}
+		  
+		  query = query + " LEFT OUTER JOIN (select poets_cities.poetid, poets_cities.cityid, ('<br>See also: ' || string_agg(birth_cities.city_name, ', ' order by birth_cities.city_name asc)) as alternative_birth_cities from (select * from poets_cities where poets_cities.relationshipid = 1) poets_cities, (SELECT cities.city_name, poets_cities.cityid, poets_cities.poetid FROM cities, poets_cities WHERE cities.cityid = poets_cities.cityid AND poets_cities.relationshipid = 1 ) birth_cities where poets_cities.poetid = birth_cities.poetid and poets_cities.cityid != birth_cities.cityid group by poets_cities.poetid, poets_cities.cityid) alternative_birth_cities ON poets_cities.poetid = alternative_birth_cities.poetid and poets_cities.cityid = alternative_birth_cities.cityid ) poets_cities WHERE poets.poetid = poets_cities.poetid ";
+		  
+		  if($('#relationship_3').is(':checked')) {
+		  }
+		  else {
+			query = query + "AND (relationshipid=1) ";
+		  }
+		  
+		  /* embed this into the next layer up */
+		  
+		  query = query + [
+			  "		ORDER BY poet_name ASC ",
+			  "	) place_players"
+		  ].join("");
+		  
+		  /* then call dates */
+		  
+		  firstCall = true;
+		  for (i=-dateValues.min; i >= -dateValues.max; i=i-25) {		
+			if(firstCall == true) {
+			  firstCall = false;
+			  query = query + [
+				", dates ",
+				"WHERE place_players.poetid = dates.poetid ",
+				"AND ( ",
+				"dates.date='",
+				i,
+				"' "
+			  ].join("");
 			}
-		}
-		/* if a genre has been selected close the query */
-		if(firstCall == false) {
-			query = query + " ) ";
-		}
-		/* if no genre selected pass all of dates up unaltered */
-		
-		/* embed this into the next layer up */
-		
-		query = query + [
-		"	ORDER BY date_players.poet_name ASC ",
-		"	) genre_players " 
-		].join("");
-		
-		/* now add the instruments */
-
-		firstCall = true;
-		for (i=1; i <= 7; i++) {		
-			if($('#instrument_'+i).is(':checked')) {
-				if(firstCall == true) {
-					firstCall = false;
-					query = query + [ 
-					", instruments ",
-					"WHERE genre_players.poetid = instruments.poetid ",
-					"AND (instruments.instrumentid = ",
-					i,
-					" "
-					].join("");
-				}
-				else {
-					query = query + "OR instruments.instrumentid = " + i + " ";
-				}
+			else {
+				query = query + "OR dates.date = '" + i + "' ";
 			}
+		  }
+		  // if a genre has been selected close the query
+		  if(firstCall == false) {
+			  query = query + " ) ";
+		  }
+		  // embed this into the next layer up
+		  
+		  query = query + [
+		  "		ORDER BY place_players.poet_name ASC ",
+		  "		) date_players "
+		  ].join("");
+		  
+		  /* now the custom genre call depending on what is selected */
+		  
+		  firstCall = true;
+		  for (i=2; i <= 30; i++) {		
+			  if($('#genre_'+i).is(':checked')) {
+				  if(firstCall == true) {
+					  firstCall = false;
+					  query = query + [
+					  ", genres ",
+					  "WHERE date_players.poetid = genres.poetid ",
+					  "			AND (genres.genreid = ",
+					  i,
+					  " "].join("");
+				  }
+				  else {
+					  query = query + "OR genres.genreid = " + i + " ";
+				  }
+			  }
+		  }
+		  /* if a genre has been selected close the query */
+		  if(firstCall == false) {
+			  query = query + " ) ";
+		  }
+		  /* if no genre selected pass all of dates up unaltered */
+		  
+		  /* embed this into the next layer up */
+		  
+		  query = query + [
+		  "	ORDER BY date_players.poet_name ASC ",
+		  "	) genre_players " 
+		  ].join("");
+		  
+		  /* now add the instruments */
+  
+		  firstCall = true;
+		  for (i=1; i <= 7; i++) {		
+			  if($('#instrument_'+i).is(':checked')) {
+				  if(firstCall == true) {
+					  firstCall = false;
+					  query = query + [ 
+					  ", instruments ",
+					  "WHERE genre_players.poetid = instruments.poetid ",
+					  "AND (instruments.instrumentid = ",
+					  i,
+					  " "
+					  ].join("");
+				  }
+				  else {
+					  query = query + "OR instruments.instrumentid = " + i + " ";
+				  }
+			  }
+		  }
+		  /* if an instrument has been selected close the call */
+		  if(firstCall == false) {
+			  query = query + " ) ";
+		  }
+		  /* if no instrument selected pass up genre players unaltered */		
+		  
+		  /* close out the query */
+  
+		  query = query + [
+			  "		ORDER BY genre_players.poet_name ASC ",
+			  "	) instrument_players ",
+			  "  ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players ",
+			  "  WHERE cities.cityid = rank_players.cityid ",
+			  "  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, ",
+			  "			cities.cartodb_id "
+		  ].join("");
 		}
-		/* if an instrument has been selected close the call */
-		if(firstCall == false) {
-			query = query + " ) ";
-		}
-		/* if no instrument selected pass up genre players unaltered */		
-		
-		/* close out the query */
-
-		query = query + [
-			"		ORDER BY genre_players.poet_name ASC ",
-			"	) instrument_players ",
-			"  ORDER BY instrument_players.cityid, instrument_players.poet_name) rank_players ",
-			"  WHERE cities.cityid = rank_players.cityid ",
-			"  GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, ",
-			"			cities.cartodb_id "
-		].join("");
 		
 		console.log(query);		
 		layer.setQuery(query); 
@@ -443,7 +450,7 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
-			var query = "SELECT cities.*, 1 as selected_number, '' as selected_links, '' as selected_names, '' as selected_sources, '' as relationship_text  FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
+			var query = "SELECT cities.*, 1 as selected_number, '' as selected_names, '' as selected_sources, '' as relationship_text FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
 			
 			layers[1].setQuery(query);
 			layers[1].setInteraction(false);

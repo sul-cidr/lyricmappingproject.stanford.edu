@@ -3,7 +3,7 @@
   <div class="cartodb-popup-content-wrapper">
     <div class="cartodb-popup-content">
       <h2 style="color:#AAAAAA">{{infowindow_name}}</h2>
-      <h4 style="color:#AAAAAA">Poets {{relationship_text}} in {{city_name}}</h4>
+      <h4 style="color:#AAAAAA">{{relationship_text}} in {{city_name}}</h4>
       <p>{{{selected_names}}} (total of {{selected_number}})</span></p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{selected_sources}}}</p>

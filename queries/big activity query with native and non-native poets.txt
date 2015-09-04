@@ -1,0 +1,345 @@
+select cities.*, totality.selected_number, totality.selected_names, totality.selected_sources, totality.relationship_text from cities, 
+(select distinct cityid, the_geom, the_geom_webmercator, city_name, infowindow_name, cartodb_id, sum(selected_number) as selected_number,
+string_agg(selected_names, '</p>') as selected_names,
+string_agg(selected_sources, '</p>') as selected_sources,
+'NON-NATIVE POETS ACTIVE' as relationship_text
+FROM
+(SELECT  cities.*, 
+         Count(rank_players.cityid) AS selected_number, 
+         (string_agg('<span style="color:#B81609">' 
+                  || rank_players.poets_cities_rank 
+                  || '</span>. ' 
+                  || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names,
+         string_agg(rank_players.poet_link, ', ')                                           AS selected_links,
+         ('<h4>Non-native Poets</h4>' || string_agg('<p><span style="color:#B81609">' 
+                  || rank_players.poets_cities_rank 
+                  || '</span>. ' 
+                  || rank_players.poet_name 
+                  || '<br>Dates: ' 
+                  || rank_players.date_names 
+                  || '<br>Genre(s): ' 
+                  || rank_players.genre_names 
+                  || '<br>Source(s): ' 
+                  || rank_players.sources 
+                  || '<br><a href="javascript:ReverseDisplay(''citation_o' 
+                  || rank_players.poets_cities_rank 
+                  || ''')">Citation</a>' 
+                  || '<br><span id="citation_o' 
+                  || rank_players.poets_cities_rank 
+                  || '" style="display:none;">' 
+                  || rank_players.source_citation 
+                  || ': "' 
+                  || rank_players.source_translation 
+                  || '" (trans. ' 
+                  || rank_players.source_translator 
+                  || ')<br>' 
+                  || rank_players.source_greektext 
+                  || rank_players.alternative_birth_cities 
+                  || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources,
+         'active'                                                                 AS relationship_text
+FROM     cities, 
+         ( 
+                  SELECT   instrument_players.*, 
+                           rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank
+                  FROM     ( 
+                                           SELECT DISTINCT genre_players.* 
+                                           FROM            ( 
+                                                                           SELECT DISTINCT date_players.*
+                                                                           FROM            ( 
+                                                                                                           SELECT DISTINCT place_players.*
+                                                                                                           FROM            (
+                                                                                                                                    SELECT   poets.poetid,
+                                                                                                                                             poets.poet_name,
+                                                                                                                                             poets.sources,
+                                                                                                                                             poets.poet_link,
+                                                                                                                                             poets.genre_names,
+                                                                                                                                             poets.dates AS date_names,
+                                                                                                                                             poets_cities.cityid,
+                                                                                                                                             poets_cities.source_citation,
+                                                                                                                                             poets_cities.source_explicit,
+                                                                                                                                             poets_cities.source_greektext,
+                                                                                                                                             poets_cities.source_notes,
+                                                                                                                                             poets_cities.source_translation,
+                                                                                                                                             poets_cities.source_translator,
+                                                                                                                                             poets_cities.source_work,
+                                                                                                                                             poets_cities.alternative_birth_cities
+                                                                                                                                    FROM     (
+                                                                                                                                                             SELECT          poets.*,
+                                                                                                                                                                             COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names
+                                                                                                                                                             FROM            poets
+                                                                                                                                                             LEFT OUTER JOIN
+                                                                                                                                                                             (
+                                                                                                                                                                                      SELECT   sorted_poets.poetid,
+                                                                                                                                                                                               sorted_poets.poet_name,
+                                                                                                                                                                                               string_agg(sorted_genres.genre, ', ') AS genre_names
+                                                                                                                                                                                      FROM     (
+                                                                                                                                                                                                        SELECT   *
+                                                                                                                                                                                                        FROM     genres
+                                                                                                                                                                                                        WHERE    genreid = '2'
+                                                                                                                                                                                                        OR       genreid = '3'
+                                                                                                                                                                                                        OR       genreid = '4'
+                                                                                                                                                                                                        OR       genreid = '5'
+                                                                                                                                                                                                        OR       genreid = '16'
+                                                                                                                                                                                                        OR       genreid = '18'
+                                                                                                                                                                                                        OR       genreid = '6'
+                                                                                                                                                                                                        OR       genreid = '22'
+                                                                                                                                                                                                        OR       genreid = '11'
+                                                                                                                                                                                                        OR       genreid = '24'
+                                                                                                                                                                                                        OR       genreid = '7'
+                                                                                                                                                                                                        OR       genreid = '8'
+                                                                                                                                                                                                        OR       genreid = '13'
+                                                                                                                                                                                                        OR       genreid = '9'
+                                                                                                                                                                                                        OR       genreid = '10'
+                                                                                                                                                                                                        OR       genreid = '12'
+                                                                                                                                                                                                        OR       genreid = '30'
+                                                                                                                                                                                                        ORDER BY genre ASC) sorted_genres,
+                                                                                                                                                                                               (
+                                                                                                                                                                                                        SELECT   poets.poetid,
+                                                                                                                                                                                                        poets.poet_name
+                                                                                                                                                                                                        FROM     poets
+                                                                                                                                                                                                        GROUP BY poets.poetid,
+                                                                                                                                                                                                        poets.poet_name ) sorted_poets
+                                                                                                                                                                                      WHERE    sorted_poets.poetid = sorted_genres.poetid
+                                                                                                                                                                                      GROUP BY sorted_poets.poetid,
+                                                                                                                                                                                               sorted_poets.poet_name) poets_genres
+                                                                                                                                                             ON              poets.poetid = poets_genres.poetid) poets,
+                                                                                                                                             (
+                                                                                                                                                             SELECT          poets_cities.*,
+                                                                                                                                                                             COALESCE(alternative_birth_cities.alternative_birth_cities, '') AS alternative_birth_cities
+                                                                                                                                                             FROM            (
+                                                                                                                                                                                    SELECT poets_cities.*
+                                                                                                                                                                                    FROM   poets_cities,
+                                                                                                                                                                                           (
+                                                                                                                                                                                                    SELECT   poetid,
+                                                                                                                                                                                                        cityid,
+                                                                                                                                                                                                        max(relationshipid) AS relationshipid
+                                                                                                                                                                                                    FROM     poets_cities
+                                                                                                                                                                                                    GROUP BY poetid,
+                                                                                                                                                                                                        cityid) poets_cities_max
+                                                                                                                                                                                    WHERE  poets_cities.poetid = poets_cities_max.poetid
+                                                                                                                                                                                    AND    poets_cities.cityid = poets_cities_max.cityid
+                                                                                                                                                                                    AND    poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities
+                                                                                                                                                             LEFT OUTER JOIN
+                                                                                                                                                                             (
+                                                                                                                                                                                      SELECT   poets_cities.poetid,
+                                                                                                                                                                                               poets_cities.cityid,
+                                                                                                                                                                                               ('<br>See also: '
+                                                                                                                                                                                                        || string_agg(birth_cities.city_name, ', ' ORDER BY birth_cities.city_name ASC)) AS alternative_birth_cities
+                                                                                                                                                                                      FROM     (
+                                                                                                                                                                                                      SELECT *
+                                                                                                                                                                                                      FROM   poets_cities
+                                                                                                                                                                                                      WHERE  poets_cities.relationshipid = 1) poets_cities,
+                                                                                                                                                                                               (
+                                                                                                                                                                                                      SELECT cities.city_name,
+                                                                                                                                                                                                        poets_cities.cityid,
+                                                                                                                                                                                                        poets_cities.poetid
+                                                                                                                                                                                                      FROM   cities,
+                                                                                                                                                                                                        poets_cities
+                                                                                                                                                                                                      WHERE  cities.cityid = poets_cities.cityid
+                                                                                                                                                                                                      AND    poets_cities.relationshipid = 1 ) birth_cities
+                                                                                                                                                                                      WHERE    poets_cities.poetid = birth_cities.poetid
+                                                                                                                                                                                      AND      poets_cities.cityid != birth_cities.cityid
+                                                                                                                                                                                      GROUP BY poets_cities.poetid,
+                                                                                                                                                                                               poets_cities.cityid) alternative_birth_cities
+                                                                                                                                                             ON              poets_cities.poetid = alternative_birth_cities.poetid
+                                                                                                                                                             AND             poets_cities.cityid = alternative_birth_cities.cityid ) poets_cities
+                                                                                                                                    WHERE    poets.poetid = poets_cities.poetid AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3)
+                                                                                                                                    ORDER BY poet_name ASC ) place_players,
+                                                                                                                           dates
+                                                                                                           WHERE           place_players.poetid = dates.poetid
+                                                                                                           AND             (
+                                                                                                                                           dates.date='700'
+                                                                                                                           OR              dates.date = '675'
+                                                                                                                           OR              dates.date = '650'
+                                                                                                                           OR              dates.date = '625'
+                                                                                                                           OR              dates.date = '600'
+                                                                                                                           OR              dates.date = '575'
+                                                                                                                           OR              dates.date = '550'
+                                                                                                                           OR              dates.date = '525'
+                                                                                                                           OR              dates.date = '500'
+                                                                                                                           OR              dates.date = '475'
+                                                                                                                           OR              dates.date = '450'
+                                                                                                                           OR              dates.date = '425'
+                                                                                                                           OR              dates.date = '400' )
+                                                                                                           ORDER BY        place_players.poet_name ASC ) date_players
+                                                                           ORDER BY        date_players.poet_name ASC ) genre_players
+                                           ORDER BY        genre_players.poet_name ASC ) instrument_players
+                  ORDER BY instrument_players.cityid, 
+                           instrument_players.poet_name) rank_players 
+WHERE    cities.cityid = rank_players.cityid 
+GROUP BY rank_players.cityid, 
+         cities.the_geom, 
+         cities.the_geom_webmercator, 
+         cities.city_name, 
+         cities.cartodb_id
+UNION ALL
+SELECT   cities.*, 
+         Count(rank_players.cityid) AS selected_number, 
+         ('<h4>Native poets active in ' || cities.city_name || '</h4><p>' || string_agg('<span style="color:#B81609">' 
+                  || rank_players.poets_cities_rank 
+                  || '</span>. ' 
+                  || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names,
+         string_agg(rank_players.poet_link, ', ')                                           AS selected_links,
+         ('<h4>Native poets</h4>' || string_agg('<p><span style="color:#B81609">' 
+                  || rank_players.poets_cities_rank 
+                  || '</span>. ' 
+                  || rank_players.poet_name 
+                  || '<br>Dates: ' 
+                  || rank_players.date_names 
+                  || '<br>Genre(s): ' 
+                  || rank_players.genre_names 
+                  || '<br>Source(s): ' 
+                  || rank_players.sources 
+                  || '<br><a href="javascript:ReverseDisplay(''citation_b' 
+                  || rank_players.poets_cities_rank 
+                  || ''')">Citation</a>' 
+                  || '<br><span id="citation_b' 
+                  || rank_players.poets_cities_rank 
+                  || '" style="display:none;">' 
+                  || rank_players.source_citation 
+                  || ': "' 
+                  || rank_players.source_translation 
+                  || '" (trans. ' 
+                  || rank_players.source_translator 
+                  || ')<br>' 
+                  || rank_players.source_greektext 
+                  || rank_players.alternative_birth_cities 
+                  || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources,
+         'active'                                                                 AS relationship_text
+FROM     cities, 
+         ( 
+                  SELECT   instrument_players.*, 
+                           rank() OVER (partition BY instrument_players.cityid ORDER BY instrument_players.poet_name ASC) AS poets_cities_rank
+                  FROM     ( 
+                                           SELECT DISTINCT genre_players.* 
+                                           FROM            ( 
+                                                                           SELECT DISTINCT date_players.*
+                                                                           FROM            ( 
+                                                                                                           SELECT DISTINCT place_players.*
+                                                                                                           FROM            (
+                                                                                                                                    SELECT   poets.poetid,
+                                                                                                                                             poets.poet_name,
+                                                                                                                                             poets.sources,
+                                                                                                                                             poets.poet_link,
+                                                                                                                                             poets.genre_names,
+                                                                                                                                             poets.dates AS date_names,
+                                                                                                                                             poets_cities.cityid,
+                                                                                                                                             poets_cities.source_citation,
+                                                                                                                                             poets_cities.source_explicit,
+                                                                                                                                             poets_cities.source_greektext,
+                                                                                                                                             poets_cities.source_notes,
+                                                                                                                                             poets_cities.source_translation,
+                                                                                                                                             poets_cities.source_translator,
+                                                                                                                                             poets_cities.source_work,
+                                                                                                                                             poets_cities.alternative_birth_cities
+                                                                                                                                    FROM     (
+                                                                                                                                                             SELECT          poets.*,
+                                                                                                                                                                             COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names
+                                                                                                                                                             FROM            poets
+                                                                                                                                                             LEFT OUTER JOIN
+                                                                                                                                                                             (
+                                                                                                                                                                                      SELECT   sorted_poets.poetid,
+                                                                                                                                                                                               sorted_poets.poet_name,
+                                                                                                                                                                                               string_agg(sorted_genres.genre, ', ') AS genre_names
+                                                                                                                                                                                      FROM     (
+                                                                                                                                                                                                        SELECT   *
+                                                                                                                                                                                                        FROM     genres
+                                                                                                                                                                                                        WHERE    genreid = '2'
+                                                                                                                                                                                                        OR       genreid = '3'
+                                                                                                                                                                                                        OR       genreid = '4'
+                                                                                                                                                                                                        OR       genreid = '5'
+                                                                                                                                                                                                        OR       genreid = '16'
+                                                                                                                                                                                                        OR       genreid = '18'
+                                                                                                                                                                                                        OR       genreid = '6'
+                                                                                                                                                                                                        OR       genreid = '22'
+                                                                                                                                                                                                        OR       genreid = '11'
+                                                                                                                                                                                                        OR       genreid = '24'
+                                                                                                                                                                                                        OR       genreid = '7'
+                                                                                                                                                                                                        OR       genreid = '8'
+                                                                                                                                                                                                        OR       genreid = '13'
+                                                                                                                                                                                                        OR       genreid = '9'
+                                                                                                                                                                                                        OR       genreid = '10'
+                                                                                                                                                                                                        OR       genreid = '12'
+                                                                                                                                                                                                        OR       genreid = '30'
+                                                                                                                                                                                                        ORDER BY genre ASC) sorted_genres,
+                                                                                                                                                                                               (
+                                                                                                                                                                                                        SELECT   poets.poetid,
+                                                                                                                                                                                                        poets.poet_name
+                                                                                                                                                                                                        FROM     poets
+                                                                                                                                                                                                        GROUP BY poets.poetid,
+                                                                                                                                                                                                        poets.poet_name ) sorted_poets
+                                                                                                                                                                                      WHERE    sorted_poets.poetid = sorted_genres.poetid
+                                                                                                                                                                                      GROUP BY sorted_poets.poetid,
+                                                                                                                                                                                               sorted_poets.poet_name) poets_genres
+                                                                                                                                                             ON              poets.poetid = poets_genres.poetid) poets,
+                                                                                                                                             (
+                                                                                                                                                             SELECT          poets_cities.*,
+                                                                                                                                                                             COALESCE(alternative_birth_cities.alternative_birth_cities, '') AS alternative_birth_cities
+                                                                                                                                                             FROM            (
+                                                                                                                                                                                    SELECT poets_cities.*
+                                                                                                                                                                                    FROM   poets_cities,
+                                                                                                                                                                                           (
+                                                                                                                                                                                                    SELECT   poetid,
+                                                                                                                                                                                                        cityid,
+                                                                                                                                                                                                        max(relationshipid) AS relationshipid
+                                                                                                                                                                                                    FROM     poets_cities
+                                                                                                                                                                                                    GROUP BY poetid,
+                                                                                                                                                                                                        cityid) poets_cities_max
+                                                                                                                                                                                    WHERE  poets_cities.poetid = poets_cities_max.poetid
+                                                                                                                                                                                    AND    poets_cities.cityid = poets_cities_max.cityid
+                                                                                                                                                                                    AND    poets_cities.relationshipid = poets_cities_max.relationshipid) poets_cities
+                                                                                                                                                             LEFT OUTER JOIN
+                                                                                                                                                                             (
+                                                                                                                                                                                      SELECT   poets_cities.poetid,
+                                                                                                                                                                                               poets_cities.cityid,
+                                                                                                                                                                                               ('<br>See also: '
+                                                                                                                                                                                                        || string_agg(birth_cities.city_name, ', ' ORDER BY birth_cities.city_name ASC)) AS alternative_birth_cities
+                                                                                                                                                                                      FROM     (
+                                                                                                                                                                                                      SELECT *
+                                                                                                                                                                                                      FROM   poets_cities
+                                                                                                                                                                                                      WHERE  poets_cities.relationshipid = 1) poets_cities,
+                                                                                                                                                                                               (
+                                                                                                                                                                                                      SELECT cities.city_name,
+                                                                                                                                                                                                        poets_cities.cityid,
+                                                                                                                                                                                                        poets_cities.poetid
+                                                                                                                                                                                                      FROM   cities,
+                                                                                                                                                                                                        poets_cities
+                                                                                                                                                                                                      WHERE  cities.cityid = poets_cities.cityid
+                                                                                                                                                                                                      AND    poets_cities.relationshipid = 1 ) birth_cities
+                                                                                                                                                                                      WHERE    poets_cities.poetid = birth_cities.poetid
+                                                                                                                                                                                      AND      poets_cities.cityid != birth_cities.cityid
+                                                                                                                                                                                      GROUP BY poets_cities.poetid,
+                                                                                                                                                                                               poets_cities.cityid) alternative_birth_cities
+                                                                                                                                                             ON              poets_cities.poetid = alternative_birth_cities.poetid
+                                                                                                                                                             AND             poets_cities.cityid = alternative_birth_cities.cityid ) poets_cities
+                                                                                                                                    WHERE    poets.poetid = poets_cities.poetid AND (poets_cities.relationshipid = 1)
+                                                                                                                                    ORDER BY poet_name ASC ) place_players,
+                                                                                                                           dates
+                                                                                                           WHERE           place_players.poetid = dates.poetid
+                                                                                                           AND             (
+                                                                                                                                           dates.date='700'
+                                                                                                                           OR              dates.date = '675'
+                                                                                                                           OR              dates.date = '650'
+                                                                                                                           OR              dates.date = '625'
+                                                                                                                           OR              dates.date = '600'
+                                                                                                                           OR              dates.date = '575'
+                                                                                                                           OR              dates.date = '550'
+                                                                                                                           OR              dates.date = '525'
+                                                                                                                           OR              dates.date = '500'
+                                                                                                                           OR              dates.date = '475'
+                                                                                                                           OR              dates.date = '450'
+                                                                                                                           OR              dates.date = '425'
+                                                                                                                           OR              dates.date = '400' )
+                                                                                                           ORDER BY        place_players.poet_name ASC ) date_players
+                                                                           ORDER BY        date_players.poet_name ASC ) genre_players
+                                           ORDER BY        genre_players.poet_name ASC ) instrument_players
+                  ORDER BY instrument_players.cityid, 
+                           instrument_players.poet_name) rank_players 
+WHERE    cities.cityid = rank_players.cityid 
+GROUP BY rank_players.cityid, 
+         cities.the_geom, 
+         cities.the_geom_webmercator, 
+         cities.city_name, 
+         cities.cartodb_id) joined_cities
+GROUP BY cityid, the_geom, the_geom_webmercator, city_name, cartodb_id, infowindow_name) totality
+where cities.cityid = totality.cityid
