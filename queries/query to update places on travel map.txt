@@ -1,0 +1,19 @@
+select
+string_agg(E'\t\t' || '<input type="radio" value="0" name="city" id="destination_' || a.cityid || '">' || E'\n\t\t' || '<label for="destination_' || a.cityid || '" class="instrument-picker-label">' || a.city_name || '</label>', E'\n\n'),
+1 as bs from
+(SELECT
+a.cityid,
+a.city_name
+FROM
+(SELECT 
+			cities.city_name as city_name,
+ 			poets_lines.birth_cityid as cityid
+			FROM poets_lines, cities where poets_lines.birth_cityid = cities.cityid
+UNION
+SELECT 
+			other_city_name as city_name,
+ 			other_cityid as cityid
+			FROM poets_lines) a
+group by cityid, city_name
+order by city_name asc) a
+group by bs
