@@ -733,22 +733,7 @@
 		if($('#region_2').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) and ";
 		if($('#region_3').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) and ";
 		if($('#region_4').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) and ";
-		dateFirstCall = true;
-		for (i=-$("#slider").rangeSlider("values").min; i >= -$("#slider").rangeSlider("values").max; i=i-50) {		
-		  if(dateFirstCall == true) {
-		    dateFirstCall = false;
-		    query1 = query1 + [
-		      " poets_lines.poetid = dates.poetid ",
-		      "AND ( ",
-		      "dates.date='",
-		      i,
-		      "' "
-		    ].join("");
-		  }
-		  else {
-			  query1 = query1 + "OR dates.date = '" + i + "' ";
-		  }
-		}
+		query1 = query1 + " poets_lines.poetid = dates.poetid AND (dates.date <= " + -$("#slider").rangeSlider("values").min + " AND dates.date >= " + -$("#slider").rangeSlider("values").max;
 		query1 = query1 + ")";
 		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
 		
