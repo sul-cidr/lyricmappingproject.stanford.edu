@@ -37,6 +37,14 @@
 		<a class="mainlinks" href="imaginary.html">GEOGRAPHICAL IMAGINARY</a>
       </div>
     </div>
+	
+    <div class="buttonContainer" style="background: white;">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >TRAVEL</div>
+        <input type="radio" value="relationship_1" name="city" id="relationship_1">
+        <label for="relationship_1" class="priority-picker-label">All Travel</label>		
+      </fieldset>
+    </div>
       
     <div class="buttonContainer" style="background: white; height: 100px;">            
       <fieldset style="border: none;" id="cityForm" class="priorityForm">
@@ -599,8 +607,8 @@
     <script>
     //<!--
       $("#slider").rangeSlider({
-        bounds:{min: -700, max: -400},
-		defaultValues:{min: -700, max: -400},
+        bounds:{min: -800, max: -400},
+		defaultValues:{min: -800, max: -400},
 		range: {min: 25},  
 		step: 50,
 		arrows: false,
