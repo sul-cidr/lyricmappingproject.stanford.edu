@@ -215,7 +215,7 @@ LEFT OUTER JOIN
 			sorted_poets.poetid,
 			sorted_poets.poet_name,
 			string_agg(sorted_genres.genre, ', ') as genre_names
-		FROM (SELECT * FROM genres where genreid = '2' or genreid = '3' or genreid = '4' or genreid = '5' or genreid = '16' or genreid = '18' or genreid = '6' or genreid = '22' or genreid = '11' or genreid = '24' or genreid = '7' or genreid = '8' or genreid = '13' or genreid = '9' or genreid = '10' or genreid = '12' or genreid = '30' OR genreid = '31' ORDER BY (genreid = 30) DESC, genre) sorted_genres, 
+		FROM (SELECT * FROM genres where genreid = '2' or genreid = '3' or genreid = '4' or genreid = '5' or genreid = '16' or genreid = '18' or genreid = '6' or genreid = '22' or genreid = '11' or genreid = '24' or genreid = '7' or genreid = '8' or genreid = '13' or genreid = '9' or genreid = '10' or genreid = '12' or genreid = '30' OR genreid = '31' or genreid = '32' ORDER BY (genreid = 32) DESC, (genreid = 30) DESC, genre) sorted_genres, 
 			(SELECT 
 				poets.poetid,
 				poets.poet_name
