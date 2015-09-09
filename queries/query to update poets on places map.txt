@@ -7,8 +7,8 @@ a.poet_name
 FROM
 (SELECT 
 			poets.poet_name as poet_name,
- 			poets_poetid as poetid
-			FROM poets_cities where poets_cities.poetid = poets.poetid
+ 			poets.poetid as poetid
+			FROM poets_cities, poets where poets_cities.poetid = poets.poetid
 ) a
 group by poetid, poet_name
 order by poet_name asc) a
