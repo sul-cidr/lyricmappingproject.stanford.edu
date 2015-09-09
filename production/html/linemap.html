@@ -684,7 +684,7 @@
 				    ].join("");
 			    }
 		    }
-		    if($('#small_region_'+i).is(':checked')) {
+		    if($('#small_region_'+i).is(':checked') && i != 9) {
 			    if(firstCall == true) {
 				    firstCall = false;
 				    query1 = query1 + [
@@ -699,6 +699,25 @@
 					i,
 					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = ",
 					i,
+					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
+				    ].join("");
+			    }
+		    }
+			if($('#small_region_9').is(':checked')) {
+			    if(firstCall == true) {
+				    firstCall = false;
+				    query1 = query1 + [
+					    " (poets_lines.birth_regionid = ",
+					    "9",
+					    " OR poets_lines.other_regionid = ",
+						"9",
+						") and "
+				    ].join("");
+					css1= [
+					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid=",
+					"9",
+					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = ",
+					"9",
 					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
 				    ].join("");
 			    }
