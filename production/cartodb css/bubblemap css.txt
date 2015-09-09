@@ -62,16 +62,4 @@ Map {
     text-placements: "N,S,E,W,NE,SE,NW,SW,16,14,12";
     text-dy: 3;
     text-dx: 3;
-    [cityid=33] {
-    	text-size: 50;
-    	text-orientation: 30;
-    	text-character-spacing: 50;
-    	text-face-name: 'Open Sans Light Italic';
-  	}
-    [cityid=34] {
-    	text-size: 50;
-    	text-orientation: 330;
-    	text-character-spacing: 20;
-    	text-face-name: 'Open Sans Light Italic';
-  	}
   }
