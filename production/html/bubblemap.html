@@ -421,6 +421,15 @@
         })
         .done(function(vis, layers) {
 			// layer 0 is the base layer, layer 1 is cartodb layer
+			
+			// remove 'Improve this Map' from the mapbox credits
+			var map = vis.getNativeMap();
+			var currentAttribution = layers[0].getAttribution();
+			console.log(currentAttribution);
+			map.attributionControl.removeAttribution(currentAttribution);
+			map.attributionControl.addAttribution('<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy; Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap</a>');
+			// cartodb attribution on layers[1].getAttribution(); and can be removed the same way.
+			
 			var query = "SELECT cities.*, 1 as selected_number, '' as selected_names, '' as selected_sources, '' as relationship_text FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
 			
 			layers[1].setQuery(query);
