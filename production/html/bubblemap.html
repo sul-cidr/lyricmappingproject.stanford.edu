@@ -425,7 +425,6 @@
 			// remove 'Improve this Map' from the mapbox credits
 			var map = vis.getNativeMap();
 			var currentAttribution = layers[0].getAttribution();
-			console.log(currentAttribution);
 			map.attributionControl.removeAttribution(currentAttribution);
 			map.attributionControl.addAttribution('<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy; Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap</a>');
 			// cartodb attribution on layers[1].getAttribution(); and can be removed the same way.
