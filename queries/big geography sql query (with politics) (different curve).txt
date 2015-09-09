@@ -41,6 +41,13 @@ FROM
 	(SELECT birth_cities.poet_name,
 	birth_cities.poetid,
 	birth_cities.regionid as birth_regionid,
+	case  
+		when birth_cities.regionid = 7 or birth_cities.regionid = 10 then 1
+		when birth_cities.regionid = 12 or birth_cities.regionid = 11 or birth_cities.regionid = 2 or birth_cities.regionid = 3 or birth_cities.regionid = 4 or birth_cities.regionid = 9 then 2
+		when birth_cities.regionid = 19 or birth_cities.regionid = 1 or birth_cities.regionid = 8 or birth_cities.regionid = 15 or birth_cities.regionid = 17 or birth_cities.regionid = 13 then 3
+		when birth_cities.regionid = 6 or birth_cities.regionid = 14 or birth_cities.regionid = 16 then 4
+		end
+		 as birth_big_regionid,
 	birth_cities.city_name as birth_city_name,
 	birth_cities.cityid as birth_cityid,
 	birth_cities.poet_link,
