@@ -231,7 +231,7 @@
     
     <div class="buttonContainer" style="background: white; height: 100px;">            
       <fieldset style="border: none;" id="instrumentForm" class="instrumentForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACES (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >PLACES (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>/<span style="color: black;">within</span>): </div>
 		<input type="radio" value="0" name="city" id="destination_65">
 		<label for="destination_65" class="instrument-picker-label">Abdera</label>
 
@@ -496,7 +496,7 @@
     
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>/<span style="color: black;">within</span>): </div>
 
         <input type="radio" value="0" name="city" id="region_1">
         <label for="region_1" class="genre-picker-label">Magna Graecia</label>
@@ -515,7 +515,7 @@
 	
     <div class="buttonContainer" style="background: white; height: 100px;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SMALL GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SMALL GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>/<span style="color: black;">within</span>): </div>
 
 		<input type="radio" value="0" name="city" id="small_region_2">
         <label for="small_region_2" class="genre-picker-label">Attica</label>
@@ -564,7 +564,7 @@
 	
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POLITICAL SYSTEM (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >POLITICAL SYSTEM (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>/<span style="color: black;">within</span>): </div>
 
         <input type="radio" value="0" name="city" id="gov_3">
         <label for="gov_3" class="genre-picker-label">Democracy</label>
@@ -653,7 +653,7 @@
 		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info, s.poets_birth_sources, s.poets_other_sources, s.travel_direction FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, ";
 
 		firstCall = true;
-		for (i=1; i<=30; i++) {
+		for (i=1; i<=150; i++) {
 		  if($('#region_'+i).is(':checked')) {
 			firstCall = false;
 			query1 = query1 + "case when min(s.birth_big_regionid) = " + i + " and min(s.other_big_regionid) = " + i + " then 3 when min(s.birth_big_regionid) = " + i + " and (min(s.other_big_regionid) != " + i + " or min(s.other_big_regionid) is null) then 1 when (min(s.birth_big_regionid) != " + i + " or min(s.birth_big_regionid) is null) and min(s.other_big_regionid) = " + i + " then 2 end as travel_direction, ";
@@ -666,6 +666,10 @@
 			firstCall = false;
 			query1 = query1 + "case when min(s.birth_cityid) = " + i + " and min(s.other_cityid) = " + i + " then 3 when min(s.birth_cityid) = " + i + " and (min(s.other_cityid) != " + i + " or min(s.other_cityid) is null) then 1 when (min(s.birth_cityid) != " + i + " or min(s.birth_cityid) is null) and min(s.other_cityid) = " + i + " then 2 end as travel_direction, ";
 		  }
+		  if($('#gov_'+i).is(':checked')) {
+			firstCall = false;
+			query1 = query1 + "case when min(s.birth_city_governmentid) = " + i + " and min(s.other_city_governmentid) = " + i + " then 3 when min(s.birth_city_governmentid) = " + i + " and (min(s.other_city_governmentid) != " + i + " or min(s.other_city_governmentid) is null) then 1 when (min(s.birth_city_governmentid) != " + i + " or min(s.birth_city_governmentid) is null) and min(s.other_city_governmentid) = " + i + " then 2 end as travel_direction, ";
+		  }
 		}
 		if (firstCall == true) {
 		  query1 = query1 + "2 as travel_direction, ";
@@ -677,7 +681,19 @@
 			  query1 = query1 + " || '<br>Governments (data from Hansen and Nielsen): ' || s.grouped_government ";
 			}
 		}
-		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '<nobr>-></nobr>' || other_city_government, ', ') AS grouped_government, min(birth_city_governmentid) AS birth_city_governmentid, min(other_city_governmentid) AS other_city_governmentid, rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* FROM poets_lines, dates WHERE ";
+		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '<nobr>-></nobr>' || other_city_government, ', ') AS grouped_government, ";
+		
+		// democracy
+		if($('#gov_3').is(':checked')) query1 = query1 + "case min(p.birth_city_governmentid) when 10 then 3 else min(p.birth_city_governmentid) end as birth_city_governmentid, case min(p.other_city_governmentid) when 10 then 3 else min(p.other_city_governmentid) end as other_city_governmentid, ";
+		// oligarchy
+		else if($('#gov_1').is(':checked')) query1 = query1 + "case min(p.birth_city_governmentid) when 10 then 1 when 9 then 1 else min(p.birth_city_governmentid) end as birth_city_governmentid, case min(p.other_city_governmentid) when 10 then 1 when 9 then 1 else min(p.other_city_governmentid) end as other_city_governmentid, ";
+		// tyranny
+		else if($('#gov_2').is(':checked')) query1 = query1 + "case min(p.birth_city_governmentid) when 9 then 2 else min(p.birth_city_governmentid) end as birth_city_governmentid, case min(p.other_city_governmentid) when 9 then 2 else min(p.other_city_governmentid) end as other_city_governmentid, ";		
+		else query1 = query1 + "Min(p.birth_city_governmentid) AS birth_city_governmentid, Min(p.other_city_governmentid) AS other_city_governmentid, ";
+		
+		query1 = query1 + "rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* ";
+
+		query1 = query1 + " FROM poets_lines, dates WHERE ";
 	    firstCall = true;
 	    for (i=1; i <= 300; i++) {		
 		    if($('#poet_'+i).is(':checked')) {
@@ -691,6 +707,9 @@
 		    if($('#small_region_'+i).is(':checked')) {
 			  query1 = query1 + " (poets_lines.birth_regionid = " + i + " OR poets_lines.other_regionid = " + i + ") and ";
 			  if(i != 9) lineSize = "big";
+		    }
+		    if($('#region_'+i).is(':checked')) {
+			  query1 = query1 + " (poets_lines.birth_big_regionid = " + i + " OR poets_lines.other_big_regionid = " + i + ") and ";
 		    }
 		    if($('#gov_'+i).is(':checked')) {
 			    if(firstCall == true) {
@@ -708,36 +727,10 @@
 					if($('#gov_1').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";
 					// tyranny
 					if($('#gov_2').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";					
-					query1 = query1 + ") and"
-					
-					css1= [
-					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; }  line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_city_governmentid=",
-					i].join("");
-					
-					if($('#gov_3').is(':checked')) css1 = css1 + "],[birth_city_governmentid=10";
-					// oligarchy
-					if($('#gov_1').is(':checked')) css1 = css1 + "],[birth_city_governmentid=9],[birth_city_governmentid=10";
-					// tyranny
-					if($('#gov_2').is(':checked')) css1 = css1 + "],[birth_city_governmentid=9";
-					
-					css1 = css1 + [
-					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_city_governmentid = ",
-					i].join("");
-					
-					if($('#gov_3').is(':checked')) css1 = css1 + "],[other_city_governmentid=10";
-					// oligarchy
-					if($('#gov_1').is(':checked')) css1 = css1 + "],[other_city_governmentid=9],[other_city_governmentid=10";
-					// tyranny
-					if($('#gov_2').is(':checked')) css1 = css1 + "],[other_city_governmentid=9";					
-					
-					css1 = css1 + "] { line-color: #fc1804; marker-fill: #fc1804; } } }";				
+					query1 = query1 + ") and"			
 			    }
 		    }
 	    }
-		if($('#region_1').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 1 or poets_lines.other_big_regionid = 1) and ";
-		if($('#region_2').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 2 or poets_lines.other_big_regionid = 2) and ";
-		if($('#region_3').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 3 or poets_lines.other_big_regionid = 3) and ";
-		if($('#region_4').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 4 or poets_lines.other_big_regionid = 4) and ";
 		query1 = query1 + " poets_lines.poetid = dates.poetid AND (dates.date <= " + -$("#slider").rangeSlider("values").min + " AND dates.date >= " + -$("#slider").rangeSlider("values").max;
 		query1 = query1 + ")";
 		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
@@ -746,7 +739,7 @@
 		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: black; marker-fill: black; } } } ";
 		}
 		else {
-		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: black; marker-fill: black; } } } ";		  
+		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: black; marker-fill: black; } } } ";		  
 		}
 		
 		console.log(query1);
