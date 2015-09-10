@@ -645,90 +645,52 @@
 	  var sublayer2 = layers[1].getSubLayer(1);
 	  var css1;
 	  var css2;
+	  var lineSize = "small";
           
 	  sublayer1.setInteraction(true);
 	    
 	    // choose query for lines data
-		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info, s.poets_birth_sources, s.poets_other_sources FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, Min(s.birth_city_governmentid) AS birth_city_governmentid, Min(s.other_city_governmentid) AS other_city_governmentid, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name ";
+		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info, s.poets_birth_sources, s.poets_other_sources, s.travel_direction FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, ";
+
+		firstCall = true;
+		for (i=1; i<=30; i++) {
+		  if($('#region_'+i).is(':checked')) {
+			firstCall = false;
+			query1 = query1 + "case when min(s.birth_big_regionid) = " + i + " and min(s.other_big_regionid) = " + i + " then 3 when min(s.birth_big_regionid) = " + i + " and (min(s.other_big_regionid) != " + i + " or min(s.other_big_regionid) is null) then 1 when (min(s.birth_big_regionid) != " + i + " or min(s.birth_big_regionid) is null) and min(s.other_big_regionid) = " + i + " then 2 end as travel_direction, ";
+		  }
+		  if($('#small_region_'+i).is(':checked')) {
+			firstCall = false;
+			query1 = query1 + "case when min(s.birth_regionid) = " + i + " and min(s.other_regionid) = " + i + " then 3 when min(s.birth_regionid) = " + i + " and (min(s.other_regionid) != " + i + " or min(s.other_regionid) is null) then 1 when (min(s.birth_regionid) != " + i + " or min(s.birth_regionid) is null) and min(s.other_regionid) = " + i + " then 2 end as travel_direction, ";
+		  }
+		  if($('#destination_'+i).is(':checked')) {
+			firstCall = false;
+			query1 = query1 + "case when min(s.birth_cityid) = " + i + " and min(s.other_cityid) = " + i + " then 3 when min(s.birth_cityid) = " + i + " and (min(s.other_cityid) != " + i + " or min(s.other_cityid) is null) then 1 when (min(s.birth_cityid) != " + i + " or min(s.birth_cityid) is null) and min(s.other_cityid) = " + i + " then 2 end as travel_direction, ";
+		  }
+		}
+		if (firstCall == true) {
+		  query1 = query1 + "2 as travel_direction, ";
+		}
+
+		query1 = query1 + "Min(s.birth_city_governmentid) AS birth_city_governmentid, Min(s.other_city_governmentid) AS other_city_governmentid, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name ";
 		for(i=1; i<=10; i++) {
 		    if($('#gov_'+i).is(':checked')) {
 			  query1 = query1 + " || '<br>Governments (data from Hansen and Nielsen): ' || s.grouped_government ";
 			}
 		}
-		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '<nobr>-></nobr>' || other_city_government, ', ') AS grouped_government, min(birth_city_governmentid) AS birth_city_governmentid, min(other_city_governmentid) AS other_city_governmentid, rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* FROM poets_lines, dates WHERE ";
-		css1 = "/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {  [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
+		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '<nobr>-></nobr>' || other_city_government, ', ') AS grouped_government, min(birth_city_governmentid) AS birth_city_governmentid, min(other_city_governmentid) AS other_city_governmentid, rank() OVER (partition BY p.birth_cityid, p.other_cityid ORDER BY p.poet_name ASC) AS poets_cities_rank FROM ( SELECT DISTINCT poets_lines.* FROM poets_lines, dates WHERE ";
 	    firstCall = true;
 	    for (i=1; i <= 300; i++) {		
 		    if($('#poet_'+i).is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query1 = query1 + [
-					    " poets_lines.poetid = ",
-					    i,
-					    " and "
-				    ].join("");
-					css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   line-width: 3; line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
-			    }
-			    else {
-				    query1 = query1 + "OR poetid = " + i + " ";
-			    }
-		    }
+			  query1 = query1 + " poets_lines.poetid = " + i + " and ";
+			  lineSize = "big";
+			}
 		    if($('#destination_'+i).is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query1 = query1 + [
-					    " (poets_lines.other_cityid = ",
-					    i,
-					    " OR poets_lines.birth_cityid = ",
-						i,
-						") and "
-				    ].join("");
-					css1= [
-					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; }  line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_cityid=",
-					i,
-					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_cityid = ",
-					i,
-					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
-				    ].join("");
-			    }
+			  query1 = query1 + " (poets_lines.other_cityid = " + i + " OR poets_lines.birth_cityid = " + i + ") and ";
+			  lineSize = "big";
 		    }
-		    if($('#small_region_'+i).is(':checked') && i != 9) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query1 = query1 + [
-					    " (poets_lines.birth_regionid = ",
-					    i,
-					    " OR poets_lines.other_regionid = ",
-						i,
-						") and "
-				    ].join("");
-					css1= [
-					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; }  line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid=",
-					i,
-					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = ",
-					i,
-					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
-				    ].join("");
-			    }
-		    }
-			if($('#small_region_9').is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query1 = query1 + [
-					    " (poets_lines.birth_regionid = ",
-					    "9",
-					    " OR poets_lines.other_regionid = ",
-						"9",
-						") and "
-				    ].join("");
-					css1= [
-					"#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid=",
-					"9",
-					"] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = ",
-					"9",
-					"] { line-color: #fc1804; marker-fill: #fc1804; } } }"				
-				    ].join("");
-			    }
+		    if($('#small_region_'+i).is(':checked')) {
+			  query1 = query1 + " (poets_lines.birth_regionid = " + i + " OR poets_lines.other_regionid = " + i + ") and ";
+			  if(i != 9) lineSize = "big";
 		    }
 		    if($('#gov_'+i).is(':checked')) {
 			    if(firstCall == true) {
@@ -772,29 +734,21 @@
 			    }
 		    }
 	    }
-		if($('#region_1').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 7 or poets_lines.birth_regionid = 10 or poets_lines.other_regionid = 7 or poets_lines.other_regionid = 10) and ";
-		if($('#region_2').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 12 or poets_lines.other_regionid = 12 or poets_lines.birth_regionid = 11 or poets_lines.other_regionid = 11 or poets_lines.birth_regionid = 2 or poets_lines.birth_regionid = 3 or poets_lines.birth_regionid = 4 or poets_lines.birth_regionid = 9 or poets_lines.other_regionid = 2 or poets_lines.other_regionid = 3 or poets_lines.other_regionid = 4 or poets_lines.other_regionid = 9) and ";
-		if($('#region_3').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 19 or poets_lines.other_regionid = 19 or poets_lines.birth_regionid = 1 or poets_lines.birth_regionid = 8 or poets_lines.birth_regionid = 15 or poets_lines.birth_regionid = 17 or poets_lines.birth_regionid = 13 or poets_lines.other_regionid = 15 or poets_lines.other_regionid = 1 or poets_lines.other_regionid = 8 or poets_lines.other_regionid = 17 or poets_lines.other_regionid = 13) and ";
-		if($('#region_4').is(':checked')) query1 = query1 + " (poets_lines.birth_regionid = 6 or poets_lines.birth_regionid = 14 or poets_lines.birth_regionid = 16 or other_regionid = 6 or other_regionid = 14 or other_regionid = 16) and ";
+		if($('#region_1').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 1 or poets_lines.other_big_regionid = 1) and ";
+		if($('#region_2').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 2 or poets_lines.other_big_regionid = 2) and ";
+		if($('#region_3').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 3 or poets_lines.other_big_regionid = 3) and ";
+		if($('#region_4').is(':checked')) query1 = query1 + " (poets_lines.birth_big_regionid = 4 or poets_lines.other_big_regionid = 4) and ";
 		query1 = query1 + " poets_lines.poetid = dates.poetid AND (dates.date <= " + -$("#slider").rangeSlider("values").min + " AND dates.date >= " + -$("#slider").rangeSlider("values").max;
 		query1 = query1 + ")";
-		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
-		
-		if (firstCall == false) {} 
-	    else if($('#region_1').is(':checked')) {
-		  css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 7],[birth_regionid = 10] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 7],[other_regionid = 10] { line-color: #fc1804; marker-fill: #fc1804; } } }";
-		}
-	    else if($('#region_2').is(':checked')) {
-		  css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 2],[birth_regionid = 3],[birth_regionid = 4],[birth_regionid=9],[birth_regionid=11],[birth_regionid=12] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 2],[other_regionid = 3],[other_regionid = 4],[other_regionid=9],[other_regionid=11],[other_regionid=12] { line-color: #fc1804; marker-fill: #fc1804; } } }";
-		}
-	    else if($('#region_3').is(':checked')) {
-		  css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 19],[birth_regionid = 1],[birth_regionid = 8],[birth_regionid=15],[birth_regionid=17],[birth_regionid=13] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 19],[other_regionid = 15],[other_regionid = 1],[other_regionid=8],[other_regionid=17],[other_regionid=13] { line-color: #fc1804; marker-fill: #fc1804; } } }";
-		}
-	    else if($('#region_4').is(':checked')) {
-		  css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [birth_regionid = 6],[birth_regionid = 14],[birth_regionid = 16] { line-color: #551A8B; marker-fill: #551A8B; } [other_regionid = 6],[other_regionid = 14],[other_regionid = 16] { line-color: #fc1804; marker-fill: #fc1804; } } }";
-		}
-		else css1="#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }";
+		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
 
+		if(lineSize == "small") {
+		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: black; marker-fill: black; } } } ";
+		}
+		else {
+		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: black; marker-fill: black; } } } ";		  
+		}
+		
 		console.log(query1);
 		console.log(css1);
 	    sublayer1.setSQL(query1);
