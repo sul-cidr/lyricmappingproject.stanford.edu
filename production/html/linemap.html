@@ -650,7 +650,7 @@
 	  sublayer1.setInteraction(true);
 	    
 	    // choose query for lines data
-		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info, s.poets_birth_sources, s.poets_other_sources, s.travel_direction FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, ";
+		query1 = "SELECT city_city_lines.*, s.birth_city_governmentid, s.other_city_governmentid, s.count, s.poets_names, s.poets_info, s.poets_birth_sources, s.poets_other_sources, s.travel_direction, s.birth_big_regionid, s.other_big_regionid FROM city_city_lines JOIN ( SELECT s.birth_cityid, s.other_cityid, min(s.birth_big_regionid) as birth_big_regionid, min(s.other_big_regionid) as other_big_regionid, ";
 
 		firstCall = true;
 		for (i=1; i<=150; i++) {
@@ -712,28 +712,19 @@
 			  query1 = query1 + " (poets_lines.birth_big_regionid = " + i + " OR poets_lines.other_big_regionid = " + i + ") and ";
 		    }
 		    if($('#gov_'+i).is(':checked')) {
-			    if(firstCall == true) {
-				    firstCall = false;
-				    query1 = query1 + [
-					    " (poets_lines.other_city_governmentid = ",
-					    i,
-					    " OR poets_lines.birth_city_governmentid = ",
-						i,
-						" "
-				    ].join("");
-					//democracy
-					if($('#gov_3').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 ";
-					// oligarchy
-					if($('#gov_1').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";
-					// tyranny
-					if($('#gov_2').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";					
-					query1 = query1 + ") and"			
-			    }
+			  query1 = query1 + " (poets_lines.other_city_governmentid = " + i + " OR poets_lines.birth_city_governmentid = " + i + " ";
+
+			  //democracy
+			  if($('#gov_3').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 ";
+			  // oligarchy
+			  if($('#gov_1').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";
+			  // tyranny
+			  if($('#gov_2').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 9 OR poets_lines.birth_city_governmentid = 9 ";					
+			  query1 = query1 + ") and";			
 		    }
 	    }
 		query1 = query1 + " poets_lines.poetid = dates.poetid AND (dates.date <= " + -$("#slider").rangeSlider("values").min + " AND dates.date >= " + -$("#slider").rangeSlider("values").max;
-		query1 = query1 + ")";
-		query1 = query1 + ") p GROUP BY birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
+		query1 = query1 + ") ) p GROUP BY birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
 
 		if(lineSize == "small") {
 		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: black; marker-fill: black; } } } ";
@@ -749,10 +740,9 @@
 		
 	    // choose query for cities data
 	    query2 = "SELECT c.* FROM cities as c, (" + query1 + ") selected_lines where (c.cityid = selected_lines.birth_cityid or c.cityid = selected_lines.other_cityid) ";
-		if($('#region_1').is(':checked')) query2 = query2 + " and (c.regionid = 7 or c.regionid = 10)";
-		if($('#region_2').is(':checked')) query2 = query2 + " and (c.regionid = 2 or c.regionid = 3 or c.regionid = 4 or c.regionid = 9 or c.regionid=11 or c.regionid=12)";
-		if($('#region_3').is(':checked')) query2 = query2 + " and (c.regionid = 1 or c.regionid = 8 or c.regionid = 15 or c.regionid = 17 or c.regionid = 13 or c.regionid = 19)";
-		if($('#region_4').is(':checked')) query2 = query2 + " and (c.regionid = 6 or c.regionid = 14 or c.regionid = 16)";	 
+		for(i=1; i <= 4; i++) {
+		  if($('#region_'+i).is(':checked')) query2 = query2 + " and (selected_lines.birth_big_regionid = " + i + " or selected_lines.other_big_regionid = " + i + ")";
+		}
 		 
 	    console.log(query2);
 	    sublayer2.setSQL(query2); 	  
