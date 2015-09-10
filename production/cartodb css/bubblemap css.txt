@@ -1,8 +1,4 @@
 /** bubble visualization */
-Map {
-  buffer-size: 300;
-}
-
 #cities{
   marker-fill: #B81609;
   marker-line-color: #FFF;
