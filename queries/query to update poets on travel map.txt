@@ -1,0 +1,15 @@
+select
+string_agg(E'\t\t' || '<input type="radio" value="0" name="city" id="poet_' || a.poetid || '">' || E'\n\t\t' || '<label for="poet_' || a.poetid || '" class="instrument-picker-label">' || a.poet_name || '</label>', E'\n\n'),
+1 as bs from
+(SELECT
+a.poet_name,
+a.poetid
+FROM
+(SELECT 
+			poet_name,
+ 			poetid
+			FROM poets_lines
+) a
+group by poet_name, poetid
+order by poet_name asc) a
+group by bs
