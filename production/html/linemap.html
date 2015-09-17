@@ -508,7 +508,7 @@
     
     <div class="buttonContainer" style="background: white;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>/<span style="color: #ffbf00;">within</span>): </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
 
         <input type="radio" value="0" name="city" id="region_1">
         <label for="region_1" class="genre-picker-label">Magna Graecia</label>
@@ -527,7 +527,7 @@
 	
     <div class="buttonContainer" style="background: white; height: 100px;">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
-        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SMALL GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>/<span style="color: #ffbf00;">within</span>): </div>
+        <div style="color:gray;padding-right:5px;display: inline-block;margin-top: 3px;" >SMALL GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
 
 		<input type="radio" value="0" name="city" id="small_region_2">
         <label for="small_region_2" class="genre-picker-label">Attica</label>
@@ -668,15 +668,15 @@
 		for (i=1; i<=150; i++) {
 		  if($('#region_'+i).is(':checked')) {
 			firstCall = false;
-			query1 = query1 + "case when min(s.birth_big_regionid) = " + i + " and min(s.other_big_regionid) = " + i + " then 3 when min(s.birth_big_regionid) = " + i + " and (min(s.other_big_regionid) != " + i + " or min(s.other_big_regionid) is null) then 1 when (min(s.birth_big_regionid) != " + i + " or min(s.birth_big_regionid) is null) and min(s.other_big_regionid) = " + i + " then 2 end as travel_direction, ";
+			query1 = query1 + "case when min(s.birth_big_regionid) = " + i + " and min(s.other_big_regionid) = " + i + " then 1 when min(s.birth_big_regionid) = " + i + " and (min(s.other_big_regionid) != " + i + " or min(s.other_big_regionid) is null) then 1 when (min(s.birth_big_regionid) != " + i + " or min(s.birth_big_regionid) is null) and min(s.other_big_regionid) = " + i + " then 2 end as travel_direction, ";
 		  }
 		  if($('#small_region_'+i).is(':checked')) {
 			firstCall = false;
-			query1 = query1 + "case when min(s.birth_regionid) = " + i + " and min(s.other_regionid) = " + i + " then 3 when min(s.birth_regionid) = " + i + " and (min(s.other_regionid) != " + i + " or min(s.other_regionid) is null) then 1 when (min(s.birth_regionid) != " + i + " or min(s.birth_regionid) is null) and min(s.other_regionid) = " + i + " then 2 end as travel_direction, ";
+			query1 = query1 + "case when min(s.birth_regionid) = " + i + " and min(s.other_regionid) = " + i + " then 1 when min(s.birth_regionid) = " + i + " and (min(s.other_regionid) != " + i + " or min(s.other_regionid) is null) then 1 when (min(s.birth_regionid) != " + i + " or min(s.birth_regionid) is null) and min(s.other_regionid) = " + i + " then 2 end as travel_direction, ";
 		  }
 		  if($('#destination_'+i).is(':checked')) {
 			firstCall = false;
-			query1 = query1 + "case when min(s.birth_cityid) = " + i + " and min(s.other_cityid) = " + i + " then 3 when min(s.birth_cityid) = " + i + " and (min(s.other_cityid) != " + i + " or min(s.other_cityid) is null) then 1 when (min(s.birth_cityid) != " + i + " or min(s.birth_cityid) is null) and min(s.other_cityid) = " + i + " then 2 end as travel_direction, ";
+			query1 = query1 + "case when min(s.birth_cityid) = " + i + " and min(s.other_cityid) = " + i + " then 1 when min(s.birth_cityid) = " + i + " and (min(s.other_cityid) != " + i + " or min(s.other_cityid) is null) then 1 when (min(s.birth_cityid) != " + i + " or min(s.birth_cityid) is null) and min(s.other_cityid) = " + i + " then 2 end as travel_direction, ";
 		  }
 		  if($('#gov_'+i).is(':checked')) {
 			firstCall = false;
