@@ -1,5 +1,5 @@
 <div class="cartodb-tooltip-content-wrapper">
   <div class="cartodb-tooltip-content">
-    <p>{{birth_city_name}} <nobr>-></nobr> {{other_city_name}}</p>
+    <p>{{birth_infowindow_name}} <nobr>-></nobr> {{other_infowindow_name}}</p>
   </p>
 </div>

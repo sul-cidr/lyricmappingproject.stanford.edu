@@ -4,21 +4,25 @@ this works to create curved lines.
 
 SELECT
 lines.birth_city_name,
+lines.birth_infowindow_name,
 lines.birth_cityid,
 lines.birth_regionid,
 lines.other_city_name,
+lines.other_infowindow_name,
 lines.other_cityid,
 lines.other_regionid,
 lines.the_geom,
 lines.arrow_angle
 FROM
 	(SELECT birth_cities.poet_name,
+	birth_cities.infowindow_name as birth_infowindow_name,
 	birth_cities.poetid,
 	birth_cities.regionid as birth_regionid,
 	birth_cities.city_name as birth_city_name,
 	birth_cities.cityid as birth_cityid,
 	birth_cities.poet_link,
 	other_cities.city_name as other_city_name,
+	other_cities.infowindow_name as other_infowindow_name,
 	other_cities.cityid as other_cityid,
 	other_cities.regionid as other_regionid,
 	other_cities.sources,
@@ -46,7 +50,8 @@ FROM
 		birth_cities_with_real_city_name.poet_link,
 		birth_cities_with_real_city_name.city_name,
 		birth_cities_with_real_city_name.the_geom,
-		birth_cities_with_real_city_name.the_geom_webmercator
+		birth_cities_with_real_city_name.the_geom_webmercator,
+		birth_cities_with_real_city_name.infowindow_name
 		FROM
 		
 			(SELECT 
@@ -57,7 +62,8 @@ FROM
 			cities.city_name,
 			cities.regionid,
 			cities.the_geom,
-			cities.the_geom_webmercator
+			cities.the_geom_webmercator,
+			cities.infowindow_name
 			FROM cities,
 				(SELECT 
 				poets.poet_name,
@@ -91,7 +97,8 @@ FROM
 		cities.city_name,
 		cities.regionid,
 		cities.the_geom,
-		cities.the_geom_webmercator
+		cities.the_geom_webmercator,
+		cities.infowindow_name
 		FROM cities, (SELECT 
 				poets.poet_name,
 				poets_cities.cityid,
@@ -109,6 +116,8 @@ GROUP BY
 lines.birth_city_name,
 lines.birth_cityid,
 lines.birth_regionid,
+lines.birth_infowindow_name,
+lines.other_infowindow_name,
 lines.other_city_name,
 lines.other_cityid,
 lines.other_regionid,
