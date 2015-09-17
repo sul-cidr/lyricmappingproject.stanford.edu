@@ -26,19 +26,23 @@ FROM
 	other_cities.cityid as other_cityid,
 	other_cities.regionid as other_regionid,
 	other_cities.sources,
-	ST_CurvetoLine(ST_GeomFromText('CIRCULARSTRING(' ||
-		st_x(birth_cities.the_geom) ||
-		' ' ||
-		st_y(birth_cities.the_geom) ||
-		', ' ||
-		st_x(st_centroid(ST_OffsetCurve(ST_Makeline(other_cities.the_geom, birth_cities.the_geom), st_length(ST_Makeline(other_cities.the_geom, birth_cities.the_geom))/20, 'quad_segs=4 join=bevel'))) ||
-		' ' ||
-		st_y(st_centroid(ST_OffsetCurve(ST_Makeline(other_cities.the_geom, birth_cities.the_geom), st_length(ST_Makeline(other_cities.the_geom, birth_cities.the_geom))/20, 'quad_segs=4 join=bevel'))) ||
-		', ' ||
-		st_x(other_cities.the_geom) ||
-		' ' ||
-		st_y(other_cities.the_geom) ||
-		')',4326)) AS the_geom,
+	ST_CurvetoLine(
+		ST_GeomFromText(
+			'CIRCULARSTRING(' ||
+				st_x(birth_cities.the_geom) ||
+				' ' ||
+				st_y(birth_cities.the_geom) ||
+				', ' ||
+				st_x(st_centroid(ST_OffsetCurve(ST_Makeline(other_cities.the_geom, birth_cities.the_geom), st_length(ST_Makeline(other_cities.the_geom, birth_cities.the_geom))/20, 'quad_segs=4 join=bevel'))) ||
+				' ' ||
+				st_y(st_centroid(ST_OffsetCurve(ST_Makeline(other_cities.the_geom, birth_cities.the_geom), st_length(ST_Makeline(other_cities.the_geom, birth_cities.the_geom))/20, 'quad_segs=4 join=bevel'))) ||
+				', ' ||
+				st_x(other_cities.the_geom) ||
+				' ' ||
+				st_y(other_cities.the_geom) ||
+			')'
+		,4326)
+	,1000) AS the_geom,
 	degrees(ST_Azimuth(birth_cities.the_geom, other_cities.the_geom)) as arrow_angle
 	FROM
 	
