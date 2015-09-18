@@ -857,13 +857,12 @@
         .done(function(vis, layers) {
 	  // layer 0 is the base layer, layer 1 is cartodb layer
 	  
-	  // remove 'Improve this Map' from the mapbox credits
+	  // change attribution to us
 	  var map = vis.getNativeMap();
-	  var currentAttribution = layers[0].getAttribution();
-	  map.attributionControl.removeAttribution(currentAttribution);
-	  map.attributionControl.addAttribution('<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy; Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap</a>');
-	  // cartodb attribution on layers[1].getAttribution(); and can be removed the same way.
-	  
+	  map.attributionControl.removeAttribution(layers[0].getAttribution());
+	  map.attributionControl.removeAttribution(layers[1].getAttribution());
+	  map.attributionControl.addAttribution('<i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i> D. Driscoll, I. McMullin, S. Sansom, A.-E. Peponi.');
+
 	  var sublayer = layers[1].getSubLayer(0);
 	  var sublayer2;
 	  var poetid = getParameterByName("poetid");
