@@ -668,15 +668,15 @@
 		for (i=1; i<=150; i++) {
 		  if($('#region_'+i).is(':checked')) {
 			firstCall = false;
-			query1 = query1 + "case when min(s.birth_big_regionid) = " + i + " and min(s.other_big_regionid) = " + i + " then 1 when min(s.birth_big_regionid) = " + i + " and (min(s.other_big_regionid) != " + i + " or min(s.other_big_regionid) is null) then 1 when (min(s.birth_big_regionid) != " + i + " or min(s.birth_big_regionid) is null) and min(s.other_big_regionid) = " + i + " then 2 end as travel_direction, ";
+			query1 = query1 + "case when min(s.birth_big_regionid) = " + i + " and min(s.other_big_regionid) = " + i + " then 2 when min(s.birth_big_regionid) = " + i + " and (min(s.other_big_regionid) != " + i + " or min(s.other_big_regionid) is null) then 1 when (min(s.birth_big_regionid) != " + i + " or min(s.birth_big_regionid) is null) and min(s.other_big_regionid) = " + i + " then 2 end as travel_direction, ";
 		  }
 		  if($('#small_region_'+i).is(':checked')) {
 			firstCall = false;
-			query1 = query1 + "case when min(s.birth_regionid) = " + i + " and min(s.other_regionid) = " + i + " then 1 when min(s.birth_regionid) = " + i + " and (min(s.other_regionid) != " + i + " or min(s.other_regionid) is null) then 1 when (min(s.birth_regionid) != " + i + " or min(s.birth_regionid) is null) and min(s.other_regionid) = " + i + " then 2 end as travel_direction, ";
+			query1 = query1 + "case when min(s.birth_regionid) = " + i + " and min(s.other_regionid) = " + i + " then 2 when min(s.birth_regionid) = " + i + " and (min(s.other_regionid) != " + i + " or min(s.other_regionid) is null) then 1 when (min(s.birth_regionid) != " + i + " or min(s.birth_regionid) is null) and min(s.other_regionid) = " + i + " then 2 end as travel_direction, ";
 		  }
 		  if($('#destination_'+i).is(':checked')) {
 			firstCall = false;
-			query1 = query1 + "case when min(s.birth_cityid) = " + i + " and min(s.other_cityid) = " + i + " then 1 when min(s.birth_cityid) = " + i + " and (min(s.other_cityid) != " + i + " or min(s.other_cityid) is null) then 1 when (min(s.birth_cityid) != " + i + " or min(s.birth_cityid) is null) and min(s.other_cityid) = " + i + " then 2 end as travel_direction, ";
+			query1 = query1 + "case when min(s.birth_cityid) = " + i + " and min(s.other_cityid) = " + i + " then 2 when min(s.birth_cityid) = " + i + " and (min(s.other_cityid) != " + i + " or min(s.other_cityid) is null) then 1 when (min(s.birth_cityid) != " + i + " or min(s.birth_cityid) is null) and min(s.other_cityid) = " + i + " then 2 end as travel_direction, ";
 		  }
 		  if($('#gov_'+i).is(':checked')) {
 			firstCall = false;
