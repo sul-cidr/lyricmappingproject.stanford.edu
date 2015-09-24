@@ -46,7 +46,7 @@ FROM
 	case  
 		when birth_cities.regionid = 7 or birth_cities.regionid = 10 then 1
 		when birth_cities.regionid = 22 or birth_cities.regionid = 20 or birth_cities.regionid = 19 or birth_cities.regionid = 12 or birth_cities.regionid = 11 or birth_cities.regionid = 2 or birth_cities.regionid = 3 or birth_cities.regionid = 4 or birth_cities.regionid = 9 then 2
-		when birth_cities.regionid = 18 or birth_cities.regionid = 1 or birth_cities.regionid = 8 or birth_cities.regionid = 15 or birth_cities.regionid = 17 or birth_cities.regionid = 13 then 3
+		when birth_cities.regionid = 1 or birth_cities.regionid = 8 or birth_cities.regionid = 15 or birth_cities.regionid = 17 or birth_cities.regionid = 13 then 3
 		when birth_cities.regionid = 26 or birth_cities.regionid = 23 or birth_cities.regionid = 6 or birth_cities.regionid = 14 or birth_cities.regionid = 16 then 4
 		end
 		 as birth_big_regionid,
@@ -66,7 +66,7 @@ FROM
 	case  
 		when other_cities.regionid = 7 or other_cities.regionid = 10 then 1
 		when other_cities.regionid = 22 or other_cities.regionid = 20 or other_cities.regionid = 19 or other_cities.regionid = 12 or other_cities.regionid = 11 or other_cities.regionid = 2 or other_cities.regionid = 3 or other_cities.regionid = 4 or other_cities.regionid = 9 then 2
-		when other_cities.regionid = 18 or other_cities.regionid = 1 or other_cities.regionid = 8 or other_cities.regionid = 15 or other_cities.regionid = 17 or other_cities.regionid = 13 then 3
+		when other_cities.regionid = 1 or other_cities.regionid = 8 or other_cities.regionid = 15 or other_cities.regionid = 17 or other_cities.regionid = 13 then 3
 		when other_cities.regionid = 26 or other_cities.regionid = 23 or other_cities.regionid = 6 or other_cities.regionid = 14 or other_cities.regionid = 16 then 4
 		end
 		 as other_big_regionid,
