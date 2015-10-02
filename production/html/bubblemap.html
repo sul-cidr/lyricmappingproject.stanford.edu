@@ -142,8 +142,12 @@
   </div>
   <!-- end of controlbar div    -->
   
-  <div id="corner_popup" class="corner_popup_content">
+  <div id="corner_popup" class="corner_popup_content" >
 	Places map Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  </div>
+  
+  <div id="attribution" class="attribution" style="position: absolute; bottom: 0; right: 0;">
+	<span style="color: white; text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey;"><i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i> D. Driscoll, I. McMullin, S. Sansom, A.-E. Peponi.</span>
   </div>
 	
     <!-- include google maps library *before* load cartodb.js -->
@@ -445,7 +449,6 @@
 			var map = vis.getNativeMap();
 			map.attributionControl.removeAttribution(layers[0].getAttribution());
 			map.attributionControl.removeAttribution(layers[1].getAttribution());
-			map.attributionControl.addAttribution('<span style="color: gray; font-size: 125%; background: rgba(255,255,255,0);"><i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i> D. Driscoll, I. McMullin, S. Sansom, A.-E. Peponi.</span>');
 			
 			var query = "SELECT cities.*, 1 as selected_number, '' as selected_names, '' as selected_sources, '' as relationship_text FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
 			
