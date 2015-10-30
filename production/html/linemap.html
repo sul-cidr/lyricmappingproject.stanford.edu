@@ -149,8 +149,8 @@
 		<input type="radio" value="0" name="city" id="poet_153">
 		<label for="poet_153" class="instrument-picker-label">Melampus</label>
 
-		<input type="radio" value="0" name="city" id="poet_1">
-		<label for="poet_1" class="instrument-picker-label">Melanippides</label>
+		<input type="radio" value="0" name="city" id="poet_158">
+		<label for="poet_158" class="instrument-picker-label">Melanippides</label>
 
 		<input type="radio" value="0" name="city" id="poet_156">
 		<label for="poet_156" class="instrument-picker-label">Meletos, the elder</label>
@@ -697,7 +697,16 @@
 			  query1 = query1 + " || '<br>Governments (data from Hansen and Nielsen): ' || s.grouped_government ";
 			}
 		}
-		query1 = query1 + " || '<br>Dates: ' || s.date_names || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '<nobr>-></nobr>' || other_city_government, ', ') AS grouped_government, ";
+		query1 = query1 + " || '<br>Dates: ' || s.date_names ";
+		
+		govCall = false;
+		for(i=1; i<=10; i++) {
+		    if($('#gov_'+i).is(':checked')) {
+			  govCall = true;
+			}
+		}
+		if(govCall == false) query1 = query1 + " || '<br>Genre(s): ' || s.genre_names || '<br>Source(s): ' || s.sources ";
+		query1 = query1 + " , '</p>' ORDER BY s.poets_cities_rank)) AS poets_info, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.birth_source_citation || ': \"' || s.birth_source_translation || '\" \(trans. ' || s.birth_source_translator || '\)<br>' || s.birth_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_birth_sources, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name || '<br>' || s.other_source_citation || ': \"' || s.other_source_translation || '\" \(trans. ' || s.other_source_translator || '\)<br>' || s.other_source_greektext , '</p>' ORDER BY s.poets_cities_rank)) AS poets_other_sources FROM ( SELECT birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, sources, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work, COALESCE(instrument_names, 'Unknown') AS instrument_names, COALESCE(genre_names, 'Unknown') AS genre_names, string_agg(birth_city_government || '<nobr>-></nobr>' || other_city_government, ', ') AS grouped_government, ";
 		
 		// democracy
 		if($('#gov_3').is(':checked')) query1 = query1 + "case min(p.birth_city_governmentid) when 10 then 3 else min(p.birth_city_governmentid) end as birth_city_governmentid, case min(p.other_city_governmentid) when 10 then 3 else min(p.other_city_governmentid) end as other_city_governmentid, ";
