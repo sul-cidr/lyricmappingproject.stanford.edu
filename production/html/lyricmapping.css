@@ -16,10 +16,10 @@ html, body, #map {
 	display: -webkit-flex;     /* NEW - Chrome */
 	display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
 	flex-direction: row;
+	background: rgba(255,255,255,0);
 }
 
 .mainlinksDiv {
-	color:white;
 	padding-top: 5px;
 	padding-bottom:5px;
 	display: flex;
@@ -35,7 +35,7 @@ html, body, #map {
 	justify-content: center;
 	text-align: center;
 	align-items: center;
-	background: white;
+	background: rgba(255,255,255,0);
 }
 
 a.mainlinks {
