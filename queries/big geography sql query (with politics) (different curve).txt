@@ -3,7 +3,7 @@ this query will create a table where every row represents one line from a birth 
 this works to create curved lines.
 this is for creating the poets_lines sheet
 
-SELECT
+SELECT DISTINCT
 lines.poet_name,
 lines.poetid,
 lines.birth_city_name,
@@ -254,9 +254,13 @@ LEFT OUTER JOIN
     all_associated_poets.poets_city_name,
     all_associated_poets.cityid,
     all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government
+   CASE min(all_associated_poets.governmentid) 
+            WHEN 10 THEN 3 
+            ELSE min(all_associated_poets.governmentid) 
+            END as governmentid,
+    string_agg(all_associated_poets.government, ', ') AS government
     FROM
+        (SELECT DISTINCT a.poets_poet_name, a.poetid, a.poets_city_name, a.cityid, a.relationshipid, a.governmentid, a.government FROM
         (SELECT
             poets_cities.poets_poet_name,
             poets_cities.poetid,
@@ -271,19 +275,17 @@ LEFT OUTER JOIN
             (SELECT * FROM city_politics) government_cities
             WHERE poets_cities.cityid = government_cities.cityid
             AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3)
-        ) all_associated_poets,
+        ) a,
         dates
-    WHERE all_associated_poets.poetid = dates.poetid
+    WHERE a.poetid = dates.poetid
     AND
-    all_associated_poets.government_date = dates.date
+    a.government_date = dates.date) all_associated_poets
     GROUP BY
     all_associated_poets.poets_poet_name,
     all_associated_poets.poetid,
     all_associated_poets.poets_city_name,
     all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government) politics_bound_poets
+    all_associated_poets.relationshipid) politics_bound_poets
 
 ON lines.other_cityid = politics_bound_poets.cityid AND lines.poetid = politics_bound_poets.poetid
 
@@ -294,10 +296,13 @@ LEFT OUTER JOIN
     all_associated_poets.poetid,
     all_associated_poets.poets_city_name,
     all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government
+    CASE min(all_associated_poets.governmentid) 
+            WHEN 10 THEN 3 
+            ELSE min(all_associated_poets.governmentid) 
+            END as governmentid,
+    string_agg(all_associated_poets.government, ', ') AS government
     FROM
+    	(SELECT DISTINCT a.poets_poet_name, a.poetid, a.poets_city_name, a.cityid, a.relationshipid, a.governmentid, a.government FROM
         (SELECT
             poets_cities.poets_poet_name,
             poets_cities.poetid,
@@ -312,18 +317,16 @@ LEFT OUTER JOIN
             (SELECT * FROM city_politics) government_cities
             WHERE poets_cities.cityid = government_cities.cityid
             AND (poets_cities.relationshipid = 1)
-        ) all_associated_poets,
+        ) a,
         dates
-    WHERE all_associated_poets.poetid = dates.poetid
+    WHERE a.poetid = dates.poetid
     AND
-    all_associated_poets.government_date = dates.date
+    a.government_date = dates.date) all_associated_poets
     GROUP BY
     all_associated_poets.poets_poet_name,
     all_associated_poets.poetid,
     all_associated_poets.poets_city_name,
     all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-    all_associated_poets.governmentid,
-    all_associated_poets.government) politics_origin_poets
+    all_associated_poets.relationshipid) politics_origin_poets
 
 ON lines.birth_cityid = politics_origin_poets.cityid AND lines.poetid = politics_origin_poets.poetid
