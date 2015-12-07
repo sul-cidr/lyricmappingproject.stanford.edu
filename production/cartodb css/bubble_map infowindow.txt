@@ -3,7 +3,7 @@
   <div class="cartodb-popup-content-wrapper">
     <div class="cartodb-popup-content">
       <h2 style="color:#AAAAAA">{{infowindow_name}}</h2>
-      <h4 style="color:#AAAAAA">{{relationship_text}} in {{city_name}}</h4>
+      <h4 style="color:#AAAAAA">{{relationship_text_1}} {{city_name}} {{relationship_text_2}}</h4>
       <p>{{{selected_names}}}</span></p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{selected_sources}}}</p>
