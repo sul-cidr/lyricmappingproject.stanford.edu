@@ -9,6 +9,26 @@ html, body, #map {
   max-width: none;
 }
 
+.home {
+	position: absolute;
+	top: 90px;
+	left: 20px;
+	width: 28px;
+	height: 28px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 4px 2px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 4px 2px;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 4px 2px;
+	background:white url("assets/android-home-512px.svg") no-repeat center center;
+	background-size: 22px 22px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #999999;
+	z-index: 105;
+}
+
 #modeSelection {
 	display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
 	display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
