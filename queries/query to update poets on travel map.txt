@@ -11,5 +11,5 @@ FROM
 			FROM poets_lines
 ) a
 group by poet_name, poetid
-order by poet_name asc) a
+order by (poetid = 18) ASC, poet_name asc) a
 group by bs
