@@ -429,15 +429,17 @@
 		  query = query + ") ) place_players ORDER BY place_players.cityid, place_players.poet_name) r WHERE cities.cityid = r.cityid GROUP BY r.cityid, cities.city_name) joined_cities WHERE cities.cityid = joined_cities.cityid GROUP BY cities.cityid, cities.cartodb_id, cities.the_geom, cities.the_geom_webmercator, cities.infowindow_name";
 		}
 		else {
-		  query = "SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities ";
-
-		  for (i=2; i <= 35; i++) {		
-			  if($('#genre_'+i).is(':checked') && i != 30 && i != 31 && i != 32) {
-					  query = query + " || '<br><br>Genre Citation: ' || rank_players.g_source_citation || ': \"' || rank_players.g_source_translation || '\" (trans. ' || rank_players.g_source_translator || ')<br>' || rank_players.g_source_greektext ";
+			firstCall = true;
+			for (i=2; i <= 35; i++) {		
+			  if($('#genre_'+i).is(':checked')) {
+					  query = "SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source: ' || rank_players.g_source_citation || ': \"' || rank_players.g_source_translation || '\" (trans. ' || rank_players.g_source_translator || ')<br>' || rank_players.g_source_greektext , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
+					  firstCall = false;
 			  }
 		  }
-		  
-		  query = query + " || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
+		  if(firstCall==true) {
+			  query = "SELECT cities.*, Count(rank_players.cityid) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name, ', ' order BY rank_players.poets_cities_rank)) AS selected_names, string_agg(rank_players.poet_link, ', ') AS selected_links, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>Genre(s): ' || rank_players.genre_names || '<br>Source(s): ' || rank_players.sources || '<br><a href=\"javascript:ReverseDisplay(''citation' || rank_players.poets_cities_rank || ''')\">Citation</a>' || '<br><span id=\"citation' || rank_players.poets_cities_rank || '\" style=\"display:none;\">' || rank_players.source_citation || ': \"' || rank_players.source_translation || '\" (trans. ' || rank_players.source_translator || ')<br>' || rank_players.source_greektext || rank_players.alternative_birth_cities || '</span>' , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources, ";
+
+		  }
   
 		  //add relationship text based on what's selected		  
 		  if ($('#genre_2').is(':checked')) query = query + "'Poets associated with dithyramb who were born' as relationship_text ";
