@@ -7,9 +7,9 @@
       <p>{{{poets_names}}}</p>
       <h4 style="color:#AAAAAA">Details</h4>
       {{{poets_info}}}</p>
-      <h4 style="color:#AAAAAA">Origin Sources</h4>
+      <h4 style="color:#AAAAAA">Origin Source</h4>
       {{{poets_birth_sources}}}</p>
-      <h4 style="color:#AAAAAA">Activity Sources</h4>
+      <h4 style="color:#AAAAAA">Activity Source</h4>
       {{{poets_other_sources}}}</p>
     </div>
   </div>
