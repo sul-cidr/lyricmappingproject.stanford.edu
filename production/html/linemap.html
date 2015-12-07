@@ -723,7 +723,7 @@
 	    for (i=1; i <= 300; i++) {		
 		    if($('#poet_'+i).is(':checked')) {
 			  query1 = query1 + " poets_lines.poetid = " + i + " and ";
-			  lineSize = "small";
+			  lineSize = "medium";
 			}
 		    if($('#destination_'+i).is(':checked')) {
 			  query1 = query1 + " (poets_lines.other_cityid = " + i + " OR poets_lines.birth_cityid = " + i + ") and ";
@@ -731,7 +731,7 @@
 		    }
 		    if($('#small_region_'+i).is(':checked')) {
 			  query1 = query1 + " (poets_lines.birth_regionid = " + i + " OR poets_lines.other_regionid = " + i + ") and ";
-			  if(i != 9) lineSize = "big";
+			  if(i != 9) lineSize = "medium";
 		    }
 		    if($('#region_'+i).is(':checked')) {
 			  query1 = query1 + " (poets_lines.birth_big_regionid = " + i + " OR poets_lines.other_big_regionid = " + i + ") and ";
@@ -752,10 +752,13 @@
 		query1 = query1 + ") ) p GROUP BY birth_cityid, other_cityid, birth_regionid, other_regionid, birth_big_regionid, other_big_regionid, poetid, poet_name, date_names, instrument_names, sources, genre_names, birth_source_citation, birth_source_explicit, birth_source_greektext, birth_source_notes, birth_source_translation, birth_source_translator, birth_source_work, other_source_citation, other_source_explicit, other_source_greektext, other_source_notes, other_source_translation, other_source_translator, other_source_work) s GROUP BY s.birth_cityid, s.other_cityid ) s ON city_city_lines.birth_cityid = s.birth_cityid AND city_city_lines.other_cityid = s.other_cityid ";
 
 		if(lineSize == "small") {
-		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 2; [travel_direction = 3] { line-width: 3 } } line-opacity: 1.0; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-allow-overlap: true; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: #ffbf00; marker-fill: #ffbf00; } } } ";
+		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; [travel_direction = 3] { line-width: 3 } } line-opacity: 1.0; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-allow-overlap: true; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: #ffbf00; marker-fill: #ffbf00; } } } ";
+		}
+		else if(lineSize == "big") {
+		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; } line-opacity: 1.0; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-allow-overlap: true; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: #ffbf00; marker-fill: #ffbf00; } } } ";		  
 		}
 		else {
-		  css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 12; } [count<=3] { line-width: 9; } [count<=2] { line-width: 6; } [count<=1] { line-width: 3; } line-opacity: 1.0; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-allow-overlap: true; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: #ffbf00; marker-fill: #ffbf00; } } } ";		  
+			css1 = "#poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible { [count<=4] { line-width: 8; } [count<=3] { line-width: 6; } [count<=2] { line-width: 4; } [count<=1] { line-width: 2; } line-opacity: 1.0; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 10; marker-placement: point; marker-allow-overlap: true; marker-transform: rotate([arrow_angle]+90, 0, 0); [travel_direction = 1] { line-color: #551A8B; marker-fill: #551A8B; } [travel_direction = 2] { line-color: #fc1804; marker-fill: #fc1804; } [travel_direction = 3] { line-color: #ffbf00; marker-fill: #ffbf00; } } } ";
 		}
 		
 		console.log(query1);
