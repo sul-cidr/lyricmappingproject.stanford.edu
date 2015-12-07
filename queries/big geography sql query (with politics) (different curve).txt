@@ -151,7 +151,7 @@ FROM
 				poets_cities.dotted,
 				poets.poetid,
 				poets.poet_link
-				FROM poets, poets_cities 
+				FROM (select poets.* from poets, dates where poets.poetid = dates.poetid AND (dates.date <= 800 AND dates.date >= 400)) poets, poets_cities 
 				WHERE poets.poetid = poets_cities.poetid 
 				AND poets_cities.relationshipid = 1
 				) sorted_poets		
