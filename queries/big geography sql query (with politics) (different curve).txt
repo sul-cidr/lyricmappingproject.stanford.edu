@@ -1,8 +1,3 @@
-recombine tables (from this can create table which will display the lines)
-this query will create a table where every row represents one line from a birth city to a city of performance; each row will also receive the appropriate poet's name and id #, and columns containing the birth city's name and id and other city's name and id.
-this works to create curved lines.
-this is for creating the poets_lines sheet
-
 SELECT DISTINCT
 lines.poet_name,
 lines.poetid,
@@ -249,84 +244,135 @@ ON lines.poetid = info.poetid
 LEFT OUTER JOIN
 
     (SELECT
-    all_associated_poets.poets_poet_name,
+ids.poetid,
+ids.cityid,
+ids.governmentid,
+govs.government
+FROM
+(SELECT
     all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
     all_associated_poets.cityid,
-    all_associated_poets.relationshipid,
-   CASE min(all_associated_poets.governmentid) 
-            WHEN 10 THEN 3 
-            ELSE min(all_associated_poets.governmentid) 
-            END as governmentid,
+    all_associated_poets.governmentid
+    FROM
+        (SELECT DISTINCT a.poetid, a.cityid, a.governmentid FROM
+            (SELECT
+                poets_cities.poetid,
+                poets_cities.cityid,
+                city_politics.governmentid,
+                city_politics.date
+                FROM
+                poets_cities, city_politics
+                WHERE poets_cities.cityid = city_politics.cityid
+                AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3)
+            ) a,
+        dates
+        WHERE a.poetid = dates.poetid
+        AND
+        a.date = dates.date
+    ) all_associated_poets
+    GROUP BY
+    all_associated_poets.poetid,
+    all_associated_poets.cityid,
+    all_associated_poets.governmentid) ids
+
+    LEFT OUTER JOIN
+
+    (SELECT
+    all_associated_poets.poetid,
+    all_associated_poets.cityid,
     string_agg(all_associated_poets.government, ', ') AS government
     FROM
-        (SELECT DISTINCT a.poets_poet_name, a.poetid, a.poets_city_name, a.cityid, a.relationshipid, a.governmentid, a.government FROM
-        (SELECT
-            poets_cities.poets_poet_name,
-            poets_cities.poetid,
-            poets_cities.poets_city_name,
-            poets_cities.cityid,
-            poets_cities.relationshipid,
-            government_cities.governmentid,
-            government_cities.government,
-            government_cities.date as government_date
-            FROM
-            poets_cities,
-            (SELECT * FROM city_politics) government_cities
-            WHERE poets_cities.cityid = government_cities.cityid
-            AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3)
-        ) a,
+        (SELECT a.poetid, a.cityid, a.government, min(a.date) as min_date FROM
+            (SELECT
+                poets_cities.poetid,
+                poets_cities.cityid,
+                city_politics.government,
+                city_politics.date
+                FROM
+                poets_cities, city_politics
+                WHERE poets_cities.cityid = city_politics.cityid
+                AND (poets_cities.relationshipid = 2 or poets_cities.relationshipid = 3)
+            ) a,
         dates
-    WHERE a.poetid = dates.poetid
-    AND
-    a.government_date = dates.date) all_associated_poets
+        WHERE a.poetid = dates.poetid
+        AND
+        a.date = dates.date
+        group by a.poetid, a.cityid, a.government
+        order by min_date desc
+    ) all_associated_poets
     GROUP BY
-    all_associated_poets.poets_poet_name,
     all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    all_associated_poets.relationshipid) politics_bound_poets
+    all_associated_poets.cityid) govs
+
+    ON ids.poetid = govs.poetid and ids.cityid = govs.cityid
+    order by ids.cityid asc, ids.poetid asc) politics_bound_poets
 
 ON lines.other_cityid = politics_bound_poets.cityid AND lines.poetid = politics_bound_poets.poetid
 
 LEFT OUTER JOIN
 
     (SELECT
-    all_associated_poets.poets_poet_name,
-    all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    CASE min(all_associated_poets.governmentid) 
-            WHEN 10 THEN 3 
-            ELSE min(all_associated_poets.governmentid) 
-            END as governmentid,
-    string_agg(all_associated_poets.government, ', ') AS government
-    FROM
-    	(SELECT DISTINCT a.poets_poet_name, a.poetid, a.poets_city_name, a.cityid, a.relationshipid, a.governmentid, a.government FROM
-        (SELECT
-            poets_cities.poets_poet_name,
-            poets_cities.poetid,
-            poets_cities.poets_city_name,
-            poets_cities.cityid,
-            poets_cities.relationshipid,
-            government_cities.governmentid,
-            government_cities.government,
-            government_cities.date as government_date
-            FROM
-            poets_cities,
-            (SELECT * FROM city_politics) government_cities
-            WHERE poets_cities.cityid = government_cities.cityid
-            AND (poets_cities.relationshipid = 1)
-        ) a,
-        dates
-    WHERE a.poetid = dates.poetid
-    AND
-    a.government_date = dates.date) all_associated_poets
-    GROUP BY
-    all_associated_poets.poets_poet_name,
-    all_associated_poets.poetid,
-    all_associated_poets.poets_city_name,
-    all_associated_poets.cityid,
-    all_associated_poets.relationshipid) politics_origin_poets
+		ids.poetid,
+		ids.cityid,
+		ids.governmentid,
+		govs.government
+		FROM
+		(SELECT
+		    all_associated_poets.poetid,
+		    all_associated_poets.cityid,
+		    all_associated_poets.governmentid
+		    FROM
+		        (SELECT DISTINCT a.poetid, a.cityid, a.governmentid FROM
+		            (SELECT
+		                poets_cities.poetid,
+		                poets_cities.cityid,
+		                city_politics.governmentid,
+		                city_politics.date
+		                FROM
+		                poets_cities, city_politics
+		                WHERE poets_cities.cityid = city_politics.cityid
+		                AND (poets_cities.relationshipid = 1)
+		            ) a,
+		        dates
+		        WHERE a.poetid = dates.poetid
+		        AND
+		        a.date = dates.date
+		    ) all_associated_poets
+		    GROUP BY
+		    all_associated_poets.poetid,
+		    all_associated_poets.cityid,
+		    all_associated_poets.governmentid) ids
+
+		    LEFT OUTER JOIN
+
+		    (SELECT
+		    all_associated_poets.poetid,
+		    all_associated_poets.cityid,
+		    string_agg(all_associated_poets.government, ', ') AS government
+		    FROM
+		        (SELECT a.poetid, a.cityid, a.government, min(a.date) as min_date FROM
+		            (SELECT
+		                poets_cities.poetid,
+		                poets_cities.cityid,
+		                city_politics.government,
+		                city_politics.date
+		                FROM
+		                poets_cities, city_politics
+		                WHERE poets_cities.cityid = city_politics.cityid
+		                AND (poets_cities.relationshipid = 1)
+		            ) a,
+		        dates
+		        WHERE a.poetid = dates.poetid
+		        AND
+		        a.date = dates.date
+		        group by a.poetid, a.cityid, a.government
+		        order by min_date desc
+		    ) all_associated_poets
+		    GROUP BY
+		    all_associated_poets.poetid,
+		    all_associated_poets.cityid) govs
+
+		    ON ids.poetid = govs.poetid and ids.cityid = govs.cityid
+		    order by ids.cityid asc, ids.poetid asc) politics_origin_poets
 
 ON lines.birth_cityid = politics_origin_poets.cityid AND lines.poetid = politics_origin_poets.poetid
