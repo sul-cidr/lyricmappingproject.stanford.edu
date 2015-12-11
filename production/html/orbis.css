@@ -273,7 +273,6 @@ z-index: -1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   position:absolute;
   left:50%;
-  height: 100%;
   right: 0px;
   top: 30px;
   bottom: 0px;
@@ -283,6 +282,7 @@ z-index: -1;
   z-index: 99;
   min-width: 600px;
   min-height: 490px;
+  overflow: auto;
 }
 
 #insertedData {
