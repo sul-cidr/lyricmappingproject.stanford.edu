@@ -276,7 +276,7 @@
 		
 		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, sum(rank_players.poet_count) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || ': ' || rank_players.poet_count || ' reference(s)' , '<br>' order BY rank_players.poets_cities_rank)) AS selected_names, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>References:<br>' || rank_players.poet_citations , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources ";
 
-		query = query + "  FROM cities, ( SELECT grouped_players.*, rank() OVER (partition BY grouped_players.cityid ORDER BY grouped_players.poet_name ASC) AS poets_cities_rank FROM (SELECT cityid, poetid, count(cityid) as poet_count, date_names, poet_name, string_agg( source_poem || '.' || source_citation || ': \"' || source_translation || '\" (trans. ' || source_translator || ')<br>' || source_greektext , '<br><br>' ORDER BY source_poem, source_citation ) as poet_citations FROM ( SELECT genre_players.* FROM ( SELECT date_players.* FROM ( SELECT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.poet_link, poets.genre_names, poets.dates AS date_names, geographical_imaginary_group.cityid, geographical_imaginary_group.source_citation, geographical_imaginary_group.source_explicit, geographical_imaginary_group.source_greektext, geographical_imaginary_group.source_notes, geographical_imaginary_group.source_poem, geographical_imaginary_group.source_translation, geographical_imaginary_group.source_translator FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, (select geographical_imaginary_group.* from geographical_imaginary_group, ";
+		query = query + "  FROM cities, ( SELECT grouped_players.*, rank() OVER (partition BY grouped_players.cityid ORDER BY grouped_players.poet_name ASC) AS poets_cities_rank FROM (SELECT cityid, poetid, count(cityid) as poet_count, date_names, poet_name, string_agg( source_poem || '.' || source_citation || ': \"' || source_translation || '\" (trans. ' || source_translator || ')<br>' || source_greektext , '<br><br>' ORDER BY source_poem, source_citation ) as poet_citations FROM ( SELECT genre_players.* FROM ( SELECT date_players.* FROM ( SELECT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.genre_names, poets.dates AS date_names, geographical_imaginary_group.cityid, geographical_imaginary_group.source_citation, geographical_imaginary_group.source_explicit, geographical_imaginary_group.source_greektext, geographical_imaginary_group.source_notes, geographical_imaginary_group.source_poem, geographical_imaginary_group.source_translation, geographical_imaginary_group.source_translator FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, (select geographical_imaginary_group.* from geographical_imaginary_group, ";
 		
 		firstCall = true;
 		for (i=1; i <= 250; i++) {				
@@ -341,7 +341,7 @@
 		}
 		// if a genre has been selected close the query
 		if(firstCall == false) {
-			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.poet_link, place_players.cityid, place_players.date_names, place_players.genre_names, place_players.source_citation, place_players.source_explicit, place_players.source_greektext, place_players.source_notes, place_players.source_poem, place_players.source_translation, place_players.source_translator ";
+			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.cityid, place_players.date_names, place_players.genre_names, place_players.source_citation, place_players.source_explicit, place_players.source_greektext, place_players.source_notes, place_players.source_poem, place_players.source_translation, place_players.source_translator ";
 		}
 		// embed this into the next layer up
 		
@@ -371,7 +371,7 @@
 		}
 		/* if a genre has been selected close the query */
 		if(firstCall == false) {
-			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.poet_link, date_players.cityid, date_players.date_names, date_players.genre_names ";
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.cityid, date_players.date_names, date_players.genre_names ";
 		}
 		/* if no genre selected pass all of dates up unaltered */
 		
@@ -404,7 +404,7 @@
 		}
 		/* if an instrument has been selected close the call */
 		if(firstCall == false) {
-			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.poet_link, genre_players.sources, genre_players.cityid, genre_players.date_names, genre_players.genre_names ";
+			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.sources, genre_players.cityid, genre_players.date_names, genre_players.genre_names ";
 		}
 		/* if no instrument selected pass up genre players unaltered */		
 		
