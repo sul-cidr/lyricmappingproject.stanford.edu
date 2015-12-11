@@ -306,22 +306,3 @@ z-index: -1;
 #essayCloseButton:hover {
   color:black;
 }
-
-#essayContent h4 {
-  margin: 20px 0 10px;
-  }
-
-
-#lcolo2 {
-  width: 40%;
-  left: 5%;
-  position: absolute;
-  font-size:16px;
-}
-
-#rcolo2 {
-  width: 40%;
-  position: absolute;
-  left: 55%%
-  font-size:16px;
-}
