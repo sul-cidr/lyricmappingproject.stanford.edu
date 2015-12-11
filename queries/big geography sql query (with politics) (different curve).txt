@@ -11,7 +11,6 @@ lines.other_regionid,
 lines.other_big_regionid,
 lines.the_geom,
 lines.sources,
-lines.poet_link,
 lines.arrow_angle,
 lines.birth_source_citation,
 lines.birth_source_explicit,
@@ -54,7 +53,6 @@ FROM
 		as dotted,
 	birth_cities.city_name as birth_city_name,
 	birth_cities.cityid as birth_cityid,
-	birth_cities.poet_link,
 	birth_cities.source_citation as birth_source_citation,
 	birth_cities.source_explicit as birth_source_explicit,
 	birth_cities.source_greektext as birth_source_greektext,
@@ -101,7 +99,6 @@ FROM
 		birth_cities_with_real_city_name.cityid,
 		birth_cities_with_real_city_name.regionid,
 		birth_cities_with_real_city_name.poetid,
-		birth_cities_with_real_city_name.poet_link,
 		birth_cities_with_real_city_name.source_citation,
 		birth_cities_with_real_city_name.source_explicit,
 		birth_cities_with_real_city_name.source_greektext,
@@ -119,7 +116,6 @@ FROM
 			sorted_poets.poet_name,
 			sorted_poets.cityid,
 			sorted_poets.poetid,
-			sorted_poets.poet_link,
 			sorted_poets.source_citation,
 			sorted_poets.source_explicit,
 			sorted_poets.source_greektext,
@@ -144,8 +140,7 @@ FROM
 				poets_cities.source_translator,
 				poets_cities.source_work,
 				poets_cities.dotted,
-				poets.poetid,
-				poets.poet_link
+				poets.poetid
 				FROM (select poets.* from poets, dates where poets.poetid = dates.poetid AND (dates.date <= 800 AND dates.date >= 400)) poets, poets_cities 
 				WHERE poets.poetid = poets_cities.poetid 
 				AND poets_cities.relationshipid = 1
