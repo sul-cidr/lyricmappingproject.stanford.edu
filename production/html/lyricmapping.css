@@ -96,3 +96,13 @@ a.mainlinks {
 	-ms-flex: 1;              /* IE 10 */
 	flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */	
 }
+
+.intro-box-two-columns {
+   -webkit-column-count: 2;
+      -moz-column-count: 2;
+           column-count: 2;
+
+   -webkit-column-gap: 20px;
+      -moz-column-gap: 20px;
+           column-gap: 20px;
+}
