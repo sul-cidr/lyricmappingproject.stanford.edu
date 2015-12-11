@@ -280,7 +280,6 @@ z-index: -1;
   background: #e6e7e8;
   padding: 25px 25px 25px 40px;
   z-index: 99;
-  min-width: 600px;
   min-height: 490px;
   overflow: auto;
 }
