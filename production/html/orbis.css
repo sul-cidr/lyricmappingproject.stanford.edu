@@ -273,6 +273,7 @@ z-index: -1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   position:absolute;
   left:50%;
+  height: 100%;
   right: 0px;
   top: 30px;
   bottom: 0px;
@@ -280,7 +281,6 @@ z-index: -1;
   background: #e6e7e8;
   padding: 25px 25px 25px 40px;
   z-index: 99;
-  display: none;
   min-width: 600px;
   min-height: 490px;
 }
@@ -314,18 +314,14 @@ z-index: -1;
 
 #lcolo2 {
   width: 40%;
+  left: 5%;
   position: absolute;
-  left:1%;
   font-size:16px;
-
 }
 
 #rcolo2 {
-  top:20px;
-  position: absolute;
   width: 40%;
-  left: 53%;
+  position: absolute;
+  left: 55%%
   font-size:16px;
 }
-
-
