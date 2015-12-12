@@ -1,7 +1,3 @@
-recombine tables (from this can create table which will display the lines)
-this query will create a table where every row represents one line from a birth city to a city of performance; each row will also receive the appropriate poet's name and id #, and columns containing the birth city's name and id and other city's name and id.
-this works to create curved lines. 
-
 SELECT
 lines.birth_city_name,
 lines.birth_infowindow_name,
@@ -20,7 +16,6 @@ FROM
 	birth_cities.regionid as birth_regionid,
 	birth_cities.city_name as birth_city_name,
 	birth_cities.cityid as birth_cityid,
-	birth_cities.poet_link,
 	other_cities.city_name as other_city_name,
 	other_cities.infowindow_name as other_infowindow_name,
 	other_cities.cityid as other_cityid,
@@ -51,7 +46,6 @@ FROM
 		birth_cities_with_real_city_name.cityid,
 		birth_cities_with_real_city_name.regionid,
 		birth_cities_with_real_city_name.poetid,
-		birth_cities_with_real_city_name.poet_link,
 		birth_cities_with_real_city_name.city_name,
 		birth_cities_with_real_city_name.the_geom,
 		birth_cities_with_real_city_name.the_geom_webmercator,
@@ -62,7 +56,6 @@ FROM
 			sorted_poets.poet_name,
 			sorted_poets.cityid,
 			sorted_poets.poetid,
-			sorted_poets.poet_link,
 			cities.city_name,
 			cities.regionid,
 			cities.the_geom,
@@ -72,8 +65,7 @@ FROM
 				(SELECT 
 				poets.poet_name,
 				poets_cities.cityid,
-				poets.poetid,
-				poets.poet_link
+				poets.poetid
 				FROM poets, poets_cities 
 				WHERE poets.poetid = poets_cities.poetid 
 				AND poets_cities.relationshipid = 1
