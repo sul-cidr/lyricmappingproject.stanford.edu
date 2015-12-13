@@ -702,7 +702,7 @@
 		query1 = query1 + "Min(s.birth_city_governmentid) AS birth_city_governmentid, Min(s.other_city_governmentid) AS other_city_governmentid, Count(s.poetid) AS count, (string_agg('<span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name , ', ' order BY s.poets_cities_rank)) AS poets_names, (string_agg('<p><span style=\"color:#B81609\">' || s.poets_cities_rank || '</span>. ' || s.poet_name ";
 		for(i=1; i<=10; i++) {
 		    if($('#gov_'+i).is(':checked')) {
-			  query1 = query1 + " || '<br>Regime (data from Hansen and Nielsen): ' || birth_city_government || '<nobr>-></nobr>' || other_city_government ";
+			  query1 = query1 + " || '<br>Regime (data from Hansen and Nielsen): ' || birth_city_government || ' <nobr>-></nobr> ' || other_city_government ";
 			}
 		}
 		query1 = query1 + " || '<br>Dates: ' || s.date_names ";
@@ -797,6 +797,42 @@
 		  updateQuery(vis, layers);
 		});
     }
+
+	  function createBubbleVisualization(selectedData) {
+		var bubble =
+			['#cities{',
+			  'marker-fill: #B81609;',
+			  'marker-line-color: #FFF;',
+			  'marker-line-width: 2;',
+			  'marker-line-opacity: 1;',
+			  'marker-opacity: 0.9;',
+			  'marker-placement: point;',
+			  'marker-type: ellipse;',
+			  'marker-allow-overlap: true;',
+			  'marker-clip: false;',
+			  'marker-multi-policy: largest;',
+			  'marker-width: 5.0;',
+			'}',
+/*			'#cities::labels ', 
+			'[',selectedData,'>=8][zoom>5], ',
+			'[',selectedData,'>=2][zoom>6], ',
+			'[',selectedData,'>=1][zoom>7] ', 
+			'{',
+			'  text-name: [city_name];',
+			'  text-face-name: "Open Sans Regular";',
+			'  text-size: 15;',
+			'  text-fill: #000;',
+			'  text-allow-overlap: true;',
+			'  text-halo-fill: #FFF;',
+			'  text-halo-radius: 1;',
+			'  text-placement-type: simple;',
+			'  text-placements: "N,S,E,W,NE,SE,NW,SW,16,14,12";',
+			'  text-dy: 3;',
+			'  text-dx: 3;',
+			'}',  */
+			].join('');
+		return bubble;
+		}
 
       function getParameterByName(name) {
 	  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
