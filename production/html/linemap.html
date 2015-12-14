@@ -745,7 +745,7 @@
 			  query1 = query1 + " (poets_lines.birth_big_regionid = " + i + " OR poets_lines.other_big_regionid = " + i + ") and ";
 		    }
 		    if($('#gov_'+i).is(':checked')) {
-			  query1 = query1 + " (poets_lines.other_city_governmentid = " + i + " OR poets_lines.birth_city_governmentid = " + i + " ";
+			  query1 = query1 + " (poets_lines.other_city_governmentid != 11 OR poets_lines.birth_city_governmentid != 11) and (poets_lines.other_city_governmentid = " + i + " OR poets_lines.birth_city_governmentid = " + i + " ";
 
 			  //democracy
 			  if($('#gov_3').is(':checked')) query1 = query1 + "or poets_lines.other_city_governmentid = 10 OR poets_lines.birth_city_governmentid = 10 ";
