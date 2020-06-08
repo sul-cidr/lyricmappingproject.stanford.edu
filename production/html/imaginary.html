@@ -40,7 +40,7 @@
 		<a class="mainlinks" href="linemap.html">TRAVEL</a>
       </div>
       <div class="mainlinksDiv" style="-webkit-box-flex: 2; -moz-box-flex: 2; -webkit-flex: 2; -ms-flex: 2; flex: 2;">
-		<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="imaginary.html">GEOGRAPHICAL IMAGINARY</a>
+		<a style="border-bottom: 4px solid rgba(199,47,42,.5);" class="mainlinks" href="imaginary.html">GEOGRAPHICAL IMAGINARY</a>
       </div>
     </div>
     
@@ -69,6 +69,9 @@
 		
         <input type="radio" value="poet_97" name="city" id="poet_97">
         <label for="poet_97" class="genre-picker-label">Archilochus</label>
+
+        <input type="radio" value="poet_149" name="city" id="poet_149">
+        <label for="poet_149" class="genre-picker-label">Bacchylides (forthcoming)</label>		
 		
         <input type="radio" value="poet_101" name="city" id="poet_101">
         <label for="poet_101" class="genre-picker-label">Callinus</label>
@@ -110,7 +113,10 @@
         <label for="poet_24" class="genre-picker-label">Philoxenus of Cythera</label>
 	
         <input type="radio" value="poet_127" name="city" id="poet_127">
-        <label for="poet_127" class="genre-picker-label">Phocylides</label>		
+        <label for="poet_127" class="genre-picker-label">Phocylides</label>
+
+        <input type="radio" value="poet_149" name="city" id="poet_149">
+        <label for="poet_149" class="genre-picker-label">Pindar (forthcoming)</label>			
 	
         <input type="radio" value="poet_132" name="city" id="poet_132">
         <label for="poet_132" class="genre-picker-label">Sappho</label>
@@ -150,6 +156,9 @@
 	
         <input type="radio" value="poet_148" name="city" id="poet_148">
         <label for="poet_148" class="genre-picker-label">Xenophanes</label>
+
+        <input type="radio" value="poet_157" name="city" id="poet_157">
+        <label for="poet_157" class="genre-picker-label">Sappho/Alcaeus</label>
       </fieldset>
     </div>
        
@@ -408,6 +417,7 @@
 		
 		console.log(query);		
 		layer.setQuery(query); 
+		layer.setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { text-name: [city_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #000; text-allow-overlap: true; text-halo-fill: #FFF; text-halo-radius: 1; text-placement-type: simple; text-placements: \"N,S,E,W,NE,SE,NW,SW,16,14,12\"; text-dy: 3; text-dx: 3; }");
 	}	  
 	  
       function main() {
@@ -425,10 +435,13 @@
 			map.attributionControl.removeAttribution(layers[0].getAttribution());
 			map.attributionControl.removeAttribution(layers[1].getAttribution());
 			
-			var query = "SELECT cities.*, 1 as selected_number, '' as selected_names, '' as selected_sources, '' as government FROM cities, geographical_imaginary_group where cities.cityid=geographical_imaginary_group.cityid";
+			var query = "SELECT DISTINCT cities.*, 1 as selected_number, '' as selected_names, '' as selected_sources, '' as government FROM cities, geographical_imaginary_group where cities.cityid=geographical_imaginary_group.cityid";
+			var css = "/** bubble visualization */ #cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.5; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { text-name: [city_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #000; text-allow-overlap: true; text-halo-fill: #FFF; text-halo-radius: 1; text-placement-type: simple; text-placements: \"N,S,E,W,NE,SE,NW,SW,16,14,12\"; text-dy: 3; text-dx: 3; }";
+
 			var sublayer = layers[1].getSubLayer(0);			
 			
 			layers[1].setQuery(query);
+			layers[1].setCartoCSS(css);
 			sublayer.setInteraction(false);
 			
 			createSelector(layers[1]);

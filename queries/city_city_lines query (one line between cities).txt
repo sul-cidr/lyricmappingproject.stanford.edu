@@ -71,6 +71,7 @@ FROM
 				AND poets_cities.relationshipid = 1
 				) sorted_poets		
 			WHERE sorted_poets.cityid = cities.cityid
+			AND cities.cityid != 56
 			) birth_cities_with_real_city_name,
 			
 			(SELECT 

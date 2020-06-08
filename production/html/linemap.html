@@ -31,7 +31,7 @@
 		<a class="mainlinks" href="bubblemap.html?visited=1">PLACES</a>
       </div>
       <div class="mainlinksDiv">
-		<a style="border-bottom: 4px solid; border-bottom-color: #c72f2a;" class="mainlinks" href="linemap.html">TRAVEL</a>
+		<a style="border-bottom: 4px solid rgba(199,47,42,.5);" class="mainlinks" href="linemap.html">TRAVEL</a>
       </div>
       <div class="mainlinksDiv" style="-webkit-box-flex: 2; -moz-box-flex: 2; -webkit-flex: 2; -ms-flex: 2; flex: 2;">
 		<a class="mainlinks" href="imaginary.html">GEOGRAPHICAL IMAGINARY</a>
@@ -308,9 +308,6 @@
 		<input type="radio" value="0" name="city" id="destination_11">
 		<label for="destination_11" class="instrument-picker-label">Ephesus</label>
 
-		<input type="radio" value="0" name="city" id="destination_56">
-		<label for="destination_56" class="instrument-picker-label">Eresos</label>
-
 		<input type="radio" value="0" name="city" id="destination_50">
 		<label for="destination_50" class="instrument-picker-label">Erythrae</label>
 
@@ -500,9 +497,6 @@
 		<input type="radio" value="0" name="city" id="destination_76">
 		<label for="destination_76" class="instrument-picker-label">Thespiai</label>
 
-		<input type="radio" value="0" name="city" id="destination_34">
-		<label for="destination_34" class="instrument-picker-label">Thessaly</label>
-
 		<input type="radio" value="0" name="city" id="destination_72">
 		<label for="destination_72" class="instrument-picker-label">Thurii</label>
 
@@ -560,6 +554,9 @@
 		
         <input type="radio" value="0" name="city" id="small_region_19">
         <label for="small_region_19" class="genre-picker-label">Ionian Sea</label>
+
+        <input type="radio" value="0" name="city" id="small_region_8">
+        <label for="small_region_8" class="genre-picker-label">Lesbos</label>
 		
         <input type="radio" value="0" name="city" id="small_region_14">
         <label for="small_region_14" class="genre-picker-label">Lydia</label>
@@ -567,9 +564,6 @@
 		<input type="radio" value="0" name="city" id="small_region_11">
         <label for="small_region_11" class="genre-picker-label">Northern Greece</label>
 		
-        <input type="radio" value="0" name="city" id="small_region_8">
-        <label for="small_region_8" class="genre-picker-label">North-eastern Aegean</label>
-
         <input type="radio" value="0" name="city" id="small_region_9">
         <label for="small_region_9" class="genre-picker-label">Peloponnese</label>
 
@@ -599,7 +593,9 @@
         <label for="gov_1" class="genre-picker-label">Oligarchy</label>
 		
         <input type="radio" value="0" name="city" id="gov_2">
-        <label for="gov_2" class="genre-picker-label">Tyranny</label>		
+        <label for="gov_2" class="genre-picker-label">Tyranny</label>
+
+        <label class="genre-picker-label" style="cursor: auto">[Mapping in Progress]</label>		
 	
       </fieldset>
     </div></div>
@@ -863,7 +859,7 @@
 	  var css = createBubbleVisualization("selected_number");
 
 	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, '' as poets_birth_sources, '' as poets_other_sources, 1 as count from city_city_lines");
-	  layers[1].setCartoCSS("/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.7; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
+	  layers[1].setCartoCSS("/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.3; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-opacity: 0.3; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
 	  sublayer.setInteraction(false);
 	  
 	  layers[1].createSubLayer({sql: query, cartocss: css } );

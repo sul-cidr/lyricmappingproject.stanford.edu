@@ -1,3 +1,5 @@
+you may need to remove Thessaly by hand from these results.
+
 select
 string_agg(E'\t\t' || '<input type="radio" value="0" name="city" id="destination_' || a.cityid || '">' || E'\n\t\t' || '<label for="destination_' || a.cityid || '" class="instrument-picker-label">' || a.city_name || '</label>', E'\n\n'),
 1 as bs from
