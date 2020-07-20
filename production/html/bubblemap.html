@@ -12,7 +12,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 
 	
-	    <!--Custom html for the infowindow customization-->
+	<!--Custom html for the infowindow customization-->
     <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
     <!--Content.data contains the field info-->
 	<!--Content.data is determined by the UI on the cartodb webpage.-->
@@ -28,9 +28,8 @@
 <body>
 
   <div id="essayBox">
-    <div id="essayTitle" onclick="closeEssay()"></div>
-    <div id="essayContent">
-    </div>
+    <div id="essayTitle" onclick="closeEssay()">HELP BOX</div>
+    <div id="essayContent"></div>
     <div id="essayCloseButton" onclick="closeEssay()" >X</div>
     <div style="width:100%;height:100%;" onclick="closeEssay()">
     </div>
@@ -58,7 +57,7 @@
         <div style="color:black;padding-right:5px;display: inline-block;margin-top: 3px; font-weight: bold;" >PLACE OF: </div>
         <input type="radio" value="0" name="city" id="relationship_1">
         <label for="relationship_1" class="priority-picker-label">ORIGIN</label>
-        <input type="radio" value="1" name="city" id="relationship_3">
+        <input type="radio" value="1" name="city" id="relationship_3" checked>
         <label for="relationship_3" class="priority-picker-label">ACTIVITY</label>
       </fieldset>
     </div>
@@ -634,11 +633,7 @@
 			map.attributionControl.removeAttribution(layers[0].getAttribution());
 			map.attributionControl.removeAttribution(layers[1].getAttribution());
 			
-			var query = "SELECT DISTINCT cities.*, 1 as selected_number, '' as selected_names, '' as selected_sources, '' as relationship_text_1, '' as relationship_text_2 FROM cities, poets_cities where cities.cityid = poets_cities.cityid";
-			var css = "/** bubble visualization */ #cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.5; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { text-name: [city_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #000; text-allow-overlap: true; text-halo-fill: #FFF; text-halo-radius: 1; text-placement-type: simple; text-placements: \"N,S,E,W,NE,SE,NW,SW,16,14,12\"; text-dy: 3; text-dx: 3; }";
-			
-			layers[1].setQuery(query);
-			layers[1].setCartoCSS(css);
+		  	updateQuery(layers[1], $("#slider").rangeSlider("values"));
 			layers[1].setInteraction(false);
 			
 			createSelector(layers[1]);

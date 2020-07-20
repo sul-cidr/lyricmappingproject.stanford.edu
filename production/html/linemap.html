@@ -41,7 +41,7 @@
     <div class="buttonContainer" style="background: rgba(255,255,255,0);">            
       <fieldset style="border: none;" id="genreForm" class="genreForm">
         <div style="color:black;padding-right:5px;display: inline-block;margin-top: 3px; font-weight: bold;" >MOBILITY</div>
-        <input type="radio" value="relationship_1" name="city" id="relationship_1">
+        <input type="radio" value="relationship_1" name="city" id="relationship_1" checked>
         <label for="relationship_1" class="priority-picker-label">ALL CASES</label>		
       </fieldset>
     </div>
@@ -855,11 +855,8 @@
 	  var sublayer = layers[1].getSubLayer(0);
 	  var sublayer2;
 	  var poetid = getParameterByName("poetid");
-	  var query = "select * from cities where cityid = 0";
-	  var css = createBubbleVisualization("selected_number");
 
-	  layers[1].setQuery("select *, '' as poets_names, '' as poets_info, '' as poets_birth_sources, '' as poets_other_sources, 1 as count from city_city_lines");
-	  layers[1].setCartoCSS("/** color visualization */ #poets_lines { ::hover { line-width: 10; line-opacity: 0; } ::visible {   [count<=4] { line-width: 4; } [count<=3] { line-width: 3; } [count<=2] { line-width: 2; } [count<=1] { line-width: 1; } line-opacity: 0.3; line-color: #fc1804; marker-fill: #fc1804; marker-file: url('http://web.stanford.edu/group/lyricmapping/arrow-16.svg'); marker-width: 5; marker-opacity: 0.3; marker-placement: point; marker-transform: rotate([arrow_angle]+90, 0, 0); } }");
+	  updateQuery(vis, layers);
 	  sublayer.setInteraction(false);
 	  
 	  layers[1].createSubLayer({sql: query, cartocss: css } );
