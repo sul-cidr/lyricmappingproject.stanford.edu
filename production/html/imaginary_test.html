@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mapping Greek Lyric: Places, Travel, Geographical Imaginary</title>
+    
+    <link type="text/css" rel="stylesheet" href="orbis.css" />
+    <link type="text/css" rel="stylesheet" href="lyricmapping.css" />
+    <link type="text/css" rel="stylesheet" href="chosen.min.css" />
+    <link rel="stylesheet" href="css/iThing.css" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+	
+	    <!--Custom html for the infowindow customization-->
+    <!--You can write simple html or use Mustache templates http://mustache.github.com/-->
+    <!--Content.data contains the field info-->
+	<!--Content.data is determined by the UI on the cartodb webpage.-->
+	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
+
+	<link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+	<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+	<![endif]-->
+	<!-- bootstrap is not playing well with the orbis box-->
+	<!-- <link href="bootstrap/css/bootstrap.css" rel="stylesheet">    --> 
+</head>
+<body>    
+
+  <div id="map"></div>
+    
+  <div class="controlsDiv" id="controlbar">
+    <div id="controlbarScroller";>
+      
+    <div id="modeSelection">
+      <div class="mainlinksDiv" >
+		<a class="mainlinks" href="bubblemap.html?visited=1">PLACES</a>
+      </div>
+      <div class="mainlinksDiv">
+		<a class="mainlinks" href="linemap.html">TRAVEL</a>
+      </div>
+      <div class="mainlinksDiv" style="-webkit-box-flex: 2; -moz-box-flex: 2; -webkit-flex: 2; -ms-flex: 2; flex: 2;">
+		<a style="border-bottom: 4px solid rgba(199,47,42,.5);" class="mainlinks" href="imaginary.html">GEOGRAPHICAL IMAGINARY</a>
+      </div>
+    </div>
+    
+    <div class="buttonContainer" style="background: rgba(255,255,255,0);">            
+      <fieldset style="border: none;" id="cityForm" class="priorityForm">
+        <div style="color:black;padding-right:5px;display: inline-block;margin-top: 3px; font-weight: bold;">LOCATIONS IN POETRY: </div>
+        <input type="radio" value="relationship_1" name="city" id="relationship_1" checked>
+        <label for="relationship_1" class="priority-picker-label">ALL REFERENCES</label>
+      </fieldset>
+    </div>
+      
+    <div class="buttonContainer" style="background: rgba(255,255,255,0);">            
+      <fieldset style="border: none;" id="genreForm" class="genreForm">
+        <div style="color:black;padding-right:5px;display: inline-block;margin-top: 3px; font-weight: bold;">POETIC WORLD OF: </div>
+        <input type="radio" value="poet_152" name="city" id="poet_152">
+        <label for="poet_152" class="genre-picker-label">Adespota</label>		
+		
+        <input type="radio" value="poet_92" name="city" id="poet_92">
+        <label for="poet_92" class="genre-picker-label">Alcaeus</label>
+	
+        <input type="radio" value="poet_93" name="city" id="poet_93">
+        <label for="poet_93" class="genre-picker-label">Alcman</label>
+	
+        <input type="radio" value="poet_94" name="city" id="poet_94">
+        <label for="poet_94" class="genre-picker-label">Anacreon</label>
+		
+        <input type="radio" value="poet_97" name="city" id="poet_97">
+        <label for="poet_97" class="genre-picker-label">Archilochus</label>
+
+        <input type="radio" value="poet_149" name="city" id="poet_149">
+        <label for="poet_149" class="genre-picker-label">Bacchylides (forthcoming)</label>		
+		
+        <input type="radio" value="poet_101" name="city" id="poet_101">
+        <label for="poet_101" class="genre-picker-label">Callinus</label>
+		
+        <input type="radio" value="poet_104" name="city" id="poet_104">
+        <label for="poet_104" class="genre-picker-label">Corinna</label>
+		
+        <input type="radio" value="poet_105" name="city" id="poet_105">
+        <label for="poet_105" class="genre-picker-label">Critias</label>
+		
+        <input type="radio" value="poet_107" name="city" id="poet_107">
+        <label for="poet_107" class="genre-picker-label">Demodocus</label>
+	
+        <input type="radio" value="poet_112" name="city" id="poet_112">
+        <label for="poet_112" class="genre-picker-label">Eumelus of Corinth</label>
+		
+        <input type="radio" value="poet_115" name="city" id="poet_115">
+        <label for="poet_115" class="genre-picker-label">Hermippus</label>
+	
+        <input type="radio" value="poet_116" name="city" id="poet_116">
+        <label for="poet_116" class="genre-picker-label">Hipponax</label>
+		
+        <input type="radio" value="poet_117" name="city" id="poet_117">
+        <label for="poet_117" class="genre-picker-label">Ibycus</label>		
+		
+        <input type="radio" value="poet_55" name="city" id="poet_55">
+        <label for="poet_55" class="genre-picker-label">Ion of Chios</label>
+	
+        <input type="radio" value="poet_158" name="city" id="poet_158">
+        <label for="poet_158" class="genre-picker-label">Melanippides</label>
+		
+        <input type="radio" value="poet_122" name="city" id="poet_122">
+        <label for="poet_122" class="genre-picker-label">Mimnermus</label>
+	
+        <input type="radio" value="poet_126" name="city" id="poet_126">
+        <label for="poet_126" class="genre-picker-label">Philiadas</label>
+	
+        <input type="radio" value="poet_24" name="city" id="poet_24">
+        <label for="poet_24" class="genre-picker-label">Philoxenus of Cythera</label>
+	
+        <input type="radio" value="poet_127" name="city" id="poet_127">
+        <label for="poet_127" class="genre-picker-label">Phocylides</label>
+
+        <input type="radio" value="poet_149" name="city" id="poet_149">
+        <label for="poet_149" class="genre-picker-label">Pindar (forthcoming)</label>			
+	
+        <input type="radio" value="poet_132" name="city" id="poet_132">
+        <label for="poet_132" class="genre-picker-label">Sappho</label>
+		
+        <input type="radio" value="poet_134" name="city" id="poet_134">
+        <label for="poet_134" class="genre-picker-label">Semonides</label>
+		
+        <input type="radio" value="poet_135" name="city" id="poet_135">
+        <label for="poet_135" class="genre-picker-label">Simonides</label>
+		
+        <input type="radio" value="poet_136" name="city" id="poet_136">
+        <label for="poet_136" class="genre-picker-label">Solon</label>
+	
+        <input type="radio" value="poet_137" name="city" id="poet_137">
+        <label for="poet_137" class="genre-picker-label">Sophocles</label>
+	
+        <input type="radio" value="poet_138" name="city" id="poet_138">
+        <label for="poet_138" class="genre-picker-label">Stesichorus</label>
+		
+        <input type="radio" value="poet_54" name="city" id="poet_54">
+        <label for="poet_54" class="genre-picker-label">Telesilla</label>
+		
+        <input type="radio" value="poet_7" name="city" id="poet_7">
+        <label for="poet_7" class="genre-picker-label">Telestes</label>		
+	
+        <input type="radio" value="poet_143" name="city" id="poet_143">
+        <label for="poet_143" class="genre-picker-label">Theognis</label>
+		
+        <input type="radio" value="poet_144" name="city" id="poet_144">
+        <label for="poet_144" class="genre-picker-label">Timocreon</label>
+		
+        <input type="radio" value="poet_6" name="city" id="poet_6">
+        <label for="poet_6" class="genre-picker-label">Timotheus</label>
+	
+        <input type="radio" value="poet_145" name="city" id="poet_145">
+        <label for="poet_145" class="genre-picker-label">Tyrtaeus</label>
+	
+        <input type="radio" value="poet_148" name="city" id="poet_148">
+        <label for="poet_148" class="genre-picker-label">Xenophanes</label>
+
+        <input type="radio" value="poet_157" name="city" id="poet_157">
+        <label for="poet_157" class="genre-picker-label">Sappho/Alcaeus</label>
+      </fieldset>
+    </div>
+       
+  </div>
+    
+  <div style="width: 320px; margin: 0 auto; margin-top: 2px" id="slider"></div>	
+
+  </div>
+  <!-- end of control div -->
+  
+  <div id="attribution">
+	<i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i> D. Driscoll, I. McMullin, S. Sansom, S. Brennan-McMahon, A.Waller, A.-E. Peponi.
+  </div>
+
+   <a href="bubblemap.html">
+	  <div id="home" class="home">
+	  </div>
+  </a>
+    
+    <!-- include google maps library *before* load cartodb.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- include cartodb.js library -->
+<!--	<script src="test-cartodb.js"></script> -->
+	<script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+    
+    <script src="jquery-1.11.2.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="jQRangeSlider-withRuler-min.js"></script>
+	<script src="lyric_mapping.js" type="text/javascript"></script>
+	
+   <script>
+    //<!--
+      $("#slider").rangeSlider({
+        bounds:{min: -800, max: -400},
+		defaultValues:{min: -800, max: -400},
+		range: {min: 25},  
+		step: 50,
+		arrows: false,
+		formatter:function(val){
+			  var value = -val;
+			  return value.toString() + " BCE";
+		},
+		scales: [
+		// Primary scale
+		{
+		  first: function(val){ return val; },
+		  next: function(val){ return val + 50; },
+		  stop: function(val){ return false; },
+		  label: function(val){ return -val; },
+		  format: function(tickContainer, tickStart, tickEnd){ 
+		  tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	  });
+    //-->
+    </script>
+	
+    <script>
+      // create layer selector
+      function createSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'dfdrisco' });
+		var displayed_category = "";
+
+        var $options = $('#controlbar input');
+        $options.click(function(e) {        
+		  updateQuery(layer, $("#slider").rangeSlider("values"));
+		  categoryChecked = false;
+		  // for (i=0; i <= 200; i++) {		
+			//   if($('#category_'+i).is(':checked') /* && "category_chooser_"+i != displayed_category */ ) {
+			// 	if ($("#"+displayed_category).length != 0) HideContent(displayed_category);
+			// 	displayed_category="category_chooser_" + i;
+			// 	if ($("#"+displayed_category).length != 0) ShowContent(displayed_category);
+			//   }
+			//   if($('#poet_'+i).is(':checked') || $('#relationship_'+i).is(':checked') ) {
+			// 	HideContent(displayed_category);
+			//   }
+		  // }
+//		  $("#slider").show();
+//		  $("#slider").rangeSlider("resize");
+        });
+		$("#slider").bind("valuesChanged", function(e, data) {
+		  if ($("#controlbar input:checked").length > 0) {}
+		  else $('#relationship_3').prop('checked', true);
+		  updateQuery(layer, $("#slider").rangeSlider("values"));
+		});
+      }
+	  
+	function updateQuery(layer, dateValues) {
+	
+	/* this function creates and calls a complex sql query based on selected items */
+	/* when an item is clicked, it checks the status of each button and creates an appropriate sql query */
+	/* it is super gross */
+	/* the sql query is composed of several embedded joins. first poets & poet_cities */
+	/* then the result of that with dates, genres, instruments, and cities in turn */
+	/* the code is somewhat repetitive and it's probably possible to shrink it with some function calls but it sounds like too much work */
+		var firstCall = true;
+		var i = 0;
+		
+		layer.setInteraction(true);
+		
+		var query = "SELECT cities.the_geom_webmercator, cities.cityid as cartodb_id, count(*) as selected_number FROM referents join poets on referents.poet_name = poets.poet_name join cities on referents.city_name = cities.city_name ";
+
+		/* pick a poet */
+		firstCall = true;
+		for (i=1; i <= 250; i++) {		
+			if('poet_'+i == $("input[name=city]:checked").val()) {
+				console.log("poet " + i + " selected");
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + "where poets.poetid = " + i + " ";
+				}
+			}
+		}				
+
+		query += "group by cities.the_geom_webmercator, cities.cityid";
+		
+		console.log(query);		
+		layer.setQuery(query); 
+		layer.setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; }");
+	}	  
+	  
+      function main() {
+        cartodb.createVis('map', 'http://24.199.68.183/user/dev/api/v2/viz/7c8aedec-53e0-4581-835d-f8b55016d857/viz.json', {
+          tiles_loader: true,
+          center_lat: 38.9,
+          center_lon: 26.38,
+          zoom: 6,
+        })
+        .done(function(vis, layers) {
+			// layer 0 is the base layer, layer 1 is cartodb layer
+			
+			// change attribution to us
+			var map = vis.getNativeMap();
+			map.attributionControl.removeAttribution(layers[0].getAttribution());
+			map.attributionControl.removeAttribution(layers[1].getAttribution());
+			
+			var sublayer = layers[1].getSubLayer(0);
+			// layers[1].setQuery("select *, 100 as selected_number from cities where city_name = 'Athens'");
+			// layers[1].setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { }"); //     
+			
+		  // updateQuery(layers[1], $("#slider").rangeSlider("values"));
+			sublayer.setInteraction(false);
+			
+			createSelector(layers[1]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	  ga('create', 'UA-66510812-1', 'auto');
+	  ga('send', 'pageview');
+	
+	</script>
+    
+  </body>
+</html>

@@ -1,0 +1,654 @@
+imaginaryid,poet_name,city_name,referent,referentid,source_translation
+48,Alcaeus,Scythia,Achilles,2,"Achilles, ruler of Scythia"
+433,Stesichorus,Troy,Achilles,2,". . . hero Achilles . . . he (you?) took away . . . (he, having destroyed?) the city . . . and ( ) the wall . . . bold . . . wonder(ful). . ."
+434,Stesichorus,Troy,Achilles (?),2,". . . (he, having destroyed?) the city . . . the child the descendant of Aeacus . . . round the town . . . (the flowery meadow) of Scamander. . ."
+22,Alcaeus,Cyprus,Aphrodite,3,"(Holy) Cyprus-born, Damoanactidas . . . you in a fair (season?) . . . by the lovely olive-trees blew down"
+23,Alcaeus,Cyprus,Aphrodite,3,by the hands of Cyprian Aphrodite
+70,Alcman,Cyprus,Aphrodite?,3,Cyprian
+71,Alcman,Cyprus,Aphrodite,3,"At the command of the Cyprian, Eros once again pours sweetly down and warms my heart."
+117,Anacreon,Cyprus,Aphrodite,3,Cyprian Aphrodite
+121,Anacreon,Lethaeus,Aphrodite,3,"who now somewhere by the eddies of the Lethaeus look down on a city of bold-hearted men and rejoice, since the citizens whom you shepherd are not untamed."
+283,Ibycus,Cyprus,Aphrodite,3,and ruin mounted long-suffering Pergamum thanks to the golden-haired Cyprian
+284,Ibycus,Cyprus,Aphrodite,3,...Cyprian...
+285,Ibycus,Cyprus,Aphrodite,3,...the Cyprian...
+325,Sappho,Crete,Aphrodite,3,"Hither to me from Crete to this holy temple,"
+326,Sappho,Cyprus,Aphrodite,3,"there, Cypris, take . . . and pour gracefully into golden cups nectar that is mingled with our festivities."
+327,Sappho,Cyprus,Aphrodite,3,"(Cypris and) Nereids, grant that my brother arrive here unharmed"
+328,Sappho,Cyprus,Aphrodite,3,Cypris
+329,Sappho,Cyprus,Aphrodite,3,"Cypris, and may she find you very harsh;"
+330,Sappho,Cyprus,Aphrodite,3,for the holy Cyprian herself once blamed me for praying
+331,Sappho,Cyprus,Aphrodite,3,"I talked with you in a dream, Cyprogeneia"
+336,Sappho,Cythera,Aphrodite,3,Cytherea
+337,Sappho,Cythera,Aphrodite,3,"‘Delicate Adonis is dying, Cytherea; what are we to do?’ / ‘Beat your breasts, girls, and tear your clothes.’"
+348,Sappho,Olympus,Aphrodite,3,leaving your father's...house
+396,Solon,Cyprus,Aphrodite,3,But now the works of the Cyprus-born and of Dionysus and the Muses are dear to me;
+419,Stesichorus,Cyprus,Aphrodite,3,Cyprus-born (Aphrodite)
+435,Stesichorus,Troy,Aphrodite,3,for Apollo . . . neither Artemis nor Aphrodite (still guarded?) the holy (city). . . the city of the Trojans Zeus. . . Trojans. . . deprived. . .
+446,Theognis,Cyprus,Aphrodite,3,Not for long will you possess the gift of the violet–crowned Cyprus–born.
+447,Theognis,Cyprus,Aphrodite,3,"lest one day you too, mighty boy, be overpowered and encounter the harsh workings of the Cyprus-born,"
+448,Theognis,Cyprus,Aphrodite,3,"Boy, since the Cyprian goddess gave you a beauty that arouses desire and all the young men are obsessed with your looks,"
+449,Theognis,Cyprus,Aphrodite,3,"Cyprus-born, put an end to my pain, scatter the cares that gnaw at my heart, and restore me to happiness."
+450,Theognis,Cyprus,Aphrodite,3,"If one day you too shall crave the gift of the Cyprus-born crowned with violets and pursue another,"
+451,Theognis,Cyprus,Aphrodite,3,Men thought that you had come with a gift from the golden Cyprus-born
+452,Theognis,Cyprus,Aphrodite,3,"Cyprus-born Cytherean, weaver of wiles, to honour you Zeus gave you this special gift."
+454,Theognis,Cythera,Aphrodite,3,and the fair-crowned Cytherean has released me from longing.
+455,Theognis,Cythera,Aphrodite,3,"Cyprus-born Cytherean, weaver of wiles, to honour you Zeus gave you this special gift."
+87,Alcman,Lycia,Apollo,4,before Lycean Apollo.
+88,Alcman,Lycia,Apollo,4,". . . excessive; if only Lycean Apollo . . .,"
+143,Aninius,Delos,Apollo,4,"Apollo, you who are perhaps residing in Delos or Pytho or Naxos or Miletus or holy Clarus, come to your temple or you will end up among the Scythians."
+144,Aninius,Miletus,Apollo,4,"Apollo, you who are perhaps residing in Delos or Pytho or Naxos or Miletus or holy Clarus, come to your temple or you will end up among the Scythians."
+145,Aninius,Delphi,Apollo,4,"Apollo, you who are perhaps residing in Delos or Pytho or Naxos or Miletus or holy Clarus, come to your temple or you will end up among the Scythians."
+146,Aninius,Naxos,Apollo,4,"Apollo, you who are perhaps residing in Delos or Pytho or Naxos or Miletus or holy Clarus, come to your temple or you will end up among the Scythians."
+147,Aninius,Scythia,Apollo,4,"Apollo, you who are perhaps residing in Delos or Pytho or Naxos or Miletus or holy Clarus, come to your temple or you will end up among the Scythians."
+148,Aninius,Claros,Apollo,4,"Apollo, you who are perhaps residing in Delos or Pytho or Naxos or Miletus or holy Clarus, come to your temple or you will end up among the Scythians."
+181,Bacchylides,Delos,Apollo,4,"God of Delos, rejoice in your heart at the choirs of the Ceans and grant a heaven-sent fortune of blessings."
+221,Corinna,Sinope,Apollo,4,"while Corcyra (and Salamis) and (lovely Euboea) (were stolen by) father Poseidon, and (Leto’s son) is in possession of Sinope and Thespia . . ."
+224,Corinna,Thespia,Apollo,4,"while Corcyra (and Salamis) and (lovely Euboea) (were stolen by) father Poseidon, and (Leto’s son) is in possession of Sinope and Thespia . . ."
+340,Sappho,Gryneia,Apollo,4,leaving woody (Gryneia?)
+381,Simonides,Delos,Apollo,4,"...Phoebus, (master) of Delos..."
+386,Simonides,Lycia,Lycian [Apollo?],4,... Lycian (Apollo)...
+435,Stesichorus,Troy,Apollo,4,for Apollo . . . neither Artemis nor Aphrodite (still guarded?) the holy (city). . . the city of the Trojans Zeus. . . Trojans. . . deprived. . .
+491,Timotheus,Athens,Apollo,4,"Come, far-shooting Pythian, to this holy city"
+521,Tyrtaeus,Delphi,oracles (Apollo),4,they brought home from Pytho the god's oracles and sure predictions
+522,Tyrtaeus,Delphi,Apollo's shrine (Apollo),4,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
+531,Tyrtaeus,Sparta,oracles,4,they brought home from Pytho the god's oracles and sure predictions
+534,Tyrtaeus,Sparta,Apollo,4,For so was Phoebus’ revelation about this to the city
+12,Alcaeus,Argos,Helen,5,. . . and excited the heart of Argive Helen in her breast;
+280,Ibycus,Argos,Helen,5,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+360,Sappho,Troy,Helen,5,she..went sailing off to Troy
+431,Stesichorus,Troy,Helen,5,"That story is not true, and you did not go on the well-benched ships and you did not reach the citadel of Troy;"
+414,Stesichorus,Athens,Polynices,6,"(and with) their dear Polynices (went the best leaders) of the Thebans. Making his way he began his journey along the road, passing the great wall . . . (and with) him . . . many . . . the men came to the furthest point (of Athens) under the escort (of the gods); and (soon) they reached the Isthmus of the sea-god, (the earth-shaker,) . . . (and were accomplishing their journey?) with prayers; and (then they departed for) the fair towns of Corinth, and quickly came to (well-built) Cleonae. . ."
+417,Stesichorus,Corinth,Polynices,6,"(and with) their dear Polynices (went the best leaders) of the Thebans. Making his way he began his journey along the road, passing the great wall . . . (and with) him . . . many . . . the men came to the furthest point (of Athens) under the escort (of the gods); and (soon) they reached the Isthmus of the sea-god, (the earth-shaker,) . . . (and were accomplishing their journey?) with prayers; and (then they departed for) the fair towns of Corinth, and quickly came to (well-built) Cleonae. . ."
+423,Stesichorus,Isthmus,Polynices,6,"(and with) their dear Polynices (went the best leaders) of the Thebans. Making his way he began his journey along the road, passing the great wall . . . (and with) him . . . many . . . the men came to the furthest point (of Athens) under the escort (of the gods); and (soon) they reached the Isthmus of the sea-god, (the earth-shaker,) . . . (and were accomplishing their journey?) with prayers; and (then they departed for) the fair towns of Corinth, and quickly came to (well-built) Cleonae. . ."
+428,Stesichorus,Thebes,Polynices,6,...my sons dead in the palace or the city captured.
+429,Stesichorus,Thebes,Polynices,6,"(I tell you) what is destined to happen: (you will reach) the house of lord Adrastus, and he will (welcome you and) give you his beautiful daughter . . ."
+430,Stesichorus,Thebes,Polynices,6,"(and with) their dear Polynices (went the best leaders) of the Thebans. Making his way he began his journey along the road, passing the great wall . . . (and with) him . . . many . . . the men came to the furthest point (of Athens) under the escort (of the gods); and (soon) they reached the Isthmus of the sea-god, (the earth-shaker,) . . . (and were accomplishing their journey?) with prayers; and (then they departed for) the fair towns of Corinth, and quickly came to (well-built) Cleonae. . ."
+196,Corinna,Aegina,Zeus,7,"Of these (daughters) Zeus, (giver?) of good things, (took) his child Aegina . . . from her father’s . . ."
+249,Eumelus of Corinth,Ithome,Zeus,7,For the god of Ithome took pleasure in the Muse
+280,Ibycus,Argos,Zeus,7,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+399,Solon,Olympus,Zeus,7,"Resplendent daughters of Memory and Olympian Zeus,"
+435,Stesichorus,Troy,Zeus,7,for Apollo . . . neither Artemis nor Aphrodite (still guarded?) the holy (city). . . the city of the Trojans Zeus. . . Trojans. . . deprived. . .
+468,Theognis,Olympus,Zeus,7,"Come, Olympian Zeus, fulfil my timely prayer;"
+541,Xenophanes,Olympia,Zeus' precinct,7,"where there is the precinct of Zeus by Pisa’s stream in Olympia,"
+542,Xenophanes,Pisa,Zeus' precinct,7,"where there is the precinct of Zeus by Pisa’s stream in Olympia,"
+65,Alcman,Carystus,wine,8,and wine of Oenus or Denthian or Carystian or Onoglian or Stathmite.
+74,Alcman,Denthiades,wine,8,and wine of Oenus or Denthian or Carystian or Onoglian or Stathmite.
+82,Alcman,Five Crests,wine,8,"Five Crests,"
+92,Alcman,Oenus,wine,8,and wine of Oenus or Denthian or Carystian or Onoglian or Stathmite.
+94,Alcman,Onogloi,wine,8,and wine of Oenus or Denthian or Carystian or Onoglian or Stathmite.
+105,Alcman,Stathmi,wine,8,and wine of Oenus or Denthian or Carystian or Onoglian or Stathmite.
+132,Anacreon,Scythia,Wine,8,"Come again, let us no longer practise Scythian drinking with clatter and shouting over our wine, but drink moderately amid beautiful songs of praise."
+170,Archilochus,Ismaros,wine,8,... on board ship Ismarian wine...
+458,Theognis,Euboea,vine-rich Euboea,8,"For I went once to the land of Sicily and I went to the vine-rich plain of Euboea and to Sparta, the splendid city of the reed-nourishing Eurotas, and they all treated me with kindly friendship on my arrival."
+461,Theognis,Lelantum,Vineyards (wine),8,Shame on weakness! Cerinthus is destroyed and Lelantum’s fine vineyards are being ravaged;
+476,Theognis,Taygetus,wine,8,Drink the wine which was produced for me beneath the peaks of Taygetus
+69,Alcman,Cydonia,apple,9,Cydonian apples are mentioned by Stesichorus . . . and by Alcman.
+282,Ibycus,Cydonia,Cydonian quince-trees,9,"In the spring flourish Cydonian quince-trees, watered from flowing rivers..."
+418,Stesichorus,Cydonia,apple,9,Many Cydonian apples they threw on their lord’s chariot...
+77,Alcman,Enetoi,horses,10,garland-winning Venetic foals
+78,Alcman,Enetoi,race-horse,10,"Why, don’t you see? The race-horse is Venetic"
+84,Alcman,Ibe,race-horse,10,and the second in beauty after Agido will run like a Colaxaean horse against an Ibenian
+103,Alcman,Scythia,race-horse,10,and the second in beauty after Agido will run like a Colaxaean horse against an Ibenian
+116,Anacreon,Corinth,horse,10,This horse of Pheidolas from spacious Corinth is dedicated to the son of Cronus to commemorate the excellence of his feet
+138,Anacreon,Thrace,Filly,10,"Thracian filly, why do you look at me from the corner of your eye and flee stubbornly from me, supposing that I have no skill?"
+141,Anacreon,Thrace,Filly,10,I turn my thoughts to the Thracian (filly?).
+299,Mimnermus,Lydia,Horses,10,who saw him...routing the thick ranks of the Lydian cavalry on the plain of Hermus.
+300,Mimnermus,Paeonia,Horses,10,"bringing men from Paeonia, where (there is) a famous race of horses"
+390,Simonides,Zacynthus,horse,10,Horse-rearing goes not with Zacynthus but with wheat-bearing fields.
+546,Ibycus,Troy,horse,10,... the great number of ships that came from Aulis across the Aegean sea from Argos to horse-rearing Troy...
+72,Alcman,Cyprus,moist charm of Cinyras,11,"giving beauty to her tresses, the moist charm of Cinyras sits on the maiden’s hair."
+75,Alcman,Dyme,"hair, Dymainai",11,curl-loving Dymainai
+139,Anacreon,Thrace,Locks,11,shaking his (your) Thracian locks
+275,Hipponax,Salmydessus,top-knotted Thracians,11,And at Salmydessus may the top-knotted Thracians give him naked a most kindly reception...
+276,Hipponax,Thrace,top-knotted Thracians,11,And at Salmydessus may the top-knotted Thracians give him naked a most kindly reception...
+280,Ibycus,Argos,hair,11,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+280,Ibycus,Argos,hair,11,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+283,Ibycus,Cyprus,hair,11,and ruin mounted long-suffering Pergamum thanks to the golden-haired Cyprian
+522,Tyrtaeus,Delphi,hair,11,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
+551,Xenophanes,Colophon,hair,11,"And [the Colophonians, according to Athenaeus] having learned useless luxury from the Lydians, while they were free of hateful tyranny, they used to go to the agora wearing robes all of purple, no fewer than a thousand as a rule, proud and exulting(?)  in the splendour of their hair, drenched with the scent of the most refined unguents."
+545,Ibycus,Troy,hair,11,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+49,Alcaeus,Scythia,Scythian shoes,12,having put on Scythian shoes
+120,Anacreon,Lesbos,The girl in the fancy sandals,12,... the girl in the fancy sandals; but she—she comes from Lesbos with its fine cities—finds fault with my hair because it is white...
+343,Sappho,Lydia,sandal,12,"and a gay leather strap covered (her?) feet, a fine piece of Lydian work."
+18,Alcaeus,Chalcis,swords,13,"Beside them are swords from Chalcis and many belts and tunics. These we have been unable to forget, ever since we first undertook this task."
+115,Anacreon,Cimmeria,bows,13,"What do I care, my friend, for the Cimmerians with their curving bows and the Sintians?"
+167,Archilochus,Euboea,spear-famed lords,13,This is the warfare in which those spear-famed lords of Euboea are skilled.
+176,"Aristotle
+",Persia,bow,13,This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods
+493,Timotheus,Delphi,bow,13,"Come, far-shooting Pythian, to this holy city"
+507,Timotheus,Persia,army,13,"And backwards in flight went the barbarian Persian host, racing along"
+522,Tyrtaeus,Delphi,bow,13,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
+89,Alcman,Lydia,headband,15,"For abundance of purple is not sufficient for protection, nor intricate snake of solid gold, no, nor Lydian headband"
+347,Sappho,Mytilene,headband,15,"But for you, Cleis, I have no way of obtaining a decorated headband; but . . . the Mytilenean..."
+357,Sappho,Sardis,headband,15,Recently . . . a decorated headband from Sardis . . . (Ionian?) cities . . .
+93,Alcman,Olympus,Muses?,16,Olympian (Muses
+129,Anacreon,Pieria,Muses,16,the Pierian Muses
+225,Corinna,Thespia,Muses,16,"Thespia of the beautiful offspring, lover of strangers, loved by the Muses."
+355,Sappho,Pieria,Pierian Muses,16,"(Hither,) holy Graces and Pierian Muses"
+400,Solon,Olympus,Muses,16,"another, taught the gifts that come from the Olympian Muses"
+403,Solon,Pieria,Muses,16,"Pierian Muses, hearken to my prayer."
+439,Telestes,Dryopis (Doris),Dorian Muse,16,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
+511,Timotheus,Pieria,"""the intricate muse""",16,"Orpheus, Calliope’s son, he of the intricate muse, was the first to beget the tortoise-shell lyre in Pieria"
+112,Alcman,Xanthus,swan on the waters of the Xanthus,17,"why, its song is like that of a swan on the waters of the Xanthus"
+372,Semonides,Maeander,"goose, egg",17,like the egg of a Maeandrian goose
+127,Anacreon,Naucratis,Garland,18,"and each man had three garlands, two of roses and the other a garland of Naucratis."
+395,Solon,Cyprus,violet crown (garland?),18,and may Cypris of the violet crown send me unscathed from your famous island on a swift ship.
+150,Archilochus,Paros,figs,19,Good-bye to Paros and those figs and life on the sea
+271,Hipponax,Lebedos,fig,19,and not to suck on a Lebedian dried fig from Camandolus
+446,Theognis,Cyprus,violent-crowned (garland),18,Not for long will you possess the gift of the violet–crowned Cyprus–born.
+450,Theognis,Cyprus,violent-crowned (garland),18,"If one day you too shall crave the gift of the Cyprus-born crowned with violets and pursue another,"
+80,Alcman,Erysiche,shepherd,62,he was no rustic man nor clumsy (not even in the view of unskilled men?) nor Thessalian by race nor an Erysichaean shepherd: he was from lofty Sardis.
+124,Anacreon,Magnesia,"shepherd, river",62,"who now somewhere by the eddies of the Lethaeus look down on a city of bold-hearted men and rejoice, since the citizens whom you shepherd are not untamed."
+126,Anacreon,Mysia,asses (donkeys),20,and the Mysians discovered the breeding of mare-mounting asses
+155,Archilochus,Arcadia,ass (the animal),20,... an Arcadian ass...
+165,Archilochus,Asia,sheep?,20,he has power over sheep-rearing Asia
+168,Archilochus,Priene,ass (the animal),20,his prick . . . swelled like that of a Prienian grain–fed breeding ass
+256,Hipponax,Ephesus,pig,20,(like?) an Ephesian sow
+492,Timotheus,Celaenae,pasture,62,and whenever some steel-bladed Greek seized and carried off an inhabitant of rich-pasturing Celaenae bereft of his fighting powers
+161,Archilochus,Lesbos,paean,21,I myself taking the lead in the Lesbian paean to the pipe’s accompaniment
+169,Archilochus,Gyrae,cloud,22,... a cloud stands straight round about the heights of Gyrae...
+210,Corinna,Hyria,dance,23,"daughter of Hyria, land of fair dances."
+223,Corinna,Thebes,dance,23,nd the choir rejoices (in the toils of its feet?) in the seven-gated city
+211,Corinna,Ladon,reeds,24,"of Ladon, nurse of reeds"
+473,Theognis,Sparta,reeds,24,"For I went once to the land of Sicily and I went to the vine-rich plain of Euboea and to Sparta, the splendid city of the reed-nourishing Eurotas, and they all treated me with kindly friendship on my arrival."
+237,Critias,Sicily,wagon,63,"Next, a Sicilian wagon is the most beautiful and expensive"
+244,Critias,Thebes,chariot,25,"Thebes was the first to construct the carriage for a chariot,"
+346,Sappho,Lydia,chariots,25,I would rather see her lovely walk and the bright sparkle of her face than the Lydians’ chariots and armed infantry
+31,Alcaeus,Lesbos,trailing robes,26,"meetings themselves I dwell, keeping my feet out of trouble, where Lesbian women with trailing robes go to and fro being judged for beauty,"
+222,Corinna,Tanagra,the white-robed women of Tanagra,26,Terpsichore summons me to sing fine tales for the white-robed women of Tanagra
+268,Hipponax,Corax,clothing,26,she clad in a Coraxian mantle
+425,Stesichorus,Larissa,clothing,26,"...and from (Larissa) came Eurytion, (son of?) with her trailing robes..."
+508,Timotheus,Persia,dress,26,and they rent their well-woven Persian dress about their breasts
+551,Xenophanes,Colophon,clothing,26,"And [the Colophonians, according to Athenaeus] having learned useless luxury from the Lydians, while they were free of hateful tyranny, they used to go to the agora wearing robes all of purple, no fewer than a thousand as a rule, proud and exulting(?)  in the splendour of their hair, drenched with the scent of the most refined unguents."
+271,Hipponax,Lebedos,vagina,27,and not to suck on a Lebedian dried fig from Camandolus
+277,Hipponax,Sindike,vagina,27,Sindian fissure
+127,Anacreon,Naucratis,flowers,28,"and each man had three garlands, two of roses and the other a garland of Naucratis."
+354,Sappho,Pieria,roses,28,"But when you die you will lie there, and afterwards there will never be any recollection of you or any longing for you since you have no share in the roses of Pieria"
+395,Solon,Cyprus,flowers,28,and may Cypris of the violet crown send me unscathed from your famous island on a swift ship.
+434,Stesichorus,Troy,flowers,28,". . . (he, having destroyed?) the city . . . the child the descendant of Aeacus . . . round the town . . . (the flowery meadow) of Scamander. . ."
+446,Theognis,Cyprus,violets (flowers),28,Not for long will you possess the gift of the violet–crowned Cyprus–born.
+450,Theognis,Cyprus,violets (flowers),28,"If one day you too shall crave the gift of the Cyprus-born crowned with violets and pursue another,"
+514,Timotheus,Sparta,flowers,28,"for Sparta’s great leader, well-born, long-lived, the populace riotous with the flowers of youth, buffets me"
+51,Alcaeus,Teos,cup,29,wine-drops fly from Teian cups
+226,Critias,Asia,wine vessels,29,"A Lydian hand, born in Asia, invented (wine) vessels,"
+227,Critias,Marathon,pottery,29,"And she that set up the beautiful trophy at Marathon invented the offspring of wheel, earth, and oven, pottery of highest fame, a useful housekeeper."
+231,Critias,Etruria,bowls,29,"The Etruscan bowl of beaten gold prevails, and all the bronze that adorns a house for any use."
+233,Critias,Lydia,wine vessels,29,"A Lydian hand, born in Asia, invented (wine) vessels,"
+236,Critias,Sicily,Cottabus,29,"From the land of Sicily comes the cottabus, a remarkable achievement; we set it up as a target for shafts of wine drops. "
+326,Sappho,Cyprus,cups,29,"there, Cypris, take . . . and pour gracefully into golden cups nectar that is mingled with our festivities."
+367,Semonides,Argos,cup,29,this is an Argive cup with tapered lip
+230,Critias,Chios,bed,30,"Miletus and Chios, Oenopian’s city by the sea, are famed(?) for the beauty of the marriage bed."
+234,Critias,Miletus,bed,30,"Miletus and Chios, Oenopian’s city by the sea, are famed(?) for the beauty of the marriage bed."
+245,Critias,Thessaly,chair,30,A Thessalian chair is the most comfortable seat for the limbs.
+272,Hipponax,Lerna,serpent,31,... serpent at Lerna
+371,Semonides,Maeander,eel,31,For a heron found a buzzard eating a Maeandrian Eel and took it away.
+352,Sappho,Phocis,handcloths,32,". . . and handcloths . . . purple, perfumed (?), (which Mnasis) sent (to you) from Phocaea, expensive gifts . . .,"
+370,Semonides,Achaea,cheese,33,"here, take note, is wonderful Tromilian cheese from Achaea, which I brought back"
+373,Semonides,Achaea,cheese,33,"here, take note, is wonderful Tromilian cheese from Achaea, which I brought back"
+98,Alcman,Psyra,"Dionysus, rock",34,"taking Dionysus to the holy rock, to Psyra,"
+137,Anacreon,Thessaly,Dionysus,34,"In gratitude to you, Dionysus, and as a splendid adornment to the city I was set up by Echecratidas, lord of Thessaly."
+71,Alcman,Cyprus,Eros,35,"At the command of the Cyprian, Eros once again pours sweetly down and warms my heart."
+128,Anacreon,Olympus,Eros,35,"See, I fly up on light wings to Olympus in search of Love; for (the boy) does not wish to enjoy the fun of youth with me."
+453,Theognis,Cyrpus,Eros,35,"Then Love leaves the beautiful island of Cyprus and goes among men, bringing seed down upon the land."
+480,Theognis,Troy,Eros,35,"Cruel Eros, the spirits of Madness took you up and nursed you. Because of you Troy’s acropolis was destroyed,"
+50,Alcaeus,Sparta,"Sparta, wealth",36,"for they say that Aristodemus once expressed it shrewdly at Sparta: ‘Money is the man, and no poor man is good or honourable.’"
+352,Sappho,Phocis,wealth,36,". . . and handcloths . . . purple, perfumed (?), (which Mnasis) sent (to you) from Phocaea, expensive gifts . . .,"
+457,Theognis,Delphi,wealth,36,that man to whom the priestess of the god at Delphi in her response reveals the god’s voice from the wealthy shrine.
+535,Tyrtaeus,Sparta,money,36,Love of money and nothing else will destroy Sparta
+540,Xenophanes,Lydia,luxury (wealth),36,"And [the Colophonians, according to Athenaeus] having learned useless luxury from the Lydians, while they were free of hateful tyranny, they used to go to the agora wearing robes all of purple, no fewer than a thousand as a rule, proud and exulting(?)  in the splendour of their hair, drenched with the scent of the most refined unguents."
+551,Xenophanes,Colophon,luxury (wealth),36,"And [the Colophonians, according to Athenaeus] having learned useless luxury from the Lydians, while they were free of hateful tyranny, they used to go to the agora wearing robes all of purple, no fewer than a thousand as a rule, proud and exulting(?)  in the splendour of their hair, drenched with the scent of the most refined unguents."
+363,Scythinus,Heracleia,Heracles,37,He [Heracles] also sacked the Cylicranians who were engaged in plunder and built there Heracleia called the Trachinian.
+365,Scythinus,Cylicrania,Heracles,37,He [Heracles] also sacked the Cylicranians who were engaged in plunder and built there Heracleia called the Trachinian.
+21,Alcaeus,Cyllene,Hermes,38,"Greetings, ruler of Cyllene—for it is of you that I wish to sing"
+261,Hipponax,Lydia,Hermes,38,"Hermes, dog throttler, Candaules in Maeonian, companion of thieves, come give me a hand(?)."
+263,Hipponax,Cyllene,Hermes,38,"he called upon Maia’s son, sultan of Cyllene"
+264,Hipponax,Cyllene,Hermes,38,"Hermes, dear Hermes, son of Maia, Cyllenian..."
+274,Hipponax,Phlyesia,Hermes,38,you will make obeisance to Hermes of the Phlyesians
+55,Alcaeus,Troy,ships,39,"and crazed by the Trojan man, the deceiver of his host, she accompanied him over the sea in his ship,"
+170,Archilochus,Ismaros,ships,39,... on board ship Ismarian wine...
+229,Critias,Caria,cargo vessels,39,"and Carians, stewards of the sea, cargo vessels."
+281,Ibycus,Aulis,Ships,39,... the great number of ships that came from Aulis across the Aegean sea from Argos to horse-rearing Troy...
+293,Mimnermus,Asia,ships,39,we came on our ships to longed-for Asia
+395,Solon,Cyprus,ships,39,and may Cypris of the violet crown send me unscathed from your famous island on a swift ship.
+431,Stesichorus,Troy,ships,39,"That story is not true, and you did not go on the well-benched ships and you did not reach the citadel of Troy;"
+467,Theognis,Melos,sails (ships),39,"we are now being carried along, with white sails lowered, beyond the Melian sea through the dark night"
+479,Theognis,Troy,ships,39,"Artemis, slayer of wild beasts, daughter of Zeus, for whom Agamemnon set up a temple when he was preparing to sail on his swift ships to Troy,"
+546,Ibycus,Troy,ships,39,... the great number of ships that came from Aulis across the Aegean sea from Argos to horse-rearing Troy...
+342,Sappho,Lesbos,singer,40,"Superior, as the Lesbian singer to those of other lands"
+131,Anacreon,Samos,Nymphs,41,city of the Nymphs:
+306,Philoxenus of Cythera,Parnassus,Nymphs,41,For they themselves on Parnassus within the gold-roofed chambers of the Nymphs
+135,Anacreon,Teos,citadel,42,But now the crown of the city is destroyed.
+223,Corinna,Thebes,dance,42,nd the choir rejoices (in the toils of its feet?) in the seven-gated city
+231,Critias,Etruria,architecture,42,"The Etruscan bowl of beaten gold prevails, and all the bronze that adorns a house for any use."
+290,Ibycus,Troy,urban architecture,42,... of high-gated Troy...
+295,Mimnermus,Colchis,architecture,42,"Aeetes’ city, where the rays of the swift Sun lie in a golden storeroom at the edge of Oceanus, where god-like Jason went."
+306,Philoxenus of Cythera,Parnassus,houses,42,For they themselves on Parnassus within the gold-roofed chambers of the Nymphs
+431,Stesichorus,Troy,citadel`,42,"That story is not true, and you did not go on the well-benched ships and you did not reach the citadel of Troy;"
+433,Stesichorus,Troy,wall,42,". . . hero Achilles . . . he (you?) took away . . . (he, having destroyed?) the city . . . and ( ) the wall . . . bold . . . wonder(ful). . ."
+437,Stesichorus,Troy,urban architecture,42,. . . easily . . . groan(ing) heavily . . . having sacked the well-built glorious (citadel) of Troy . . . glory (among) mankind . . .
+457,Theognis,Delphi,shrine (architecture),42,that man to whom the priestess of the god at Delphi in her response reveals the god’s voice from the wealthy shrine.
+477,Theognis,Thebes,"walls, Thebes",42,"I am Aethon by birth, but I dwell in the well–walled city of Thebes, excluded from my homeland."
+479,Theognis,Troy,temple,42,"Artemis, slayer of wild beasts, daughter of Zeus, for whom Agamemnon set up a temple when he was preparing to sail on his swift ships to Troy,"
+480,Theognis,Troy,architecture,42,"Cruel Eros, the spirits of Madness took you up and nursed you. Because of you Troy’s acropolis was destroyed,"
+498,Timotheus,Ionia,walls,42,"it was the city of Miletus that nurtured him, the city of a twelve-walled people that is foremost among the Achaeans."
+503,Timotheus,Miletus,walls,42,"it was the city of Miletus that nurtured him, the city of a twelve-walled people that is foremost among the Achaeans."
+522,Tyrtaeus,Delphi,architecture,42,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
+550,Stesichorus,Cleonae,architecture,42,"(and with) their dear Polynices (went the best leaders) of the Thebans. Making his way he began his journey along the road, passing the great wall . . . (and with) him . . . many . . . the men came to the furthest point (of Athens) under the escort (of the gods); and (soon) they reached the Isthmus of the sea-god, (the earth-shaker,) . . . (and were accomplishing their journey?) with prayers; and (then they departed for) the fair towns of Corinth, and quickly came to (well-built) Cleonae. . ."
+130,Anacreon,Samos,talkers (muthietai) (speech),43,"and so Anacreon says of the rebellious fishermen in Samos: and in the island, Megistes, the talkers hold sway over the sacred city,"
+490,Timotheus,Asia,speech. dialect,43,"and he, embracing his knees, would beseech him, interweaving Greek speech with Asian, shattering his mouth’s seal in piercing cry, tracking down the Ionian tongue"
+497,Timotheus,Ionia,speech. dialect,43,"and he, embracing his knees, would beseech him, interweaving Greek speech with Asian, shattering his mouth’s seal in piercing cry, tracking down the Ionian tongue"
+35,Alcaeus,Mytilene,fame,44,glorious (kydnos) Mytilene
+102,Alcman,Sardis,fame,44,famous Sardis
+110,Alcman,Thessaly,fame,44,(Thessalian?) fame.
+167,Archilochus,Euboea,fame,44,This is the warfare in which those spear-famed lords of Euboea are skilled.
+175,Aristotle,Attica,fame,44,and coming to the famous plain of Cecropia
+227,Critias,Marathon,fame,44,"And she that set up the beautiful trophy at Marathon invented the offspring of wheel, earth, and oven, pottery of highest fame, a useful housekeeper."
+230,Critias,Chios,fame,44,"Miletus and Chios, Oenopian’s city by the sea, are famed(?) for the beauty of the marriage bed."
+234,Critias,Miletus,fame,44,"Miletus and Chios, Oenopian’s city by the sea, are famed(?) for the beauty of the marriage bed."
+300,Mimnermus,Paeonia,fame,44,"bringing men from Paeonia, where (there is) a famous race of horses"
+324,Sappho,Asia,"fame, Asia",44,and of the rest of Asia...undying fame
+395,Solon,Cyprus,fame,44,and may Cypris of the violet crown send me unscathed from your famous island on a swift ship.
+421,Stesichorus,Erytheia,fame,44,almost opposite famous Erytheia ...
+436,Stesichorus,Troy,fame,44,a man by whose (devices trickery?) instead of fighting and the battle-cry (will have) fame (that it) brought the capture day of spacious Troy. . . hardships. . .’
+465,Theognis,Megara,fame,44,"but everyone will say, “They are the verses of Theognis of Megara, and he is famous among all men;”"
+538,Xenophanes,Greece,fame,44,"For although you sent the thigh bone of a kid, you won the fat leg of a fatted bull, a thing of honour to fall to a man whose fame will spread over the whole of Greece and will not die, so long as the Grecian form of song exists."
+204,Corinna,Corcyra,Poseidon,45,"while Corcyra (and Salamis) and (lovely Euboea) (were stolen by) father Poseidon, and (Leto’s son) is in possession of Sinope and Thespia . . ."
+205,Corinna,Euboea,Poseidon,45,"while Corcyra (and Salamis) and (lovely Euboea) (were stolen by) father Poseidon, and (Leto’s son) is in possession of Sinope and Thespia . . ."
+220,Corinna,Salamis,Poseidon,45,"while Corcyra (and Salamis) and (lovely Euboea) (were stolen by) father Poseidon, and (Leto’s son) is in possession of Sinope and Thespia . . ."
+253,Hipponax,Miletus,barley,46,"and if they catch the soloeci they sell them, Phrygians to Miletus to grind barley"
+265,Hipponax,Phrygia,barley,46,"and if they catch the soloeci they sell them, Phrygians to Miletus to grind barley"
+292,Melanippides,Syria,grain (food),46,or again seeking out frankincense with its sacred tears and fragrant dates and the smooth Syrian grains of cassia.
+390,Simonides,Zacynthus,wheat,46,Horse-rearing goes not with Zacynthus but with wheat-bearing fields.
+415,Stesichorus,Boeotia,wheat,46,and those who lived in the holy wheat-bearing land of Boeotia.
+527,Tyrtaeus,Messene,ploughland (grain),46,Messene good to plough and good to plant.
+435,Stesichorus,Troy,Artemis,47,for Apollo . . . neither Artemis nor Aphrodite (still guarded?) the holy (city). . . the city of the Trojans Zeus. . . Trojans. . . deprived. . .
+438,Telesilla,Alpheos,Artemis,47,"And Artemis, girls, fleeing from Alpheus"
+479,Theognis,Troy,Artemis,47,"Artemis, slayer of wild beasts, daughter of Zeus, for whom Agamemnon set up a temple when he was preparing to sail on his swift ships to Troy,"
+495,Timotheus,Ephesus,Artemis,47,"I no come here to you, I go over there to Sardis, to Susa, Ecbatana dweller. Artimis, my great god, will guard me to Ephesus."
+42,Alcaeus,Olympus,strife,48,"and let us relax from the heart-eating strife and civil warring, which one of the Olympians has aroused among us,"
+190,Callinus,Cimmeria,war,48,"now the horde of Cimmerians, with their acts of violence, is advancing"
+280,Ibycus,Argos,strife (war),48,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+413,Stesichorus,Aetolia,war,48,"...and the Aetolians, staunch in war..."
+460,Theognis,Greece,"strife
+",48,"For indeed I am afraid when I look upon the mindless, people-destroying strife of the Greeks."
+530,Tyrtaeus,Sparta,war,48,it (i.e. factions) happened too in Sparta in the course of the Messenian War
+545,Ibycus,Troy,war,48,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+66,Alcman,Cerbesians,tune,49,"he piped a Phrygian tune, the Cerbesian,"
+96,Alcman,Phrygia,tune,49,"he piped a Phrygian tune, the Cerbesian,"
+228,Critias,Athens,song,49,"And now I shall crown the Athenian son of Cleinias, Alcibiades, with a song in a new manner."
+243,Critias,Teos,song,49,"Teos brought to Greece the one who once wove songs with strains celebrating women, sweet Anacreon,"
+439,Telestes,Dryopis (Doris),Dorian Muse,49,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
+440,Telestes,Lydia,"strain
+",49,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
+441,Telestes,Lydia,hymn,49,The first to sing to the pipes the Phrygian tune of the mountain Mother beside the mixing-bowls of the Greeks were the companions of Pelops; and the Greeks began to twang the Lydian hymn with the shrill-voiced plucking of the pectis.
+443,Telestes,Phrygia,tune,49,The first to sing to the pipes the Phrygian tune of the mountain Mother beside the mixing-bowls of the Greeks were the companions of Pelops; and the Greeks began to twang the Lydian hymn with the shrill-voiced plucking of the pectis.
+511,Timotheus,Pieria,lyre,49,"Orpheus, Calliope’s son, he of the intricate muse, was the first to beget the tortoise-shell lyre in Pieria"
+539,Xenophanes,Greece,song,49,"Three score years and seven have now been tossing my thoughts throughout the land of Greece,"
+55,Alcaeus,Troy,Paris,50,"and crazed by the Trojan man, the deceiver of his host, she accompanied him over the sea in his ship,"
+95,Alcman,Paphos,wave,51,"leaving lovely Cyprus and Paphos, wave-washed on all sides."
+122,Anacreon,Leucas,waves,51,"See, once again I climb up and dive from the Leucadian cliff into the grey waves, drunk with love."
+15,Alcaeus,Athens,"Athenians, shield",52,"Alcaeus is safe, but the Athenians hung up (his armour? the shield that was his protection?) in the holy temple of Grey-eyed Athena."
+114,Anacreon,Caria,Shield-strap,52,Once again (I have put my?) hand through the Carian-made shield-strap.
+119,Anacreon,Ialysus,shield-strap,52,Once again this man plucks (i.e. mocks) the blue-shielded men of Ialysus.
+172,Archilochus,Thrace,shield,52,Some Saian exults in my shield which I left...
+166,Archilochus,Caria,soldier,53,... and what’s more I shall be called an auxiliary like a Carian...
+346,Sappho,Lydia,infantry,53,I would rather see her lovely walk and the bright sparkle of her face than the Lydians’ chariots and armed infantry
+426,Stesichorus,Locris Ozolia,Locrian warriors,53,On one side the Locrian warriors were taking up their positions...
+194,Castorion,Arcadia,snow,54,"You who dwell in the land of the Arcadians, an abode wintry with battering snowstorms, beast-tending Pan"
+545,Ibycus,Troy,Priam,55,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+289,Ibycus,Thrace,North Wind,56,...Thracian north wind...
+523,Tyrtaeus,Erineus,wind,56,with them we left windy Erineus and came to the wide island of Pelops
+164,Archilochus,Crete,law,57,the Cretan law teaches
+176,"Aristotle
+",Persia,law,57,This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods
+238,Critias,Sparta,law,57,This too is the custom and established practice at Sparta:
+240,Critias,Sparta,Spartan way of life (law),57,But the Spartan way of life is evenly ordered:
+445,Theognis,Colophon,laws,57,"Lawlessness destroyed Magnesia, Colophon, and Smyrna; it will assuredly destroy you people too, Cyrnus."
+463,Theognis,Magnesia,laws,57,Such acts of lawlessness destroyed Magnesia as now prevail in this holy city.
+472,Theognis,Smyrna,laws,57,"Lawlessness destroyed Magnesia, Colophon, and Smyrna; it will assuredly destroy you people too, Cyrnus."
+422,Stesichorus,Gades,silver,58,...  by the limitless silver-rooted waters of the river Tartessus ...
+485,Timocreon,Isthmus,silver,58,"Gorged with silver, he made a ridiculous innkeeper at the Isthmus, serving cold meat"
+551,Xenophanes,Colophon,oil (smell),59,"And [the Colophonians, according to Athenaeus] having learned useless luxury from the Lydians, while they were free of hateful tyranny, they used to go to the agora wearing robes all of purple, no fewer than a thousand as a rule, proud and exulting(?)  in the splendour of their hair, drenched with the scent of the most refined unguents."
+231,Critias,Etruria,gold,60,"The Etruscan bowl of beaten gold prevails, and all the bronze that adorns a house for any use."
+283,Ibycus,Cyprus,gold,60,and ruin mounted long-suffering Pergamum thanks to the golden-haired Cyprian
+295,Mimnermus,Colchis,gold,60,"Aeetes’ city, where the rays of the swift Sun lie in a golden storeroom at the edge of Oceanus, where god-like Jason went."
+306,Philoxenus of Cythera,Parnassus,gold,60,For they themselves on Parnassus within the gold-roofed chambers of the Nymphs
+326,Sappho,Cyprus,gold,60,"there, Cypris, take . . . and pour gracefully into golden cups nectar that is mingled with our festivities."
+451,Theognis,Cyprus,gold,60,Men thought that you had come with a gift from the golden Cyprus-born
+522,Tyrtaeus,Delphi,gold,60,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
+231,Critias,Etruria,bronze,61,"The Etruscan bowl of beaten gold prevails, and all the bronze that adorns a house for any use."
+522,Tyrtaeus,Delphi,silver,61,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
+2,Adespota,Samos,Syloson,,"Syloson laid waste the state of the Samians and from this there arose the proverb: ""By the will of Syloson there is wide open space."""
+3,Adespota,Abdera,Teians,,"Abdera, fair colony of the Teians"
+4,Adespota,Thrace,,,and of Priapis which faces the Bosporus
+5,Alcaeus,Achaea,,,
+6,Alcaeus,Aegae,Achaians,,they sailed past Aegae
+7,Alcaeus,Aenus,river,,"Hebrus, you flow, the most beautiful of rivers, past Aenus into the turbid sea, surging through the land of Thrace . . ."
+8,Alcaeus,Aeolis,Aeolids,,Aeolids
+9,Alcaeus,Aeolis,Mother Godess (likely Hera),,"and they entitled Zeus God of Suppliants and you, the Aeolian, Glorious Goddess, Mother of all,"
+10,Alcaeus,Aeolis,Pelasgians,,Pelasgians Aeolian
+11,Alcaeus,Antandrus,Antandrus,,Antandrus (is ?) the foremost city of the Leleges
+13,Alcaeus,Ascalon,Ascalon,,Ascalon
+14,Alcaeus,Athens,Athenians,,(Athenians ?)
+16,Alcaeus,Babylon,Babylon,,holy Babylon
+17,Alcaeus,Ceteia,a Ceteian,,Ceteian
+19,Alcaeus,Coronea,"Athena, ruler of Coronea",,ruler of Coronea
+20,Alcaeus,Crisa,Crisa,,Crisa
+24,Alcaeus,Delphi,spring,,water of Tritaea
+25,Alcaeus,Epirus,river,,great river of...Acheron
+26,Alcaeus,Epirus,Sisyphus,,he (Sisyphus) crossed eddying Acheron
+27,Alcaeus,Hebrus,river,,"Hebrus, the most beautiful of rivers"
+28,Alcaeus,Hiera,We,,to the sacred city
+29,Alcaeus,Lesbos,Lesbos,,from lovely (Lesbos ?)
+30,Alcaeus,Lesbos,Macar,,leaving the lovely island of Macar
+31,Alcaeus,Lesbos,The Lesbian women,,"meetings themselves I dwell, keeping my feet out of trouble, where Lesbian women with trailing robes go to and fro being judged for beauty,"
+32,Alcaeus,Lesbos,The Lesbians,,". . . the Lesbians established this great conspicuous precinct to be held in common,"
+33,Alcaeus,Locris Ozolia,Ajax,,"and seizing the maiden with both hands as she stood by the (holy?) statue the Locrian (ravished her),"
+34,Alcaeus,Lydia,The Lydians,,"Father Zeus, the Lydians, indignant at the turn of events, gave us two thousand staters in the hope that we could enter the holy city,"
+35,Alcaeus,Mytilene,Mytilene,,glorious (kydnos) Mytilene
+36,Alcaeus,Mytilene,Mytilene,,Mytilene
+37,Alcaeus,Mytilene,Mytilene,,"Melanchrus, worthy of respect, to the city"
+38,Alcaeus,Mytilene,Pittacus,,let (him)...devour the city
+39,Alcaeus,Mytilene,Pittacus,,he devours our city
+40,Alcaeus,Mytilene,Pittacus,,this man who seeks supreme power will soon overturn the city; its fate is in the balance.
+41,Alcaeus,Mytilene,,,"Father Zeus, the Lydians, indignant at the turn of events, gave us two thousand staters in the hope that we could enter the holy city,"
+42,Alcaeus,Olympus,Olympian gods,,"and let us relax from the heart-eating strife and civil warring, which one of the Olympians has aroused among us,"
+43,Alcaeus,Olympus,Olympian gods,,the Olympian gods
+44,Alcaeus,Olympus,Olympian gods,,so that none of the Olympian gods could free her apart from him
+45,Alcaeus,Olympus,Olympus,,"Greetings, ruler of Cyllene—for it is of you that I wish to sing: you whom Maia bore on the very mountain-tops, having lain with Zeus, son of Cronus, king of all."
+46,Alcaeus,Peloponnese,Pelops,,"Come hither, leaving the island of Pelops, strong sons of Zeus and Leda;"
+47,Alcaeus,Phrygia,Phrygians,,"But they perished for Helen’s sake—the Phrygians and their city,"
+52,Alcaeus,Thrace,river,,surging through the land of Thrace
+53,Alcaeus,Troy,Dardanian plain,,the (Dardanian ?) plain
+54,Alcaeus,Troy,Ilium,,"As the story goes, because of evil deeds bitter grief came once to Priam and his sons from you, Helen, and Zeus destroyed holy Ilium with fire."
+56,Alcaeus,Troy,Phrygians,,"But they perished for Helen’s sake—the Phrygians and their city,"
+57,Alcaeus,Troy,Troy,,"many of his brothers (the dark earth?) holds, laid low on the Trojans’ plain for that woman’s sake,"
+58,Alcaeus,Tyrrhacea,Dinnomenes the Tyrrhacean,,of Dinnomenes the Tyrrhacean
+59,Alcman,Achaea,women,,woman of Aegialus (ancient name of Achaea).
+60,Alcman,Amyclae,?,,Amyclae
+61,Alcman,Annichorum,,,Annichorum
+62,Alcman,Aphidnae,city of the Athenians,,city of the Asanaioi
+63,Alcman,Asia,?,,spacious Asia?
+64,Alcman,Assos,,,Assus
+67,Alcman,Cnacalus,,,nor from Cnacalus nor from Nyrsylas.
+68,Alcman,Corcyra,,,"and leads a Corcyraean,"
+73,Alcman,Cyprus,,,"leaving lovely Cyprus and Paphos, wave-washed on all sides."
+76,Alcman,Dyme,Dymainai,,And you... lead the Dymainai
+79,Alcman,Epirus,,,Arybban
+81,Alcman,Euboea,?,,Euboea
+83,Alcman,Gargara,,,Gargarus
+85,Alcman,Illyria,,,Araxae or Araxi:
+86,Alcman,Issedones (Scythia),,,Essedones.
+90,Alcman,Maeonia,?,,Maeonia(n)?
+91,Alcman,Nyrsylas,,,nor from Cnacalus nor from Nyrsylas.
+97,Alcman,Pityussae (Balearic Islands),,,Pityodeis
+99,Alcman,Rhipae,"mountains, forest",,"Rhipae, mountain blossoming with forest, breast of black night."
+100,Alcman,Sardis,Alcman?,,"nor Thessalian by race, but from lofty) Sardis"
+101,Alcman,Sardis,Alcman?,,he was no rustic man nor clumsy (not even in the view of unskilled men?) nor Thessalian by race nor an Erysichaean shepherd: he was from lofty Sardis.
+104,Alcman,Sparta,?,,from Sparta(?)
+106,Alcman,Therapne,?,,Therapne
+107,Alcman,Therapne,temple,,and the holy temple of well-towered Therapne
+108,Alcman,Thessaly,Alcman?,,"nor Thessalian by race, but from lofty) Sardis"
+109,Alcman,Thessaly,Alcman?,,he was no rustic man nor clumsy (not even in the view of unskilled men?) nor Thessalian by race nor an Erysichaean shepherd: he was from lofty Sardis.
+111,Alcman,Trygeae,,,the lovely sanctuary of the Leucotheae by going up from Trygeae
+113,Anacreon,Abdera,,,The mighty Agathon who died for Abdera was mourned at the pyre by this whole city;
+118,Anacreon,Euonymon,Tellias,,and grant that he dwell among the fair-judging people of Euonymon enjoying good fortune all his days.
+122,Anacreon,Leucas,Cliff,,"See, once again I climb up and dive from the Leucadian cliff into the grey waves, drunk with love."
+123,Anacreon,Lydia,Lydian style,,people living in Lydian style
+125,Anacreon,Miletus,,,Once long ago the Milesians were brave.
+130,Anacreon,Samos,fishermen,,"and so Anacreon says of the rebellious fishermen in Samos: and in the island, Megistes, the talkers hold sway over the sacred city,"
+133,Anacreon,Sintia,,,"What do I care, my friend, for the Cimmerians with their curving bows and the Sintians?"
+134,Anacreon,Tartessus,,,"I would not wish for Amalthea’s horn nor to be king of Tartessus for a hundred and fifty years,"
+136,Anacreon,Teos,,,Athamantis
+140,Anacreon,Thrace,,,for what is one to do if he has not succeeded even for the sake of Thrace
+142,Anacreon?,Abdera,,,"Abdera, fair colony of the Teians."
+149,Archilochus,Paros,,,... from Paros...
+151,Archilochus,Thasos,Thasians,,"I bewail the woes of the Thasians, not those of the Magnesians."
+152,Archilochus,Thasos,,,... some in Thasos...
+153,Archilochus,Thasos,Misery,,the misery of All-Greeks has rushed to Thasos
+154,Archilochus,Magnesia-ad-Sipylum,Magnesians,,"I bewail the woes of the Thasians, not those of the Magnesians."
+156,Archilochus,Gortyn,,,... you arrived from the region of Gortyn...
+157,Archilochus,Naxos,Naxians,,... of the Naxians to get into...
+158,Archilochus,Naxos,"Megatimus, Aristophon",,"Great earth, you hold beneath you Megatimus and Aristophon, lofty pillars of Naxos."
+159,Archilochus,Mt. Olympus,Olympian gods,,... me Zeus father of the Olympians...
+160,Archilochus,Mt. Olympus,Olympian gods,,... Zeus father of the Olympians...
+162,Archilochus,Phrygia,Phrygian,,"she was sucking like a Thracian or Phrygian sucking beer through a tube, and she was bent over working hard"
+163,Archilochus,Thrace,Thracian,,"she was sucking like a Thracian or Phrygian sucking beer through a tube, and she was bent over working hard"
+164,Archilochus,Crete,teacher,,the Cretan law teaches
+171,Archilochus,Karpathos,witness,,a Karpathian (introduced) his witness
+173,Archilochus,Siris,,,"for it is not at all a fair, desirable, or lovely land, like that round about the stream of Siris."
+174,Archilochus,Torone,,,... and Torone...
+177,Bacchylides,Athens,,,but the whole group of young Athenians had trembled
+178,Bacchylides,Ceos,Choirs of the Ceans,,"God of Delos, rejoice in your heart at the choirs of the Ceans and grant a heaven-sent fortune of blessings."
+179,Bacchylides,Ceos,,,The Young Athenians or Theseus for the Ceans to Perform in Delos
+180,Bacchylides,Cyprus,,,the dread gifts of the Cyprian goddess
+182,Bacchylides,Delos,,,The Young Athenians or Theseus for the Ceans to Perform in Delos
+183,Bacchylides,Ionia,,,maidens of the Ionians
+184,Bacchylides,Knossos,,,warlord of the Cnossians
+185,Bacchylides,Knossos,,,in what thoughts did he check the Cnossian commander
+186,Bacchylides,Mt. Ida,,,under the brow of mount Ida
+187,Bacchylides,Phoenicia,,,if the white-armed Phoenician maiden indeed bore me as your son
+188,Bacchylides,Sea of Crete,,,"was cleaving the Cretan sea,"
+189,Bacchylides,Troezen,"Aethra, Poseidon",,if Troezenian Aethra in fact bore you to earth-shaking Poseidon
+190,Callinus,Cimmeria,Cimmerians,,"now the horde of Cimmerians, with their acts of violence, is advancing"
+191,Callinus,Smyrna,Smyrnaeans,,have mercy on the Smyrnaeans
+192,Callinus,Smyrna,Smyrnaeans,,"remember, if ever (the Smyrnaeans burned) fine thigh bones of oxen for you"
+193,Callinus,Treros,Trerians,,bringing Trerian men
+194,Castorion,Arcadia,Pan,,"You who dwell in the land of the Arcadians, an abode wintry with battering snowstorms, beast-tending Pan"
+195,Cinesias,Phthia,,,Phthian
+197,Corinna,Boeotia,Asopos,,Asopus (went) to his haunts
+198,Corinna,Boeotia,Asopos,,"So spoke the reverend prophet, and Asopus happily grasped him by his right hand and shedding tears from his eyes answered him thus"
+199,Corinna,Cephisus,,,"often I adorned our ancestor Cephisus with my words,"
+200,Corinna,Cephisus,River,,widely (flowing Cephisus?)
+201,Corinna,Cephisus,River,,well-wooded Cephisus
+202,Corinna,Cithaeron,,,and Cithaeron won the greater number
+203,Corinna,Cithaeron,,,Cithaeron
+206,Corinna,Euripus,,,on the Euripus
+207,Corinna,Gargara,,,and shadowy Gargara
+208,Corinna,Helicon,,,"but the other, Helicon, gripped by cruel anguish, tore out a smooth rock"
+209,Corinna,Helicon,,,(Helicon?)
+212,Corinna,Libya,,,(and fair) Libya
+213,Corinna,Mt. Parnes,,,Parnes (spoke in turn)
+214,Corinna,Mt. Parnes,,,Parnes
+215,Corinna,Mt. Parnes,,,Parnes
+216,Corinna,Olympus,,,Olympus
+217,Corinna,Olympus,,,Olympus
+218,Corinna,Plataea,,,"Plataea
+"
+219,Corinna,Mt. Ptoios,,,and the mountain Ptoios
+228,Critias,Athens,Alcibiades,,"And now I shall crown the Athenian son of Cleinias, Alcibiades, with a song in a new manner."
+232,Critias,Greece,Greece,,"Teos brought to Greece the one who once wove songs with strains celebrating women, sweet Anacreon,"
+235,Critias,Phoenicia,letters,,Phoenicians invented letters as a means of preserving discourse.
+238,Critias,Sparta,Sparta,,This too is the custom and established practice at Sparta:
+239,Critias,Sparta,Spartan youths,,But Spartan youths drink only enough (to turn?) their mind to cheerful
+241,Critias,Sparta,Chilon,,"It was Chilon, the Spartan sage, who said this: “Nothing in excess, to due measure belongs everything."""
+242,Critias,Sparta,Arcesilaus,,"the wealth of the Scopadae, the magnanimity of Cimon, and the victories of the Spartan Arcesilaus."
+243,Critias,Teos,Anacreon,,"Teos brought to Greece the one who once wove songs with strains celebrating women, sweet Anacreon,"
+246,Demodocus,Chios,Chians,,"This too is by Demodocus. The Chians are base, not just one and another not, but all except Procles—and Procles is a Chian."
+247,Demodocus,Miletus,Milesians,,"<This too is by Demodocus.> The Milesians are not fools, but they act as fools do."
+248,Demodocus,Priene,Bias,,"If you happen to be paying requital, plead your case in the Prienian manner."
+250,Hermippus,Cylicrania,,,"On my journey I came to the spleen-land of the Cylicranians; and so I saw Heracleia, a very beautiful city."
+251,Hermippus,Heracleia,,,"On my journey I came to the spleen-land of the Cylicranians; and so I saw Heracleia, a very beautiful city."
+252,Hipponax,Chios,Critias,,I don’t think that Critias the Chian was justly apprehended as an adulterer in the . . . assembly of women
+253,Hipponax,Miletus,Soloeci (barbarians),,"and if they catch the soloeci they sell them, Phrygians to Miletus to grind barley"
+254,Hipponax,Miletus,,,... to Miletus...
+255,Hipponax,Ephesus,,,"And also a certain place in Ephesus was called Smyrna, as Hipponax makes clear: he (she) lived behind the city in Smyrna between Tracheia and Lepra Acte."
+257,Hipponax,Smyrna,,,go along the road to Smyrna through Lydia past the tomb of Attalus and the gravestone of Gyges
+258,Hipponax,Erythrae,Bupalus,,"Bupalus, the mother-fucker with Arete, fooling with these words (by these means?) the Erythraeans, preparing to draw back his damnable foreskin."
+259,Hipponax,Clazomenae,,,"People of Clazomenae, Bupalus has killed"
+260,Hipponax,Mt. Olympus,Olympian gods,,"Zeus, father Zeus, sultan of the Olympian god..."
+262,Hipponax,Lydia,,,go along the road to Smyrna through Lydia past the tomb of Attalus and the gravestone of Gyges
+265,Hipponax,Phrygia,Soloeci (barbarians),,"and if they catch the soloeci they sell them, Phrygians to Miletus to grind barley"
+266,Hipponax,Thrace,Bendis,,"and the daughter of Zeus, Cybebe, and Thracian Bendis."
+267,Hipponax,Priene,Bias,,and to have a better judge than Bias of Priene
+269,Hipponax,Daskyleion,,,... Daskyleion...
+270,Hipponax,Lampsacus,eunuch,,... like a eunuch from Lampsacus
+273,Hipponax,Mytalis,memorial of Tos,,"and the memorial of Tos, sultan at Mytalis"
+278,Ibycus,Achaea,Sons of the Achaeans,,...sons of the Achaeans...
+279,Ibycus,Argos,Cyanippus,,"...from Argos to Ilium Cyanippus, the most handsome man..."
+280,Ibycus,Argos,Achaeans,,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
+286,Ibycus,Ionia,Ionians,,...among Ionians...
+287,Ibycus,Leontini,glens of Chronios,,...glen(s) of Cronion . . .: Cronion at Leontini...
+288,Ibycus,Sparta,Spartans (?),,...dwell in Lacedaemon...
+291,Ion of Chios,Chios,Theseus,,"Among them is the Chiot Ion, who says of his native city ""which once Theseus’ son Oenopion founded."""
+293,Mimnermus,Asia,Asia,,we came on our ships to longed-for Asia
+294,Mimnermus,Colchis,Aea,,Jason would never have brought back the great fleece from Aea on his own at the end of a painful
+295,Mimnermus,Colchis,Aeetes' city,,"Aeetes’ city, where the rays of the swift Sun lie in a golden storeroom at the edge of Oceanus, where god-like Jason went."
+296,Mimnermus,Colophon,Colophon,,with overwhelming force we settled in lovely Colophon
+297,Mimnermus,Colophon,Andraemon of Pylos,,"Andraemon of Pylos founded Colophon, as Mimnermus says in his Nanno"
+298,Mimnermus,Ethiopia,Ethiopians,,to the land of the Ethiopians
+301,Mimnermus,Phrygia,River Hermus,,who saw him...routing the thick ranks of the Lydian cavalry on the plain of Hermus.
+302,Mimnermus,Pylos,Pylos,,"leaving Pylos, the city of Neleus"
+303,Mimnermus,Smyrna,Smyrnaeans,,by the will of the gods we captured Aeolian Smyrna
+304,Philiadas,Helicon,Helicon,,Spacious Thespiae takes pride in the spirit of those men who once dwelled beneath the brows of Helicon.
+305,Philiadas,Thespia,Thespia,,Spacious Thespiae takes pride in the spirit of those men who once dwelled beneath the brows of Helicon.
+307,Phocylides,Leros,Lerians,,"This too is by Phocylides. The Lerians are base, not just one and another not, but all except Procles—and Procles is a Lerian."
+308,Phocylides,Nineveh,Nineveh,,This too is by Phocylides. A small and orderly city on a height is superior to foolish Nineveh.
+309,Pindar,Alpheos,,,"if the splendor of Pisa and of Pherenicus has indeed enthralled your mind with sweetest considerations, when he sped beside the Alpheus,"
+310,Pindar,Alpheos,,,"as he reclines by the course of the Alpheus,"
+311,Pindar,Elis,,,and speed me in the swiftest of chariots to Elis
+312,Pindar,Lydia,,,... in the colony of brave men founded by Lydian Pelops
+313,Pindar,Mt. Olympus,,,"If in fact the wardens of Olympus honored any mortal / man,"
+314,Pindar,Olympia,,,... nor let us proclaim a contest greater than Olympia.
+315,Pindar,Olympia,fame,,And far shines that fame of the Olympic festivals gained in the racecourses of Pelops
+316,Pindar,Olympia,,,when coming to Cronus’ sunny hill.
+317,Pindar,Peloponnese,,,... Fame shines for him in the colony of brave men founded by Lydian Pelops
+318,Pindar,Pisa,,,"if the splendor of Pisa and of Pherenicus has indeed enthralled your mind with sweetest considerations, when he sped beside the Alpheus,"
+319,Pindar,Pisa,,,"to winning famous Hippodameia from her father, the Pisan."
+320,Pindar,Sicily,,,"... the rich and blessed hearth of Hieron, who wields the rightful scepter in flock-rich Sicily."
+321,Pindar,Sipylus,Tantalus,,... that when your father invited the gods to his most orderly feast and to his friendly Sipylus...
+322,Pindar,Syracuse,,,"... the rich and blessed hearth of Hieron, who wields the rightful scepter in flock-rich Sicily."
+323,Pindar,Syracuse,,,Syracuse’s horse-loving king.
+332,Sappho,Cyprus,island,,either Cyprus or Paphos or Panormus (detains) you
+333,Sappho,Cyprus,island,,Cyprus
+334,Sappho,Cyprus,island,,Cyprus...queen
+335,Sappho,Cyprus,island,,(Cyprus?)
+338,Sappho,Epirus,Acheron,,"(to) see the dewy, lotus-covered banks of Acheron"
+339,Sappho,Geraestus,Geraesteum,,the Geraesteum
+341,Sappho,Ionia,Ionian cities,,(Ionian?) cities
+344,Sappho,Lydia,,,"I have a beautiful child who looks like golden flowers, my darling Cleis, for whom I would not (take) all Lydia or lovely . . ."
+345,Sappho,Lydia,"Lydian women, moon",,"Now she stands out among Lydian women like the rosy-fingered moon after sunset, surpassing all the stars,"
+349,Sappho,Olympus,Mt. Olympus,,(There is no) road to great Olympus for mortals
+350,Sappho,Panormus,Panormus,,either Cyprus or Paphos or Panormus (detains) you
+351,Sappho,Paphos,Paphos,,either Cyprus or Paphos or Panormus (detains) you
+353,Sappho,Phrygia,Phrygian,,(Phrygian?)
+356,Sappho,Sardis,Sardis,,Sardis...often turning her thoughts in this direction
+358,Sappho,Thebe,Placia,,"Hector and his companions are bringing the lively-eyed, graceful Andromache from holy Thebe and ever-flowing Placia"
+359,Sappho,Thebe,Thebe,,"Hector and his companions are bringing the lively-eyed, graceful Andromache from holy Thebe and ever-flowing Placia"
+361,Sappho,Troy,Atridae,,"after accomplishing (many labours), first around (Ilium, then on the sea), they started out to this island, but could not (complete their journey)..."
+362,Sappho,Troy,Ilion,,To Ilium
+364,Scythinus,Euboea,Eurytus,,Heracles captured and killed Eurytus and his son when they were exacting tribute from the Euboeans.
+366,Scythinus,Trachis,Heracleia,,He [Heracles] also sacked the Cylicranians who were engaged in plunder and built there Heracleia called the Trachinian.
+368,Semonides,Mt. Olympus,Olympian gods,,Another the Olympians fashioned from earth and gave her maimed to her man...
+369,Semonides,Lesbos,Prylis,,like Lesbian Prylis
+374,Simonides,?,"Jason, Medea",,And he (Jason) came to Corinth ... and sharing his hearth with his Colchian wife ruled over . . . and Lechaeum.
+375,Simonides,Alpheos,,,...at the Alpheus...
+376,Simonides,Athens,Demos of Athens,,...it was the people of Athens that performed it alone.
+377,Simonides,Caria,valiant Carians,,... (of) the valiant Carians
+378,Simonides,Cholchis,,,...Colchis...
+379,Simonides,Corinth,Danaans,,"...and [Troy] is not angry with the Corinthians, nor are the Danaans..."
+380,Simonides,Corinth,,,...and those who inhabit the Corinthian city of Glaucus.
+382,Simonides,Delos,daughters of the Delians,,...daughters of the Delians...
+383,Simonides,Delos,,,...to Delos...
+384,Simonides,Delphi,Pytho,,...for once at Pytho...
+385,Simonides,Delphi,shining Pytho,,...shining Pytho
+387,Simonides,Mt. Parnes,sacred Parnes,,...from sacred Parnes...
+388,Simonides,Sicyon,,,...Sicyon...
+389,Simonides,Thessaly,,,...even for every people of the Thessalians.
+391,Solon,Athens,Athenian,,In that case may I change my country and be a Pholegandrian or Sikinite instead of an Athenian.
+392,Solon,Athens,Athenian,,"For this report would quickly be spread among men: “This man is an Athenian, one of the Salamisceders.”"
+393,Solon,Athens,Athenians,,"This is what my heart bids me teach the Athenians,"
+394,Solon,Athens,Athens,,"And I brought back to Athens, to their homeland founded by the gods, many who had been sold, "
+397,Solon,Ionia,Athens,,"as I look on the eldest land of Ionia tottering,"
+398,Solon,Nile,Mouth of the Nile,,"at the mouth of the Nile, near Canopus’ shore"
+401,Solon,Olympus,Olympians,,"the mighty mother of the Olympian gods, dark Earth,"
+402,Solon,Pholegandros,Pholegandrian,,In that case may I change my country and be a Pholegandrian or Sikinite instead of an Athenian.
+404,Solon,Salamis,Salamis,,"I have come in person as a herald from lovely Salamis, "
+405,Solon,Salamis,Salamis,,"For this report would quickly be spread among men: “This man is an Athenian, one of the Salamisceders.”"
+406,Solon,Salamis,Salamis,,Let us go to Salamis to fight for a lovely island and clear away bitter disgrace.
+407,Solon,Sikinos,Sikinite,,In that case may I change my country and be a Pholegandrian or Sikinite instead of an Athenian.
+408,Solon,Soli,Soloi,,Now may you and your progeny dwell in this city and rule over Soloi for a long time;
+409,Sophocles,Athens,,,helper of the Cecropidae
+410,Sophocles,Olympus,,,Olympian
+411,Stesichorus,Achaea,Achaeans,,Achaeans
+412,Stesichorus,Achaea,Achaeans,,...steadfast Achaeans...
+413,Stesichorus,Aetolia,Aetolians,,"...and the Aetolians, staunch in war..."
+415,Stesichorus,Boeotia,Boeotians,,and those who lived in the holy wheat-bearing land of Boeotia.
+416,Stesichorus,Calydon,,,...lovely Calydon...
+420,Stesichorus,Dryopis (Doris),Dryopians,,On the other side the Dryopians...
+422,Stesichorus,Gades,,,...  by the limitless silver-rooted waters of the river Tartessus ...
+424,Stesichorus,Ithaka,Odysseus,,. . . Odysseus having appeared at your family’s house . . . a man . . . by the plans of Athena
+425,Stesichorus,Larissa,Eurytion,,"...and from (Larissa) came Eurytion, (son of?) with her trailing robes..."
+427,Stesichorus,Phocis,Phocians (?),,...and proud (Phocians?)...
+428,Stesichorus,Thebes,Eteocles,,...my sons dead in the palace or the city captured.
+432,Stesichorus,Troy,Epeius,,‘. . . maiden(ly) . . . longs . . .; but now by the (fair-flowing) eddies of the Simois a man has grievously misled us
+442,Telestes,Phrygia,"Olympus, pipes",,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
+444,Theognis,Cerinthus,Cerinthus,,Shame on weakness! Cerinthus is destroyed and Lelantum’s fine vineyards are being ravaged;
+445,Theognis,Colophon,Colophon,,"Lawlessness destroyed Magnesia, Colophon, and Smyrna; it will assuredly destroy you people too, Cyrnus."
+456,Theognis,Delos,Delos,,"all Delos was filled from end to end with an ambrosial aroma,"
+457,Theognis,Delphi,Delphi,,that man to whom the priestess of the god at Delphi in her response reveals the god’s voice from the wealthy shrine.
+459,Theognis,Greece,Hellas,,"Cyrnus, as you roam throughout the land of Greece and among the islands,"
+460,Theognis,Greece,Greeks,,"For indeed I am afraid when I look upon the mindless, people-destroying strife of the Greeks."
+462,Theognis,Lethaeus,Lethaean plain,,"Moreover, I have a city, a fair one that lies on the Lethaean plain."
+463,Theognis,Magnesia,Magnesia,,Such acts of lawlessness destroyed Magnesia as now prevail in this holy city.
+464,Theognis,Magnesia,Magnesia,,"Lawlessness destroyed Magnesia, Colophon, and Smyrna; it will assuredly destroy you people too, Cyrnus."
+465,Theognis,Megara,Theognis of Megara,,"but everyone will say, “They are the verses of Theognis of Megara, and he is famous among all men;”"
+466,Theognis,Megara,Megara,,"Come, Phoebus, graciously protect this city of ours."
+467,Theognis,Melos,Melian sea,,"we are now being carried along, with white sails lowered, beyond the Melian sea through the dark night"
+469,Theognis,Olympus,Olympus,,Hope is the only good god remaining among mankind; the others have left and gone to Olympus.
+470,Theognis,Olympus,Ganymede,,"And there is some pleasure in loving a boy, since once in fact even the son of Cronus, king of the immortals, fell in love with Ganymede, seized him, carried him off to Olympus, and made him divine, keeping the lovely bloom of boyhood."
+471,Theognis,Sicily,Sicily,,"For I went once to the land of Sicily and I went to the vine-rich plain of Euboea and to Sparta, the splendid city of the reed-nourishing Eurotas, and they all treated me with kindly friendship on my arrival."
+473,Theognis,Sparta,Sparta,,"For I went once to the land of Sicily and I went to the vine-rich plain of Euboea and to Sparta, the splendid city of the reed-nourishing Eurotas, and they all treated me with kindly friendship on my arrival."
+474,Theognis,Sparta,Spartan girl,,and a comely Spartan girl with slender hands would quickly carry out the washbasin and bring in garlands.
+475,Theognis,Sparta,Lacedaemon,,"Castor and Polydeuces, you who dwell in glorious Lacedaemon by the fair-flowing river Eurotas,"
+476,Theognis,Taygetus,Taygetus,,Drink the wine which was produced for me beneath the peaks of Taygetus
+478,Theognis,Tmolus,Mountain,,"I’ll never place my neck beneath the galling yoke of my enemies, not even if Tmolus is upon my head."
+479,Theognis,Troy,Troy,,"Artemis, slayer of wild beasts, daughter of Zeus, for whom Agamemnon set up a temple when he was preparing to sail on his swift ships to Troy,"
+481,Timocreon,Athens,,,I commend Aristides as the very best man to have come from holy Athens
+482,Timocreon,Ceos,nonsense,,from Ceos came to me against my will. Against my will there came to me nonsense from Ceos
+483,Timocreon,Ceos,,,from Ceos came to me against my will. Against my will there came to me nonsense from Ceos
+484,Timocreon,Ialysus,home,,"for Themistocles incurred the hatred of Leto, Themistocles the liar, the criminal, the traitor, who was bribed with mischievous silver and would not take Timocreon home to his native Ialysus, although he was his guest-friend."
+485,Timocreon,Isthmus,"innkeeper, meat",,"Gorged with silver, he made a ridiculous innkeeper at the Isthmus, serving cold meat"
+486,Timocreon,Sicily,mother,,A clever Sicilian said to his mother
+487,Timotheus,Aeolis,,,Aeolian Lesbos bore him to give glory to Antissa
+488,Timotheus,Antissa,,,Aeolian Lesbos bore him to give glory to Antissa
+489,Timotheus,Asia,,,"I no come here to you, I go over there to Sardis, to Susa, Ecbatana dweller. Artimis, my great god, will guard me to Ephesus."
+494,Timotheus,Ecbatana,,,"I no come here to you, I go over there to Sardis, to Susa, Ecbatana dweller. Artimis, my great god, will guard me to Ephesus."
+496,Timotheus,Helle,,,navigable Helle
+499,Timotheus,Ionia,melody,,"‘Timotheus of Miletus is victorious over Camon’s son, the modulator of Ionian melody,’"
+500,Timotheus,Lesbos,,,Aeolian Lesbos bore him to give glory to Antissa
+501,Timotheus,Lydia,Lydian town of Sardis,,for then I should not have left Tmolus or the Lydian town of Sardis and come to fend off Greek Ares
+502,Timotheus,Macedon,bones,,"All Greece is the monument of Euripides, although his bones lie in the land of Macedon, where he met the end of his life."
+504,Timotheus,Miletus,Timotheus,,"‘Timotheus of Miletus is victorious over Camon’s son, the modulator of Ionian melody,’"
+505,Timotheus,Mysia,glens,,"Ho, you tree-tressed glens of Mysia"
+506,Timotheus,Persia,,,Persians
+509,Timotheus,Persia,,,and lamentable sufferings will befall the Persian land!
+510,Timotheus,Phrygia,,,"At this point a man from the (Phrygian?) plain, a lord of the land that takes a day to cross"
+512,Timotheus,Sardis,Lydian town of Sardis,,for then I should not have left Tmolus or the Lydian town of Sardis and come to fend off Greek Ares
+513,Timotheus,Sardis,,,"I no come here to you, I go over there to Sardis, to Susa, Ecbatana dweller. Artimis, my great god, will guard me to Ephesus."
+514,Timotheus,Sparta,youth,,"for Sparta’s great leader, well-born, long-lived, the populace riotous with the flowers of youth, buffets me"
+515,Timotheus,Susa,,,"I no come here to you, I go over there to Sardis, to Susa, Ecbatana dweller. Artimis, my great god, will guard me to Ephesus."
+516,Timotheus,Tmolus,,,for then I should not have left Tmolus or the Lydian town of Sardis and come to fend off Greek Ares
+517,Timotheus,Troy,,,"Troyward-conveying, she alone might be the deliverer from disaster"
+518,"Timotheus
+",Athens,,,"His native city was Athens, the Greece of Greece."
+519,Tyrtaeus,Arcadia,Arcadians,,Archadians(?)
+520,Tyrtaeus,Argos,Argives,,of the Argives(?)
+524,Tyrtaeus,Ithome,mountain range of Ithome,,"and in the twentieth year the enemy fled from the high mountain range of Ithome, abandoning their rich farmlands"
+525,Tyrtaeus,Messene,war,,it (i.e. factions) happened too in Sparta in the course of teh Messenian War
+526,Tyrtaeus,Messene,,,through whom (i.e. Theopompus) we captured spacious Messene
+528,Tyrtaeus,Messene,,,of the Messenians
+529,Tyrtaeus,Peloponnese,Island of Pelops,,with them we left windy Erineus and came to the wide island of Pelops
+532,Tyrtaeus,Sparta,kings,,"The divinely honoured kings, in whose care is Sparta’s lovely city"
+533,Tyrtaeus,Sparta,the people,,and (the men of the people should) not give the city (crooked) counsel
+536,Tyrtaeus,Sparta,Spartans,,of the Spartans as many as
+537,Tyrtaeus,Thrace,Thracian Boreas,,and outstripped Thracian Boreas in the race
+539,Xenophanes,Greece,thoughts,,"Three score years and seven have now been tossing my thoughts throughout the land of Greece,"
+543,Xenophanes,Pisa,Olympia,,if one were to win while contending by the banks of Pisa;
+544,Ibycus,Troy,,,"...from Argos to Ilium Cyanippus, the most handsome man..."
+547,Simonides,Corinth,,,And he (Jason) came to Corinth ... and sharing his hearth with his Colchian wife ruled over . . . and Lechaeum.
+548,Stesichorus,Argos,,,"(I tell you) what is destined to happen: (you will reach) the house of lord Adrastus, and he will (welcome you and) give you his beautiful daughter . . ."
+551,Sappho or Alcaeus,Gyaros,Hero,,taught fleet-footed Hero (from Gyaros?)1;
+552,Sappho or Alcaeus,Crete,dance,23,the Cretan women once kept time so well with the music as they danced on their soft feet around the lovely altar;
+553,Sappho or Alcaeus,Thebes,chariot,25,such was the boy who (came) to Thebes riding on a chariot
+554,Sappho or Alcaeus,Arcadia,grain,46,you (thorn-eater?)! For it is no insult to the Arcadians (to be called that?)
