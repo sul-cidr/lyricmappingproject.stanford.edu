@@ -18,7 +18,7 @@
 	<!--Content.data is determined by the UI on the cartodb webpage.-->
 	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
 
-	<link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+	<link rel="stylesheet" href="cartodb.css" />
 	<!--[if lte IE 8]>
 		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
 	<![endif]-->
@@ -182,7 +182,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <!-- include cartodb.js library -->
 <!--	<script src="test-cartodb.js"></script> -->
-	<script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+	<script src="cartodb.js"></script>
     
     <script src="jquery-1.11.2.js"></script>
     <script src="jquery-ui.js"></script>
@@ -226,16 +226,16 @@
         $options.click(function(e) {        
 		  updateQuery(layer, $("#slider").rangeSlider("values"));
 		  categoryChecked = false;
-		  // for (i=0; i <= 200; i++) {		
-			//   if($('#category_'+i).is(':checked') /* && "category_chooser_"+i != displayed_category */ ) {
-			// 	if ($("#"+displayed_category).length != 0) HideContent(displayed_category);
-			// 	displayed_category="category_chooser_" + i;
-			// 	if ($("#"+displayed_category).length != 0) ShowContent(displayed_category);
-			//   }
-			//   if($('#poet_'+i).is(':checked') || $('#relationship_'+i).is(':checked') ) {
-			// 	HideContent(displayed_category);
-			//   }
-		  // }
+		  for (i=0; i <= 200; i++) {		
+			  if($('#category_'+i).is(':checked') /* && "category_chooser_"+i != displayed_category */ ) {
+				if ($("#"+displayed_category).length != 0) HideContent(displayed_category);
+				displayed_category="category_chooser_" + i;
+				if ($("#"+displayed_category).length != 0) ShowContent(displayed_category);
+			  }
+			  if($('#poet_'+i).is(':checked') || $('#relationship_'+i).is(':checked') ) {
+				// HideContent(displayed_category);
+			  }
+		  }
 //		  $("#slider").show();
 //		  $("#slider").rangeSlider("resize");
         });
@@ -259,29 +259,151 @@
 		
 		layer.setInteraction(true);
 		
-		var query = "SELECT cities.the_geom_webmercator, cities.cityid as cartodb_id, count(*) as selected_number FROM referents join poets on referents.poet_name = poets.poet_name join cities on referents.city_name = cities.city_name ";
+		var query = "SELECT cities_with_poets.*, grouped_politics.grouped_government AS government FROM ( SELECT cities.*, sum(rank_players.poet_count) AS selected_number, (string_agg('<span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || ': ' || rank_players.poet_count || ' reference(s)' , '<br>' order BY rank_players.poets_cities_rank)) AS selected_names, (string_agg('<p><span style=\"color:#B81609\">' || rank_players.poets_cities_rank || '</span>. ' || rank_players.poet_name || '<br>Dates: ' || rank_players.date_names || '<br>References:<br>' || rank_players.poet_citations , '</p>' ORDER BY rank_players.poets_cities_rank)) AS selected_sources ";
 
+		query = query + "  FROM cities, ( SELECT grouped_players.*, rank() OVER (partition BY grouped_players.cityid ORDER BY grouped_players.poet_name ASC) AS poets_cities_rank FROM (SELECT cityid, poetid, count(cityid) as poet_count, date_names, poet_name, string_agg( source_poem || '.' || source_citation || ': \"' || source_translation || '\" (trans. ' || source_translator || ')<br>' || source_greektext , '<br><br>' ORDER BY source_poem, source_citation ) as poet_citations FROM ( SELECT genre_players.* FROM ( SELECT date_players.* FROM ( SELECT place_players.* FROM ( SELECT poets.poetid, poets.poet_name, poets.sources, poets.genre_names, poets.dates AS date_names, geographical_imaginary_group.cityid, geographical_imaginary_group.source_citation, geographical_imaginary_group.source_explicit, geographical_imaginary_group.source_greektext, geographical_imaginary_group.source_notes, geographical_imaginary_group.source_poem, geographical_imaginary_group.source_translation, geographical_imaginary_group.source_translator FROM ( SELECT poets.*, COALESCE(poets_genres.genre_names, 'Unknown') AS genre_names FROM poets LEFT OUTER JOIN ( SELECT sorted_poets.poetid, sorted_poets.poet_name, string_agg(sorted_genres.genre, ', ') AS genre_names FROM ( SELECT * FROM genres WHERE genreid = '2' OR genreid = '3' OR genreid = '4' OR genreid = '5' OR genreid = '16' OR genreid = '18' OR genreid = '6' OR genreid = '22' OR genreid = '11' OR genreid = '24' OR genreid = '7' OR genreid = '8' OR genreid = '13' OR genreid = '9' OR genreid = '10' OR genreid = '12' OR genreid = '30' ORDER BY genre ASC) sorted_genres, ( SELECT poets.poetid, poets.poet_name FROM poets GROUP BY poets.poetid, poets.poet_name ) sorted_poets WHERE sorted_poets.poetid = sorted_genres.poetid GROUP BY sorted_poets.poetid, sorted_poets.poet_name) poets_genres ON poets.poetid = poets_genres.poetid) poets, (select geographical_imaginary_group.* from geographical_imaginary_group, ";
+		
+		firstCall = true;
+		for (i=1; i <= 250; i++) {				
+			if('category_'+i == $("input[name=city]:checked").val()) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + "(select referents.* from referents, referent_categories where referents.referentid = referent_categories.referentid and referent_categories.ref_categoryid = " + i + ") ";
+				}
+			}
+		}		
+		
+		query = query + " referents where geographical_imaginary_group.imaginaryid = referents.imaginaryid ";
+		
+		firstCall = true;
+		for (i=1; i <= 250; i++) {		
+			if('referent_'+i == $("input[name=city]:checked").val()) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + "and referents.referentid = " + i + " ";
+				}
+			}
+		}
+		
+		query = query + ") geographical_imaginary_group WHERE poets.poetid = geographical_imaginary_group.poetid ";
+		
 		/* pick a poet */
 		firstCall = true;
 		for (i=1; i <= 250; i++) {		
 			if('poet_'+i == $("input[name=city]:checked").val()) {
-				console.log("poet " + i + " selected");
 				if(firstCall == true) {
 					firstCall = false;
-					query = query + "where poets.poetid = " + i + " ";
+					query = query + "and poets.poetid = " + i + " ";
 				}
 			}
 		}				
+	
+		/* embed this into the next layer up */
+		
+		query = query + [
+			"		ORDER BY poet_name ASC ",
+			"	) place_players"
+		].join("");
+		
+		/* then call dates */
+		
+		firstCall = true;
+		for (i=-dateValues.min; i >= -dateValues.max; i=i-50) {		
+		  if(firstCall == true) {
+		    firstCall = false;
+		    query = query + [
+		      ", dates ",
+		      "WHERE place_players.poetid = dates.poetid ",
+		      "AND ( ",
+		      "dates.date='",
+		      i,
+		      "' "
+		    ].join("");
+		  }
+		  else {
+			  query = query + "OR dates.date = '" + i + "' ";
+		  }
+		}
+		// if a genre has been selected close the query
+		if(firstCall == false) {
+			query = query + " ) GROUP BY place_players.poetid, place_players.poet_name, place_players.sources, place_players.cityid, place_players.date_names, place_players.genre_names, place_players.source_citation, place_players.source_explicit, place_players.source_greektext, place_players.source_notes, place_players.source_poem, place_players.source_translation, place_players.source_translator ";
+		}
+		// embed this into the next layer up
+		
+		query = query + [
+		"		ORDER BY place_players.poet_name ASC ",
+		"		) date_players "
+		].join("");
+		
+		/* now the custom genre call depending on what is selected */
+		
+		firstCall = true;
+		for (i=2; i <= 30; i++) {		
+			if($('#genre_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [
+					", genres ",
+					"WHERE date_players.poetid = genres.poetid ",
+					"			AND (genres.genreid = ",
+					i,
+					" "].join("");
+				}
+				else {
+					query = query + "OR genres.genreid = " + i + " ";
+				}
+			}
+		}
+		/* if a genre has been selected close the query */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY date_players.poetid, date_players.poet_name, date_players.sources, date_players.cityid, date_players.date_names, date_players.genre_names ";
+		}
+		/* if no genre selected pass all of dates up unaltered */
+		
+		/* embed this into the next layer up */
+		
+		query = query + [
+		"	ORDER BY date_players.poet_name ASC ",
+		"	) genre_players " 
+		].join("");
+		
+		/* now add the instruments */
 
-		query += "group by cities.the_geom_webmercator, cities.cityid";
+		firstCall = true;
+		for (i=1; i <= 7; i++) {		
+			if($('#instrument_'+i).is(':checked')) {
+				if(firstCall == true) {
+					firstCall = false;
+					query = query + [ 
+					", instruments ",
+					"WHERE genre_players.poetid = instruments.poetid ",
+					"AND (instruments.instrumentid = ",
+					i,
+					" "
+					].join("");
+				}
+				else {
+					query = query + "OR instruments.instrumentid = " + i + " ";
+				}
+			}
+		}
+		/* if an instrument has been selected close the call */
+		if(firstCall == false) {
+			query = query + " ) GROUP BY genre_players.poetid, genre_players.poet_name, genre_players.sources, genre_players.cityid, genre_players.date_names, genre_players.genre_names ";
+		}
+		/* if no instrument selected pass up genre players unaltered */		
+		
+		/* close out the query */
+
+		query = query + " ORDER BY genre_players.poet_name ASC) instrument_players GROUP BY cityid, poetid, date_names, poet_name ) grouped_players ORDER BY grouped_players.cityid, grouped_players.poet_name) rank_players WHERE cities.cityid = rank_players.cityid GROUP BY rank_players.cityid, cities.the_geom, cities.the_geom_webmercator, cities.city_name, cities.cartodb_id) cities_with_poets LEFT OUTER JOIN ( SELECT s.cityid, string_agg(s.early_date || s.late_date || ': ' ||c.government, ', ') AS grouped_government FROM ( SELECT cityid, max(date) AS early_date, CASE WHEN min(date) = max(date) THEN '' ELSE '-' || min(date) END AS late_date FROM ( SELECT s.*, sum(startflag) OVER (partition BY cityid ORDER BY date DESC) AS grp FROM ( SELECT c.*, ( CASE WHEN lag(governmentid) OVER (partition BY cityid ORDER BY date DESC) = governmentid THEN 0 ELSE 1 END) AS startflag FROM ( SELECT * FROM city_politics WHERE date >= 400) c ) s ) s GROUP BY cityid, grp, city ORDER BY city ASC, early_date DESC) s, city_politics AS c WHERE s.cityid = c.cityid AND s.early_date = c.date GROUP BY s.cityid ) grouped_politics ON cities_with_poets.cityid = grouped_politics.cityid";
 		
 		console.log(query);		
 		layer.setQuery(query); 
-		layer.setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; }");
+		layer.setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { text-name: [city_name]; text-face-name: 'DejaVu Sans Book'; text-size: 15; text-fill: #000; text-allow-overlap: true; text-halo-fill: #FFF; text-halo-radius: 1; text-placement-type: simple; text-placements: \"N,S,E,W,NE,SE,NW,SW,16,14,12\"; text-dy: 3; text-dx: 3; }");
 	}	  
 	  
       function main() {
-        cartodb.createVis('map', 'http://24.199.68.183/user/dev/api/v2/viz/7c8aedec-53e0-4581-835d-f8b55016d857/viz.json', {
+        cartodb.createVis('map', 'http://128.199.4.121/user/dev/api/v2/viz/5e25b255-2ea9-45d8-99e5-e3bae5e6403e/viz.json', {
           tiles_loader: true,
           center_lat: 38.9,
           center_lon: 26.38,
@@ -295,11 +417,9 @@
 			map.attributionControl.removeAttribution(layers[0].getAttribution());
 			map.attributionControl.removeAttribution(layers[1].getAttribution());
 			
-			var sublayer = layers[1].getSubLayer(0);
-			// layers[1].setQuery("select *, 100 as selected_number from cities where city_name = 'Athens'");
-			// layers[1].setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { }"); //     
+			var sublayer = layers[1].getSubLayer(0);			
 			
-		  // updateQuery(layers[1], $("#slider").rangeSlider("values"));
+		  updateQuery(layers[1], $("#slider").rangeSlider("values"));
 			sublayer.setInteraction(false);
 			
 			createSelector(layers[1]);
