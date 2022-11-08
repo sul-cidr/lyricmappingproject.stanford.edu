@@ -18,7 +18,7 @@
 	<!--Content.data is determined by the UI on the cartodb webpage.-->
 	<!--In order for the following to work, you must run a query that gives the columns selected_number and selected_names, and then select those-->
 
-	<link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+	<link rel="stylesheet" href="cartodb.css" />
 	<!--[if lte IE 8]>
 		<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
 	<![endif]-->
@@ -182,7 +182,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <!-- include cartodb.js library -->
 <!--	<script src="test-cartodb.js"></script> -->
-	<script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+	<script src="cartodb.js"></script>
     
     <script src="jquery-1.11.2.js"></script>
     <script src="jquery-ui.js"></script>
@@ -233,7 +233,7 @@
 				if ($("#"+displayed_category).length != 0) ShowContent(displayed_category);
 			  }
 			  if($('#poet_'+i).is(':checked') || $('#relationship_'+i).is(':checked') ) {
-				HideContent(displayed_category);
+				// HideContent(displayed_category);
 			  }
 		  }
 //		  $("#slider").show();
@@ -399,11 +399,11 @@
 		
 		console.log(query);		
 		layer.setQuery(query); 
-		layer.setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { text-name: [city_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #000; text-allow-overlap: true; text-halo-fill: #FFF; text-halo-radius: 1; text-placement-type: simple; text-placements: \"N,S,E,W,NE,SE,NW,SW,16,14,12\"; text-dy: 3; text-dx: 3; }");
+		layer.setCartoCSS("#cities{ marker-fill: #B81609; marker-line-color: #FFF; marker-line-width: 2; marker-line-opacity: 1; marker-opacity: 0.9; marker-placement: point; marker-type: ellipse; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest; } #cities [ selected_number <= 200] { marker-width: 28.0; } #cities [ selected_number <= 15] { marker-width: 25.0; } #cities [ selected_number <= 8] { marker-width: 23.3; } #cities [ selected_number <= 8] { marker-width: 21.7; } #cities [ selected_number <= 6] { marker-width: 20.0; } #cities [ selected_number <= 6] { marker-width: 18.3; } #cities [ selected_number <= 4] { marker-width: 16.7; } #cities [ selected_number <= 3] { marker-width: 15.0; } #cities [ selected_number <= 2] { marker-width: 13.3; } #cities [ selected_number <= 1] { marker-width: 10.0; } #cities::labels [selected_number>=8][zoom>5], [selected_number>=2][zoom>6], [selected_number>=1][zoom>7] { text-name: [city_name]; text-face-name: 'DejaVu Sans Book'; text-size: 15; text-fill: #000; text-allow-overlap: true; text-halo-fill: #FFF; text-halo-radius: 1; text-placement-type: simple; text-placements: \"N,S,E,W,NE,SE,NW,SW,16,14,12\"; text-dy: 3; text-dx: 3; }");
 	}	  
 	  
       function main() {
-        cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/423eb720-3ef0-11e5-a0a4-0e018d66dc29/viz.json', {
+        cartodb.createVis('map', 'http://128.199.4.121/user/dev/api/v2/viz/5e25b255-2ea9-45d8-99e5-e3bae5e6403e/viz.json', {
           tiles_loader: true,
           center_lat: 38.9,
           center_lon: 26.38,
@@ -419,7 +419,7 @@
 			
 			var sublayer = layers[1].getSubLayer(0);			
 			
-		  	updateQuery(layers[1], $("#slider").rangeSlider("values"));
+		  updateQuery(layers[1], $("#slider").rangeSlider("values"));
 			sublayer.setInteraction(false);
 			
 			createSelector(layers[1]);

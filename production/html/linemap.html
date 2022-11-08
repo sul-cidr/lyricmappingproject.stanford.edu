@@ -12,7 +12,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
-	<link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+	<link rel="stylesheet" href="cartodb.css" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
     <![endif]-->
@@ -617,7 +617,7 @@
     <!-- include google maps library *before* load cartodb.js -->
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <!-- include cartodb.js library -->
-	<script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+	<script src="cartodb.js"></script>
 	
     <script src="jquery-1.11.2.js"></script>
     <script src="jquery-ui.js"></script>
@@ -838,7 +838,7 @@
       }      
 	  
       function main() {
-        cartodb.createVis('map', 'https://greeklyricpoets.cartodb.com/api/v2/viz/08fed7e4-8e49-11e5-b2ed-0e31c9be1b51/viz.json', {
+        cartodb.createVis('map', 'http://128.199.4.121/user/dev/api/v2/viz/baf7abe8-68ab-47b4-bc49-45fc58813823/viz.json', {
           tiles_loader: true,
           center_lat: 38.9,
           center_lon: 26.38,
