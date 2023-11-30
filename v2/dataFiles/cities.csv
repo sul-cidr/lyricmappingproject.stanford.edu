@@ -1,0 +1,235 @@
+city_name,infowindow_name,cityid,notes,lat,long,region,regionid
+Melos,Melos,1,city not listed,36.683333,24.416667,Cyclades,1
+Athens,Athens,2,,37.971687,23.726464,Attica,2
+Thebes,Thebes,3,,38.319076,23.317799,Boeotia,3
+Chalcis,Chalcis,4,,38.457139,23.621937,Euboea,22
+Delos,Delos,5,city not listed,37.397274,25.268194,Cyclades,1
+Chios,Chios,6,,38.414,26.053,Asia Minor islands,29
+Leontini,Leontini,7,,37.285478,14.998115,Sicily,7
+Mytilene,Mytilene,8,,39.110475,26.547048,Lesbos,8
+Miletus,Miletus,9,,37.5292362,27.2774885,Ionia,6
+Sparta,Sparta,10,,37.082132,22.42366,Peloponnese,9
+Ephesus,Ephesus,11,,37.941944,27.339722,Ionia,6
+Selinus,Selinus,12,,37.582841,12.82512,Sicily,7
+Sicyon,Sicyon,13,,37.984123,22.711059,Peloponnese,9
+Locri,Locri,14,i.e. Lokroi,38.216171,16.228784,Italy,10
+Rhegium,Rhegium,15,dates not listed,38.109279,15.64393,Italy,10
+Helicon,Helicon,16,"see http://www.mountain-forecast.com/peaks/Mount-Helicon and https://www.google.com/maps/place/38%C2%B021'10.0%22N+22%C2%B049'21.0%22E/@38.352778,22.8225,33620m/data=!3m1!1e3!4m2!3m1!1s0x0:0x0?hl=en",38.352778,22.8225,Boeotia,3
+Megara,Megara,17,,37.985078,23.340163,Attica,2
+Syracuse,Syracuse,18,,37.063921,15.292995,Sicily,7
+Tarentum,Tarentum,19,i.e. Taras,40.476034,17.228553,Italy,10
+Colophon,Colophon,20,,38.109632,27.14711,Ionia,6
+Leucas,Leucas,21,,38.716667,20.65,Ionian Sea,19
+Selymbria,Selymbria,22,city not listed,41.078496,28.247677,Northern Greece,11
+Himera,Himera,23,dates not listed,37.970797,13.822496,Sicily,7
+Megalopolis,Megalopolis,24,city founded 378,37.414256,22.126238,Peloponnese,9
+Stageira,Stageira,25,city not listed,40.592218,23.795769,Northern Greece,11
+Soli (Soloi/Pompeiopolis),Soli (Soloi/Pompeiopolis),26,"i.e. Soloi, Dem. 333-?",36.744896,34.542284,,
+Nemea,Nemea,27,"city not listed; games overseen by Corinth or others, so...?",37.808904,22.7108171,Peloponnese,9
+Marathon,Marathon,28,city not listed,38.137916,23.979372,Attica,2
+Delphi,Delphi,30,dates not listed,38.482289,22.501169,Central Greece,4
+Hermione,Hermione,31,,37.385218,23.243591,Peloponnese,9
+Elis,ELIS (region),32,coordinates are city of Elis,37.891781,21.375091,Peloponnese,9
+Macedonia,MACEDONIA (region),33,coordinates are Pella; Aiane – tyrrant; Beroia – Ol.,40.754555,22.518485,Northern Greece,11
+Thessaly,THESSALY (region),34,either Ol. or Tyr. (various poleis),39.6,22.2,Thessaly,12
+Cythera,Cythera,35,city not listed,36.1667,23,Cythera,13
+Smyrna,Smyrna,36,city not listed,38.41905,27.1383,Ionia,6
+Argos,Argos,38,,37.631561,22.719464,Peloponnese,9
+Paros,Paros,39,,37.05,25.19,Cyclades,1
+Thasos,Thasos,40,,40.683333,24.65,Northern Greece,11
+Samos,Samos,41,,37.73,26.84,Asia Minor islands,29
+Teos,Teos,42,,38.177262,26.785014,Ionia,6
+Sardis,Sardis,43,city not listed,38.488314,28.040286,Lydia,14
+Magnesia-ad-Sipylum,Magnesia-ad-Sipylum,44,dates not listed,38.604383,27.43864,Lydia,14
+Methymna,Methymna,45,,39.370953,26.168055,Lesbos,8
+Ioulis (Ceos),Ioulis (Ceos),46,,37.640469,24.340442,Cyclades,1
+Leros,Leros,47,,37.158037,26.854663,Dodecanese,15
+Corinth,Corinth,48,,37.906033,22.879189,Peloponnese,9
+Messena,Messena,49,,38.192251,15.556634,Sicily,7
+Erythrae,Erythrae,50,Boeotia Erythrae,38.243092,23.411384,Boeotia,3
+Astypalaia,Astypalaia,51,,36.547366,26.35142,Dodecanese,15
+Anthedon,Anthedon,52,,38.497693,23.451655,Boeotia,3
+Mysia,MYSIA (region),53,coordinates are Pergamon,39.130991,27.18383,Mysia,16
+Arcadia,ARCADIA (region),54,coordinates are Arcadian Orchomenos,37.725676,22.314403,Peloponnese,9
+Phleious,Phleious,55,,37.831664,22.641069,Peloponnese,9
+Eresos,Eresos,56,,39.138899,25.928752,Lesbos,8
+Tanagra,Tanagra,57,,38.295671,23.584379,Boeotia,3
+Matauria,Matauria,58,"coordinates are Metaurum in Calabria, though the identification of this city with the Suda's Matauria seems to be disputed",38.425,15.89985,Italy,10
+Antissa,Antissa,59,,39.291377,26.018991,Lesbos,8
+Gortyn,Gortyn,60,,35.062107,24.946943,Crete,17
+Rhodes,Rhodes,61,,36.195597,27.964125,Dodecanese,15
+Soli (Cyprus),Soli (Cyprus),63,,35.139761,32.811959,Cyprus,18
+Katane,Katane,64,,37.502959,15.088142,Sicily,7
+Abdera,Abdera,65,,40.95,24.983333,Northern Greece,11
+Naxos,Naxos,66,,37.05,25.49,Cyclades,1
+Siris,Siris,67,,40.149042,16.54137,Italy,10
+Sicily,SICILY (region),68,Coordinates are Enna,37.567652,14.279558,Sicily,7
+Tainaron,Tainaron,69,,36.387567,22.482064,Peloponnese,9
+Mantineia,Mantineia,70,,37.618138,22.393259,Peloponnese,9
+Pellene,Pellene,71,,38.043207,22.548344,Peloponnese,9
+Thurii,Thurii,72,i.e. Sybaris,39.715622,16.490517,Italy,10
+Ikaros,Ikaros,73,,37.583333,26.166667,Cyclades,1
+Heracleia Trachinia,Heracleia Trachinia,74,Heraclea Trachinea,38.792037,22.447577,Central Greece,4
+Clazomenae,Clazomenae,75,,38.3614625,26.7705581,Ionia,6
+Thespiai,Thespiai,76,aka Thespeia and Thespia,38.295831,23.1528615,Boeotia,3
+Amorgos,Amorgos,77,,36.833333,25.9,Cyclades,1
+Gela,Gela,78,,37.063029,14.258722,Sicily,7
+Akragas,Akragas,79,,37.290594,13.585475,Sicily,7
+Pharsalos,Pharsalos,80,,39.362373,22.283669,Thessaly,12
+Krannon,Krannon,81,,39.500564,22.294124,Thessaly,12
+Salamis,Salamis,82,,37.93,23.51,Attica,2
+Pallantion,Pallantion,83,,37.462155,22.336587,Peloponnese,9
+Locris Ozolia,Locris Ozolia,84,coordinates are Amphissa,38.518403,22.374172,Central Greece,4
+Persia,"PERSIA (region, at Persepolis)",85,Location is for Persepolis,29.935945,52.88841,Asia,21
+Kynoskephalai,Kynoskephalai,86,"coordinates are modern Loutoufi (following Munn, CA 6 (1987): 113n27)",38.276667,23.27027,Boeotia,3
+Olympia,Olympia,87,,37.637807,21.630049,Peloponnese,9
+Metapontion,Metapontion,88,,40.383868,16.824063,Italy,10
+Aigina,Aigina,89,coordinates are temple of Aphaia on Aegina,37.754475,23.53304,Cyclades & western Aegean islands,1
+Pyrrha,Pyrrha,90,coordinates from Inventory,39.1,26.15,Lesbos,8
+"Egypt
+",EGYPT (region),91,coordinates are Naucratis,30.90071,30.591777,,
+"Italy
+","ITALY (region)
+",92,coordinates are mod. Acri,39.481432,16.390228,Italy,10
+Ionia,IONIA (region),93,coordinates are Mount Mycale (near Panionium),37.666667,27.083333,Ionia,6
+Sanctuary of Poseidon Petraios,Sanctuary of Poseidon Petraios,94,"coordinates are the vale of Tempe, where the sanctuary lay (though it is still undiscovered)",39.875996,22.554418,Thessaly,12
+Acharnae,Acharnae,95,,38.083333,23.733333,Attica,2
+Mt. Ida,Mt. Ida,96,,35.226667,24.7725,Crete,17
+Knossos,Knossos,97,,35.298056,25.163056,Crete,17
+Sea of Crete,Sea of Crete,98,or Knossian Sea,35.926953,24.944044,Crete,17
+Troezen,Troezen,99,,37.483333,23.35,Peloponnese,9
+Mt. Olympus,Mt. Olympus,100,,40.085556,22.358611,Northern Greece,11
+Alpheos,Alpheos,101,(river at Olympia),37.634566,21.6263755,Peloponnese,9
+Lydia,LYDIA (region),102,Should we just use Sardis for this instead of following coordinates?,38.8131598,29.7190513,Lydia,14
+Sipylus,Sipylus,103,"(Lydian city near Smyrna). The location of this city is unknown. I'm basically just making this up -- ""imagineering"" it, as it were. In reality, the following coordinates are for Mount Sipylos, which is the best I could do.",38.5672198,27.454722,Lydia,14
+Pisa,Pisa,104,,37.644,21.654,Peloponnese,9
+Peloponnese,PELOPONNESE (region),105,,37.2641846,22.4967727,Peloponnese,9
+Cyprus,Cyprus,106,,35.1697515,33.4369908,Cyprus,18
+Phoenicia,PHOENICIA (region),107,"This is too broad to be pinned down, right? The following coordinates are for a modern town in the general area. We could use Tiryns or something like that. ",32.1155977,34.9640904,Phoenicia,25
+Crisa,Crisa,108,,38.466667,22.466667,Central Greece,4
+Troy,Troy,109,,39.9575,26.238889,Lydia,14
+Hebrus,Hebrus,110,This is a river (in modern Bulgaria). These are the coordinates for its mouth. What region is this? North Western Greece?,40.73056,26.035,Northern Greece,11
+Aenus,Aenus,111,"modern Enez, in Thrace",40.733333,26.066667,Thrace,20
+Babylon,Babylon,112,,32.536389,44.420833,Asia,21
+Ascalon,Ascalon,113,?what region is modern Israel?,31.666667,34.566667,Phoenicia,25
+Aegae,Aegae,114,Random coordinates near Karystos on Natasha's suggestion: http://pleiades.stoa.org/places/570336/darmc-location-64,37.956135,24.493165,Euboea,22
+Cyllene,Cyllene,115,,37.939722,22.396944,Peleponnese,9
+Coronea,Coronea,116,,38.35,22.966667,Boeotia,3
+Antandrus,Antandrus,117,,39.575833,26.790556,Lydia,14
+Keteios,Keteios,118,This is an unidentified river located somewhere near Pergamum. http://pleiades.stoa.org/places/550637,39.25,27.25,Mysia,16
+Paphos,Paphos,119,,34.766667,32.583333,Cyprus,18
+Panormus,Panormus,120,modern Palermo,38.116667,13.366667,Sicily,7
+Thebe,Thebe,121,,39.597431,27.020171,Lydia,14
+Pieria,Pieria,122,,40.235,22.1775,Northern Greece,11
+Geraestus,Geraestus,123,"this is the location of Μπούρος, some town of the cape of southern Euboeia. I couldn't get anymore specific information",37.963147,24.481659,Euboeia,22
+Gryneia,Gryneia,124,in Aeolis,38.916667,27.083333,Lydia,14
+Aeolis,AEOLIS (region),125,this is a region. the coordinates are for Phocaea,38.6675,26.758056,Aeolis,27
+Lesbos,LESBOS (region),126,"this is the coordinates for Kalloni, Lesbos",39.233333,26.25,Lesbos,8
+Epirus,EPIRUS (region),127,This is the coordinates for Paramythia.,39.472868,20.519535,Northern Greece,11
+Phrygia,PHRYGIA (region),128,This is the coordinates for Eskisehir,39.783333,30.516667,Phrygia,23
+Thrace,THRACE (region),129,This is the coordinates for Komotini,41.1,25.416667,Thrace,20
+Achaea,ACHAEA (region),130,This is the coordinates given for the region of Achaea on wikipedia,38.083333,21.833333,Peleponnese,9
+Scythia,SCYTHIA (region),131,"Coordinates are for Oleksandriia, Ukraine (not Kazakhstan), following NP s.v. Scythae.",48.666667,33.116667,Scythia,24
+Crete,CRETE (region),132,Coordinates are for Zoniana,35.3,24.083333,Crete,17
+Asia,ASIA (region),133,"Coordinates are for Isfahan, Iran (not sure where else to drop the pin)",32.466667,51.65,Asia,21
+Aetolia,AETOLIA (region),134,"Coordinates are ancient Aetolian Thermon, meeting place of Aetolian League.",38.559444,21.668056,Central Greece,4
+Phocaea,Phocaea,255,,38.670353,26.753208,Ionia,6
+Aulis,Aulis,136,Modern Avlida,38.40679,23.604165,Boeotia,3
+Boeotia,BOEOTIA (region),137,,38.41,23.08,Boeotia,3
+Calydon,Calydon,138,,38.372423,21.533106,Central Greece,4
+Caria,CARIA (region),139,A region in Anatolia (IAP p. 1108) ,37.4,27.65,Lydia,14
+Colchis,Colchis,140,"Hellenistic Phasis (Greek settlement), modern Poti?",42.15,41.66,,
+Cleonae,Cleonae,141,South of Corinth,37.5,22.45,Peleponnese,9
+Cydonia,Cydonia,142,,35.3,24,Crete,17
+Erytheia,Erytheia,143,"According to Campbell, it is an island off the east coast of Spain.",36.5294937,-6.2910722,,
+Gades,Gades,145,modern day Cádiz,36.53,-6.28,,
+Isthmus,Isthmus,146,Should this just be a Corinth reference?,37.94,22.98,Peloponnese,9
+Ithaka,Ithaka,147,,38.25,20.4,Ionian Sea,19
+Larisa,Larisa,149,,39.64,22.41,Thessaly,12
+Lycia,LYCIA (region),150,"A coastal region in southern Turkey. The coordinates are for Kyaneai, one of its major cities and according to NP near an archaic and early classical settlement.",36.246592,29.815759,,
+Mt. Parnes,Mt. Parnes,151,"Parnes is a mountain in between Boitia and Attica, modern Mount Parnitha.",38.1734,23.7174,Attica,2
+Zacynthus,Zacynthus,153,island in Ionian Sea,37.8,20.75,Ionian Sea,19
+Amyclae,Amyclae,155,,37.033333,22.433333,Peloponnese,9
+Aphidnae,Aphidnae,157,,38.2,23.833333,,
+Assos,Assos,160,,39.487778,26.336944,Troad,28
+Carystus,Carystus,161,,38.016541,24.420381,euboeia,22
+Cerbesia,Cerbesia,162,"coordinates are for Hierapolis, cf. Ogden 2013 p. 112 citing Strabo",37.925,29.125833,Phrygia,23
+Cnacalus,Cnacalus,163,mountain,37.73637,22.23977,Peloponnese,9
+Corcyra,Corcyra,164,coordinates are for Corfu from Wikipedia,39.583333,19.866667,"North West Greece, Epira",11
+Dyme,Dyme,166,Arbitrary location near Sparta,37.137519,22.409305,Peloponnese,9
+Enetoi,Enetoi,167,coordinates are for modern Venice,45.4375,12.335833,Italy,10
+Erysiche,Erysiche,168,"coordinates are for Stratos, the largest city of ancient Acarnania, the location of Erysiche",38.666667,21.316667,,
+Euboea,EUBOEA (region),169,coord. for a middle location of Euboea,38.487995,23.895264,Euboea,22
+Gargara,Gargara,171,,39.586111,26.534167,Troad,28
+Oenus,Oenus,174,"location is for Mt. Parnon, the source of the river Oenus",37.116667,22.733333,Peloponnese,9
+Onogloi,Onogloi,175,"in Laconia, but ""with no known locations"" (HN p.572).",,,Peloponnese,9
+Pityussae,Pityussae,176,location is for Ibiza,38.98,1.43,Spain,
+Psyra,Psyra,177,"equivalent to Psara, next to Chios",38.55,25.566667,Dodekanese,15
+Stathmi,Stathmi,178,"in Laconia, but ""with no known locations"" (HN p.572).",,,Central Greece,4
+Therapni,Therapni,179,,37.083333,22.55,Peloponnese,9
+Xanthus,Xanthus,180,for city of Xanthus where river too is located,36.356111,29.318611,,
+Messene,Messene,181,,37.166667,21.916667,Peloponnese,9
+Erineus,Erineus,182,coord. for modern Amfikleia,38.633333,22.583333,Central Greece,4
+Ithome,Ithome,183,,37.186111,21.925,Peloponnese,9
+Pylos,Pylos,184,,36.916667,21.7,Peloponnese,9
+Ethiopia,ETHIOPIA (region),185,coord. for Addis Ababa,9.016667,38.75,Africa,
+Paeonia,Paeonia,186,,41,22.566667,Macedonia,33
+Pholegandros,Pholegandros,187,,36.616667,24.9,Cyclades,1
+Sikinos,Sikinos,188,,36.683333,25.116667,Cyclades,1
+Taygetus,Taygetus,189,,36.953889,22.352222,Peloponnese,9
+Cerinthus,Cerinthus,190,,38.825075,23.48282,Euboea,22
+Lelantum,Lelantum,191,coord. are near Vasiliko,38.425622,23.672447,Euboea,22
+Tmolus,Tmolus,192,modern Bozdag,38.35,28.083333,,
+Lethaeus,Lethaeus,193,pin dropped near Aydin,37.809784,27.58667,,
+Nineveh,Nineveh,195,,36.359444,43.150278,Asia,21
+Priene,Priene,196,,37.659722,27.297778,Ionia,6
+Etruria,ETRURIA (region),197,a random pin drop north of Grosseto,42.924252,118301,Italy,10
+Attica,ATTICA (region),198,"roughly the center the of Attica, also the intersection of the Attiki Odos and A/D Pathe Highways.",38.06,23.75,Attica,2
+Celaenae,Celaenae,201,ancient city of Phrygia and capital of the Persian satrapy of Greater Phrygia and modern Dinar,38.065,30.1655,,
+Cephisus,Cephisus,202,"The Cephissus or Kifisos (Greek: Κηφισός) is a river in central Greece. In Greek mythology the river god Cephissus was associated with this river. The river rises at Lilaia in Phocis, on the northwestern slope of Mount Parnassus. It flows east through the Boeotian plain, passing the towns Amfikleia, Kato Tithorea and Orchomenos. https://en.wikipedia.org/wiki/Cephissus_(Boeotia)",38.43,23.24,,
+Cimmeria,Cimmeria,203,modern day Crimea,45.3,34.4,,
+Cithaeron,Cithaeron,204,mountain range,38.18,23.25,,
+Ecbatana,Ecbatana,205,"an ancient city in Media in western Iran. It is believed that Ecbatana is in Tell Hagmatana (Tappa-ye Hagmatāna), near Hamedan, but the history of the city is controversial.",34.806,48.516,,
+Euripus Strait,Euripus Strait,206,this is the strait dividing euboea from the mainland. the coordinates are the bridge connecting chalcis to the mainland,38.462778,23.589444,Euboea,22
+Helle,Helle,208,aka the Hellespont,40,26.39,,
+Hyria,Hyria,209,Boeotian Hyria?,38.385,23.627,,
+Ialysus,Ialysus,210,on Rhodes,36.25,28.1,,
+Illyria,ILLYRIA(region),211,Just a pin dropped into what seems to have been the center of the area the various Illyrian kingdoms controlled.,43.84,17.11,,
+Ladon,Ladon,212,a river and tributary of the Alphios,37.59,21.82,,
+Libya,LIBYA (region),214,pin dropped in vicinity of ancient region of Libya,32.82,21.85,,
+Naucratis,Naucratis,215,,30.9,30.616,,
+Mt. Parnassus,Mt. Parnassus,216,The mountain above delphi,38.53,22.62,,
+"Plataea
+","Plataea
+",218,i.e. Plataiai,38.221257,23.273345,,
+Mt. Ptoios,Mt. Ptoios,219,non-polis oracle site of Apollo on a mountain,38.48,23.32,,
+Sinope,Sinope,220,,42.025776,35.143037,,
+Susa,Susa,222,,32.19,48.26,,
+Syria,Syria,223,,35.79,36.79,,
+Tartessus,Tartessus,224,"Tartessos (Greek: Ταρτησσός) or Tartessus was a semi-mythical harbor city and the surrounding culture on the south coast of the Iberian Peninsula (in modern Andalusia, Spain), at the mouth of the Guadalquivir River. It appears in sources from Greece and the Near East starting during the first millennium BC, for example Herodotus, who describes it as beyond the Pillars of Heracles(Strait of Gibraltar)",37.5,-6.5,,
+Megara Hyblaia,Megara Hyblaia,225,Sicilian Megara,37.203717,15.181777,Sicily,7
+Claros,Claros,226,,384725,27.192987,,
+Daskyleion,Daskyleion,229,,40.128889,28.071667,,
+Gyrae,Gyrae,230,"Can't find this one, it is a reference to the cliffs that the lesser Ajax died on. (probably a mountain chain on Tenos; see Sandback CR 1942 pp. 63-5; coordinates are now the rugged mountain of Exomvourgo on tenos)",37.577222,25.1675,Cyclades,1
+Ismaros,Ismaros,232,"Thracian Ismaros, pin dropped in possible area",40.980201,25.263959,,
+Karpathos,Karpathos,233,,35.583333,27.133333,,
+Lampsacus,Lampsacus,234,,40.346685,26.699162,,
+Lebedos,Lebedos,235,,38.077883,26.964721,,
+Lerna,Lerna,236,,37.5512409,22.7183258,,
+Maeander,Maeander,237,,37.852778,27.527222,,
+Priapus,Priapus,240,Modern day Karabiga,40.403611,27.303889,,
+Salmydessus,Salmydessus,241,"On the southwest coast of the Black Sea. For more details see J. P. Stronk, “Wreckage at Salmydessos,” Talanta 18–19 (1986–87) 63–75. Pin drop is in general area.",42.027485,27.882144,,
+Sindike,Sindike,242,Modern day Taman Peninsula,45.174464,36.724115,,
+Siris,Siris,243,,40.177613,16.662266,,
+Torone,Torone,244,,39.9770534,23.9008123,,
+Cyme,Cyme,247,,38.75953,26.936283,Aeolis,27
+Arne,Arne,248,Pleiades DARMC location 11507,38.48288,22.93328,Boeotia,3
+Tripodiskos,Tripodiskos,249,"Exact location unknown, but 7km WNW of Megara (NP, Pleiades). These coordinates from the unreliable http://www.gtp.gr/LocPage.asp?id=60485, but look about right",38.020833,23.233333,Boeotia,3
+Cephallenia,Cephallenia,250,http://pleiades.stoa.org/places/530826/location-of-cephallania-ins,38.2,20.59,Ionian Islands,19
+Messenia,MESSENIA (region),251,Located at Hellenistic Messene (the later capitol of Messenia),37.175491,21.920439,,
+Gyaros,Gyaros,252,,37.598103,24.682578,Cyclades,1
+Magnesia ad Maeandrum,Magnesia ad Maeandrum,253,To be distinguished from Magnesia-ad-Sipylum,37.848006,27.518987,,
+Erythrae,Erythrae,254,Ionian Erythrae,38.382778,26.480833,,
+Opous,Opous,256,, 38.649723999999999,23.008427999999999,Boeotia,3
+Orchomenos,Orchomenos,257,,38.493319,22.974702,Boeotia,3
+Tenedos,Tenedos,258,,39.8397494,26.0705870,Cyclades,1

@@ -1,0 +1,9 @@
+#attribution {
+  position: absolute;
+  bottom: 0;
+  right: 0px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: #4d4d4d;
+  z-index: 1;
+}

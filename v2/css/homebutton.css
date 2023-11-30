@@ -1,0 +1,13 @@
+.home {
+	position: absolute;
+	top: 85px;
+	left: 11px;
+	width: 30px;
+	height: 30px;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 4px 2px;
+	background: white url("../assets/android-home-512px.svg") no-repeat center center;
+	background-size: 22px 22px;
+	border-radius: 4px;
+	border: 1px solid #999999;
+	z-index: 105;
+}

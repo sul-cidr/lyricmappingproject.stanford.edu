@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Mapping Greek Lyric: Places, Travel, Geographical Imaginary</title>
+
+	<link type="text/css" rel="stylesheet" href="css/attribution.css" />
+	<link type="text/css" rel="stylesheet" href="css/controlbar.css" />
+	<link type="text/css" rel="stylesheet" href="css/homebutton.css" />
+	<link type="text/css" rel="stylesheet" href="css/lyricmapping.css" />
+	<link type="text/css" rel="stylesheet" href="css/mapstyling.css" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+	<div id="map"></div>
+
+	<div id="controlbar">
+		<fieldset id="mapModeSelector" class="controlForm">
+			<input type="radio" name="map" id="places_mode" class="hiddenRadio" checked>
+			<label for="places_mode" class="mainlinks-label">
+				PLACES
+			</label>
+			<input type="radio" name="map" id="travel_mode" class="hiddenRadio">
+			<label for="travel_mode" class="mainlinks-label">
+				TRAVEL
+			</label>
+			<input type="radio" name="map" id="geo_imaginary_mode" class="hiddenRadio">
+			<label for="geo_imaginary_mode" class="mainlinks-label">
+				GEOGRAPHICAL IMAGINARY
+			</label>
+		</fieldset>
+
+		<div id="poetsSelector"></div>
+	</div>
+
+	<div id="attribution">
+		<i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i>
+		D. Driscoll, I. McMullin, S. Sansom, S. Brennan-McMahon, A. Waller, A.-E. Peponi.
+	</div>
+
+	<a href="index.html">
+		<div id="home" class="home"></div>
+	</a>
+
+	<!-- leaflet https://leafletjs.com/ v. 1.9.4, released 2023/05/18 -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<!-- papaparse https://www.papaparse.com/ v. 5.4.1, released 2023/03/23 -->
+	<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+	<!-- https://github.com/henrythasler/Leaflet.Geodesic, v. 2.7.1, released 2023/10/02 -->
+	<script src="https://cdn.jsdelivr.net/npm/leaflet.geodesic@2.7.1/dist/leaflet.geodesic.umd.min.js"
+		integrity="sha512-iaFsrOsrVQKaxgOutC3x1hPWfg3K6DjcKZrxchqbO8amLrjJyYw7/ukh3ar4kly4kK2m5z5qiB3+Dt5RI5Pq4g=="
+		crossorigin=""></script>
+
+	<!-- https://github.com/bbecquet/Leaflet.PolylineDecorator, v. 1.6.0, released 2018/01/28 -->
+	<script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0"></script>
+
+	<script type="module" src="index.js"></script>
+</body>
+
+</html>

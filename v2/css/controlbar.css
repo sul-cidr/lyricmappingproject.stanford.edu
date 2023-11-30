@@ -1,0 +1,120 @@
+#controlbar {
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  top: 0px;
+  right: 0px;
+  width: 320px;
+  padding: 0px 10px 20px;
+}
+
+.buttonContainer {
+  width: 100%;
+  margin-top: 10px;
+  float: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.buttonContainer:hover {
+  overflow-y: scroll;
+}
+
+#mapModeSelector {
+  display: flex;
+  flex-direction: row;
+  background: rgba(255, 255, 255, 0);
+  border: none;
+}
+
+.controlForm {
+  border: none;
+}
+
+.controlBarLabel {
+  color:black;
+  padding-right:5px;
+  display: inline-block;
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+.mainlinks {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: block;
+  flex: 1;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0);
+}
+
+.mainlinks-label {
+  text-decoration: none;
+  color: black;
+  font-family: sans-serif;
+  line-height: 150%;
+  font-size: 16px;
+  position: relative;
+  padding: 0 5px;
+  text-transform: none;
+  display: inline-block;
+  line-height: 25px;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.mainlinks-label:before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  border-bottom: 4px solid;
+  border-color: #205fa4 #205fb4 #c72f2a;
+  opacity: 0;
+  text-transform: none;
+}
+
+.hiddenRadio {
+  display: none;
+}
+
+input:checked+.mainlinks-label:before {
+  opacity: .5;
+}
+
+input:checked+.picker-label:before {
+  opacity: 1;
+}
+
+.picker-label {
+  position: relative;
+  padding: 0 5px;
+  font-size: 14px;
+  text-transform: none;
+  display: inline-block;
+  line-height: 25px;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.picker-label:before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  border-bottom: 4px solid;
+  border-color: #205fa4 #205fb4 #c72f2a;
+  opacity: 0;
+  text-transform: none;
+}

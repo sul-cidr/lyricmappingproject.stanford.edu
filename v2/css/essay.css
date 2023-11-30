@@ -1,0 +1,61 @@
+.intro-box-two-columns {
+	column-count: 2;
+	column-gap: 20px;
+}
+
+#essayBox {
+  position: fixed;
+  background: rgba(0, 0, 0, .5);
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 98;
+  display: none;
+}
+
+#essayTitle {
+  height: 25px;
+  background: #B81609;
+  position: absolute;
+  left: 5%;
+  right: 65%;
+  top: 0px;
+  text-align: center;
+  color: white;
+  padding-top: 5px;
+  font-weight: 600px;
+}
+
+#essayContent {
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 5%;
+  right: 65%;
+  top: 30px;
+  bottom: 10%;
+  border: 1px solid gray;
+  background: #e6e7e8;
+  padding: 25px 25px 25px 40px;
+  z-index: 99;
+  min-height: 490px;
+  overflow: auto;
+}
+
+#essayCloseButton {
+  background: #B81609;
+  color: white;
+  font-size: 14px;
+  top: 7px;
+  right: 65%;
+  position: absolute;
+  width: 20px;
+  z-index: 99;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+#essayCloseButton:hover {
+  color: black;
+}
