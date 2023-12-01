@@ -54,23 +54,6 @@ function renderPoetsCities(filteredPoetsCities, data, state) {
   const [type, num] = getMapTypeNum(state);
 
   return filteredPoetsCities.map(pc => {
-    const poet = getPoet(data, pc.poetid);
-
-    let poetDetailsName = "";
-    if (poet.details_name) poetDetailsName = poet.details_name;
-    else alert(`Poet ${pc.poets_poet_name} with poetid ${pc.poetid} lacks a details name`);
-
-    let poetDates = "";
-    if (poet.dates) poetDates = poet.dates;
-    else console.log(`Poet ${pc.poets_poet_name} with poetid ${pc.poetid} lacks dates`);
-
-    let poetSources = "";
-    if (poet.sources) poetSources = poet.sources;
-    else console.log(`Poet ${pc.poets_poet_name} with poetid ${pc.poetid} lacks sources`);
-
-    const genres = getGenres(data, pc.poetid);
-    const poetsGenreNames = genres.map(genre => genre.genre).join(", ");
-
     const reference = {
       source_citation: pc.source_citation,
       source_greektext: pc.source_greektext,
@@ -99,10 +82,10 @@ function renderPoetsCities(filteredPoetsCities, data, state) {
       cityid: pc.cityid,
       poets_city_name: pc.poets_city_name,
       poets_poet_name: pc.poets_poet_name,
-      poets_details_name: poetDetailsName,
-      poets_dates: poetDates,
-      poets_genres: poetsGenreNames,
-      poets_sources: poetSources,
+      poetsDetailsName: pc.poetDetailsName,
+      poetsDates: pc.poetDates,
+      poetsGenres: pc.poetsGenreNames,
+      poetsSources: pc.poetSources,
       relationshipid: pc.relationshipid,
       reference: reference
     };

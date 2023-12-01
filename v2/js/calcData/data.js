@@ -1,4 +1,4 @@
-import { getPoet, getCity } from "./getters.js";
+import { getPoet, getCity, getGenres } from "./getters.js";
 
 export function initializeData(data) {
   // some datacleaning from csv parse
@@ -39,6 +39,32 @@ export function initializeData(data) {
   createGeoImaginaryPoets(data);
   createLines(data);
   keyLines(data);
+  primePoetCities(data);
+}
+
+function primePoetCities(data) {
+  data.poetsCities.forEach(pc => {
+    primeObjWithPoetData(pc, data);
+  });
+}
+
+function primeObjWithPoetData(obj, data) {
+  const poet = getPoet(data, obj.poetid);
+
+  obj.poetsDetailsName = "";
+  if (poet.details_name) obj.poetsDetailsName = poet.details_name;
+  else alert(`Poet ${obj.poets_poet_name} with poetid ${obj.poetid} lacks a details name`);
+
+  obj.poetsDates = "";
+  if (poet.dates) obj.poetsDates = poet.dates;
+  else console.log(`Poet ${obj.poets_poet_name} with poetid ${obj.poetid} lacks dates`);
+
+  obj.poetsSources = "";
+  if (poet.sources) obj.poetsSources = poet.sources;
+  else console.log(`Poet ${obj.poets_poet_name} with poetid ${obj.poetid} lacks sources`);
+
+  const genres = getGenres(data, obj.poetid);
+  obj.poetsGenreNames = genres.map(genre => genre.genre).join(", ");
 }
 
 export function sortAlphabetically(a, b) {
@@ -111,7 +137,7 @@ function addBigRegionIdToCities(data) {
         city.bigRegionid = aegeanIslandsId;
       else if (asiaMinor.includes(city.regionid))
         city.bigRegionid = asiaMinorId;
-      else if (unAssigned.includes(city.regionid)) {}
+      else if (unAssigned.includes(city.regionid)) { }
       else {
         console.log(`city ${city.city_name} with id ${city.cityid} has unknown regionid ${city.regionid} with name ${city.region}`);
       }
@@ -202,7 +228,8 @@ function createLines(data) {
           const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
           const fromCity = getCity(data, bornPc.cityid);
           const toCity = getCity(data, activePc.cityid);
-          data.lines.push({
+          const poet = getPoet(data, poetId);
+          const line = {
             poetid: poetId,
             bornCityid: bornPc.cityid,
             activeCityid: activePc.cityid,
@@ -210,8 +237,11 @@ function createLines(data) {
             activePc: activePc,
             dotted: dotted,
             bornCity: fromCity,
-            activeCity: toCity
-          });
+            activeCity: toCity,
+            poets_details_name: poet.details_name
+          };
+          primeObjWithPoetData(line, data);
+          data.lines.push(line);
         }
       }
     }

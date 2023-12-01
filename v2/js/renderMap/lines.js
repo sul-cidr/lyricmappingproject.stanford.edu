@@ -1,6 +1,7 @@
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 import { drawBubbles } from "./bubbles.js";
 import { getMapTypeNum, getCity, getGovs } from "../calcData/getters.js";
+import { createTravelPopupHtml } from "./travelPopups.js";
 
 export function calculateAndDrawLines(map, data, state) {
   const filteredPoetLines = filterLines(state, data);
@@ -17,15 +18,15 @@ function filterLines(state, data) {
   } else if (type === "poet") {
     return data.lines.filter(line => line.poetid === num);
   } else if (type === "destination") {
-    return data.lines.filter(line => 
+    return data.lines.filter(line =>
       line.bornCityid === num || line.activeCityid === num
     );
   } else if (type === "smallregion") {
-    return data.lines.filter(line => 
+    return data.lines.filter(line =>
       line.bornCity.regionid === num || line.activeCity.regionid === num
     );
   } else if (type === "region") {
-    return data.lines.filter(line => 
+    return data.lines.filter(line =>
       line.bornCity.bigRegionid === num || line.activeCity.bigRegionid === num
     );
   } else if (type === "gov") {
@@ -51,7 +52,6 @@ function unhashCityIds(hash) {
 }
 
 function calculateLines(state, data, filteredPoetLines) {
-  const [type, num] = getMapTypeNum(state);
   const lines = {}
   for (const line of filteredPoetLines) {
     const hash = hashCityIds(line.bornCityid, line.activeCityid);
@@ -62,6 +62,7 @@ function calculateLines(state, data, filteredPoetLines) {
       lines[hash].poetLines = [];
       lines[hash].dotted = false;
       lines[hash].color = TRAVEL_RED;
+      lines[hash].name = (`${line.bornCity.infowindow_name} -> ${line.activeCity.infowindow_name}`).toUpperCase();
     }
     lines[hash].poetLines.push(line);
     colorLine(state, data, lines[hash], line);
@@ -69,16 +70,22 @@ function calculateLines(state, data, filteredPoetLines) {
   }
   for (const hash in lines) {
     const line = lines[hash];
-    const poetsNum = line.poetLines.length;
-    let multiplier = 1;
-    let increment = 0;
-    if (type === "destination" || type === "smallregion" || type === "poet") {
-      multiplier = 2;
-      increment = 1;
-    } 
-    line.weight = multiplier * poetsNum + increment;
+    weightLine(state, line);
+    line.popupHtml = createTravelPopupHtml(state, data, line);
   }
   return lines;
+}
+
+function weightLine(state, line) {
+  const [type, num] = getMapTypeNum(state);
+  const poetsNum = line.poetLines.length;
+  let multiplier = 1;
+  let increment = 0;
+  if (type === "destination" || type === "smallregion" || type === "poet") {
+    multiplier = 2;
+    increment = 1;
+  }
+  line.weight = multiplier * poetsNum + increment;
 }
 
 function colorLine(state, data, line) {
@@ -89,14 +96,14 @@ function colorLine(state, data, line) {
   } else if (type === "smallregion") {
     if (line.fromCity.regionid === num) line.color = TRAVEL_PURPLE;
   } else if (type === "region") {
-    if (line.fromCity.bigRegionid === num) line.color = TRAVEL_PURPLE;    
+    if (line.fromCity.bigRegionid === num) line.color = TRAVEL_PURPLE;
   } else if (type === "gov") {
     const bornGovs = getGovs(data, line.fromCity.cityid);
     const activeGovs = getGovs(data, line.toCity.cityid);
     if (bornGovs.has(num) && activeGovs.has(num)) line.color = TRAVEL_YELLOW;
     else if (bornGovs.has(num)) line.color = TRAVEL_PURPLE;
   }
- }
+}
 
 function calculateTravelBubbles(data, filteredPoetLines) {
   const cityIds = new Set()
@@ -130,6 +137,9 @@ function drawLines(map, calculatedLines) {
       dashArray = "8, 8";
     }
     const geodesic = L.geodesic([fromLatLng, toLatLng], { color: line.color, weight: line.weight, dashArray: dashArray });
+    if (line.popupHtml)
+      geodesic.bindPopup(line.popupHtml);
+    geodesic.bindTooltip(line.name);
     const decorator = L.polylineDecorator(geodesic, {
       patterns: [
         { offset: 10, repeat: 200, symbol: L.Symbol.arrowHead({ pathOptions: { color: line.color, fillOpacity: 1, weight: 0 } }) }

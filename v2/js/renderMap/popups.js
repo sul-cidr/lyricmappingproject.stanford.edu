@@ -1,5 +1,6 @@
 import { LYRIC_GREY, LYRIC_RED } from "../constants/colors.js";
 import { getMapTypeNum } from "../calcData/getters.js";
+import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
 export function createPopupHtml(state, data, bubble) {
   const [type, num] = getMapTypeNum(state);
@@ -34,7 +35,7 @@ function createActivePopupHtml(state, data, bubble) {
   if (bornPoetCities.length > 0) {
     nativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nativeTitle}</h2>
-      ${createPlacesHeaderListOfPoets(bornPoetCities, data)}    
+      ${createNumberedListOfPoets(bornPoetCities.map(pc => pc.poets_details_name), data)}    
     `;
     nativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NATIVE POETS</h4>
@@ -45,7 +46,7 @@ function createActivePopupHtml(state, data, bubble) {
   if (otherPoetCities.length > 0) {
     nonNativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nonNativeTitle}</h2>
-      ${createPlacesHeaderListOfPoets(otherPoetCities, data)}    
+      ${createNumberedListOfPoets(otherPoetCities.map(pc => pc.poets_details_name), data)}    
     `;
     nonNativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NON-NATIVE POETS</h4>
@@ -67,8 +68,8 @@ function createHeader(state, data, bubble) {
   const cityname = bubble.city.city_name.toUpperCase();
   const title = createTitle(state, data, cityname, bubble);
   return (`
-    <h3 style="color:${LYRIC_GREY}">${cityname}</h2>
-    <h5 style="color:${LYRIC_GREY}">${title}</h2>
+    <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
+    <h5 style="color:${LYRIC_GREY}">${title}</h5>
   `);
 }
 
@@ -76,19 +77,9 @@ function createPlacesPopupHtml(state, data, bubble) {
   const poetCities = bubble.poetCities;
   return (`
     ${createHeader(state, data, bubble)}
-    ${createPlacesHeaderListOfPoets(poetCities, data)}
+    ${createNumberedListOfPoets(poetCities.map(pc => pc.poets_details_name))}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedListOfPoets(poetCities, data)}
-  `);
-}
-
-function createPlacesHeaderListOfPoets(poetCities, data) {
-  return (`
-    <p>
-    ${poetCities.map((poetCity, idx) =>
-    `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poetCity.poets_details_name}`
-  ).join(" ")}
-    </p>
   `);
 }
 
@@ -104,22 +95,6 @@ function createGeoHeaderListOfPoets(poetsList, data) {
   `);
 }
 
-function createDetailedListOfPoets(poetCities, data) {
-  return (`
-    ${poetCities.map((poetCity, idx) => {
-    return (`
-      <p>
-        <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poetCity.poets_details_name}<br>
-        Dates: ${poetCity.poets_dates}<br>
-        Genre(s): ${poetCity.poets_genres}<br>
-        Source(s): ${poetCity.poets_sources}<br>
-        ${renderReference(poetCity.reference)}
-      </p >
-      `);
-  }).join(" ")}
-  `);
-}
-
 function createDetailedGeoListOfPoets(poetsList, data) {
   return (`
     ${poetsList.map((poet, idx) => {
@@ -132,15 +107,6 @@ function createDetailedGeoListOfPoets(poetsList, data) {
       </p >
       `);
   }).join(" ")}
-  `);
-}
-
-function renderReference(reference) {
-  let source_poem = "";
-  if (reference.source_poem) source_poem = `${reference.source_poem}.`;
-  return (`
-  Citation: ${source_poem}${reference.source_citation}: "${reference.source_translation}" (trans. ${reference.source_translator})<br>
-  Greek: ${reference.source_greektext}
   `);
 }
 
