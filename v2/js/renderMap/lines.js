@@ -1,10 +1,10 @@
-import { TRAVEL_RED } from "../constants/colors.js";
+import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 import { drawBubbles } from "./bubbles.js";
-import { getMapTypeNum, getCity } from "../calcData/getters.js";
+import { getMapTypeNum, getCity, getGovs } from "../calcData/getters.js";
 
 export function calculateAndDrawLines(map, data, state) {
   const filteredPoetLines = filterLines(state, data);
-  const calculatedLines = calculateLines(data, filteredPoetLines);
+  const calculatedLines = calculateLines(state, data, filteredPoetLines);
   const travelBubbles = calculateTravelBubbles(data, filteredPoetLines);
   drawLines(map, calculatedLines);
   drawBubbles(map, travelBubbles);
@@ -17,8 +17,25 @@ function filterLines(state, data) {
   } else if (type === "poet") {
     return data.lines.filter(line => line.poetid === num);
   } else if (type === "destination") {
-    return data.lines.filter(line => line.bornCityid === num || line.activeCityid === num);
-  } else {
+    return data.lines.filter(line => 
+      line.bornCityid === num || line.activeCityid === num
+    );
+  } else if (type === "smallregion") {
+    return data.lines.filter(line => 
+      line.bornCity.regionid === num || line.activeCity.regionid === num
+    );
+  } else if (type === "region") {
+    return data.lines.filter(line => 
+      line.bornCity.bigRegionid === num || line.activeCity.bigRegionid === num
+    );
+  } else if (type === "gov") {
+    return data.lines.filter(line => {
+      const bornGovs = getGovs(data, line.bornCityid);
+      const activeGovs = getGovs(data, line.activeCityid);
+      return bornGovs.has(num) || activeGovs.has(num);
+    });
+  }
+  else {
     alert(`unrecognized type of map in travel map: <b>${type}</b>`);
   }
 }
@@ -33,24 +50,53 @@ function unhashCityIds(hash) {
   return [fromCityid, activeCityid];
 }
 
-function calculateLines(data, filteredPoetLines) {
+function calculateLines(state, data, filteredPoetLines) {
+  const [type, num] = getMapTypeNum(state);
   const lines = {}
   for (const line of filteredPoetLines) {
     const hash = hashCityIds(line.bornCityid, line.activeCityid);
     if (!lines[hash]) {
       lines[hash] = {};
-      const fromCity = getCity(data, line.bornCityid);
-      const toCity = getCity(data, line.activeCityid);
-      lines[hash].fromCity = fromCity;
-      lines[hash].toCity = toCity;
+      lines[hash].fromCity = line.bornCity;
+      lines[hash].toCity = line.activeCity;
       lines[hash].poetLines = [];
       lines[hash].dotted = false;
+      lines[hash].color = TRAVEL_RED;
     }
     lines[hash].poetLines.push(line);
+    colorLine(state, data, lines[hash], line);
     if (line.dotted) lines[hash].dotted = true;
+  }
+  for (const hash in lines) {
+    const line = lines[hash];
+    const poetsNum = line.poetLines.length;
+    let multiplier = 1;
+    let increment = 0;
+    if (type === "destination" || type === "smallregion" || type === "poet") {
+      multiplier = 2;
+      increment = 1;
+    } 
+    line.weight = multiplier * poetsNum + increment;
   }
   return lines;
 }
+
+function colorLine(state, data, line) {
+  const [type, num] = getMapTypeNum(state);
+  // default color is red
+  if (type === "destination") {
+    if (line.fromCity.cityid === num) line.color = TRAVEL_PURPLE;
+  } else if (type === "smallregion") {
+    if (line.fromCity.regionid === num) line.color = TRAVEL_PURPLE;
+  } else if (type === "region") {
+    if (line.fromCity.bigRegionid === num) line.color = TRAVEL_PURPLE;    
+  } else if (type === "gov") {
+    const bornGovs = getGovs(data, line.fromCity.cityid);
+    const activeGovs = getGovs(data, line.toCity.cityid);
+    if (bornGovs.has(num) && activeGovs.has(num)) line.color = TRAVEL_YELLOW;
+    else if (bornGovs.has(num)) line.color = TRAVEL_PURPLE;
+  }
+ }
 
 function calculateTravelBubbles(data, filteredPoetLines) {
   const cityIds = new Set()
@@ -83,10 +129,10 @@ function drawLines(map, calculatedLines) {
     if (line.dotted) {
       dashArray = "8, 8";
     }
-    const geodesic = L.geodesic([fromLatLng, toLatLng], { color: TRAVEL_RED, weight: 1, dashArray: dashArray });
+    const geodesic = L.geodesic([fromLatLng, toLatLng], { color: line.color, weight: line.weight, dashArray: dashArray });
     const decorator = L.polylineDecorator(geodesic, {
       patterns: [
-        { offset: 25, repeat: 200, symbol: L.Symbol.arrowHead({ pathOptions: { color: TRAVEL_RED, fillOpacity: 1, weight: 0 } }) }
+        { offset: 10, repeat: 200, symbol: L.Symbol.arrowHead({ pathOptions: { color: line.color, fillOpacity: 1, weight: 0 } }) }
         // {
         //   symbol: L.Symbol.marker({
         //     rotate: true, markerOptions: {

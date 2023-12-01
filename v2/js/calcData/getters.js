@@ -13,6 +13,12 @@ export function getCity(data, cityId) {
   console.log(`cityId ${cityId} does not exist in citiesById`);
 }
 
+export function getGovs(data, cityId) {
+  if (data.govsByCityId[cityId]) return data.govsByCityId[cityId];
+  console.log(`cityId ${cityId} does not exist in govsByCityId`);
+  return new Set();
+}
+
 export function getMapTypeNum(state) {
   const [type, string_num] = state.selectedId.split("_");
   const num = parseInt(string_num);

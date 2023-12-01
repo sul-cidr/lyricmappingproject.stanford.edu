@@ -10,7 +10,8 @@ export async function parseCsvs(data) {
     parseCsv(data, "poetsCities", "./dataFiles/poets_cities.csv"),
     parseCsv(data, "poets", "./dataFiles/poets.csv"),
     parseCsv(data, "genres", "./dataFiles/genres.csv"),
-    parseCsv(data, "geoPoetsCities", "./dataFiles/geographical_imaginary_group.csv")
+    parseCsv(data, "geoPoetsCities", "./dataFiles/geographical_imaginary_group.csv"),
+    parseCsv(data, "cityPolitics", "./dataFiles/city_politics.csv")
   ])
 }
 

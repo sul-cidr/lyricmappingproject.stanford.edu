@@ -1,15 +1,21 @@
-import { getPoet } from "./getters.js";
+import { getPoet, getCity } from "./getters.js";
 
 export function initializeData(data) {
   // some datacleaning from csv parse
   data.genres.forEach(genre => genre.genreid = parseInt(genre.genreid));
   data.cities.forEach(city => city.cityid = parseInt(city.cityid));
+  data.cities.forEach(city => city.regionid = parseInt(city.regionid));
+  data.cityPolitics.forEach(city => city.cityid = parseInt(city.cityid));
+  data.cityPolitics.forEach(city => city.governmentid = parseInt(city.governmentid));
   data.poetsCities.forEach(poetCity => poetCity.relationshipid = parseInt(poetCity.relationshipid));
   data.poetsCities.forEach(poetCity => poetCity.poetid = parseInt(poetCity.poetid));
   data.poetsCities.forEach(poetCity => poetCity.cityid = parseInt(poetCity.cityid));
   data.geoPoetsCities.forEach(poetCity => poetCity.poetid = parseInt(poetCity.poetid));
   data.geoPoetsCities.forEach(poetCity => poetCity.imaginaryid = parseInt(poetCity.imaginaryid));
   data.geoPoetsCities.forEach(poetCity => poetCity.cityid = parseInt(poetCity.cityid));
+
+  // add big regionid to cities
+  addBigRegionIdToCities(data);
 
   // create useful maps by key
   data.citiesById = {}
@@ -27,6 +33,7 @@ export function initializeData(data) {
     }
     data.genresByPoetId[genre.poetid].push(genre);
   }
+  createGovsByCityId(data);
   createGenresByGenreId(data);
   createGenreIdsWithNames(data);
   createGeoImaginaryPoets(data);
@@ -38,6 +45,78 @@ export function sortAlphabetically(a, b) {
   if (a < b) { return -1; }
   if (a > b) { return 1; }
   return 0;
+}
+
+function createGovsByCityId(data) {
+  data.govsByCityId = {};
+  for (const cp of data.cityPolitics) {
+    if (!data.govsByCityId[cp.cityid]) data.govsByCityId[cp.cityid] = new Set();
+    data.govsByCityId[cp.cityid].add(cp.governmentid);
+  }
+}
+
+function addBigRegionIdToCities(data) {
+  const magnaGraeciaId = 1;
+  const magnaGraecia = [
+    7, // Sicily
+    10 // Italy
+  ];
+  const mainlandGreeceId = 2;
+  const mainlandGreece = [
+    22, // Euboea
+    20, // Thrace
+    12, // Thessaly
+    11, // Northern Greece
+    2, // Attica
+    3, // Boeotia
+    4, // Central Greece
+    9//, // Peloponnese
+    // 33 // Macedonia
+  ];
+  const aegeanIslandsId = 3;
+  const aegeanIsland = [
+    1, // Cyclades
+    8, // Lesbos
+    15, // Dodecanese
+    17, // Crete
+    13, // Cythera
+    29 // Asia Minor islands
+  ];
+  const asiaMinorId = 4;
+  const asiaMinor = [
+    26, // doesn't exist?
+    23, // Phrygia
+    6, // Ionia
+    14, // Lydia
+    16, // Mysia
+    28, // Troad
+    27 // Aeolis
+  ];
+  const unAssigned = [
+    19, // Ionian Sea
+    13, // Cythera
+    18, // Cyprus
+    21, // Asia
+    25, // Phoenicia
+    24, // Scythia
+    33 // Macedonia
+  ]
+  for (const city of data.cities) {
+    if (city.regionid) {
+      if (magnaGraecia.includes(city.regionid))
+        city.bigRegionid = magnaGraeciaId;
+      else if (mainlandGreece.includes(city.regionid))
+        city.bigRegionid = mainlandGreeceId;
+      else if (aegeanIsland.includes(city.regionid))
+        city.bigRegionid = aegeanIslandsId;
+      else if (asiaMinor.includes(city.regionid))
+        city.bigRegionid = asiaMinorId;
+      else if (unAssigned.includes(city.regionid)) {}
+      else {
+        console.log(`city ${city.city_name} with id ${city.cityid} has unknown regionid ${city.regionid} with name ${city.region}`);
+      }
+    }
+  }
 }
 
 function createGenresByGenreId(data) {
@@ -121,13 +200,17 @@ function createLines(data) {
       for (const bornPc of poet.bornPcs) {
         for (const activePc of poet.activePcs) {
           const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
+          const fromCity = getCity(data, bornPc.cityid);
+          const toCity = getCity(data, activePc.cityid);
           data.lines.push({
             poetid: poetId,
             bornCityid: bornPc.cityid,
             activeCityid: activePc.cityid,
             bornPc: bornPc,
             activePc: activePc,
-            dotted: dotted
+            dotted: dotted,
+            bornCity: fromCity,
+            activeCity: toCity
           });
         }
       }

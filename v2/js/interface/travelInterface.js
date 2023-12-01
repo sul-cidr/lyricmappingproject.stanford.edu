@@ -490,50 +490,50 @@ export function createTravelInterfaceHtml() {
   <fieldset style="border: none;" id="controlForm" class="controlForm">
     <div style="color:black;padding-right:5px;display: inline-block;margin-top: 3px; font-weight: bold;" >SMALL GEOGRAPHICAL REGION (<span style="color: #fc1804;">to</span>/<span style="color: #551A8B;">from</span>): </div>
 
-<input type="radio" value="0" name="city" id="small_region_2">
-    <label for="small_region_2" class="picker-label">Attica</label>
+<input type="radio" value="0" name="city" id="smallregion_2">
+    <label for="smallregion_2" class="picker-label">Attica</label>
 
-    <input type="radio" value="0" name="city" id="small_region_3">
-    <label for="small_region_3" class="picker-label">Boeotia</label>
+    <input type="radio" value="0" name="city" id="smallregion_3">
+    <label for="smallregion_3" class="picker-label">Boeotia</label>
 
-    <input type="radio" value="0" name="city" id="small_region_4">
-    <label for="small_region_4" class="picker-label">Central Greece</label>
+    <input type="radio" value="0" name="city" id="smallregion_4">
+    <label for="smallregion_4" class="picker-label">Central Greece</label>
 
-    <input type="radio" value="0" name="city" id="small_region_17">
-    <label for="small_region_17" class="picker-label">Crete</label>
+    <input type="radio" value="0" name="city" id="smallregion_17">
+    <label for="smallregion_17" class="picker-label">Crete</label>
 
-    <input type="radio" value="0" name="city" id="small_region_1">
-    <label for="small_region_1" class="picker-label">Cyclades & western Aegean Islands</label>
+    <input type="radio" value="0" name="city" id="smallregion_1">
+    <label for="smallregion_1" class="picker-label">Cyclades & western Aegean Islands</label>
 
-    <input type="radio" value="0" name="city" id="small_region_18">
-    <label for="small_region_18" class="picker-label">Cyprus</label>	
+    <input type="radio" value="0" name="city" id="smallregion_18">
+    <label for="smallregion_18" class="picker-label">Cyprus</label>	
 
-<input type="radio" value="0" name="city" id="small_region_15">
-    <label for="small_region_15" class="picker-label">Dodecanese</label>
+<input type="radio" value="0" name="city" id="smallregion_15">
+    <label for="smallregion_15" class="picker-label">Dodecanese</label>
 
-    <input type="radio" value="0" name="city" id="small_region_22">
-    <label for="small_region_22" class="picker-label">Euboea</label>
+    <input type="radio" value="0" name="city" id="smallregion_22">
+    <label for="smallregion_22" class="picker-label">Euboea</label>
 
-    <input type="radio" value="0" name="city" id="small_region_19">
-    <label for="small_region_19" class="picker-label">Ionian Sea</label>
+    <input type="radio" value="0" name="city" id="smallregion_19">
+    <label for="smallregion_19" class="picker-label">Ionian Sea</label>
 
-    <input type="radio" value="0" name="city" id="small_region_8">
-    <label for="small_region_8" class="picker-label">Lesbos</label>
+    <input type="radio" value="0" name="city" id="smallregion_8">
+    <label for="smallregion_8" class="picker-label">Lesbos</label>
 
-    <input type="radio" value="0" name="city" id="small_region_14">
-    <label for="small_region_14" class="picker-label">Lydia</label>
+    <input type="radio" value="0" name="city" id="smallregion_14">
+    <label for="smallregion_14" class="picker-label">Lydia</label>
 
-<input type="radio" value="0" name="city" id="small_region_11">
-    <label for="small_region_11" class="picker-label">Northern Greece</label>
+<input type="radio" value="0" name="city" id="smallregion_11">
+    <label for="smallregion_11" class="picker-label">Northern Greece</label>
 
-    <input type="radio" value="0" name="city" id="small_region_9">
-    <label for="small_region_9" class="picker-label">Peloponnese</label>
+    <input type="radio" value="0" name="city" id="smallregion_9">
+    <label for="smallregion_9" class="picker-label">Peloponnese</label>
 
-<input type="radio" value="0" name="city" id="small_region_7">
-    <label for="small_region_7" class="picker-label">Sicily</label>
+<input type="radio" value="0" name="city" id="smallregion_7">
+    <label for="smallregion_7" class="picker-label">Sicily</label>
 
-    <input type="radio" value="0" name="city" id="small_region_12">
-    <label for="small_region_12" class="picker-label">Thessaly</label>
+    <input type="radio" value="0" name="city" id="smallregion_12">
+    <label for="smallregion_12" class="picker-label">Thessaly</label>
 
   </fieldset>
 </div>

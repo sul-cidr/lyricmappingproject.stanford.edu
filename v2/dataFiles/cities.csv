@@ -137,7 +137,7 @@ Phocaea,Phocaea,255,,38.670353,26.753208,Ionia,6
 Aulis,Aulis,136,Modern Avlida,38.40679,23.604165,Boeotia,3
 Boeotia,BOEOTIA (region),137,,38.41,23.08,Boeotia,3
 Calydon,Calydon,138,,38.372423,21.533106,Central Greece,4
-Caria,CARIA (region),139,A region in Anatolia (IAP p. 1108) ,37.4,27.65,Lydia,14
+Caria,CARIA (region),139,A region in Anatolia (IAP p. 1108),37.4,27.65,Lydia,14
 Colchis,Colchis,140,"Hellenistic Phasis (Greek settlement), modern Poti?",42.15,41.66,,
 Cleonae,Cleonae,141,South of Corinth,37.5,22.45,Peleponnese,9
 Cydonia,Cydonia,142,,35.3,24,Crete,17
@@ -164,7 +164,7 @@ Gargara,Gargara,171,,39.586111,26.534167,Troad,28
 Oenus,Oenus,174,"location is for Mt. Parnon, the source of the river Oenus",37.116667,22.733333,Peloponnese,9
 Onogloi,Onogloi,175,"in Laconia, but ""with no known locations"" (HN p.572).",,,Peloponnese,9
 Pityussae,Pityussae,176,location is for Ibiza,38.98,1.43,Spain,
-Psyra,Psyra,177,"equivalent to Psara, next to Chios",38.55,25.566667,Dodekanese,15
+Psyra,Psyra,177,"equivalent to Psara, next to Chios",38.55,25.566667,Dodecanese,15
 Stathmi,Stathmi,178,"in Laconia, but ""with no known locations"" (HN p.572).",,,Central Greece,4
 Therapni,Therapni,179,,37.083333,22.55,Peloponnese,9
 Xanthus,Xanthus,180,for city of Xanthus where river too is located,36.356111,29.318611,,
@@ -230,6 +230,6 @@ Messenia,MESSENIA (region),251,Located at Hellenistic Messene (the later capitol
 Gyaros,Gyaros,252,,37.598103,24.682578,Cyclades,1
 Magnesia ad Maeandrum,Magnesia ad Maeandrum,253,To be distinguished from Magnesia-ad-Sipylum,37.848006,27.518987,,
 Erythrae,Erythrae,254,Ionian Erythrae,38.382778,26.480833,,
-Opous,Opous,256,, 38.649723999999999,23.008427999999999,Boeotia,3
+Opous,Opous,256,,38.649723999999999,23.008427999999999,Boeotia,3
 Orchomenos,Orchomenos,257,,38.493319,22.974702,Boeotia,3
 Tenedos,Tenedos,258,,39.8397494,26.0705870,Cyclades,1
