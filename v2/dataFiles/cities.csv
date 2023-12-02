@@ -1,4 +1,4 @@
-city_name,infowindow_name,cityid,notes,lat,long,region,regionid
+cityname,infowindow_name,cityId,notes,lat,long,region,regionId
 Melos,Melos,1,city not listed,36.683333,24.416667,Cyclades,1
 Athens,Athens,2,,37.971687,23.726464,Attica,2
 Thebes,Thebes,3,,38.319076,23.317799,Boeotia,3

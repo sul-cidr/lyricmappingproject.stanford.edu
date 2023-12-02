@@ -13,13 +13,12 @@ export function createNumberedListOfPoets(names) {
 export function createDetailedListOfPoets(poets) {
   return (`
     ${poets.map((poet, idx) => {
-    console.log(poet);
     return (`
       <p>
-        <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetsDetailsName}<br>
-        Dates: ${poet.poetsDates}<br>
-        Genre(s): ${poet.poetsGenres}<br>
-        Source(s): ${poet.poetsSources}<br>
+        <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetDetailName}<br>
+        Dates: ${poet.poetDates}<br>
+        Genre(s): ${poet.poetGenres}<br>
+        Source(s): ${poet.poetSources}<br>
         ${renderReference(poet.reference)}
       </p >
       `);

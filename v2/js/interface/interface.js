@@ -25,13 +25,13 @@ export function addMapModeEventListener(map, data, state) {
 
 export function updateMapMode(map, data, state) {
   let interfaceHtml;
-  if (state.currentMapMode === "places_mode") {
+  if (state.currentMapMode === "placesMode") {
     interfaceHtml = createPlacesInterfaceHtml(data);
     state.selectedId = "relationship_3";
-  } else if (state.currentMapMode === "travel_mode") {
+  } else if (state.currentMapMode === "travelMode") {
     interfaceHtml = createTravelInterfaceHtml(data);
     state.selectedId = "all_1";
-  } else if (state.currentMapMode === "geo_imaginary_mode") {
+  } else if (state.currentMapMode === "geoimaginaryMode") {
     interfaceHtml = createGeoImaginaryInterfaceHtml(data);
     state.selectedId = "all_1";
   } else {

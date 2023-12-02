@@ -8,7 +8,7 @@ function main() {
   map.currentLayerGroup = L.layerGroup();
   const data = {};
   const state = {
-    "currentMapMode": "places_mode"
+    "currentMapMode": "placesMode"
   };
 
   parseCsvs(data)

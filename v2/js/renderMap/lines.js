@@ -16,23 +16,23 @@ function filterLines(state, data) {
   if (type === "all") {
     return data.lines;
   } else if (type === "poet") {
-    return data.lines.filter(line => line.poetid === num);
+    return data.lines.filter(line => line.poetId === num);
   } else if (type === "destination") {
     return data.lines.filter(line =>
-      line.bornCityid === num || line.activeCityid === num
+      line.bornCityId === num || line.activeCityId === num
     );
   } else if (type === "smallregion") {
     return data.lines.filter(line =>
-      line.bornCity.regionid === num || line.activeCity.regionid === num
+      line.bornCity.regionId === num || line.activeCity.regionId === num
     );
   } else if (type === "region") {
     return data.lines.filter(line =>
-      line.bornCity.bigRegionid === num || line.activeCity.bigRegionid === num
+      line.bornCity.bigRegionId === num || line.activeCity.bigRegionId === num
     );
   } else if (type === "gov") {
     return data.lines.filter(line => {
-      const bornGovs = getGovs(data, line.bornCityid);
-      const activeGovs = getGovs(data, line.activeCityid);
+      const bornGovs = getGovs(data, line.bornCityId);
+      const activeGovs = getGovs(data, line.activeCityId);
       return bornGovs.has(num) || activeGovs.has(num);
     });
   }
@@ -47,14 +47,14 @@ function hashCityIds(from, to) {
 
 function unhashCityIds(hash) {
   const fromCityid = Math.floor(hash / 1000);
-  const activeCityid = hash % 1000;
-  return [fromCityid, activeCityid];
+  const activeCityId = hash % 1000;
+  return [fromCityid, activeCityId];
 }
 
 function calculateLines(state, data, filteredPoetLines) {
   const lines = {}
   for (const line of filteredPoetLines) {
-    const hash = hashCityIds(line.bornCityid, line.activeCityid);
+    const hash = hashCityIds(line.bornCityId, line.activeCityId);
     if (!lines[hash]) {
       lines[hash] = {};
       lines[hash].fromCity = line.bornCity;
@@ -92,14 +92,14 @@ function colorLine(state, data, line) {
   const [type, num] = getMapTypeNum(state);
   // default color is red
   if (type === "destination") {
-    if (line.fromCity.cityid === num) line.color = TRAVEL_PURPLE;
+    if (line.fromCity.cityId === num) line.color = TRAVEL_PURPLE;
   } else if (type === "smallregion") {
-    if (line.fromCity.regionid === num) line.color = TRAVEL_PURPLE;
+    if (line.fromCity.regionId === num) line.color = TRAVEL_PURPLE;
   } else if (type === "region") {
-    if (line.fromCity.bigRegionid === num) line.color = TRAVEL_PURPLE;
+    if (line.fromCity.bigRegionId === num) line.color = TRAVEL_PURPLE;
   } else if (type === "gov") {
-    const bornGovs = getGovs(data, line.fromCity.cityid);
-    const activeGovs = getGovs(data, line.toCity.cityid);
+    const bornGovs = getGovs(data, line.fromCity.cityId);
+    const activeGovs = getGovs(data, line.toCity.cityId);
     if (bornGovs.has(num) && activeGovs.has(num)) line.color = TRAVEL_YELLOW;
     else if (bornGovs.has(num)) line.color = TRAVEL_PURPLE;
   }
@@ -109,8 +109,8 @@ function calculateTravelBubbles(data, filteredPoetLines) {
   const cityIds = new Set()
   for (const plId in filteredPoetLines) {
     const pl = filteredPoetLines[plId];
-    cityIds.add(pl.bornCityid);
-    cityIds.add(pl.activeCityid);
+    cityIds.add(pl.bornCityId);
+    cityIds.add(pl.activeCityId);
   }
 
   const bubbles = {};

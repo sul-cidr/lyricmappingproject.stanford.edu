@@ -1,4 +1,4 @@
-dates_poet_name,poetid,date,iso_8601,notes
+dates_poetname,poetId,date,iso_8601,notes
 -es,18,500,0500-01-01,
 -es,18,475,0475-01-01,
 -es,18,450,0450-01-01,

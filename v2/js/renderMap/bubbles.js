@@ -1,16 +1,16 @@
 import { LYRIC_WHITE, LYRIC_RED } from "../constants/colors.js";
 import { calculateBubbles } from "./calcBubbles.js";
 
-export function calculateAndDrawBubbles(map, data, state, poetsCities) {
-  const bubbles = calculateBubbles(state, data, poetsCities);
+export function calculateAndDrawBubbles(map, data, state, poetCities) {
+  const bubbles = calculateBubbles(state, data, poetCities);
   drawBubbles(map, bubbles);
 }
 
 export function drawBubbles(map, bubbles) {
   const drawnBubbles = [];
 
-  for (const cityid in bubbles) {
-    const bubble = bubbles[cityid];
+  for (const cityId in bubbles) {
+    const bubble = bubbles[cityId];
     const location = L.latLng(
       bubble.city.lat,
       bubble.city.long
@@ -42,7 +42,7 @@ function drawBubble(location, map, bubble) {
   map.currentLayerGroup.addLayer(circle);
   if (bubble.popupHtml)
     circle.bindPopup(bubble.popupHtml);
-  circle.bindTooltip(bubble.city.city_name);
+  circle.bindTooltip(bubble.city.cityname);
   return circle;
 }
 
@@ -50,13 +50,13 @@ function drawLegend(location, map, bubble) {
   if (bubble.price >= 25) {
     const textMarker = L.marker(location, {
       icon: L.divIcon({
-        html: bubble.city.city_name,
+        html: bubble.city.cityname,
         className: 'text-below-marker',
       })
     });
     map.currentLayerGroup.addLayer(textMarker);
     textMarker.bindPopup(bubble.popupHtml);
-    textMarker.bindTooltip(bubble.city.city_name);
+    textMarker.bindTooltip(bubble.city.cityname);
   }
 }
 

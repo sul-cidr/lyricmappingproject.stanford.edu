@@ -1,70 +1,71 @@
 import { getPoet, getCity, getGenres } from "./getters.js";
 
 export function initializeData(data) {
-  // some datacleaning from csv parse
   data.genres.forEach(genre => genre.genreid = parseInt(genre.genreid));
-  data.cities.forEach(city => city.cityid = parseInt(city.cityid));
-  data.cities.forEach(city => city.regionid = parseInt(city.regionid));
-  data.cityPolitics.forEach(city => city.cityid = parseInt(city.cityid));
+  data.cities.forEach(city => city.cityId = parseInt(city.cityId));
+  data.cities.forEach(city => city.regionId = parseInt(city.regionId));
+  data.cityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
   data.cityPolitics.forEach(city => city.governmentid = parseInt(city.governmentid));
-  data.poetsCities.forEach(poetCity => poetCity.relationshipid = parseInt(poetCity.relationshipid));
-  data.poetsCities.forEach(poetCity => poetCity.poetid = parseInt(poetCity.poetid));
-  data.poetsCities.forEach(poetCity => poetCity.cityid = parseInt(poetCity.cityid));
-  data.geoPoetsCities.forEach(poetCity => poetCity.poetid = parseInt(poetCity.poetid));
-  data.geoPoetsCities.forEach(poetCity => poetCity.imaginaryid = parseInt(poetCity.imaginaryid));
-  data.geoPoetsCities.forEach(poetCity => poetCity.cityid = parseInt(poetCity.cityid));
-
-  // add big regionid to cities
-  addBigRegionIdToCities(data);
+  data.poetCities.forEach(poetCity => poetCity.relationshipid = parseInt(poetCity.relationshipid));
+  data.poetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
+  data.poetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
+  data.geopoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
+  data.geopoetCities.forEach(poetCity => poetCity.imaginaryid = parseInt(poetCity.imaginaryid));
+  data.geopoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
+  data.regions.forEach(region => region.regionId = parseInt(region.regionId));
+  data.regions.forEach(region => region.bigRegionId = parseInt(region.bigRegionId));
 
   // create useful maps by key
   data.citiesById = {}
   for (const city of data.cities) {
-    data.citiesById[city.cityid] = city;
+    data.citiesById[city.cityId] = city;
   }
   data.poetsById = {}
   for (const poet of data.poets) {
-    data.poetsById[poet.poetid] = poet;
+    data.poetsById[poet.poetId] = poet;
   }
   data.genresByPoetId = {}
   for (const genre of data.genres) {
-    if (!data.genresByPoetId[genre.poetid]) {
-      data.genresByPoetId[genre.poetid] = [];
+    if (!data.genresByPoetId[genre.poetId]) {
+      data.genresByPoetId[genre.poetId] = [];
     }
-    data.genresByPoetId[genre.poetid].push(genre);
+    data.genresByPoetId[genre.poetId].push(genre);
   }
+  data.regionsById = {}
+  for (const region of data.regions) {
+    data.regionsById[region.regionId] = region;
+  }
+  addBigRegionIdToCities(data);
   createGovsByCityId(data);
   createGenresByGenreId(data);
   createGenreIdsWithNames(data);
   createGeoImaginaryPoets(data);
   createLines(data);
   keyLines(data);
-  primePoetCities(data);
-}
-
-function primePoetCities(data) {
-  data.poetsCities.forEach(pc => {
-    primeObjWithPoetData(pc, data);
-  });
+  createTravelPoets(data);
+  createTravelCities(data);
+  createRegionsForInterface(data);
+  data.poetCities.forEach(pc => primeObjWithPoetData(pc, data));
+  data.geopoetCities.forEach(pc => primeObjWithPoetData(pc, data));
 }
 
 function primeObjWithPoetData(obj, data) {
-  const poet = getPoet(data, obj.poetid);
+  const poet = getPoet(data, obj.poetId);
 
-  obj.poetsDetailsName = "";
-  if (poet.details_name) obj.poetsDetailsName = poet.details_name;
-  else alert(`Poet ${obj.poets_poet_name} with poetid ${obj.poetid} lacks a details name`);
+  obj.poetDetailName = "";
+  if (poet.poetDetailName) obj.poetDetailName = poet.poetDetailName;
+  else alert(`Poet ${obj.poetname} with poetId ${obj.poetId} lacks a details name`);
 
-  obj.poetsDates = "";
-  if (poet.dates) obj.poetsDates = poet.dates;
-  else console.log(`Poet ${obj.poets_poet_name} with poetid ${obj.poetid} lacks dates`);
+  obj.poetDates = "";
+  if (poet.dates) obj.poetDates = poet.dates;
+  else console.log(`Poet ${obj.poetname} with poetId ${obj.poetId} lacks dates`);
 
-  obj.poetsSources = "";
-  if (poet.sources) obj.poetsSources = poet.sources;
-  else console.log(`Poet ${obj.poets_poet_name} with poetid ${obj.poetid} lacks sources`);
+  obj.poetSources = "";
+  if (poet.sources) obj.poetSources = poet.sources;
+  else console.log(`Poet ${obj.poetname} with poetId ${obj.poetId} lacks sources`);
 
-  const genres = getGenres(data, obj.poetid);
-  obj.poetsGenreNames = genres.map(genre => genre.genre).join(", ");
+  const genres = getGenres(data, obj.poetId);
+  obj.poetGenres = genres.map(genre => genre.genre).join(", ");
 }
 
 export function sortAlphabetically(a, b) {
@@ -76,71 +77,19 @@ export function sortAlphabetically(a, b) {
 function createGovsByCityId(data) {
   data.govsByCityId = {};
   for (const cp of data.cityPolitics) {
-    if (!data.govsByCityId[cp.cityid]) data.govsByCityId[cp.cityid] = new Set();
-    data.govsByCityId[cp.cityid].add(cp.governmentid);
+    if (!data.govsByCityId[cp.cityId]) data.govsByCityId[cp.cityId] = new Set();
+    data.govsByCityId[cp.cityId].add(cp.governmentid);
   }
 }
 
 function addBigRegionIdToCities(data) {
-  const magnaGraeciaId = 1;
-  const magnaGraecia = [
-    7, // Sicily
-    10 // Italy
-  ];
-  const mainlandGreeceId = 2;
-  const mainlandGreece = [
-    22, // Euboea
-    20, // Thrace
-    12, // Thessaly
-    11, // Northern Greece
-    2, // Attica
-    3, // Boeotia
-    4, // Central Greece
-    9//, // Peloponnese
-    // 33 // Macedonia
-  ];
-  const aegeanIslandsId = 3;
-  const aegeanIsland = [
-    1, // Cyclades
-    8, // Lesbos
-    15, // Dodecanese
-    17, // Crete
-    13, // Cythera
-    29 // Asia Minor islands
-  ];
-  const asiaMinorId = 4;
-  const asiaMinor = [
-    26, // doesn't exist?
-    23, // Phrygia
-    6, // Ionia
-    14, // Lydia
-    16, // Mysia
-    28, // Troad
-    27 // Aeolis
-  ];
-  const unAssigned = [
-    19, // Ionian Sea
-    13, // Cythera
-    18, // Cyprus
-    21, // Asia
-    25, // Phoenicia
-    24, // Scythia
-    33 // Macedonia
-  ]
   for (const city of data.cities) {
-    if (city.regionid) {
-      if (magnaGraecia.includes(city.regionid))
-        city.bigRegionid = magnaGraeciaId;
-      else if (mainlandGreece.includes(city.regionid))
-        city.bigRegionid = mainlandGreeceId;
-      else if (aegeanIsland.includes(city.regionid))
-        city.bigRegionid = aegeanIslandsId;
-      else if (asiaMinor.includes(city.regionid))
-        city.bigRegionid = asiaMinorId;
-      else if (unAssigned.includes(city.regionid)) { }
-      else {
-        console.log(`city ${city.city_name} with id ${city.cityid} has unknown regionid ${city.regionid} with name ${city.region}`);
-      }
+    if (
+      city.regionId &&
+      data.regionsById[city.regionId] &&
+      data.regionsById[city.regionId].bigRegionId
+    ) {
+      city.bigRegionId = data.regionsById[city.regionId].bigRegionId;
     }
   }
 }
@@ -161,6 +110,17 @@ function createGenresByGenreId(data) {
   }
 }
 
+function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
+  return Array
+    .from(poetIds)
+    .map(poetId => {
+      const poet = getPoet(data, poetId);
+      const poetDetailName = poet.poetDetailName;
+      return [poetId, poetDetailName];
+    })
+    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+}
+
 function createGeoImaginaryPoets(data) {
   const poetIdsToOmit = [
     151, // Aristotle
@@ -170,47 +130,99 @@ function createGeoImaginaryPoets(data) {
     149  // Pindar
   ]
 
-  const poetIds = new Set();
-  for (const pc of data.geoPoetsCities) {
-    if (!poetIdsToOmit.includes(pc.poetid))
-      poetIds.add(pc.poetid);
-  }
+  const poetIds = new Set(
+    data.geopoetCities
+      .map(pc => pc.poetId)
+      .filter(poetId => !poetIdsToOmit.includes(poetId))
+  );
 
-  data.geoImaginaryPoets = [];
-  for (const poetId of poetIds) {
-    const poet = getPoet(data, poetId);
-    const poetDetailsName = poet.details_name
-    data.geoImaginaryPoets.push([poetId, poetDetailsName]);
-  }
-  data.geoImaginaryPoets.sort((a, b) => sortAlphabetically(a[1], b[1]));
+  data.geoImaginaryPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
 
   // put sappho / alcaeus at end of array
-  let sappAlcIdx;
+
   const sappAlcPoetId = 157;
-  for (let idx = 0; idx < data.geoImaginaryPoets.length; idx++) {
-    if (data.geoImaginaryPoets[idx][0] === sappAlcPoetId) {
-      sappAlcIdx = idx;
+  putPoetIdAtEndOfPoetIdNameTuples(data.geoImaginaryPoets, sappAlcPoetId);
+}
+
+function putPoetIdAtEndOfPoetIdNameTuples(array, poetId) {
+  let foundIdx;
+  for (let idx = 0; idx < array.length; idx++) {
+    if (array[idx][0] === poetId) {
+      foundIdx = idx;
       break;
     }
   }
-  if (sappAlcIdx) {
-    const sapphoAlcaeus = data.geoImaginaryPoets[sappAlcIdx];
-    data.geoImaginaryPoets.splice(sappAlcIdx, 1);
-    data.geoImaginaryPoets.push(sapphoAlcaeus);
+  if (foundIdx !== undefined) {
+    const item = array[foundIdx];
+    array.splice(foundIdx, 1);
+    array.push(item);
   }
+}
+
+function createTravelPoets(data) {
+  // why do we omit these guys?
+  const poetIdsToOmit = [
+    29, // Oeniades
+    38, // Aristonous
+  ];
+
+  const poetIds = new Set(
+    data.lines
+      .map(line => line.poetId)
+      .filter(poetId => !poetIdsToOmit.includes(poetId))
+  );
+  data.travelPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
+
+  const esIdx = 18; // -es
+  putPoetIdAtEndOfPoetIdNameTuples(data.travelPoets, esIdx);
+}
+
+function createTravelCities(data) {
+  const cityIds = new Set(
+    data.lines.flatMap(line => [line.bornCityId, line.activeCityId])
+  );
+  data.travelCities = Array
+    .from(cityIds)
+    .map(cityId => {
+      const city = getCity(data, cityId);
+      return [cityId, city.cityname];
+    })
+    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+}
+
+function createRegionsForInterface(data) {
+  const regionIdsToOmit = [
+    27, // Aeolis
+    21, // Asia
+    29, // Asia Minor islands
+    13, // Cythera
+    6, // Ionia
+    10, // Italy
+    33, // Macedonia
+    16, // Mysia
+    25, // Phoenicia
+    23, // Phrygia
+    24, // Scythia
+    20, // Thrace
+    28 // Troad
+  ];
+  data.regionsForInterface = data.regions
+    .filter(region => !regionIdsToOmit.includes(region.regionId))
+    .map(region => [region.regionId, region.regionname])
+    .sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
 function createLines(data) {
   const poets = {}
-  for (const pc of data.poetsCities) {
-    if (!poets[pc.poetid]) poets[pc.poetid] = {
+  for (const pc of data.poetCities) {
+    if (!poets[pc.poetId]) poets[pc.poetId] = {
       bornPcs: [],
       activePcs: []
     }
     if (pc.relationshipid === 3 || pc.relationshipid === 2)
-      poets[pc.poetid].activePcs.push(pc);
+      poets[pc.poetId].activePcs.push(pc);
     else if (pc.relationshipid === 1)
-      poets[pc.poetid].bornPcs.push(pc);
+      poets[pc.poetId].bornPcs.push(pc);
   }
 
   data.poetsWithUnknownTravel = [];
@@ -220,25 +232,25 @@ function createLines(data) {
     const poet = poets[poetId];
     if (poet.bornPcs.length === 0 || poet.activePcs.length === 0) {
       const poet = getPoet(data, poetId);
-      const poetDetailsName = poet.details_name
-      data.poetsWithUnknownTravel.push([poetId, poetDetailsName]);
+      const poetDetailName = poet.poetDetailName
+      data.poetsWithUnknownTravel.push([poetId, poetDetailName]);
     } else {
       for (const bornPc of poet.bornPcs) {
         for (const activePc of poet.activePcs) {
           const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
-          const fromCity = getCity(data, bornPc.cityid);
-          const toCity = getCity(data, activePc.cityid);
+          const fromCity = getCity(data, bornPc.cityId);
+          const toCity = getCity(data, activePc.cityId);
           const poet = getPoet(data, poetId);
           const line = {
-            poetid: poetId,
-            bornCityid: bornPc.cityid,
-            activeCityid: activePc.cityid,
+            poetId: poetId,
+            bornCityId: bornPc.cityId,
+            activeCityId: activePc.cityId,
             bornPc: bornPc,
             activePc: activePc,
             dotted: dotted,
             bornCity: fromCity,
             activeCity: toCity,
-            poets_details_name: poet.details_name
+            poetDetailName: poet.poetDetailName
           };
           primeObjWithPoetData(line, data);
           data.lines.push(line);
@@ -252,26 +264,26 @@ function createLines(data) {
 function keyLines(data) {
   data.linesByPoetId = {};
   for (const line of data.lines) {
-    if (!data.linesByPoetId[line.poetid]) {
-      data.linesByPoetId[line.poetid] = [];
+    if (!data.linesByPoetId[line.poetId]) {
+      data.linesByPoetId[line.poetId] = [];
     }
-    data.linesByPoetId[line.poetid].push(line);
+    data.linesByPoetId[line.poetId].push(line);
   }
 
   data.linesByBornCityId = {}
   for (const line of data.lines) {
-    if (!data.linesByBornCityId[line.bornCityid]) {
-      data.linesByBornCityId[line.bornCityid] = [];
+    if (!data.linesByBornCityId[line.bornCityId]) {
+      data.linesByBornCityId[line.bornCityId] = [];
     }
-    data.linesByBornCityId[line.bornCityid].push(line);
+    data.linesByBornCityId[line.bornCityId].push(line);
   }
 
   data.linesByActiveCityId = {}
   for (const line of data.lines) {
-    if (!data.linesByActiveCityId[line.activeCityid]) {
-      data.linesByActiveCityId[line.activeCityid] = [];
+    if (!data.linesByActiveCityId[line.activeCityId]) {
+      data.linesByActiveCityId[line.activeCityId] = [];
     }
-    data.linesByActiveCityId[line.activeCityid].push(line);
+    data.linesByActiveCityId[line.activeCityId].push(line);
   }
 }
 

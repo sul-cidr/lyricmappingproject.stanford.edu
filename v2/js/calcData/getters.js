@@ -20,7 +20,7 @@ export function getGovs(data, cityId) {
 }
 
 export function getMapTypeNum(state) {
-  const [type, string_num] = state.selectedId.split("_");
-  const num = parseInt(string_num);
+  const [type, stringNum] = state.selectedId.split("_");
+  const num = parseInt(stringNum);
   return [type, num];
 }

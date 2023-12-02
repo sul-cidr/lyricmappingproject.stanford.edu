@@ -4,19 +4,19 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
 
 export function createPopupHtml(state, data, bubble) {
   const [type, num] = getMapTypeNum(state);
-  if (state.currentMapMode === "places_mode") {
+  if (state.currentMapMode === "placesMode") {
     if (type === "relationship" && num === 3) {
       return createActivePopupHtml(state, data, bubble);
     } else {
       return createPlacesPopupHtml(state, data, bubble);
     }
-  } else if (state.currentMapMode === "geo_imaginary_mode") {
+  } else if (state.currentMapMode === "geoimaginaryMode") {
     return createGeoImaginaryPopupHtml(state, data, bubble);
   }
 }
 
 function createActivePopupHtml(state, data, bubble) {
-  const cityname = bubble.city.city_name.toUpperCase();
+  const cityname = bubble.city.cityname.toUpperCase();
   const poetCities = bubble.poetCities;
   const bornPoetCities = [];
   const otherPoetCities = [];
@@ -35,7 +35,7 @@ function createActivePopupHtml(state, data, bubble) {
   if (bornPoetCities.length > 0) {
     nativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nativeTitle}</h2>
-      ${createNumberedListOfPoets(bornPoetCities.map(pc => pc.poets_details_name), data)}    
+      ${createNumberedListOfPoets(bornPoetCities.map(pc => pc.poetDetailName), data)}    
     `;
     nativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NATIVE POETS</h4>
@@ -46,7 +46,7 @@ function createActivePopupHtml(state, data, bubble) {
   if (otherPoetCities.length > 0) {
     nonNativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nonNativeTitle}</h2>
-      ${createNumberedListOfPoets(otherPoetCities.map(pc => pc.poets_details_name), data)}    
+      ${createNumberedListOfPoets(otherPoetCities.map(pc => pc.poetDetailName), data)}    
     `;
     nonNativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NON-NATIVE POETS</h4>
@@ -65,7 +65,7 @@ function createActivePopupHtml(state, data, bubble) {
 }
 
 function createHeader(state, data, bubble) {
-  const cityname = bubble.city.city_name.toUpperCase();
+  const cityname = bubble.city.cityname.toUpperCase();
   const title = createTitle(state, data, cityname, bubble);
   return (`
     <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
@@ -77,33 +77,31 @@ function createPlacesPopupHtml(state, data, bubble) {
   const poetCities = bubble.poetCities;
   return (`
     ${createHeader(state, data, bubble)}
-    ${createNumberedListOfPoets(poetCities.map(pc => pc.poets_details_name))}
+    ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedListOfPoets(poetCities, data)}
   `);
 }
 
-function createGeoHeaderListOfPoets(poetsList, data) {
+function createGeoHeaderListOfPoets(poets, data) {
   return (`
     <p>
-    ${poetsList.map((poet, idx) => {
-    const [poetName, references, fullPoet] = poet;
-    return `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poetName}: ${references.length} reference(s)`
+    ${poets.map((poet, idx) => {
+    return `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}: ${poet.references.length} reference(s)`
   }
   ).join("<br>")}
     </p>
   `);
 }
 
-function createDetailedGeoListOfPoets(poetsList, data) {
+function createDetailedGeoListOfPoets(poets, data) {
   return (`
-    ${poetsList.map((poet, idx) => {
-    const [poetName, references, fullPoet] = poet;
+    ${poets.map((poet, idx) => {
     return (`
       <p>
-        <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poetName}<br>
-        Dates: ${fullPoet.poets_dates}<br>
-        ${references.map(reference => renderReference(reference)).join("<br><br>")}
+        <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}<br>
+        Dates: ${poet.poetDates}<br>
+        ${poet.references.map(reference => renderReference(reference)).join("<br><br>")}
       </p >
       `);
   }).join(" ")}
@@ -111,9 +109,9 @@ function createDetailedGeoListOfPoets(poetsList, data) {
 }
 
 function createTitle(state, data, cityname, bubble) {
-  if (state.currentMapMode === "places_mode") {
+  if (state.currentMapMode === "placesMode") {
     return createPlacesModeTitle(state, data, cityname);
-  } else if (state.currentMapMode === "geo_imaginary_mode") {
+  } else if (state.currentMapMode === "geoimaginaryMode") {
     return `${bubble.poetCities.length} REFERENCE(S) TO ${cityname}`
   }
 }
@@ -133,8 +131,8 @@ function createPlacesModeTitle(state, data, cityname) {
 function createGeoImaginaryPopupHtml(state, data, bubble) {
   return (`
     ${createHeader(state, data, bubble)}
-    ${createGeoHeaderListOfPoets(bubble.poetsList, data)}
+    ${createGeoHeaderListOfPoets(bubble.poets, data)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
-    ${createDetailedGeoListOfPoets(bubble.poetsList, data)}
+    ${createDetailedGeoListOfPoets(bubble.poets, data)}
   `);
 }

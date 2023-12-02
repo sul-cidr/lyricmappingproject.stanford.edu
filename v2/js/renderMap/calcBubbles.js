@@ -1,49 +1,44 @@
 import { sortAlphabetically } from "../calcData/data.js";
 import { createPopupHtml } from "./popups.js";
 
-export function calculateBubbles(state, data, poetsCities) {
+export function calculateBubbles(state, data, poetCities) {
   const citiesById = data.citiesById;
   const bubbles = {}
 
-  for (const poetCity of poetsCities) {
-    const cityid = poetCity.cityid;
-    if (cityid && citiesById[cityid]) {
-      if (!bubbles[cityid]) {
-        bubbles[cityid] = {};
-        bubbles[cityid].city = citiesById[cityid];
-        bubbles[cityid].poetCities = [];
+  for (const poetCity of poetCities) {
+    const cityId = poetCity.cityId;
+    if (cityId && citiesById[cityId]) {
+      if (!bubbles[cityId]) {
+        bubbles[cityId] = {};
+        bubbles[cityId].city = citiesById[cityId];
+        bubbles[cityId].poetCities = [];
       }
-      bubbles[cityid].poetCities.push(poetCity);
+      bubbles[cityId].poetCities.push(poetCity);
     }
   }
 
-  if (state.currentMapMode === "geo_imaginary_mode") {
-    for (const cityid in bubbles) {
-      const bubbleCity = bubbles[cityid];
+  if (state.currentMapMode === "geoimaginaryMode") {
+    for (const cityId in bubbles) {
+      const bubbleCity = bubbles[cityId];
       if (!bubbleCity.poets) bubbleCity.poets = {}
       for (const pc of bubbleCity.poetCities) {
-        if (!bubbleCity.poets[pc.poetid]) {
-          bubbleCity.poets[pc.poetid] = { ...pc };
-          bubbleCity.poets[pc.poetid].references = [];
+        if (!bubbleCity.poets[pc.poetId]) {
+          bubbleCity.poets[pc.poetId] = { ...pc };
+          bubbleCity.poets[pc.poetId].references = [];
         }
-        bubbleCity.poets[pc.poetid].references.push(pc.reference);
+        bubbleCity.poets[pc.poetId].references.push(pc.reference);
       }
-      bubbleCity.poetsList = [];
-      for (const poetId in bubbleCity.poets) {
-        const poet = bubbleCity.poets[poetId];
-        bubbleCity.poetsList.push([poet.poets_details_name, poet.references, poet]);
-      }
-      bubbleCity.poetsList.sort((a, b) => sortAlphabetically(a[0], b[0]));
+      bubbleCity.poets = Object.values(bubbleCity.poets);
+      bubbleCity.poets.sort((a, b) => sortAlphabetically(a.poetname, b.poetname));
     }
   }
 
-  for (const cityid in bubbles) {
-    const bubble = bubbles[cityid];
+  for (const cityId in bubbles) {
+    const bubble = bubbles[cityId];
     bubble.price = calculateBubblePriceFromNumberOfPoets(bubble.poetCities.length);
     bubble.popupHtml = createPopupHtml(state, data, bubble);
-    bubble.legend = bubble.city.city_name;
+    bubble.legend = bubble.city.cityname;
   }
-
   return bubbles;
 }
 

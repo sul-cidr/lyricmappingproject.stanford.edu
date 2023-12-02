@@ -4,10 +4,10 @@ import { calcPoetCities } from "./calcPoetCities.js";
 
 export function updateMap(map, data, state) {
   clearMap(map);
-  if (state.currentMapMode === "places_mode" || state.currentMapMode === "geo_imaginary_mode") {
+  if (state.currentMapMode === "placesMode" || state.currentMapMode === "geoimaginaryMode") {
     const poetCities = calcPoetCities(data, state);
     calculateAndDrawBubbles(map, data, state, poetCities);
-  } else if (state.currentMapMode === "travel_mode") {
+  } else if (state.currentMapMode === "travelMode") {
     calculateAndDrawLines(map, data, state);
   } else {
     alert(`unrecognized map mode ${state.currentMapMode}`);

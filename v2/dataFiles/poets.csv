@@ -1,4 +1,4 @@
-poet_name,details_name,poetid,sources,dates,dates_source,notes
+poetname,poetDetailName,poetId,sources,dates,dates_source,notes
 -es,-es,18,Stefanis 2684,5th c.,,
 Adespota,Adespota,152,"Gerber, Greek Iambic Poetry (LCL 259)",,,
 Alcaeus,Alcaeus,92,"Campbell, Greek Lyric vol. 1 (LCL 142); Aspiotes 74; Brill’s New Pauly",c. 600,,

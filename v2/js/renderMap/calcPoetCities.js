@@ -1,25 +1,25 @@
 import { getGenres, getMapTypeNum, getPoet } from "../calcData/getters.js";
 
 export function calcPoetCities(data, state) {
-  const poetsCitiesData = getPoetsCitiesData(data, state)
-  const filterFn = getFilterFn(data, state)
-  const filteredPoetsCities = poetsCitiesData.filter(filterFn);
+  const poetCitiesData = getpoetCitiesData(data, state);
+  const filterFn = getFilterFn(data, state);
+  const filteredpoetCities = poetCitiesData.filter(filterFn);
 
-  const renderedPoetsCities = renderPoetsCities(filteredPoetsCities, data, state);
+  const renderedpoetCities = renderpoetCities(filteredpoetCities, data, state);
 
-  return renderedPoetsCities;
+  return renderedpoetCities;
 }
 
-function getPoetsCitiesData(data, state) {
-  let poetsCitiesData;
-  if (state.currentMapMode === "places_mode" || state.currentMapMode === "travel_mode") {
-    poetsCitiesData = data.poetsCities;
-  } else if (state.currentMapMode === "geo_imaginary_mode") {
-    poetsCitiesData = data.geoPoetsCities;
+function getpoetCitiesData(data, state) {
+  let poetCitiesData;
+  if (state.currentMapMode === "placesMode" || state.currentMapMode === "travelMode") {
+    poetCitiesData = data.poetCities;
+  } else if (state.currentMapMode === "geoimaginaryMode") {
+    poetCitiesData = data.geopoetCities;
   } else {
     alert(`unrecognized current map mode ${state.currentMapMode}`);
   }
-  return [...poetsCitiesData];
+  return [...poetCitiesData];
 }
 
 function getFilterFn(data, state) {
@@ -33,13 +33,13 @@ function getFilterFn(data, state) {
     else filterFn = poetCity => poetCity.relationshipid === num;
   }
   else if (type === "poet") {
-    filterFn = poetCity => poetCity.poetid === num;
+    filterFn = poetCity => poetCity.poetId === num;
   }
   else if (type === "genre") {
     filterFn = poetCity => {
-      return data.genresByPoetId[poetCity.poetid] &&
+      return data.genresByPoetId[poetCity.poetId] &&
         data
-          .genresByPoetId[poetCity.poetid]
+          .genresByPoetId[poetCity.poetId]
           .map(genre => genre.genreid)
           .includes(num) &&
         poetCity.relationshipid === 1;
@@ -50,10 +50,10 @@ function getFilterFn(data, state) {
   return filterFn;
 }
 
-function renderPoetsCities(filteredPoetsCities, data, state) {
+function renderpoetCities(filteredpoetCities, data, state) {
   const [type, num] = getMapTypeNum(state);
 
-  return filteredPoetsCities.map(pc => {
+  return filteredpoetCities.map(pc => {
     const reference = {
       source_citation: pc.source_citation,
       source_greektext: pc.source_greektext,
@@ -62,13 +62,13 @@ function renderPoetsCities(filteredPoetsCities, data, state) {
     }
     if (type === "genre") {
       const genrePoetCities = data
-        .genresByPoetId[pc.poetid]
+        .genresByPoetId[pc.poetId]
         .filter(genre => genre.genreid === num);
       if (genrePoetCities.length > 1) {
-        console.log(`poet with name ${pc.poets_poet_name} and ${poetid} has more than one entry for genreid ${num}`);
+        console.log(`poet with name ${pc.poetname} and ${poetId} has more than one entry for genreid ${num}`);
       }
       if (genrePoetCities.length === 0) {
-        console.log(`poet with name ${pc.poets_poet_name} and ${poetid} has no entries for genreid ${num} (though we filtered to this genreid)`);
+        console.log(`poet with name ${pc.poetname} and ${poetId} has no entries for genreid ${num} (though we filtered to this genreid)`);
       }
       const genrePoetCity = genrePoetCities[0];
       reference.source_citation = genrePoetCity.source_citation;
@@ -78,14 +78,14 @@ function renderPoetsCities(filteredPoetsCities, data, state) {
     }
 
     const renderedPc = {
-      poetid: pc.poetid,
-      cityid: pc.cityid,
-      poets_city_name: pc.poets_city_name,
-      poets_poet_name: pc.poets_poet_name,
-      poetsDetailsName: pc.poetDetailsName,
-      poetsDates: pc.poetDates,
-      poetsGenres: pc.poetsGenreNames,
-      poetsSources: pc.poetSources,
+      poetId: pc.poetId,
+      cityId: pc.cityId,
+      cityname: pc.cityname,
+      poetname: pc.poetname,
+      poetDetailName: pc.poetDetailName,
+      poetDates: pc.poetDates,
+      poetGenres: pc.poetGenres,
+      poetSources: pc.poetSources,
       relationshipid: pc.relationshipid,
       reference: reference
     };
