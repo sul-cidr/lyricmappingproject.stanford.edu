@@ -1,0 +1,45 @@
+.buttonContainer {
+  width: 100%;
+  margin-top: 10px;
+  float: left;
+  position: relative;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+.controlForm {
+  border: none;
+}
+
+.controlBarLabel {
+  color: black;
+  padding-right: 5px;
+  display: inline-block;
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+.picker-label {
+  position: relative;
+  padding: 0 5px;
+  font-size: 14px;
+  display: inline-block;
+  line-height: 25px;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.picker-label:before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  border-bottom: 4px solid #c72f2a;
+  opacity: 0;
+}
+
+input:checked+.picker-label:before {
+  opacity: 1;
+}
