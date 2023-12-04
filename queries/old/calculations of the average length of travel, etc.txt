@@ -1,3 +1,0 @@
-get average of the east-west poetic travel:
-
-SELECT avg(ST_Length(ST_Transform(the_geom,32647))*cos(radians(arrow_angle-90))/1000) FROM poets_lines

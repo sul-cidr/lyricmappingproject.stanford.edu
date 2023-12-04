@@ -1,5 +1,0 @@
-<div class="cartodb-tooltip-content-wrapper">
-  <div class="cartodb-tooltip-content">
-    <p>{{birth_infowindow_name}} <nobr>-></nobr> {{other_infowindow_name}}</p>
-  </p>
-</div>
