@@ -3,34 +3,39 @@ import { calculateBubbles } from "./calcBubbles.js";
 
 export function calculateAndDrawBubbles(map, data, state, poetCities) {
   const bubbles = calculateBubbles(state, data, poetCities);
-  drawBubbles(map, bubbles);
+  drawBubblesAndLegends(map, bubbles);
 }
 
-export function drawBubbles(map, bubbles) {
+export function drawBubblesAndLegends(map, bubbles) {
+  const drawnBubbles = drawBubbles(map, bubbles);
+  drawLegends(map, bubbles);
+
+  map.on('zoomend', function () {
+    const zoom = map.getZoom();
+    for (const bubble of drawnBubbles) {
+      bubble.setRadius(calculateBubbleSize(zoom, bubble._price))
+    }
+    drawLegends(map, bubbles);
+  });
+}
+
+function drawBubbles(map, bubbles) {
   const drawnBubbles = [];
 
-  for (const cityId in bubbles) {
-    const bubble = bubbles[cityId];
+  for (const bubble of Object.values(bubbles)) {
     const location = L.latLng(
       bubble.city.lat,
       bubble.city.long
     );
     drawnBubbles.push(drawBubble(location, map, bubble));
-    if (bubble.legend) {
-      drawLegend(location, map, bubble);
-    }
-
-    map.addLayer(map.currentLayerGroup);
-    map.on('zoomend', function () {
-      for (const bubble of drawnBubbles) {
-        bubble.setRadius(calculateBubbleSize(map, bubble._price))
-      }
-    });
   }
+
+  map.addLayer(map.currentLayerGroup);
+  return drawnBubbles;
 }
 
 function drawBubble(location, map, bubble) {
-  const radius = calculateBubbleSize(map, bubble.price);
+  const radius = calculateBubbleSize(map.getZoom(), bubble.price);
   const circle = L.circle(location, {
     color: LYRIC_WHITE,
     fillColor: LYRIC_RED,
@@ -46,29 +51,52 @@ function drawBubble(location, map, bubble) {
   return circle;
 }
 
+function drawLegends(map, bubbles) {
+  map.currentLegendLayerGroup.clearLayers();
+
+  for (const bubble of Object.values(bubbles)) {
+    if (bubble.legend) {
+      const location = L.latLng(
+        bubble.city.lat,
+        bubble.city.long
+      );
+      drawLegend(location, map, bubble);
+    }
+  }
+
+  map.addLayer(map.currentLegendLayerGroup);
+}
+
 function drawLegend(location, map, bubble) {
-  if (bubble.price >= 25) {
+  if (map.getZoom() >= minimumZoomToShowLegend(bubble.price)) {
     const textMarker = L.marker(location, {
       icon: L.divIcon({
         html: bubble.city.cityname,
         className: 'text-below-marker',
       })
     });
-    map.currentLayerGroup.addLayer(textMarker);
+    map.currentLegendLayerGroup.addLayer(textMarker);
     textMarker.bindPopup(bubble.popupHtml);
     textMarker.bindTooltip(bubble.city.cityname);
   }
 }
 
-function calculateBubbleSize(map, price) {
-  const zoom = map.getZoom();
+function minimumZoomToShowLegend(price) {
+  if (price >= 22) return 0;
+  if (price >= 20) return 7;
+  if (price >= 18) return 8;
+  if (price >= 15) return 9;
+  return 10;
+}
+
+function calculateBubbleSize(zoom, price) {
   let multiplier;
 
   if (zoom <= 6) multiplier = 900;
   if (zoom === 7) multiplier = 500;
   if (zoom === 8) multiplier = 300;
-  if (zoom === 9) multiplier = 100;
-  if (zoom >= 10) multiplier = 50;
+  if (zoom === 9) multiplier = 200;
+  if (zoom >= 10) multiplier = 100;
 
   return price * multiplier;
 }

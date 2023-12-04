@@ -1,5 +1,5 @@
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
-import { drawBubbles } from "./bubbles.js";
+import { drawBubblesAndLegends } from "./bubbles.js";
 import { getMapTypeNum, getCity, getGovs } from "../calcData/getters.js";
 import { createTravelPopupHtml } from "./travelPopups.js";
 
@@ -8,7 +8,7 @@ export function calculateAndDrawLines(map, data, state) {
   const calculatedLines = calculateLines(state, data, filteredPoetLines);
   const travelBubbles = calculateTravelBubbles(data, filteredPoetLines);
   drawLines(map, calculatedLines);
-  drawBubbles(map, travelBubbles);
+  drawBubblesAndLegends(map, travelBubbles);
 }
 
 function filterLines(state, data) {

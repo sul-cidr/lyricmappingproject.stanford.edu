@@ -6,6 +6,7 @@ import { initializeMap } from './js/renderMap/initializeMap.js';
 function main() {
   const map = initializeMap();
   map.currentLayerGroup = L.layerGroup();
+  map.currentLegendLayerGroup = L.layerGroup();
   const data = {};
   const state = {
     "currentMapMode": "placesMode"
