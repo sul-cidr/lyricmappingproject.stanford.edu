@@ -21,7 +21,17 @@ export function drawLines(map, calculatedLines) {
     );
     const decorator = L.polylineDecorator(geodesic, {
       patterns: [
-        { offset: 10, repeat: 200, symbol: L.Symbol.arrowHead({ pathOptions: { color: line.color, fillOpacity: 1, weight: 0 } }) }
+        {
+          offset: 10,
+          repeat: 200,
+          symbol: L.Symbol.arrowHead({
+            pathOptions: {
+              color: line.color,
+              fillOpacity: 1,
+              weight: 0
+            }
+          })
+        }
       ]
     });
     const transparentLine = L.geodesic(
