@@ -47,7 +47,7 @@ function drawBubble(location, map, bubble) {
   map.currentLayerGroup.addLayer(circle);
   if (bubble.popupHtml)
     circle.bindPopup(bubble.popupHtml);
-  circle.bindTooltip(bubble.city.cityname);
+  circle.bindTooltip(bubble.city.infowindowName);
   return circle;
 }
 
@@ -77,7 +77,7 @@ function drawLegend(location, map, bubble) {
     });
     map.currentLegendLayerGroup.addLayer(textMarker);
     textMarker.bindPopup(bubble.popupHtml);
-    textMarker.bindTooltip(bubble.city.cityname);
+    textMarker.bindTooltip(bubble.city.infowindowName);
   }
 }
 

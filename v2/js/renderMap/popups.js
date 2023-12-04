@@ -16,7 +16,7 @@ export function createPopupHtml(state, data, bubble) {
 }
 
 function createActivePopupHtml(state, data, bubble) {
-  const cityname = bubble.city.cityname.toUpperCase();
+  const cityname = bubble.city.infowindowName.toUpperCase();
   const poetCities = bubble.poetCities;
   const bornPoetCities = [];
   const otherPoetCities = [];
@@ -65,7 +65,7 @@ function createActivePopupHtml(state, data, bubble) {
 }
 
 function createHeader(state, data, bubble) {
-  const cityname = bubble.city.cityname.toUpperCase();
+  const cityname = bubble.city.infowindowName.toUpperCase();
   const title = createTitle(state, data, cityname, bubble);
   return (`
     <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
