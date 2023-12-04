@@ -160,7 +160,6 @@ function createGeoImaginaryPoets(data) {
   data.geoImaginaryPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
 
   // put sappho / alcaeus at end of array
-
   const sappAlcPoetId = 157;
   putPoetIdAtEndOfPoetIdNameTuples(data.geoImaginaryPoets, sappAlcPoetId);
 }

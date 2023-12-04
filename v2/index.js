@@ -18,12 +18,12 @@ function main() {
   parseCsvs(data)
     .then(() => {
       initializeData(data);
-      initializeSlider(map, data, state);
 
       addMapModeEventListener(map, data, state);
       addPoetsEventListener(map, data, state);
 
       updateMapMode(map, data, state);
+      initializeSlider(map, data, state);
     });
 
 
