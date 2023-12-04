@@ -1,4 +1,5 @@
 import { LYRIC_RED } from "../constants/colors.js";
+import { getGenres } from "../calcData/getters.js";
 
 export function createNumberedListOfPoets(names) {
   return (`
@@ -10,20 +11,29 @@ export function createNumberedListOfPoets(names) {
   `);
 }
 
-export function createDetailedListOfPoets(poets) {
+export function createDetailedListOfPoets(poets, data) {
   return (`
     ${poets.map((poet, idx) => {
     return (`
       <p>
         <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetDetailName}<br>
         Dates: ${poet.poetDates}<br>
-        Genre(s): ${poet.poetGenres}<br>
+        ${createGenreString(poet, data)}
         Source(s): ${poet.poetSources}<br>
         ${renderReference(poet.reference)}
-      </p >
+      </p>
       `);
   }).join(" ")}
   `);
+}
+
+function createGenreString(poet, data) {
+  if (poet.poetGenres) {
+    const genres = getGenres(data, poet.poetId)
+    const genreStr = genres.length > 1 ? "Genres" : "Genre"
+    return `${genreStr}: ${poet.poetGenres}<br>`
+  }
+  return "";
 }
 
 export function renderReference(reference) {

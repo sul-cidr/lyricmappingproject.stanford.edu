@@ -87,7 +87,8 @@ function createGeoHeaderListOfPoets(poets, data) {
   return (`
     <p>
     ${poets.map((poet, idx) => {
-    return `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}: ${poet.references.length} reference(s)`
+    const referenceStr = poet.references.length > 1 ? "references" : "reference";
+    return `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}: ${poet.references.length} ${referenceStr}`
   }
   ).join("<br>")}
     </p>
@@ -112,7 +113,8 @@ function createTitle(state, data, cityname, bubble) {
   if (state.currentMapMode === "placesMode") {
     return createPlacesModeTitle(state, data, cityname);
   } else if (state.currentMapMode === "geoimaginaryMode") {
-    return `${bubble.poetCities.length} REFERENCE(S) TO ${cityname}`
+    const referenceStr = bubble.poetCities.length === 1 ? "REFERENCE" : "REFERENCES";
+    return `${bubble.poetCities.length} ${referenceStr} TO ${cityname}`
   }
 }
 
