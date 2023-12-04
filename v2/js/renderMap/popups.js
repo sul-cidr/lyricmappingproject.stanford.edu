@@ -21,7 +21,7 @@ function createActivePopupHtml(state, data, bubble) {
   const bornPoetCities = [];
   const otherPoetCities = [];
   for (const pc of poetCities) {
-    if (pc.relationshipid === 1) bornPoetCities.push(pc);
+    if (pc.relationshipId === 1) bornPoetCities.push(pc);
     else otherPoetCities.push(pc);
   }
   const nonNativeTitle = `NON-NATIVE LYRIC ACTIVITY IN ${cityname}`;

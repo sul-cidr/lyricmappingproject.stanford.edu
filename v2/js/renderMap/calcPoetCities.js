@@ -1,16 +1,19 @@
 import { getGenres, getMapTypeNum, getPoet } from "../calcData/getters.js";
+import { getDateFilterFn } from "./calcCommon.js";
 
 export function calcPoetCities(data, state) {
-  const poetCitiesData = getpoetCitiesData(data, state);
-  const filterFn = getFilterFn(data, state);
-  const filteredpoetCities = poetCitiesData.filter(filterFn);
+  const poetCitiesData = getPoetCitiesData(data, state);
+  const filteredPoetCities =
+    poetCitiesData
+      .filter(getDateFilterFn(data, state))
+      .filter(getFilterFn(data, state));
 
-  const renderedpoetCities = renderpoetCities(filteredpoetCities, data, state);
+  const renderedPoetCities = renderPoetCities(filteredPoetCities, data, state);
 
-  return renderedpoetCities;
+  return renderedPoetCities;
 }
 
-function getpoetCitiesData(data, state) {
+function getPoetCitiesData(data, state) {
   let poetCitiesData;
   if (state.currentMapMode === "placesMode" || state.currentMapMode === "travelMode") {
     poetCitiesData = data.poetCities;
@@ -30,7 +33,7 @@ function getFilterFn(data, state) {
   }
   else if (type === "relationship") {
     if (num === 3) filterFn = () => true;
-    else filterFn = poetCity => poetCity.relationshipid === num;
+    else filterFn = poetCity => poetCity.relationshipId === num;
   }
   else if (type === "poet") {
     filterFn = poetCity => poetCity.poetId === num;
@@ -42,7 +45,7 @@ function getFilterFn(data, state) {
           .genresByPoetId[poetCity.poetId]
           .map(genre => genre.genreId)
           .includes(num) &&
-        poetCity.relationshipid === 1;
+        poetCity.relationshipId === 1;
     }
   } else {
     alert(`${type} not recognized when trying to calculate poet cities`);
@@ -50,10 +53,10 @@ function getFilterFn(data, state) {
   return filterFn;
 }
 
-function renderpoetCities(filteredpoetCities, data, state) {
+function renderPoetCities(filteredPoetCities, data, state) {
   const [type, num] = getMapTypeNum(state);
 
-  return filteredpoetCities.map(pc => {
+  return filteredPoetCities.map(pc => {
     const reference = {
       source_citation: pc.source_citation,
       source_greektext: pc.source_greektext,
@@ -86,7 +89,7 @@ function renderpoetCities(filteredpoetCities, data, state) {
       poetDates: pc.poetDates,
       poetGenres: pc.poetGenres,
       poetSources: pc.poetSources,
-      relationshipid: pc.relationshipid,
+      relationshipId: pc.relationshipId,
       reference: reference
     };
     if (pc.source_poem) renderedPc.reference.source_poem = pc.source_poem;

@@ -1,0 +1,19 @@
+#slider {
+  margin-top: 30px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.noUi-connect {
+  background: #B81609;
+}
+
+.noUi-tooltip {
+  background: #B81609;
+  color: white;
+}
+
+.noUi-handle {
+  background: #B81609;
+  box-shadow: none;
+}

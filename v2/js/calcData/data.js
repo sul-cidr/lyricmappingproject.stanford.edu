@@ -6,7 +6,7 @@ export function initializeData(data) {
   data.cities.forEach(city => city.regionId = parseInt(city.regionId));
   data.cityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
   data.cityPolitics.forEach(city => city.governmentid = parseInt(city.governmentid));
-  data.poetCities.forEach(poetCity => poetCity.relationshipid = parseInt(poetCity.relationshipid));
+  data.poetCities.forEach(poetCity => poetCity.relationshipId = parseInt(poetCity.relationshipId));
   data.poetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
   data.poetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
   data.geopoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
@@ -14,6 +14,10 @@ export function initializeData(data) {
   data.geopoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
   data.regions.forEach(region => region.regionId = parseInt(region.regionId));
   data.regions.forEach(region => region.bigRegionId = parseInt(region.bigRegionId));
+  data.dates.forEach(date => {
+    date.poetId = parseInt(date.poetId);
+    date.date = parseInt(date.date);
+  })
 
   // create useful maps by key
   data.citiesById = {}
@@ -36,6 +40,8 @@ export function initializeData(data) {
     data.regionsById[region.regionId] = region;
   }
   addBigRegionIdToCities(data);
+  addDatesToPoets(data);
+
   createGovsByCityId(data);
   createGenresByGenreId(data);
   createGenreIdsWithNames(data);
@@ -92,6 +98,22 @@ function addBigRegionIdToCities(data) {
       city.bigRegionId = data.regionsById[city.regionId].bigRegionId;
     }
   }
+}
+
+function addDatesToPoets(data) {
+  const datesByPoetId = {};
+  for (const date of data.dates) {
+    if (!datesByPoetId[date.poetId]) datesByPoetId[date.poetId] = [];
+    datesByPoetId[date.poetId].push(date.date);
+  }
+  for (const poetId in datesByPoetId) {
+    const poet = getPoet(data, poetId);
+    if (poet) {
+      poet.minDate = -1 * Math.max(...datesByPoetId[poetId]);
+      poet.maxDate = -1 * Math.min(...datesByPoetId[poetId]);
+    }
+  }
+  console.log(data.poets);
 }
 
 function createGenresByGenreId(data) {
@@ -219,9 +241,9 @@ function createLines(data) {
       bornPcs: [],
       activePcs: []
     }
-    if (pc.relationshipid === 3 || pc.relationshipid === 2)
+    if (pc.relationshipId === 3 || pc.relationshipId === 2)
       poets[pc.poetId].activePcs.push(pc);
-    else if (pc.relationshipid === 1)
+    else if (pc.relationshipId === 1)
       poets[pc.poetId].bornPcs.push(pc);
   }
 

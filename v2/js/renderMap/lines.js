@@ -2,9 +2,12 @@ import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js
 import { drawBubblesAndLegends } from "./bubbles.js";
 import { getMapTypeNum, getCity, getGovs } from "../calcData/getters.js";
 import { createTravelPopupHtml } from "./travelPopups.js";
+import { getDateFilterFn } from "./calcCommon.js";
 
 export function calculateAndDrawLines(map, data, state) {
-  const filteredPoetLines = filterLines(state, data);
+  const filteredPoetLines = 
+    filterLines(state, data)
+      .filter(getDateFilterFn(data, state));
   const calculatedLines = calculateLines(state, data, filteredPoetLines);
   const travelBubbles = calculateTravelBubbles(data, filteredPoetLines);
   drawLines(map, calculatedLines);
@@ -43,12 +46,6 @@ function filterLines(state, data) {
 
 function hashCityIds(from, to) {
   return from * 1000 + to;
-}
-
-function unhashCityIds(hash) {
-  const fromCityid = Math.floor(hash / 1000);
-  const activeCityId = hash % 1000;
-  return [fromCityid, activeCityId];
 }
 
 function calculateLines(state, data, filteredPoetLines) {
