@@ -1,5 +1,5 @@
 import { sortAlphabetically } from "../calcData/data.js";
-import { createPopupHtml } from "./popups.js";
+import { createPopupHtml } from "../popups/popups.js";
 
 export function calculateBubbles(state, data, poetCities) {
   const citiesById = data.citiesById;

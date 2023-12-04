@@ -1,12 +1,14 @@
-import { calculateAndDrawBubbles } from "./bubbles.js";
 import { calculateAndDrawLines } from "./lines.js";
 import { calcPoetCities } from "./calcPoetCities.js";
+import { calculateBubbles } from "./calcBubbles.js";
+import { drawBubblesAndLegends } from "../drawMap/drawBubbles.js";
 
 export function updateMap(map, data, state) {
   map.currentLayerGroup.clearLayers();
   if (state.currentMapMode === "placesMode" || state.currentMapMode === "geoimaginaryMode") {
     const poetCities = calcPoetCities(data, state);
-    calculateAndDrawBubbles(map, data, state, poetCities);
+    const bubbles = calculateBubbles(state, data, poetCities);
+    drawBubblesAndLegends(map, bubbles);
   } else if (state.currentMapMode === "travelMode") {
     calculateAndDrawLines(map, data, state);
   } else {

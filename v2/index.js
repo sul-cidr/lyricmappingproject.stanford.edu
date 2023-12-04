@@ -1,7 +1,7 @@
 import { initializeData } from './js/calcData/data.js';
 import { parseCsvs } from './js/calcData/parseCsvs.js';
 import { addMapModeEventListener, addPoetsEventListener, updateMapMode } from './js/interface/interface.js';
-import { initializeMap } from './js/renderMap/initializeMap.js';
+import { initializeMap } from './js/drawMap/initializeMap.js';
 import { initializeSlider } from './js/interface/slider.js';
 
 function main() {

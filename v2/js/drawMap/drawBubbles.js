@@ -1,10 +1,5 @@
 import { LYRIC_WHITE, LYRIC_RED } from "../constants/colors.js";
-import { calculateBubbles } from "./calcBubbles.js";
-
-export function calculateAndDrawBubbles(map, data, state, poetCities) {
-  const bubbles = calculateBubbles(state, data, poetCities);
-  drawBubblesAndLegends(map, bubbles);
-}
+import { calculateBubbles } from "../renderMap/calcBubbles.js";
 
 export function drawBubblesAndLegends(map, bubbles) {
   const drawnBubbles = drawBubbles(map, bubbles);
