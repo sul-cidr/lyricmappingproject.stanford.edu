@@ -40,7 +40,7 @@ function getFilterFn(data, state) {
       return data.genresByPoetId[poetCity.poetId] &&
         data
           .genresByPoetId[poetCity.poetId]
-          .map(genre => genre.genreid)
+          .map(genre => genre.genreId)
           .includes(num) &&
         poetCity.relationshipid === 1;
     }
@@ -63,12 +63,12 @@ function renderpoetCities(filteredpoetCities, data, state) {
     if (type === "genre") {
       const genrePoetCities = data
         .genresByPoetId[pc.poetId]
-        .filter(genre => genre.genreid === num);
+        .filter(genre => genre.genreId === num);
       if (genrePoetCities.length > 1) {
-        console.log(`poet with name ${pc.poetname} and ${poetId} has more than one entry for genreid ${num}`);
+        console.log(`poet with name ${pc.poetname} and ${poetId} has more than one entry for genreId ${num}`);
       }
       if (genrePoetCities.length === 0) {
-        console.log(`poet with name ${pc.poetname} and ${poetId} has no entries for genreid ${num} (though we filtered to this genreid)`);
+        console.log(`poet with name ${pc.poetname} and ${poetId} has no entries for genreId ${num} (though we filtered to this genreId)`);
       }
       const genrePoetCity = genrePoetCities[0];
       reference.source_citation = genrePoetCity.source_citation;

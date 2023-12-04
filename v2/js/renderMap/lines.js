@@ -62,7 +62,7 @@ function calculateLines(state, data, filteredPoetLines) {
       lines[hash].poetLines = [];
       lines[hash].dotted = false;
       lines[hash].color = TRAVEL_RED;
-      lines[hash].name = (`${line.bornCity.infowindow_name} -> ${line.activeCity.infowindow_name}`).toUpperCase();
+      lines[hash].name = (`${line.bornCity.infowindowName} -> ${line.activeCity.infowindowName}`).toUpperCase();
     }
     lines[hash].poetLines.push(line);
     colorLine(state, data, lines[hash], line);

@@ -1,7 +1,7 @@
 import { getPoet, getCity, getGenres } from "./getters.js";
 
 export function initializeData(data) {
-  data.genres.forEach(genre => genre.genreid = parseInt(genre.genreid));
+  data.genres.forEach(genre => genre.genreId = parseInt(genre.genreId));
   data.cities.forEach(city => city.cityId = parseInt(city.cityId));
   data.cities.forEach(city => city.regionId = parseInt(city.regionId));
   data.cityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
@@ -98,13 +98,13 @@ function createGenresByGenreId(data) {
   data.genresByGenreId = {}
   for (const genre of data.genres) {
     const genreName = genre.genre;
-    if (!data.genresByGenreId[genre.genreid]) {
-      data.genresByGenreId[genre.genreid] = genreName;
+    if (!data.genresByGenreId[genre.genreId]) {
+      data.genresByGenreId[genre.genreId] = genreName;
     }
     else {
-      const existingGenreName = data.genresByGenreId[genre.genreid];
+      const existingGenreName = data.genresByGenreId[genre.genreId];
       if (genreName !== existingGenreName) {
-        console.log(`${genreName} has genreid ${genre.genreid} but does not match existing ${existingGenreName}. Source translation: "${genre.source_translation}"`);
+        console.log(`${genreName} has genreId ${genre.genreId} but does not match existing ${existingGenreName}. Source translation: "${genre.source_translation}"`);
       }
     }
   }
