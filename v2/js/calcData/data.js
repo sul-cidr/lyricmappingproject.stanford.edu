@@ -113,7 +113,6 @@ function addDatesToPoets(data) {
       poet.maxDate = -1 * Math.min(...datesByPoetId[poetId]);
     }
   }
-  console.log(data.poets);
 }
 
 function createGenresByGenreId(data) {
