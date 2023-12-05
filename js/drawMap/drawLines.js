@@ -1,5 +1,5 @@
 export function drawLines(map, calculatedLines) {
-  drawLinesWithSampledRoute(map, calculatedLines);
+  drawGeodesicLines(map, calculatedLines);
 }
 
 // https://github.com/elfalem/Leaflet.curve/issues/59
