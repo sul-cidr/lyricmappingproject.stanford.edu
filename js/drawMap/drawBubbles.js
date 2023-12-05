@@ -25,7 +25,6 @@ function drawBubbles(map, bubbles) {
     drawnBubbles.push(drawBubble(location, map, bubble));
   }
 
-  map.addLayer(map.currentLayerGroup);
   return drawnBubbles;
 }
 
@@ -58,8 +57,6 @@ function drawLegends(map, bubbles) {
       drawLegend(location, map, bubble);
     }
   }
-
-  map.addLayer(map.currentLegendLayerGroup);
 }
 
 function drawLegend(location, map, bubble) {

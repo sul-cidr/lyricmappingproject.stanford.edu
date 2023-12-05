@@ -1,11 +1,14 @@
-import { getPoet, getCity, getGenres } from "./getters.js";
+import { getPoet, getCity, getGenres, getGovs } from "./getters.js";
 
 export function initializeData(data) {
   data.genres.forEach(genre => genre.genreId = parseInt(genre.genreId));
   data.cities.forEach(city => city.cityId = parseInt(city.cityId));
   data.cities.forEach(city => city.regionId = parseInt(city.regionId));
+  data.cities.forEach(city => city.lat = parseFloat(city.lat));
+  data.cities.forEach(city => city.long = parseFloat(city.long));
   data.cityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
-  data.cityPolitics.forEach(city => city.governmentid = parseInt(city.governmentid));
+  data.cityPolitics.forEach(city => city.governmentId = parseInt(city.governmentId));
+  data.cityPolitics.forEach(cp => cp.date = -1 * parseInt(cp.date));
   data.poetCities.forEach(poetCity => poetCity.relationshipId = parseInt(poetCity.relationshipId));
   data.poetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
   data.poetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
@@ -16,8 +19,9 @@ export function initializeData(data) {
   data.regions.forEach(region => region.bigRegionId = parseInt(region.bigRegionId));
   data.dates.forEach(date => {
     date.poetId = parseInt(date.poetId);
-    date.date = parseInt(date.date);
+    date.date = -1 * parseInt(date.date);
   })
+  data.governments.forEach(gov => gov.governmentId = parseInt(gov.governmentId));
 
   // create useful maps by key
   data.citiesById = {}
@@ -43,6 +47,7 @@ export function initializeData(data) {
   addDatesToPoets(data);
 
   createGovsByCityId(data);
+  createGovsById(data);
   createGenresByGenreId(data);
   createGenreIdsWithNames(data);
   createGeoImaginaryPoets(data);
@@ -83,8 +88,15 @@ export function sortAlphabetically(a, b) {
 function createGovsByCityId(data) {
   data.govsByCityId = {};
   for (const cp of data.cityPolitics) {
-    if (!data.govsByCityId[cp.cityId]) data.govsByCityId[cp.cityId] = new Set();
-    data.govsByCityId[cp.cityId].add(cp.governmentid);
+    if (!data.govsByCityId[cp.cityId]) data.govsByCityId[cp.cityId] = [];
+    data.govsByCityId[cp.cityId].push(cp);
+  }
+}
+
+function createGovsById(data) {
+  data.govsById = {};
+  for (const gov of data.governments) {
+    data.govsById[gov.governmentId] = gov.government;
   }
 }
 
@@ -101,16 +113,16 @@ function addBigRegionIdToCities(data) {
 }
 
 function addDatesToPoets(data) {
-  const datesByPoetId = {};
+  data.datesByPoetId = {};
   for (const date of data.dates) {
-    if (!datesByPoetId[date.poetId]) datesByPoetId[date.poetId] = [];
-    datesByPoetId[date.poetId].push(date.date);
+    if (!data.datesByPoetId[date.poetId]) data.datesByPoetId[date.poetId] = [];
+    data.datesByPoetId[date.poetId].push(date.date);
   }
-  for (const poetId in datesByPoetId) {
+  for (const poetId in data.datesByPoetId) {
     const poet = getPoet(data, poetId);
     if (poet) {
-      poet.minDate = -1 * Math.max(...datesByPoetId[poetId]);
-      poet.maxDate = -1 * Math.min(...datesByPoetId[poetId]);
+      poet.minDate = Math.min(...data.datesByPoetId[poetId]);
+      poet.maxDate = Math.max(...data.datesByPoetId[poetId]);
     }
   }
 }
@@ -261,6 +273,17 @@ function createLines(data) {
           const fromCity = getCity(data, bornPc.cityId);
           const toCity = getCity(data, activePc.cityId);
           const poet = getPoet(data, poetId);
+          const poetDates = data.datesByPoetId[poetId];
+          const bornGovIds = [... new Set(
+            getGovs(data, bornPc.cityId)
+              .filter(gov => poetDates.includes(gov.date))
+              .map(gov => gov.governmentId)
+          )];
+          const activeGovIds = [... new Set(
+            getGovs(data, activePc.cityId)
+              .filter(gov => poetDates.includes(gov.date))
+              .map(gov => gov.governmentId)
+          )];
           const line = {
             poetId: poetId,
             bornCityId: bornPc.cityId,
@@ -270,7 +293,9 @@ function createLines(data) {
             dotted: dotted,
             bornCity: fromCity,
             activeCity: toCity,
-            poetDetailName: poet.poetDetailName
+            poetDetailName: poet.poetDetailName,
+            bornGovIds: bornGovIds,
+            activeGovIds: activeGovIds
           };
           primeObjWithPoetData(line, data);
           data.lines.push(line);

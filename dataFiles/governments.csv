@@ -1,0 +1,12 @@
+government,governmentId
+Oligarchy,1
+Tyranny,2
+Democracy,3
+Kingship,4
+Uncertain,5
+N/A,6
+Mixed,7
+Klerouchy,8
+Oligarchy/Tyranny,9
+Oligarchy/Democracy,10
+Do not display,11

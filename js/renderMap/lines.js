@@ -2,7 +2,7 @@ import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js
 import { drawLines } from "../drawMap/drawLines.js";
 import { drawBubblesAndLegends } from "../drawMap/drawBubbles.js";
 import { getMapTypeNum, getCity, getGovs } from "../calcData/getters.js";
-import { createTravelPopupHtml } from "../popups/travelPopups.js";
+import { createTravelPopupHtml, createGovTravelPopupHtml } from "../popups/travelPopups.js";
 import { getDateFilterFn } from "./calcCommon.js";
 
 export function calculateAndDrawLines(map, data, state) {
@@ -34,11 +34,9 @@ function filterLines(state, data) {
       line.bornCity.bigRegionId === num || line.activeCity.bigRegionId === num
     );
   } else if (type === "gov") {
-    return data.lines.filter(line => {
-      const bornGovs = getGovs(data, line.bornCityId);
-      const activeGovs = getGovs(data, line.activeCityId);
-      return bornGovs.has(num) || activeGovs.has(num);
-    });
+    return data.lines.filter(line =>
+      line.bornGovIds.includes(num) || line.activeGovIds.includes(num)
+    );
   }
   else {
     alert(`unrecognized type of map in travel map: <b>${type}</b>`);
@@ -50,6 +48,8 @@ function hashCityIds(from, to) {
 }
 
 function calculateLines(state, data, filteredPoetLines) {
+  const [type, num] = getMapTypeNum(state);
+
   const lines = {}
   for (const line of filteredPoetLines) {
     const hash = hashCityIds(line.bornCityId, line.activeCityId);
@@ -69,7 +69,11 @@ function calculateLines(state, data, filteredPoetLines) {
   for (const hash in lines) {
     const line = lines[hash];
     weightLine(state, line);
-    line.popupHtml = createTravelPopupHtml(state, data, line);
+    if (type === "gov") {
+      line.popupHtml = createGovTravelPopupHtml(data, line);
+    } else {
+      line.popupHtml = createTravelPopupHtml(data, line);
+    }
   }
   return lines;
 }
@@ -96,10 +100,10 @@ function colorLine(state, data, line) {
   } else if (type === "region") {
     if (line.fromCity.bigRegionId === num) line.color = TRAVEL_PURPLE;
   } else if (type === "gov") {
-    const bornGovs = getGovs(data, line.fromCity.cityId);
-    const activeGovs = getGovs(data, line.toCity.cityId);
-    if (bornGovs.has(num) && activeGovs.has(num)) line.color = TRAVEL_YELLOW;
-    else if (bornGovs.has(num)) line.color = TRAVEL_PURPLE;
+    const bornGovIds = line.poetLines.flatMap(pl => pl.bornGovIds).filter(govId => govId === num);
+    const activeGovIds = line.poetLines.flatMap(pl => pl.activeGovIds).filter(govId => govId === num);
+    if (bornGovIds.length && activeGovIds.length) line.color = TRAVEL_YELLOW;
+    else if (bornGovIds.length) line.color = TRAVEL_PURPLE;
   }
 }
 

@@ -14,9 +14,11 @@ export function getCity(data, cityId) {
 }
 
 export function getGovs(data, cityId) {
-  if (data.govsByCityId[cityId]) return data.govsByCityId[cityId];
+  if (data.govsByCityId[cityId]) {
+    return data.govsByCityId[cityId];
+  }
   console.log(`cityId ${cityId} does not exist in govsByCityId`);
-  return new Set();
+  return [];
 }
 
 export function getMapTypeNum(state) {

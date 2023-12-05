@@ -6,8 +6,6 @@ import { initializeSlider } from './js/interface/slider.js';
 
 function main() {
   const map = initializeMap();
-  map.currentLayerGroup = L.layerGroup();
-  map.currentLegendLayerGroup = L.layerGroup();
   const data = {};
   const state = {
     "currentMapMode": "placesMode",

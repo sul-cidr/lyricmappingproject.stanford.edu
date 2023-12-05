@@ -3,5 +3,9 @@ export function initializeMap() {
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
     maxZoom: 20
   }).addTo(map);
+  map.currentLayerGroup = L.layerGroup();
+  map.currentLegendLayerGroup = L.layerGroup();
+  map.addLayer(map.currentLayerGroup);
+  map.addLayer(map.currentLegendLayerGroup);
   return map;
 }
