@@ -17,7 +17,6 @@ function drawBubbles(map, bubbles) {
   const drawnBubbles = [];
 
   for (const bubble of Object.values(bubbles)) {
-    console.log(bubble);
     if (bubble.city.lat && bubble.city.long) {
       const location = L.latLng(
         bubble.city.lat,
