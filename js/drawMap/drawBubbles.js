@@ -47,6 +47,7 @@ function drawBubble(location, map, bubble) {
 }
 
 function drawLegends(map, bubbles) {
+  map.legendLayerGroup.clearLayers();
   for (const bubble of Object.values(bubbles)) {
     if (bubble.legend && bubble.city.lat && bubble.city.long) {
       const location = L.latLng(
