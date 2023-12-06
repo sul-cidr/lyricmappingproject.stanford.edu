@@ -1,6 +1,5 @@
-.intro-box-two-columns {
-  column-count: 2;
-  column-gap: 20px;
+.hideEssay {
+  display: none;
 }
 
 #essayBox {
@@ -11,7 +10,6 @@
   top: 0px;
   bottom: 0px;
   z-index: 98;
-  display: none;
 }
 
 #essayTitle {
@@ -28,7 +26,6 @@
 }
 
 #essayContent {
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   position: absolute;
   left: 5%;

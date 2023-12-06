@@ -4,6 +4,7 @@ import { calculateBubbles } from "./calcBubbles.js";
 import { drawBubblesAndLegends } from "../drawMap/drawBubbles.js";
 
 export function updateMap(map, data, state) {
+  clearMap(map);
   if (state.currentMapMode === "placesMode" || state.currentMapMode === "geoimaginaryMode") {
     const poetCities = calcPoetCities(data, state);
     const bubbles = calculateBubbles(state, data, poetCities);
@@ -13,4 +14,10 @@ export function updateMap(map, data, state) {
   } else {
     alert(`unrecognized map mode ${state.currentMapMode}`);
   }
+}
+
+function clearMap(map) {
+  map.bubbleLayerGroup.clearLayers();
+  map.legendLayerGroup.clearLayers();
+  map.lineLayerGroup.clearLayers();
 }

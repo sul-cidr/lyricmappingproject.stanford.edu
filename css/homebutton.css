@@ -1,4 +1,4 @@
-.home {
+#homeButton {
 	position: absolute;
 	top: 85px;
 	left: 11px;
@@ -9,5 +9,5 @@
 	background-size: 22px 22px;
 	border-radius: 4px;
 	border: 1px solid #999999;
-	z-index: 105;
+	z-index: 95;
 }

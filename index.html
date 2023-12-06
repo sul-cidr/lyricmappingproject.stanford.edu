@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/homebutton.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/mapstyling.css">
+  <link rel="stylesheet" href="css/essay.css">
   <!-- note dependency on Google's Gentium Basic font (deprecated?) -->
   <link href='https://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
@@ -18,6 +19,14 @@
 </head>
 
 <body>
+  <div id="essayBox">
+    <div id="essayTitle">HELP BOX</div>
+    <div id="essayContent"></div>
+    <div id="essayCloseButton">X</div>
+    <div id="wholeScreen" style="width:100%;height:100%;">
+    </div>
+  </div>
+
   <div id="map"></div>
 
   <div id="controlbar">
@@ -46,7 +55,7 @@
   </div>
 
   <a href="index.html">
-    <div id="home" class="home"></div>
+    <div id="homeButton"></div>
   </a>
 
   <!-- leaflet https://leafletjs.com/ v. 1.9.4, released 2023/05/18 -->

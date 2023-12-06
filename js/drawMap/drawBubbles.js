@@ -1,7 +1,6 @@
 import { LYRIC_WHITE, LYRIC_RED } from "../constants/colors.js";
 
 export function drawBubblesAndLegends(map, bubbles) {
-  map.bubbleLayerGroup.clearLayers();
   const drawnBubbles = drawBubbles(map, bubbles);
   drawLegends(map, bubbles);
 
@@ -46,8 +45,6 @@ function drawBubble(location, map, bubble) {
 }
 
 function drawLegends(map, bubbles) {
-  map.legendLayerGroup.clearLayers();
-
   for (const bubble of Object.values(bubbles)) {
     if (bubble.legend) {
       const location = L.latLng(

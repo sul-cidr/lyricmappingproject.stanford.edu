@@ -7,3 +7,7 @@ body,
   z-index: 1;
   font-family: 'Gentium Basic', sans-serif;
 }
+
+h4 {
+  margin: 0;
+}
