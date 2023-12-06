@@ -17,11 +17,14 @@ function drawBubbles(map, bubbles) {
   const drawnBubbles = [];
 
   for (const bubble of Object.values(bubbles)) {
-    const location = L.latLng(
-      bubble.city.lat,
-      bubble.city.long
-    );
-    drawnBubbles.push(drawBubble(location, map, bubble));
+    console.log(bubble);
+    if (bubble.city.lat && bubble.city.long) {
+      const location = L.latLng(
+        bubble.city.lat,
+        bubble.city.long
+      );
+      drawnBubbles.push(drawBubble(location, map, bubble));
+    }
   }
 
   return drawnBubbles;
@@ -46,7 +49,7 @@ function drawBubble(location, map, bubble) {
 
 function drawLegends(map, bubbles) {
   for (const bubble of Object.values(bubbles)) {
-    if (bubble.legend) {
+    if (bubble.legend && bubble.city.lat && bubble.city.long) {
       const location = L.latLng(
         bubble.city.lat,
         bubble.city.long

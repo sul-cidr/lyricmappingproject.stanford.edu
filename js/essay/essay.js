@@ -17,7 +17,6 @@ export function initializeCloseEssayClicks() {
 }
 
 function closeEssay() {
-  console.log("closing essay");
   document.getElementById("essayBox").classList.add("hideEssay");
   document.getElementById("essayContent").classList.add("hideEssay");
 }
