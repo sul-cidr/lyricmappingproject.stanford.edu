@@ -3,9 +3,11 @@ export function initializeMap() {
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
     maxZoom: 20
   }).addTo(map);
-  map.currentLayerGroup = L.layerGroup();
-  map.currentLegendLayerGroup = L.layerGroup();
-  map.addLayer(map.currentLayerGroup);
-  map.addLayer(map.currentLegendLayerGroup);
+  map.bubbleLayerGroup = L.layerGroup();
+  map.legendLayerGroup = L.layerGroup();
+  map.lineLayerGroup = L.layerGroup();
+  map.addLayer(map.bubbleLayerGroup);
+  map.addLayer(map.legendLayerGroup);
+  map.addLayer(map.lineLayerGroup);
   return map;
 }

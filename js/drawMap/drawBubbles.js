@@ -1,7 +1,7 @@
 import { LYRIC_WHITE, LYRIC_RED } from "../constants/colors.js";
-import { calculateBubbles } from "../renderMap/calcBubbles.js";
 
 export function drawBubblesAndLegends(map, bubbles) {
+  map.bubbleLayerGroup.clearLayers();
   const drawnBubbles = drawBubbles(map, bubbles);
   drawLegends(map, bubbles);
 
@@ -38,7 +38,7 @@ function drawBubble(location, map, bubble) {
     radius: radius
   });
   circle._price = bubble.price;
-  map.currentLayerGroup.addLayer(circle);
+  map.bubbleLayerGroup.addLayer(circle);
   if (bubble.popupHtml)
     circle.bindPopup(bubble.popupHtml);
   circle.bindTooltip(bubble.city.infowindowName);
@@ -46,7 +46,7 @@ function drawBubble(location, map, bubble) {
 }
 
 function drawLegends(map, bubbles) {
-  map.currentLegendLayerGroup.clearLayers();
+  map.legendLayerGroup.clearLayers();
 
   for (const bubble of Object.values(bubbles)) {
     if (bubble.legend) {
@@ -67,7 +67,7 @@ function drawLegend(location, map, bubble) {
         className: 'text-below-marker',
       })
     });
-    map.currentLegendLayerGroup.addLayer(textMarker);
+    map.legendLayerGroup.addLayer(textMarker);
     textMarker.bindPopup(bubble.popupHtml);
     textMarker.bindTooltip(bubble.city.infowindowName);
   }
@@ -82,13 +82,9 @@ function minimumZoomToShowLegend(price) {
 }
 
 function calculateBubbleSize(zoom, price) {
-  let multiplier;
+  let multiplier = 900; // base zoom at 6 and below
 
-  if (zoom <= 6) multiplier = 900;
-  if (zoom === 7) multiplier = 500;
-  if (zoom === 8) multiplier = 300;
-  if (zoom === 9) multiplier = 200;
-  if (zoom >= 10) multiplier = 100;
+  multiplier /= Math.pow(2, zoom - 6);
 
   return price * multiplier;
 }
