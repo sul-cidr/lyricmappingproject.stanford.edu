@@ -2,7 +2,7 @@ import { createInput, createInputFromTuple } from "./commonInterface.js";
 
 export function createPlacesInterfaceHtml(data) {
   return (`
-    <div class="buttonContainer">
+    <div class="buttonContainer" tabindex="0">
       <fieldset class="controlForm">
         <div class="controlBarLabel">
           PLACE OF:
@@ -12,7 +12,7 @@ export function createPlacesInterfaceHtml(data) {
       </fieldset>
     </div>
 
-    <div class="buttonContainer" style="height: 100px;">
+    <div class="buttonContainer" style="height: 100px;" tabindex="0">
       <fieldset class="controlForm">
         <div class="controlBarLabel">
           POETS WITH UNKNOWN TRAVELS:
@@ -24,7 +24,7 @@ export function createPlacesInterfaceHtml(data) {
       </fieldset>
     </div>
 
-    <div class="buttonContainer">
+    <div class="buttonContainer" tabindex="0">
       <fieldset class="controlForm">
         <div class="controlBarLabel">
           GENRE:

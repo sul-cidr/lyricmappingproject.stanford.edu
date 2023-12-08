@@ -2,7 +2,7 @@ import { createInput, createInputFromTuple } from "./commonInterface.js";
 
 export function createGeoImaginaryInterfaceHtml(data) {
   return (`
-  <div class="buttonContainer">
+  <div class="buttonContainer" tabindex="0">
     <fieldset class="controlForm">
       <div class="controlBarLabel">
       LOCATIONS IN POETRY: 
@@ -11,7 +11,7 @@ export function createGeoImaginaryInterfaceHtml(data) {
     </fieldset>
   </div>
 
-  <div class="buttonContainer">
+  <div class="buttonContainer" tabindex="0">
     <fieldset class="controlForm">
       <div class="controlBarLabel">
         POETIC WORLD OF: 

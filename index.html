@@ -23,17 +23,10 @@
 </head>
 
 <body>
-  <div id="essayBox">
-    <div id="essayTitle">HELP BOX</div>
-    <div id="essayContent"></div>
-    <div id="essayCloseButton">X</div>
-    <div id="wholeScreen" style="width:100%;height:100%;">
-    </div>
-  </div>
+  <main id="map"></main>
 
-  <div id="map"></div>
-
-  <div id="controlbar">
+  <nav id="controlbar">
+    <h1 id="title">Mapping Greek Lyric</h1>
     <fieldset id="mapModeSelector" class="controlForm">
       <input type="radio" name="map" id="placesMode" class="hiddenRadio" checked>
       <label for="placesMode" class="mainlinks-label">
@@ -51,16 +44,26 @@
 
     <div id="poetsSelector"></div>
     <div id="slider"></div>
-  </div>
+  </nav>
 
-  <div id="attribution">
-    <i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i>
-    D. Driscoll, I. McMullin, S. Sansom, S. Brennan-McMahon, A. Waller, A.-E. Peponi.
-  </div>
+  <header>
+    <div id="essayBox">
+      <div id="essayTitle">HELP BOX</div>
+      <div id="essayContent"></div>
+      <div id="essayCloseButton">X</div>
+      <div id="wholeScreen" style="width:100%;height:100%;">
+      </div>
+    </div>
 
-  <a href="index.html" aria-label="Link reloading the page">
-    <div id="homeButton"></div>
-  </a>
+    <a href="index.html" aria-label="Link reloading the page">
+      <div id="homeButton"></div>
+    </a>
+
+    <div id="attribution">
+      <i>Mapping Greek Lyric: Places, Travel, Geographical Imaginary.</i>
+      D. Driscoll, I. McMullin, S. Sansom, S. Brennan-McMahon, A. Waller, A.-E. Peponi.
+    </div>
+  </header>
 
   <!-- leaflet https://leafletjs.com/ v. 1.9.4, released 2023/05/18 -->
   <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -95,6 +98,9 @@
   <link href="3rdparty/nouislider.css" rel="stylesheet">
   <script src="3rdparty/nouislider.js"></script>
   <link href="css/controlbar/slider.css" rel="stylesheet">
+
+  <!-- https://github.com/dequelabs/axe-core, v. 4.8.2, released 2023/09/21 -->
+  <script src="https://unpkg.com/axe-core@4.8.2/axe.min.js"></script>
 
   <script type="module" src="index.js"></script>
 </body>

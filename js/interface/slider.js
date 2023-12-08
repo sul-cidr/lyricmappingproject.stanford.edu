@@ -18,7 +18,10 @@ export function initializeSlider(map, data, state) {
   });
 
   slider.noUiSlider.on("update", function (values) {
-    [state.minDate, state.maxDate] = values.map(value => parseInt(value));
-    updateMap(map, data, state);
+    const [minDate, maxDate] = values.map(value => parseInt(value));
+    if (state.minDate !== minDate || state.maxDate !== maxDate) {
+      [state.minDate, state.maxDate] = [minDate, maxDate];
+      updateMap(map, data, state);
+    }
   });
 }

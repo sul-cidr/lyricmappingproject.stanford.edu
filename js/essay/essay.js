@@ -24,7 +24,7 @@ function closeEssay() {
 function createIntroHtml() {
   return (`
   <div id="intro-top">
-   	<h4>Mapping Greek Lyric: Places, Travel, Geographical Imaginary</h4>
+   	<h2>Mapping Greek Lyric: Places, Travel, Geographical Imaginary</h2>
 	  <p>This project is the first-ever attempt to illustrate on an interactive map key geocultural aspects of the rich lyric production that was generated and spread throughout the Greek world from the 8<sup>th</sup> to the beginning of the 4<sup>th</sup> century BC. We report and display data based on the ancient sources, without judging whether they are all historically accurate. It is the users’ responsibility to explore further.</p>
 	  <p>The composition of <i>melic</i>, <i>elegiac</i> and <i>iambic</i> poetry, all included here under the term <i>lyric</i>, was a crucial component of Greek musical cultures. As <i>mousike</i>, with its various combinations of vocal, instrumental and kinetic activity, was a cornerstone in forming sensibilities and establishing ideologies, our project aspires to be a useful tool for all those interested in exploring the local origins and mobile dynamics of performance and culture in the ancient world. 
 	  <p>Created by David Driscoll, Israel McMullin, Stephen Sansom, maintained by Sinead Brennan-McMahon, headed by Anastasia-Erasmia Peponi. </p>

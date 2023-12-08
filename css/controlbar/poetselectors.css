@@ -7,6 +7,10 @@
   scrollbar-gutter: stable;
 }
 
+.buttonContainer::-webkit-scrollbar {
+  display: none;
+}
+
 .controlForm {
   border: none;
 }

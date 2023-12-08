@@ -3,7 +3,7 @@ import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js
 
 export function createTravelInterfaceHtml(data) {
   return (`
-  <div class="buttonContainer">
+  <div class="buttonContainer tabindex="0"">
     <fieldset class="controlForm">
       <div class="controlBarLabel">
         MOBILITY
@@ -12,7 +12,7 @@ export function createTravelInterfaceHtml(data) {
     </fieldset>
   </div>
 
-  <div class="buttonContainer" style="height: 100px;">
+  <div class="buttonContainer" style="height: 100px;" tabindex="0">
     <fieldset class="controlForm">
       <div class="controlBarLabel">
         POET: 
@@ -24,7 +24,7 @@ export function createTravelInterfaceHtml(data) {
     </fieldset>
   </div>
 
-  <div class="buttonContainer" style="height: 100px;">
+  <div class="buttonContainer" style="height: 100px;" tabindex="0">
   <fieldset class="controlForm">
     <div class="controlBarLabel">
       PLACES 
@@ -37,7 +37,7 @@ export function createTravelInterfaceHtml(data) {
   </fieldset>
 </div>
 
-<div class="buttonContainer">
+<div class="buttonContainer" tabindex="0">
   <fieldset class="controlForm">
     <div class="controlBarLabel">
       GEOGRAPHICAL REGION 
@@ -50,7 +50,7 @@ export function createTravelInterfaceHtml(data) {
   </fieldset>
 </div>
 
-<div class="buttonContainer" style="height: 100px;">
+<div class="buttonContainer" style="height: 100px;" tabindex="0">
   <fieldset class="controlForm">
     <div class="controlBarLabel">
       SMALL GEOGRAPHICAL REGION 
@@ -63,7 +63,7 @@ export function createTravelInterfaceHtml(data) {
   </fieldset>
 </div>
 
-<div class="buttonContainer" height: 100px;">
+<div class="buttonContainer" height: 100px;" tabindex="0">
   <fieldset class="controlForm">
     <div class="controlBarLabel">
       POLITICAL SYSTEM 
