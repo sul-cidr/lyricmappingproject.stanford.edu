@@ -278,11 +278,13 @@ function createLines(data) {
             getGovs(data, bornPc.cityId)
               .filter(gov => poetDates.includes(gov.date))
               .map(gov => gov.governmentId)
+              .flatMap(govId => convertMixedGovIds(govId))
           )];
           const activeGovIds = [... new Set(
             getGovs(data, activePc.cityId)
               .filter(gov => poetDates.includes(gov.date))
               .map(gov => gov.governmentId)
+              .flatMap(govId => convertMixedGovIds(govId))
           )];
           const line = {
             poetId: poetId,
@@ -304,6 +306,18 @@ function createLines(data) {
     }
   }
   data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a[1], b[1]));
+}
+
+function convertMixedGovIds(govId) {
+  // some gov ids correspond to two government types (e.g. Kingship/Tyranny -> both kingship and tyranny)
+  // here we unpack these and include those types as well
+  if (govId === 9) {
+    return [9,1,2] // oligarchy/tyranny, oligarchy, tyranny
+  } else if (govId === 10) {
+    return [10,1,3] // oligarchy/democracy, oligarchy, democracy
+  } else if (govId === 12) {
+    return [12,4,2] // kingship/tyranny, kingship, tyranny
+  } else return [govId];
 }
 
 function keyLines(data) {

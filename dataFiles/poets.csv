@@ -1,17 +1,12 @@
 poetname,poetDetailName,poetId,sources,dates,dates_source,notes
 -es,-es,18,Stefanis 2684,5th c.,,
-Adespota,Adespota,152,"Gerber, Greek Iambic Poetry (LCL 259)",,,
+Adespota,Adespota,152,"Gerber, Greek Iambic Poetry (LCL 259)",n/a,,
 Alcaeus,Alcaeus,92,"Campbell, Greek Lyric vol. 1 (LCL 142); Aspiotes 74; Brill’s New Pauly",c. 600,,
 Alcman,Alcman,93,"Campbell, Greek Lyric vol. 2 (LCL 143); Aspiotes 90; Brill’s New Pauly",fl. 650–600,,
 Alkaios,Alkaios (≠ Alcaeus),36,Stefanis 131; Aspiotes 73; Brill’s New Pauly,c. 400,,
 Alkimakhos,Alkimakhos,35,Stefanis 138; Aspiotes 83,5th c.,,
 Ananius,Ananius,95,,,"Writes in a ""western Ionic"" dialect (West 1974: 88), but [his] ""place of origin is unknown"" (Rotstein 2010: 40).",
 Chares,Chares,58,,,I can’t find anything linking him to Athens besides the reference in Apsiotes. Bowie doesn’t mention it in his NP piece. Did Aspiotes confuse (or more charitably identify) him with the famous Athenian general?,
-Oenopas (Oinonas),Oenopas (Oinonas),78,,,,
-Aristonous,Aristonous,38,,,,
-Aristotle,Aristotle,151,,,,
-Adespota,Adespota,152,,,,
-Castorion,Castorion,33,,,,
 Anacreon,Anacreon,94,"Campbell, Greek Lyric vol. 2 (LCL 143); Aspiotes 116; Brill’s New Pauly",6th c.,,
 Antigenes,Antigenes,8,Stefanis 197; Aspiotes 140; Brill’s New Pauly,fl. 500–450,,
 Apollodorus,Apollodorus,96,"Campbell, Greek Lyric vol. 3 (LCL 476); Aspiotes 174; Brill’s New Pauly",fl. 550–500,,
@@ -82,9 +77,7 @@ Melampus,Melampus,153,Aspiotes 1274,fl. 575,competed in the same games as echemb
 Melanippides,Melanippides,158,"Campbell, Greek Lyric vol. 5 (LCL 144); Aspiotes 1276; Brill’s New Pauly",c. 450-400,"Natasha: ""SECOND HALF OF THE FIFTH CENTURY""",
 Melanthios,Melanthios,91,Aspiotes 1278; Brill’s New Pauly,5th c.,,
 Meles,Meles,48,Stefanis 1630; Aspiotes 1281,fl. 450–400,,
-Meletos of Athens,Meletos of Athens,53,"Aspiotes 1283, Suda M 495, New Pauly, Fowler Plato: Euthyphro, Apology, Crito, Phaedo, Phaedrus (LCL 36)",5th or 4th c.,Aspiotes,"Son of M. (presumably [3]) from the deme of Pitthus (Pl. Euthphr. 2b), prosecutor of Socrates as representative of the poets (Pl. Ap. 23e), probably author of an Oedipus tetralogy. He was condemned to death by the Athenians according to Diog. Laert. 2,43.
-
-Zimmermann, Bernhard (Freiburg)"
+Meletos of Athens,Meletos of Athens,53,"Aspiotes 1283, Suda M 495, New Pauly, Fowler Plato: Euthyphro, Apology, Crito, Phaedo, Phaedrus (LCL 36)",5th or 4th c.,Aspiotes,"Son of M. (presumably [3]) from the deme of Pitthus (Pl. Euthphr. 2b), prosecutor of Socrates as representative of the poets (Pl. Ap. 23e), probably author of an Oedipus tetralogy. He was condemned to death by the Athenians according to Diog. Laert. 2,43. Zimmermann, Bernhard (Freiburg)"
 Mimnermus,Mimnermus,122,"Gerber, Greek Elegiac Poetry (LCL 258); Aspiotes 1327; Brill’s New Pauly",fl. 650–600,,
 Moskhos,Moskhos,49,Stefanis 1748; Aspiotes 1348,fl. 450–400,,
 Myrtis,Myrtis,123,"Campbell, Greek Lyric vol. 4 (LCL 461); Aspiotes 1363; Brill’s New Pauly",6th c.,,
@@ -103,7 +96,7 @@ Phrynichos,Phrynichos,81,Stefanis 2584; Aspiotes 1672; Brill’s New Pauly,fl. 5
 Phrynis,Phrynis,5,"Campbell, Greek Lyric vol. 5 (LCL 144), Stefanis 2583; Aspiotes 1674; Brill’s New Pauly",fl. 450–400,,
 Pindar,Pindar,149,"Race, Pindar 1–2 (LCL 56 and 485); Brill’s New Pauly",fl. 500–450,,
 "Pindar, son of Skopelinos","Pindar, son of Skopelinos",82,Aspiotes 1681,5th c.,,Reportedly the cousin or nephew of Pindar.
-Polychares,Polychares,150,,fl. 400-375,,"NP (Zimmermann, Bernhard (Freiburg)): ""Early 4th cent. BC poet, uncertain whether of tragedy or dithyramb (DID B 6)."""
+Polychares,Polychares,150,"Leven 2014: 37",fl. 400-375,,"NP (Zimmermann, Bernhard (Freiburg)): ""Early 4th cent. BC poet, uncertain whether of tragedy or dithyramb (DID B 6)."""
 Polyidus,Polyidus,26,"Campbell, Greek Lyric vol. 5 (LCL 144); Aspiotes 1699; Brill’s New Pauly",4th c.,,
 Polymnestus,Polymnestus,128,"Campbell, Greek Lyric vol. 2 (LCL 143); Aspiotes 1705; Brill’s New Pauly",7th c.,,
 Pratinas,Pratinas,129,"Campbell, Greek Lyric vol. 3 (LCL 476); Aspiotes 1718; Brill’s New Pauly",fl. 500–475,"NP (Zimmermann, Bernhard (Freiburg)) says two dates attested for Pratinas: ""between 499 and 496 he entered a tragedic agon against Aeschylus [1] and Choerilus [2] (T 1); and 467 is a  terminus ante quem for his death""",
@@ -111,7 +104,7 @@ Praxilla,Praxilla,83,Aspiotes 1723; Brill’s New Pauly,c. 450,,
 Pronomus,Pronomus,2,"Campbell, Greek Lyric vol. 5 (LCL 144); Stefanis 2149; Aspiotes 1736; Brill’s New Pauly",fl. 450–400,,
 Sacadas,Sacadas,131,"Campbell, Greek Lyric vol. 3 (LCL 476); Aspiotes 1809; Brill’s New Pauly",fl. 600–550,"NP (Harmon, Roger (Basle)): ""won the Pythian agṓn (Pythia [2]) three times in a row from 586 BC in Delphi""",
 Sappho,Sappho,132,"Campbell, Greek Lyric vol. 1 (LCL 142); Aspiotes 1814; Brill’s New Pauly",fl. 625–575,,
-Sappho or Alcaeus,Sappho/Alcaeus,157,,both fl. 625–575,,
+Sappho or Alcaeus,Sappho/Alcaeus,157,n/a,both fl. 625–575,,
 Scythinus,Scythinus,84,"Gerber, Greek Iambic Poetry (LCL 259); Aspiotes 1865; Brill’s New Pauly",5th or 4th c.,,
 Semonides,Semonides,134,"Gerber, Greek Iambic Poetry (LCL 259); Aspiotes 1865; Brill’s New Pauly",7th c.,,
 Simonides,Simonides,135,"Campbell, Greek Lyric vol. 3 (LCL 476); Aspiotes 1857; Brill’s New Pauly",556/553 or 532/529–468/465,,

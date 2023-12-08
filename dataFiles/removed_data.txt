@@ -1,0 +1,39 @@
+poet stubs recently added; it looks like we removed these poets for some reason a long time ago
+Oenopas (Oinonas),Oenopas (Oinonas),78,,,,
+Aristonous,Aristonous,38,,,,
+Aristotle,Aristotle,151,,,,
+Adespota,Adespota,152,,,,
+Castorion,Castorion,33,,,,
+
+removed poets_cities
+Aristonous,38,Athens,2,performed,3,3,,,Inscription,,IG 12.5 444 80-1 = Parian Marble 67,"ἀφ' οὗ Ἀρ[ι]στ[όνους ὁ κιθαρωιδὸς ἐνίκησεν] Ἀθήνησιν, ἔτη ΗΔΔΔ𐅃, ἄρχοντος Ἀθήνησιν Ἀριστοκράτους.",It has been 135 years [=399/8 BCE] since Arist[onous the kitharode won] at Athens during the archonship of Aristocrates at Athens.,Driscoll,,yes
+Aristonous,38,Delphi,30,born,1,1,,,Plutarch,,Plut. Lys. 18.10,"ἐπεὶ μέντοι ὁ κιθαρῳδὸς Ἀριστόνους ἑξάκις Πύθια νενικηκὼς ἐπηγγέλλετο τῷ Λυσάνδρῳ φιλοφρονούμενος, ἂν νικήσῃ πάλιν, Λυσάνδρου κηρύξειν ἑαυτόν, “Ἦ δοῦλον;” εἶπεν.","However, when Aristonoüs the harper, who had been six times victor at the Pythian games, told Lysander in a patronizing way that if he should be victorious again, he would have himself proclaimed under Lysander’s name, “That is,” Lysander replied, “as my slave?”",,,yes
+Oenopas (Oinonas),78,Italy,,,1,1,,Assuming Oinopas = Oinonas,Athenaeus,,Ath. 1.20a,περὶ τὸ ἐξ Ἰταλίας Οἰνώα (sic),concerning Oinonas (sic) from Italy,Sansom,,
+
+looks like we didn't trust this oeniades data point
+Oeniades,29,Thebes,,,1,1,,,Inscription,,"IG P2 3064, 3 + Hesperia 28, 1959, 275-277",Οἰνιάδην δὲ τὸν Τιμοθέου,Oiniades son of Timotheos,Sansom,,yes
+
+removed geographical_imaginary_group
+175,Aristotle,151,Attica,198,,,,,,,fr. 673 Rose = West,1,,ἐλθὼν δ᾿ ἐς κλεινὸν Κεκροπίης δάπεδον,and coming to the famous plain of Cecropia,,,FALSE
+176,"Aristotle",151,Persia,85,,,,,,,"F.G.E. i. (p. 32)",2,,"τόνδε ποτ᾿ οὐχ ὁσίως παραβὰς μακάρων θέμιν ἁγνήν ἔκτεινεν Περσῶν τοξοφόρων βασιλεύς,",This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods,,,
+194,Castorion,33,Arcadia,54,,,,,,,"fr. 310 Suppl. Hell.",1,,"σὲ τὸν βολαῖς νιφοκτύποις δυσχείμερον ναίονθ᾿ ἕδραν, θηρονόμε Πάν, χθόν᾿ Ἀρκάδων","You who dwell in the land of the Arcadians, an abode wintry with battering snowstorms, beast-tending Pan",Campbell,,
+
+removed dates
+Kastorion,33,375.00,,
+Kastorion,33,350.00,,
+Kastorion,33,325.00,,
+Kastorion,33,300.00,,
+Kastorion,33,275.00,,
+Kastorion,33,250.00,,
+Kastorion,33,225.00,,
+Kastorion,33,200.00,,
+Aristonous,38,350,0350-01-01,"NP: “(Aristonoos, -nus) of Corinth, son of Nicosthenes, author of two inscriptions of preserved poems on the Treasury of the Athenians in Delphi: a  paean to Apollo in Aeolic verse measure and a  hymn to Hestia in dactylo-epitrites (3rd quarter of the 4th cent. BC); valuable documents on Delphi's construction of its own mythological history.”"
+Aristonous,38,325,0325-01-01,
+Aristonous,38,300,0300-01-01,
+Oenopas,78,425.00,0425-01-01,
+Oenopas,78,400.00,0400-01-01,
+Oenopas,78,375.00,0375-01-01,
+Aristotle,151,400.00,,
+Aristotle,151,375.00,,
+Aristotle,151,350.00,,
+Aristotle,151,325.00,,

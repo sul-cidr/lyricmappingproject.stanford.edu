@@ -50,7 +50,7 @@ export function createTravelInterfaceHtml(data) {
   </fieldset>
 </div>
 
-<div class="buttonContainer" height: 100px;">
+<div class="buttonContainer" style="height: 100px;">
   <fieldset class="controlForm">
     <div class="controlBarLabel">
       SMALL GEOGRAPHICAL REGION 
