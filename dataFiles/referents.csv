@@ -113,8 +113,7 @@ imaginaryid,poetname,cityname,referent,referentid,source_translation
 18,Alcaeus,Chalcis,swords,13,"Beside them are swords from Chalcis and many belts and tunics. These we have been unable to forget, ever since we first undertook this task."
 115,Anacreon,Cimmeria,bows,13,"What do I care, my friend, for the Cimmerians with their curving bows and the Sintians?"
 167,Archilochus,Euboea,spear-famed lords,13,This is the warfare in which those spear-famed lords of Euboea are skilled.
-176,"Aristotle
-",Persia,bow,13,This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods
+176,"Aristotle",Persia,bow,13,This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods
 493,Timotheus,Delphi,bow,13,"Come, far-shooting Pythian, to this holy city"
 507,Timotheus,Persia,army,13,"And backwards in flight went the barbarian Persian host, racing along"
 522,Tyrtaeus,Delphi,bow,13,"For thus Apollo who works from afar, the golden-haired lord of the silver bow, prophesied from his rich shrine"
@@ -269,8 +268,7 @@ imaginaryid,poetname,cityname,referent,referentid,source_translation
 190,Callinus,Cimmeria,war,48,"now the horde of Cimmerians, with their acts of violence, is advancing"
 280,Ibycus,Argos,strife (war),48,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
 413,Stesichorus,Aetolia,war,48,"...and the Aetolians, staunch in war..."
-460,Theognis,Greece,"strife
-",48,"For indeed I am afraid when I look upon the mindless, people-destroying strife of the Greeks."
+460,Theognis,Greece,"strife",48,"For indeed I am afraid when I look upon the mindless, people-destroying strife of the Greeks."
 530,Tyrtaeus,Sparta,war,48,it (i.e. factions) happened too in Sparta in the course of the Messenian War
 545,Ibycus,Troy,war,48,". . . destroyed the great, glorious, blessed city of Priam, son of Dardanus, setting off from Argos by the plans of great Zeus, enduring much-sung strife over the beauty of auburn Helen in tearful war..."
 66,Alcman,Cerbesians,tune,49,"he piped a Phrygian tune, the Cerbesian,"
@@ -278,8 +276,7 @@ imaginaryid,poetname,cityname,referent,referentid,source_translation
 228,Critias,Athens,song,49,"And now I shall crown the Athenian son of Cleinias, Alcibiades, with a song in a new manner."
 243,Critias,Teos,song,49,"Teos brought to Greece the one who once wove songs with strains celebrating women, sweet Anacreon,"
 439,Telestes,Dryopis (Doris),Dorian Muse,49,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
-440,Telestes,Lydia,"strain
-",49,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
+440,Telestes,Lydia,"strain",49,"or the Phrygian king of the fair-breathing holy pipes, who was the first to tune the Lydian strain, rival of the Dorian muse, weaving about the quivering reeds the fair-winged gust of his breath."
 441,Telestes,Lydia,hymn,49,The first to sing to the pipes the Phrygian tune of the mountain Mother beside the mixing-bowls of the Greeks were the companions of Pelops; and the Greeks began to twang the Lydian hymn with the shrill-voiced plucking of the pectis.
 443,Telestes,Phrygia,tune,49,The first to sing to the pipes the Phrygian tune of the mountain Mother beside the mixing-bowls of the Greeks were the companions of Pelops; and the Greeks began to twang the Lydian hymn with the shrill-voiced plucking of the pectis.
 511,Timotheus,Pieria,lyre,49,"Orpheus, Calliope’s son, he of the intricate muse, was the first to beget the tortoise-shell lyre in Pieria"
@@ -299,8 +296,7 @@ imaginaryid,poetname,cityname,referent,referentid,source_translation
 289,Ibycus,Thrace,North Wind,56,...Thracian north wind...
 523,Tyrtaeus,Erineus,wind,56,with them we left windy Erineus and came to the wide island of Pelops
 164,Archilochus,Crete,law,57,the Cretan law teaches
-176,"Aristotle
-",Persia,law,57,This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods
+176,"Aristotle",Persia,law,57,This man was once impiously slain by the king of the bow-bearing Persians in transgression of the holy law of the blessed gods
 238,Critias,Sparta,law,57,This too is the custom and established practice at Sparta:
 240,Critias,Sparta,Spartan way of life (law),57,But the Spartan way of life is evenly ordered:
 445,Theognis,Colophon,laws,57,"Lawlessness destroyed Magnesia, Colophon, and Smyrna; it will assuredly destroy you people too, Cyrnus."
@@ -453,8 +449,7 @@ imaginaryid,poetname,cityname,referent,referentid,source_translation
 215,Corinna,Mt. Parnes,,,Parnes
 216,Corinna,Olympus,,,Olympus
 217,Corinna,Olympus,,,Olympus
-218,Corinna,Plataea,,,"Plataea
-"
+218,Corinna,Plataea,,,"Plataea"
 219,Corinna,Mt. Ptoios,,,and the mountain Ptoios
 228,Critias,Athens,Alcibiades,,"And now I shall crown the Athenian son of Cleinias, Alcibiades, with a song in a new manner."
 232,Critias,Greece,Greece,,"Teos brought to Greece the one who once wove songs with strains celebrating women, sweet Anacreon,"
@@ -630,8 +625,7 @@ imaginaryid,poetname,cityname,referent,referentid,source_translation
 515,Timotheus,Susa,,,"I no come here to you, I go over there to Sardis, to Susa, Ecbatana dweller. Artimis, my great god, will guard me to Ephesus."
 516,Timotheus,Tmolus,,,for then I should not have left Tmolus or the Lydian town of Sardis and come to fend off Greek Ares
 517,Timotheus,Troy,,,"Troyward-conveying, she alone might be the deliverer from disaster"
-518,"Timotheus
-",Athens,,,"His native city was Athens, the Greece of Greece."
+518,"Timotheus",Athens,,,"His native city was Athens, the Greece of Greece."
 519,Tyrtaeus,Arcadia,Arcadians,,Archadians(?)
 520,Tyrtaeus,Argos,Argives,,of the Argives(?)
 524,Tyrtaeus,Ithome,mountain range of Ithome,,"and in the twentieth year the enemy fled from the high mountain range of Ithome, abandoning their rich farmlands"
