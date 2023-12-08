@@ -32,7 +32,7 @@ function createIntroHtml() {
   </div>
   <div id="intro-bottom" class="flex-wrapper" style="justify-content: center;">
 	  <div id="bottom-center" class="box-column">
-		  <iframe src="https://www.youtube.com/embed/XvlZzQkwy1Y?rel=0&autoplay=0" frameborder="0" allowfullscreen></iframe><br>
+		  <iframe id="youtubeVideo" src="https://www.youtube.com/embed/XvlZzQkwy1Y?rel=0&autoplay=0" allowfullscreen></iframe><br>
 		  <a href="#" id="creditsLink">Credits and Acknowledgements</a></p>
 	  </div>
   </div>

@@ -56,3 +56,7 @@
 #essayCloseButton:hover {
   color: black;
 }
+
+#youtubeVideo {
+  border: 0px;
+}
