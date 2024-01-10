@@ -22,7 +22,7 @@ function drawBubbles(map, bubbles) {
         bubble.city.lat,
         bubble.city.long
       );
-      drawnBubbles.push(drawBubble(location, map, bubble));
+      drawnBubbles.push(...drawBubble(location, map, bubble));
     }
   }
 
@@ -31,6 +31,15 @@ function drawBubbles(map, bubbles) {
 
 function drawBubble(location, map, bubble) {
   const radius = calculateBubbleSize(map.getZoom(), bubble.price);
+  const transparentCircle = L.circle(location,
+    {
+      opacity: 0,
+      fillOpacity: 0,
+      weight: 2,
+      radius: radius * 3
+    }
+  );
+  transparentCircle._price = bubble.price * 3;
   const circle = L.circle(location, {
     color: LYRIC_WHITE,
     fillColor: LYRIC_RED,
@@ -39,11 +48,15 @@ function drawBubble(location, map, bubble) {
     radius: radius
   });
   circle._price = bubble.price;
+  map.bubbleLayerGroup.addLayer(transparentCircle);
   map.bubbleLayerGroup.addLayer(circle);
-  if (bubble.popupHtml)
+  if (bubble.popupHtml) {
+    transparentCircle.bindPopup(bubble.popupHtml);
     circle.bindPopup(bubble.popupHtml);
+  }
+  transparentCircle.bindTooltip(bubble.city.infowindowName);
   circle.bindTooltip(bubble.city.infowindowName);
-  return circle;
+  return [transparentCircle, circle];
 }
 
 function drawLegends(map, bubbles) {
