@@ -58,6 +58,16 @@ export function initializeData(data) {
   createRegionsForInterface(data);
   data.poetCities.forEach(pc => primeObjWithPoetData(pc, data));
   data.geopoetCities.forEach(pc => primeObjWithPoetData(pc, data));
+  sortPoetCities(data, data.poetCities);
+  sortPoetCities(data, data.geopoetCities);
+}
+
+function sortPoetCities(data, poetCities) {
+  poetCities.sort((a, b) => {
+    const poetA = getPoet(data, a.poetId);
+    const poetB = getPoet(data, b.poetId);
+    return sortAlphabetically(poetA.poetname, poetB.poetname);
+  })
 }
 
 function primeObjWithPoetData(obj, data) {
@@ -80,9 +90,11 @@ function primeObjWithPoetData(obj, data) {
 }
 
 export function sortAlphabetically(a, b) {
-  if (a < b) { return -1; }
-  if (a > b) { return 1; }
-  return 0;
+  const aIsLetter = a.charAt(0).match(/[a-z]/i) !== null;
+  const bIsLetter = b.charAt(0).match(/[a-z]/i) !== null;
+  if (aIsLetter && !bIsLetter) return -1;
+  if (!aIsLetter && bIsLetter) return 1;
+  return a < b ? -1 : 1;
 }
 
 function createGovsByCityId(data) {
@@ -204,9 +216,6 @@ function createTravelPoets(data) {
       .filter(poetId => !poetIdsToOmit.includes(poetId))
   );
   data.travelPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
-
-  const esIdx = 18; // -es
-  putPoetIdAtEndOfPoetIdNameTuples(data.travelPoets, esIdx);
 }
 
 function createTravelCities(data) {
@@ -312,11 +321,11 @@ function convertMixedGovIds(govId) {
   // some gov ids correspond to two government types (e.g. Kingship/Tyranny -> both kingship and tyranny)
   // here we unpack these and include those types as well
   if (govId === 9) {
-    return [9,1,2] // oligarchy/tyranny, oligarchy, tyranny
+    return [9, 1, 2] // oligarchy/tyranny, oligarchy, tyranny
   } else if (govId === 10) {
-    return [10,1,3] // oligarchy/democracy, oligarchy, democracy
+    return [10, 1, 3] // oligarchy/democracy, oligarchy, democracy
   } else if (govId === 12) {
-    return [12,4,2] // kingship/tyranny, kingship, tyranny
+    return [12, 4, 2] // kingship/tyranny, kingship, tyranny
   } else return [govId];
 }
 
