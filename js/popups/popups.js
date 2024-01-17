@@ -16,8 +16,6 @@ export function createPopupHtml(state, data, bubble) {
 }
 
 function createActivePopupHtml(state, data, bubble) {
-  console.log(data);
-  console.log(bubble);
   const cityname = bubble.city.infowindowName.toUpperCase();
   const poetCities = bubble.poetCities;
   const bornPoetCities = [];
