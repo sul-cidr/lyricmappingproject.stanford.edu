@@ -4,7 +4,7 @@ This project is the first-ever attempt to illustrate on an interactive map key g
 
 The composition of melic, elegiac and iambic poetry, all included here under the term lyric, was a crucial component of Greek musical cultures. As mousike, with its various combinations of vocal, instrumental and kinetic activity, was a cornerstone in forming sensibilities and establishing ideologies, our project aspires to be a useful tool for all those interested in exploring the local origins and mobile dynamics of performance and culture in the ancient world.
 
-Created by David Driscoll, Israel McMullin, Stephen Sansom, maintained by Sinead Brennan-McMahon, headed by Anastasia-Erasmia Peponi.
+Created and implemented by David Driscoll, designed and researched by David Driscoll, Israel McMullin, Stephen Sansom, maintained by Sinead Brennan-McMahon, headed by Anastasia-Erasmia Peponi.
 
 Please cite as: D. Driscoll, I. McMullin, S. Sansom, S. Brennan-McMahon, A.-E. Peponi. Mapping Greek Lyric : Places, Travel, Geographical Imaginary [Date of access] (http://lyricmappingproject.stanford.edu)
 
