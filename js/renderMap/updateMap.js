@@ -14,7 +14,6 @@ export function updateMap(map, data, state) {
   } else {
     alert(`unrecognized map mode ${state.currentMapMode}`);
   }
-  addAriaLabelsToSlider();
   // uncomment following line to run accessibility checks while playing with the map
   // runAxe();
 }
@@ -23,15 +22,6 @@ function clearMap(map) {
   map.bubbleLayerGroup.clearLayers();
   map.legendLayerGroup.clearLayers();
   map.lineLayerGroup.clearLayers();
-}
-
-function addAriaLabelsToSlider() {
-  for (const element of Array.from(document.getElementsByClassName("noUi-handle-lower"))) {
-    element.setAttribute('aria-label', 'Lower slider handle');
-  }
-  for (const element of Array.from(document.getElementsByClassName("noUi-handle-upper"))) {
-    element.setAttribute('aria-label', 'Upper slider handle');
-  }
 }
 
 function runAxe() {

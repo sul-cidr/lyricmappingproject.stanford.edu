@@ -14,6 +14,11 @@ export function initializeSlider(map, data, state) {
     tooltips: [
       { to: function (value) { return `${-1 * value} BCE`; } },
       { to: function (value) { return `${-1 * value} BCE`; } }
+    ],
+    // following from https://github.com/leongersen/noUiSlider/issues/1223
+    handleAttributes: [
+      { 'aria-label': 'lower' },
+      { 'aria-label': 'upper' },
     ]
   });
 
