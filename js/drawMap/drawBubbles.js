@@ -90,8 +90,7 @@ function minimumZoomToShowLegend(price) {
   if (price >= 22) return 0;
   if (price >= 20) return 7;
   if (price >= 18) return 8;
-  if (price >= 15) return 9;
-  return 10;
+  return 9;
 }
 
 function calculateBubbleSize(zoom, price) {
