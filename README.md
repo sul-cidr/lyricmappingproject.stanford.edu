@@ -28,6 +28,15 @@ They use Node's built-in runner, so there is nothing to install. Most check the
 CSVs in `dataFiles/`, which is where this project's bugs have historically come
 from. Some record known data problems we plan to fix.
 
+There is also a browser smoke test, which serves the repository and opens it in
+headless Chromium to check each map actually paints and that nothing errors. It
+needs an install, so it is kept separate from `npm test`:
+
+```sh
+npm ci && npx playwright install chromium
+npm run test:browser
+```
+
 ### Types
 
 Types are JSDoc comments, declared in `types/` and checked by TypeScript in

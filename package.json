@@ -2,13 +2,15 @@
   "name": "lyricmappingproject",
   "private": true,
   "type": "module",
-  "description": "No build. This file exists so Node treats the .js files as the ES modules they already are, and to pin @types/node so the tests can be typechecked. The only dependency is type declarations; nothing is bundled or compiled, and the site is still plain files served as-is.",
+  "description": "No build. This file exists so Node treats the .js files as the ES modules they already are, to pin @types/node so the tests can be typechecked, and to pin playwright for the browser smoke test. Nothing is bundled or compiled, no dependency is shipped, and the site is still plain files served as-is.",
   "scripts": {
     "test": "node --test tests/*.test.js",
+    "test:browser": "node --test tests/browser/*.test.js",
     "lint": "npx -y oxlint@1 --deny-warnings -A all -D correctness -D eqeqeq -D no-var -D prefer-const -D no-self-compare -D no-template-curly-in-string js/ tests/ index.js",
     "typecheck": "npx -y -p typescript@5 tsc -p jsconfig.json"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2"
+    "@types/node": "^26.1.2",
+    "playwright": "^1.62.1"
   }
 }

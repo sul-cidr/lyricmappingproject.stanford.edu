@@ -37,7 +37,14 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Install type declarations
+      - name: Install type declarations and playwright
         run: npm ci
       - name: Typecheck
         run: npx -y -p typescript@5 tsc -p jsconfig.json
+
+      # Serves the repository and opens it in headless Chromium, to check the
+      # map actually paints. Not a screenshot test: see tests/browser/.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser smoke test
+        run: npm run test:browser
