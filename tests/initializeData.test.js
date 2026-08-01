@@ -32,16 +32,54 @@ describe("initializeData runs clean", () => {
 });
 
 describe("hydration", () => {
-  test("ids and coordinates become numbers", () => {
-    for (const city of data.cities) {
-      assert.equal(typeof city.cityId, "number", `${city.cityname} has a non-numeric cityId`);
-      assert.equal(typeof city.lat, "number", `${city.cityname} has a non-numeric lat`);
-      assert.equal(typeof city.long, "number", `${city.cityname} has a non-numeric long`);
+  test("every field the types declare numeric really is one, on every row", () => {
+    // Written out by hand rather than read from NUMERIC_CSV_FIELDS, which would
+    // only assert that table against itself. This is the independent statement
+    // of the same claim, and it is what was missing: the version of this test it
+    // replaces checked cities and poetCities alone, so poets.poetId,
+    // genres.poetId and the whole of bigRegions went unparsed and unnoticed.
+    /** @type {[keyof Csvs, string[]][]} */
+    const NUMERIC = [
+      ["cities", ["cityId", "regionId", "lat", "long"]],
+      ["regions", ["regionId", "bigRegionId"]],
+      ["bigRegions", ["regionId"]],
+      ["governments", ["governmentId"]],
+      ["cityPolitics", ["cityId", "governmentId", "date"]],
+      ["dates", ["poetId", "date"]],
+      ["poets", ["poetId"]],
+      ["genres", ["poetId", "genreId"]],
+      ["poetCities", ["poetId", "cityId", "relationshipId"]],
+      ["geopoetCities", ["imaginaryid", "poetId", "cityId"]]
+    ];
+    for (const [table, fields] of NUMERIC) {
+      const rows = /** @type {Record<string, unknown>[]} */ (/** @type {unknown} */ (data[table]));
+      assert.ok(rows.length > 0, `${table} is empty`);
+      for (const field of fields) {
+        const bad = rows.filter(row => typeof row[field] !== "number").length;
+        assert.equal(bad, 0, `${bad}/${rows.length} rows of ${table} have a non-numeric ${field}`);
+      }
     }
-    for (const pc of data.poetCities) {
-      assert.equal(typeof pc.poetId, "number");
-      assert.equal(typeof pc.cityId, "number");
-    }
+  });
+
+  test("ids can be compared across tables with ===", () => {
+    // What the strings actually broke. An id is nearly always used as an object
+    // key, where poetsById["149"] and poetsById[149] are the same key, so the
+    // three unparsed fields hid behind that for as long as nothing compared one.
+    const pindar = data.poets.find(poet => poet.poetDetailName === "Pindar");
+    assert.ok(pindar, "expected a poet named Pindar");
+    assert.ok(
+      data.lines.some(line => line.poetId === pindar.poetId),
+      "Pindar's travel lines should be findable by === on poetId"
+    );
+    assert.ok(
+      data.genres.some(genre => genre.poetId === pindar.poetId),
+      "Pindar's genres should be findable by === on poetId"
+    );
+    const region = data.regions[0];
+    assert.ok(
+      data.bigRegions.some(bigRegion => bigRegion.regionId === region.bigRegionId),
+      "a region's bigRegionId should match a big region by ==="
+    );
   });
 
   test("cities with no coordinates hydrate to NaN, and are skipped when drawing", () => {

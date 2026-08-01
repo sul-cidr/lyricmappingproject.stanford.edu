@@ -149,6 +149,27 @@ interface RawCsvs {
   governments: RawGovernment[];
 }
 
+/**
+ * Which fields of which CSV hydrate() parses out of their string form.
+ *
+ * Total over the ten CSVs, and each field name is checked against that CSV's own
+ * columns — `keyof RawCsvs[K][number]` is the column set of one row of table K.
+ * So a field named here that the CSV does not have, or a table left out
+ * entirely, is a type error.
+ *
+ * This exists because hydrate() used to be a flat list of forEach calls with no
+ * relationship to the types they were producing, and three fields were simply
+ * missing from it: poets.poetId, genres.poetId, and the whole of bigRegions.
+ */
+type NumericCsvFields = {
+  [K in keyof RawCsvs]: {
+    int?: (keyof RawCsvs[K][number])[];
+    float?: (keyof RawCsvs[K][number])[];
+    /** Written as a positive year BCE in the CSV, stored negative so it sorts. */
+    bce?: (keyof RawCsvs[K][number])[];
+  };
+};
+
 /** The three tables that carry source citations. */
 type CitedCsv = "poetCities" | "geopoetCities" | "genres";
 

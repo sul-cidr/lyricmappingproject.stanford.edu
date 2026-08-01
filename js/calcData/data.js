@@ -39,6 +39,29 @@ export function initializeData(raw) {
 }
 
 /**
+ * Every field Papa Parse hands back as a string that is not one.
+ *
+ * The three marked below were missing when this was a flat list of forEach
+ * calls, so a Poet held the string "149" where its type promised a number. It
+ * went unnoticed for as long as it did because an id is only ever used as an
+ * object key, and poetsById["149"] and poetsById[149] are the same key — until
+ * something compares one with ===.
+ * @type {NumericCsvFields}
+ */
+export const NUMERIC_CSV_FIELDS = {
+  regions: { int: ["regionId", "bigRegionId"] },
+  cities: { int: ["cityId", "regionId"], float: ["lat", "long"] },
+  poetCities: { int: ["poetId", "cityId", "relationshipId"] },
+  poets: { int: ["poetId"] }, // was missing
+  genres: { int: ["poetId", "genreId"] }, // poetId was missing
+  geopoetCities: { int: ["poetId", "cityId", "imaginaryid"] },
+  cityPolitics: { int: ["cityId", "governmentId"], bce: ["date"] },
+  bigRegions: { int: ["regionId"] }, // the whole table was missing
+  dates: { int: ["poetId"], bce: ["date"] },
+  governments: { int: ["governmentId"] }
+};
+
+/**
  * Papa Parse hands back every field as a string. This parses the numeric ones in
  * place and hands the rows back under their hydrated types, which is the only
  * form the rest of the codebase ever sees.
@@ -52,27 +75,14 @@ function hydrate(raw) {
   /** @type {Record<keyof RawCsvs, any[]>} */
   const rows = raw;
 
-  rows.genres.forEach(genre => (genre.genreId = parseInt(genre.genreId)));
-  rows.cities.forEach(city => (city.cityId = parseInt(city.cityId)));
-  rows.cities.forEach(city => (city.regionId = parseInt(city.regionId)));
-  rows.cities.forEach(city => (city.lat = parseFloat(city.lat)));
-  rows.cities.forEach(city => (city.long = parseFloat(city.long)));
-  rows.cityPolitics.forEach(city => (city.cityId = parseInt(city.cityId)));
-  rows.cityPolitics.forEach(city => (city.governmentId = parseInt(city.governmentId)));
-  rows.cityPolitics.forEach(cp => (cp.date = -1 * parseInt(cp.date)));
-  rows.poetCities.forEach(poetCity => (poetCity.relationshipId = parseInt(poetCity.relationshipId)));
-  rows.poetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
-  rows.poetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
-  rows.geopoetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
-  rows.geopoetCities.forEach(poetCity => (poetCity.imaginaryid = parseInt(poetCity.imaginaryid)));
-  rows.geopoetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
-  rows.regions.forEach(region => (region.regionId = parseInt(region.regionId)));
-  rows.regions.forEach(region => (region.bigRegionId = parseInt(region.bigRegionId)));
-  rows.dates.forEach(date => {
-    date.poetId = parseInt(date.poetId);
-    date.date = -1 * parseInt(date.date);
-  });
-  rows.governments.forEach(gov => (gov.governmentId = parseInt(gov.governmentId)));
+  for (const table of /** @type {(keyof RawCsvs)[]} */ (Object.keys(NUMERIC_CSV_FIELDS))) {
+    const fields = NUMERIC_CSV_FIELDS[table];
+    for (const row of rows[table]) {
+      for (const field of fields.int ?? []) row[field] = parseInt(row[field]);
+      for (const field of fields.float ?? []) row[field] = parseFloat(row[field]);
+      for (const field of fields.bce ?? []) row[field] = -1 * parseInt(row[field]);
+    }
+  }
 
   return rows;
 }
