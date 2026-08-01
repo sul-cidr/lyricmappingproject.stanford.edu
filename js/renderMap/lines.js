@@ -29,7 +29,7 @@ export function calculateAndDrawLines(map, data, state) {
  * @param {number} num
  * @returns {Line[]}
  */
-function filterLines(data, type, num) {
+export function filterLines(data, type, num) {
   switch (type) {
     case "all":
       return data.lines;
@@ -68,7 +68,7 @@ function hashCityIds(from, to) {
  * @param {Line[]} filteredPoetLines
  * @returns {Record<number, DrawnLine>}
  */
-function calculateLines(data, type, num, filteredPoetLines) {
+export function calculateLines(data, type, num, filteredPoetLines) {
   /** @type {Record<number, DrawnLine>} */
   const lines = {};
 
