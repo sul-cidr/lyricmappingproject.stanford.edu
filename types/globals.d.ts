@@ -138,12 +138,14 @@ interface PoetDisplay {
 }
 
 /**
- * How a poet is attested to relate to a city. These are the only three values
- * poets_cities.csv uses, so a comparison against 4 is now a type error rather
- * than a filter that silently matches nothing.
+ * How a poet is attested to relate to a city: 1 = born, 2 = died, 3 = active
+ * there. These are the only three values poets_cities.csv uses, so a comparison
+ * against 4 is now a type error rather than a filter that silently matches
+ * nothing.
  *
  * A claim about the data, like Poet.minDate, and enforced the same way: by the
- * "relationshipId is 1, 2, 3 or absent" test in tests/initializeData.test.js.
+ * "relationshipId is 1, 2 or 3 on every row" test in
+ * tests/initializeData.test.js.
  */
 type RelationshipId = 1 | 2 | 3;
 
@@ -151,15 +153,8 @@ type RelationshipId = 1 | 2 | 3;
 interface PoetCity extends Omit<RawPoetCity, "poetId" | "cityId" | "relationshipId"> {
   poetId: number;
   cityId: number;
-  /**
-   * Absent for the eight rows of poets_cities.csv that leave the column blank.
-   * Those rows show under ACTIVITY, which every row qualifies for, and are
-   * classed non-native there; they never show under ORIGIN and never become a
-   * travel line. That was already true when the blank parsed to NaN — this
-   * says so, rather than leaving it to a value that equals nothing including
-   * itself.
-   */
-  relationshipId?: RelationshipId;
+  /** Required: every row of the CSV classifies its attestation. */
+  relationshipId: RelationshipId;
 }
 
 /** A row of dataFiles/geographical_imaginary_group.csv, hydrated. */

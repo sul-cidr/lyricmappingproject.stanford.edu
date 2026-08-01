@@ -248,10 +248,10 @@ describe("nothing errors", () => {
 // ---------------------------------------------------------------------------
 
 describe("places map: specific views", () => {
-  test("ORIGIN draws the 55 cities some poet was born in", async () => {
+  test("ORIGIN draws the 56 cities some poet was born in", async () => {
     await mode("placesMode");
     await select("relationship_1");
-    assert.equal(await drawnPaths(), 110); // 55 cities x 2 circles
+    assert.equal(await drawnPaths(), 112); // 56 cities x 2 circles
   });
 
   test("ACTIVITY draws the 102 cities with any lyric activity", async () => {
@@ -259,22 +259,28 @@ describe("places map: specific views", () => {
     assert.equal(await drawnPaths(), 204); // 102 x 2
   });
 
-  test("the Dithyramb filter draws 15 cities, Epinician only 3", async () => {
+  test("the Dithyramb filter draws 15 cities, Epinician only 4", async () => {
     await select("genre_2");
     assert.equal(await drawnPaths(), 30);
     await select("genre_16");
-    assert.equal(await drawnPaths(), 6);
+    assert.equal(await drawnPaths(), 8);
   });
 });
 
 describe("places map: specific popups", () => {
-  test("the Epinician filter draws three cities, Athens first, naming Euripides", async () => {
+  test("the Epinician filter draws four cities, Salamis over Athens, naming Euripides", async () => {
     await mode("placesMode");
     await select("genre_16");
-    assert.equal(await drawnPaths(), 6); // Athens, Thebes, Ioulis (Ceos)
+    // Athens, Thebes, Ioulis (Ceos), Salamis. Salamis is Euripides' second
+    // attested birthplace, which the map could not see while its row had no
+    // relationshipId — genre bubbles are drawn from birthplaces only.
+    assert.equal(await drawnPaths(), 8);
+    // It is the Salamis bubble that opens, not the Athens one this test used to
+    // name: the two are twenty kilometres apart, so at this scale Salamis is
+    // drawn over Athens and takes the click. Both poets are the same Euripides.
     const text = await popupText();
-    assert.match(text, /ATHENS/);
-    assert.match(text, /POET BORN IN ATHENS AND ASSOCIATED WITH EPINICIAN/);
+    assert.match(text, /SALAMIS/);
+    assert.match(text, /POET BORN IN SALAMIS AND ASSOCIATED WITH EPINICIAN/);
     assert.match(text, /Euripides \(b\.in Salamis\)/);
     assert.match(text, /Dates: 485\/80–406/);
   });
@@ -297,8 +303,10 @@ describe("places map: specific popups", () => {
 describe("travel map: specific views", () => {
   test("ALL CASES draws every attested journey", async () => {
     await mode("travelMode");
-    // 159 distinct city pairs x2 paths, plus 96 cities touched x2 circles.
-    assert.equal(await drawnPaths(), 510);
+    // 161 distinct city pairs x2 paths, plus 96 cities touched x2 circles.
+    // The two new pairs are Euripides leaving Salamis for Macedonia and Ikaros;
+    // Salamis was already among the 96, as the end of Sophocles' Athens arc.
+    assert.equal(await drawnPaths(), 514);
   });
 
   test("Alcman draws both reported origins, one of them degenerate", async () => {

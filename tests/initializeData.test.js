@@ -48,7 +48,7 @@ describe("hydration", () => {
       ["dates", ["poetId", "date"]],
       ["poets", ["poetId"]],
       ["genres", ["poetId", "genreId"]],
-      ["poetCities", ["poetId", "cityId"]],
+      ["poetCities", ["poetId", "cityId", "relationshipId"]],
       ["geopoetCities", ["imaginaryid", "poetId", "cityId"]]
     ];
     for (const [table, fields] of NUMERIC) {
@@ -93,42 +93,18 @@ describe("hydration", () => {
     }
   });
 
-  test("relationshipId is 1, 2, 3 or absent — never NaN", () => {
-    // What RelationshipId claims, asserted against the corpus. The blank column
-    // used to parse to NaN, a number that equals nothing including itself, so
-    // the eight rows below quietly matched no filter and produced no travel
-    // line. They still do neither; the difference is that the type now says so.
-    const counts = { 1: 0, 2: 0, 3: 0, absent: 0 };
+  test("relationshipId is 1, 2 or 3 on every row", () => {
+    // What RelationshipId claims, asserted against the corpus. The column was
+    // blank on eight rows until those blanks were filled in, and parseInt("") is
+    // NaN — a number that equals nothing, including itself — so those eight
+    // attestations quietly matched no filter and produced no travel line. This
+    // is what stops a blank being reintroduced silently.
+    const counts = { 1: 0, 2: 0, 3: 0 };
     for (const pc of data.poetCities) {
-      const key = pc.relationshipId ?? "absent";
-      assert.ok(key in counts, `relationshipId ${pc.relationshipId} is not 1, 2, 3 or absent`);
-      assert.ok(!Number.isNaN(pc.relationshipId), `${pc.poetname} — ${pc.cityname} has a NaN relationshipId`);
-      counts[key] += 1;
+      assert.ok(pc.relationshipId in counts, `${pc.poetname} — ${pc.cityname} has relationshipId ${pc.relationshipId}`);
+      counts[pc.relationshipId] += 1;
     }
-    assert.deepEqual(counts, { 1: 109, 2: 10, 3: 176, absent: 8 });
-  });
-
-  test("the rows with no relationshipId are the ones travel cannot see", () => {
-    // Named rather than counted, because this is a gap in the CSV rather than a
-    // property of the code: these attestations show under ACTIVITY, which every
-    // row qualifies for, are classed non-native there, and never reach ORIGIN or
-    // the travel map. Every poet involved still reaches travel by another row,
-    // so nobody vanishes — but these particular attestations do.
-    const blank = data.poetCities.filter(pc => pc.relationshipId === undefined);
-    assert.deepEqual(blank.map(pc => `${pc.poetname} — ${pc.cityname}`).sort(), [
-      "Euripides — Salamis",
-      "Trytaeus — Athens",
-      "Trytaeus — Athens",
-      "Trytaeus — Sparta",
-      "Tyrtaeus — Messena",
-      "Tyrtaeus — Messena",
-      "Tyrtaeus — Sparta",
-      "Tyrtaeus — Sparta"
-    ]);
-    const travelling = new Set(data.lines.flatMap(line => [line.bornPc.poetId, line.activePc.poetId]));
-    for (const pc of blank) {
-      assert.ok(travelling.has(pc.poetId), `${pc.poetname} reaches the travel map by no row at all`);
-    }
+    assert.deepEqual(counts, { 1: 112, 2: 10, 3: 179 });
   });
 
   test("dates become negative years, so BCE sorts naturally", () => {
@@ -191,16 +167,38 @@ describe("date filtering depends on every mapped poet having dates", () => {
 
 describe("travel lines", () => {
   test("one line per (birthplace, place of activity) pair", () => {
+    // Counted over cities rather than rows: poets_cities.csv holds one row per
+    // testimonium, so a relationship attested by three sources is three rows,
+    // and createLines() takes the first of each city.
     const byPoet = new Map();
     for (const pc of data.poetCities) {
-      if (!byPoet.has(pc.poetId)) byPoet.set(pc.poetId, { born: 0, active: 0 });
-      const counts = byPoet.get(pc.poetId);
-      if (pc.relationshipId === 1) counts.born++;
-      else if (pc.relationshipId === 2 || pc.relationshipId === 3) counts.active++;
+      if (!byPoet.has(pc.poetId)) byPoet.set(pc.poetId, { born: new Set(), active: new Set() });
+      const cities = byPoet.get(pc.poetId);
+      if (pc.relationshipId === 1) cities.born.add(pc.cityId);
+      else cities.active.add(pc.cityId);
     }
     let expected = 0;
-    for (const { born, active } of byPoet.values()) expected += born * active;
+    for (const { born, active } of byPoet.values()) expected += born.size * active.size;
     assert.equal(data.lines.length, expected);
+  });
+
+  test("several sources for one relationship make one journey, not several", () => {
+    // Tyrtaeus is the only poet in the corpus attested more than once for the
+    // same relationship: three sources call him an Athenian and four put him at
+    // Sparta. Multiplied out that is 25 lines rather than 6 — and
+    // calculateLines() weights each arc by how many lines it merges, so
+    // Athens -> Sparta would be drawn as though twelve poets had walked it.
+    const tyrtaeus = poetIdByName("Tyrtaeus");
+    assert.equal(data.poetCities.filter(pc => pc.poetId === tyrtaeus).length, 10);
+    const journeys = data.linesByPoetId[tyrtaeus].map(l => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`);
+    assert.deepEqual(journeys.sort(), [
+      "Athens -> Messenia",
+      "Athens -> Sparta",
+      "Miletus -> Messenia",
+      "Miletus -> Sparta",
+      "Sparta -> Messenia",
+      "Sparta -> Sparta"
+    ]);
   });
 
   test("a poet with two attested birthplaces gets a line from each", () => {
@@ -210,6 +208,21 @@ describe("travel lines", () => {
     const lines = data.linesByPoetId[alcman];
     const journeys = lines.map(l => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`).sort();
     assert.deepEqual(journeys, ["Sardis -> Sparta", "Sparta -> Sparta"]);
+  });
+
+  test("Euripides travels from Salamis as well as from Athens", () => {
+    // poets.csv has called him "Euripides (b.in Salamis)" all along, and the
+    // Life of Euripides row saying so is in poets_cities.csv — but with no
+    // relationshipId, so it produced no line and the map showed him leaving
+    // Athens only.
+    const euripides = poetIdByName("Euripides (b.in Salamis)");
+    const journeys = data.linesByPoetId[euripides].map(l => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`);
+    assert.deepEqual(journeys.sort(), [
+      "Athens -> Ikaros",
+      "Athens -> Macedonia",
+      "Salamis -> Ikaros",
+      "Salamis -> Macedonia"
+    ]);
   });
 
   test("every line resolves both its cities and carries its citations", () => {

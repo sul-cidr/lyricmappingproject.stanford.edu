@@ -226,14 +226,39 @@ describe("labels agree with the ids they point at", () => {
 });
 
 describe("field values", () => {
-  test("relationshipId is 1, 2, 3 or blank", () => {
+  test("every row has a relationshipId of 1, 2 or 3", () => {
+    // 1 = born, 2 = died, 3 = active there. A blank parses to NaN, which equals
+    // nothing including itself, so the row shows under ACTIVITY — which every
+    // row qualifies for — and is silently missing from ORIGIN and from travel.
     for (const row of raw.poetCities) {
-      if (!filled(row.relationshipId)) continue; // blank = unclassified, excluded from travel
       assert.ok(
-        [1, 2, 3].includes(id(row.relationshipId)),
-        `${row.poetname} -> ${row.cityname} has relationshipId ${row.relationshipId}`
+        filled(row.relationshipId) && [1, 2, 3].includes(id(row.relationshipId)),
+        `${row.poetname} -> ${row.cityname} has relationshipId "${row.relationshipId}"`
       );
     }
+  });
+
+  test("one row per poet, city and relationship, except where several sources attest one", () => {
+    // The shape the file is in everywhere else: a poet's connection to a city is
+    // stated once, by its best source. Tyrtaeus is the exception — his three
+    // Athenian testimonia and four Spartan ones are separate rows, because a row
+    // holds one citation and there is nowhere else to put them.
+    //
+    // It matters because the places map sizes a bubble and numbers its popup by
+    // rows, so a poet with three rows for one city is counted three times there.
+    // createLines() takes the first row per city precisely to keep that out of
+    // the travel map; see "several sources for one relationship make one
+    // journey" in initializeData.test.js.
+    const rowsByAttestation = new Map();
+    for (const row of raw.poetCities) {
+      const key = `${row.poetname} -> ${row.cityname} (${row.relationshipId})`;
+      rowsByAttestation.set(key, (rowsByAttestation.get(key) ?? 0) + 1);
+    }
+    const repeated = [...rowsByAttestation].filter(([, count]) => count > 1);
+    assert.deepEqual(repeated.sort(), [
+      ["Tyrtaeus -> Athens (1)", 3],
+      ["Tyrtaeus -> Sparta (3)", 4]
+    ]);
   });
 
   test("coordinates are either both blank or both plausible for the mapped world", () => {
@@ -651,16 +676,28 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
     }
   });
 
-  test("BUG: Tyrtaeus is misspelt Trytaeus in four poets_cities rows", () => {
-    const misspelt = raw.poetCities.filter(row => row.poetname === "Trytaeus");
-    assert.equal(misspelt.length, 4);
-    // The poetId is correct (145), and popups display poetDetailName from
-    // poets.csv, so this is cosmetic — but calcBubbles sorts geographical
-    // imaginary poets by poetname, so a misspelling can misorder a list.
-    assert.ok(misspelt.every(row => id(row.poetId) === 145));
-    const tyrtaeus = raw.poets.find(p => id(p.poetId) === 145);
-    assert.ok(tyrtaeus);
-    assert.equal(tyrtaeus.poetname, "Tyrtaeus");
+  test("BUG: nativeid is ignored, so Alcman is a native of Sparta again", () => {
+    // nativeid is not a copy of relationshipId. It was added in September 2015
+    // (issue #257) to separate "born here" from "counts as a native here", and
+    // 28f4504 "changed active query from relationshipid to nativeid" so that the
+    // old map's ACTIVITY popup read it. The instruction it implements is that
+    // Alcman appear at Sparta among the non-natives only, so his Suda A 1290 row
+    // carries relationshipId 1 with nativeid deliberately blank. It is the one
+    // row in the file where the two disagree, which is why the column looks
+    // redundant.
+    //
+    // v2 rewrote that popup to split on relationshipId (createActivePopupHtml in
+    // js/popups/popups.js), so the override does nothing and Alcman is listed as
+    // a native of Sparta once more. Euripides is the other case the column was
+    // built for: issue #284 wanted his birth stated at Salamis while keeping him
+    // among the natives of Athens.
+    const disagree = raw.poetCities.filter(row => row.nativeid !== row.relationshipId);
+    assert.deepEqual(
+      disagree.map(row => `${row.poetname} -> ${row.cityname}`),
+      ["Alcman -> Sparta"]
+    );
+    assert.equal(disagree[0].relationshipId, "1");
+    assert.equal(disagree[0].nativeid, "");
   });
 
   test("BUG: two names carry stray whitespace", () => {

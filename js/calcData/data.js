@@ -51,7 +51,7 @@ export function initializeData(raw) {
 export const NUMERIC_CSV_FIELDS = {
   regions: { int: ["regionId", "bigRegionId"] },
   cities: { int: ["cityId", "regionId"], float: ["lat", "long"] },
-  poetCities: { int: ["poetId", "cityId"], optionalInt: ["relationshipId"] },
+  poetCities: { int: ["poetId", "cityId", "relationshipId"] },
   poets: { int: ["poetId"] }, // was missing
   genres: { int: ["poetId", "genreId"] }, // poetId was missing
   geopoetCities: { int: ["poetId", "cityId", "imaginaryid"] },
@@ -79,11 +79,6 @@ function hydrate(raw) {
     const fields = NUMERIC_CSV_FIELDS[table];
     for (const row of rows[table]) {
       for (const field of fields.int ?? []) row[field] = parseInt(row[field]);
-      for (const field of fields.optionalInt ?? []) {
-        const parsed = parseInt(row[field]);
-        if (Number.isNaN(parsed)) delete row[field];
-        else row[field] = parsed;
-      }
       for (const field of fields.float ?? []) row[field] = parseFloat(row[field]);
       for (const field of fields.bce ?? []) row[field] = -1 * parseInt(row[field]);
     }
@@ -415,8 +410,17 @@ function createLines(csvs, lookups) {
         bornPcs: [],
         activePcs: []
       };
-    if (pc.relationshipId === 3 || pc.relationshipId === 2) poets[pc.poetId].activePcs.push(pc);
-    else if (pc.relationshipId === 1) poets[pc.poetId].bornPcs.push(pc);
+    // Exhaustive now that relationshipId is required: 1 is a birthplace, 2 and
+    // 3 are both places of activity.
+    const pcs = pc.relationshipId === 1 ? poets[pc.poetId].bornPcs : poets[pc.poetId].activePcs;
+    // One row per city, the first in file order standing for the rest. Several
+    // sources can attest the same relationship — Tyrtaeus is called an Athenian
+    // by Plato, by Pausanias and by the scholiast on the Laws — and this map
+    // draws journeys, not testimonia. Without this his three Athenian rows and
+    // four Spartan ones would multiply out into twelve identical Athens ->
+    // Sparta lines, which calculateLines() would then merge into one arc
+    // weighted as though twelve poets had walked it.
+    if (!pcs.some(seen => seen.cityId === pc.cityId)) pcs.push(pc);
   }
 
   /** @type {FilterOption[]} */
