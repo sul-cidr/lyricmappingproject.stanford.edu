@@ -344,11 +344,10 @@ interface State {
 }
 
 /**
- * The single mutable bag of everything. parseCsvs() fills the raw arrays;
- * initializeData() hydrates them and adds every derived lookup below.
+ * The ten CSVs, hydrated: ids and coordinates parsed to numbers, dates negated
+ * to BCE years. The pre-hydration string forms are RawCsvs, in types/csv.d.ts.
  */
-interface Data {
-  // straight from CSV
+interface Csvs {
   cities: City[];
   regions: Region[];
   bigRegions: BigRegion[];
@@ -359,8 +358,18 @@ interface Data {
   genres: Genre[];
   poetCities: PoetCity[];
   geopoetCities: GeoPoetCity[];
+}
 
-  // lookups
+/**
+ * The by-id lookups. Each is a regrouping of exactly one CSV and depends on
+ * nothing else, which is why they can all be built in a single step, before
+ * anything that reads them.
+ *
+ * This, rather than the whole Data, is what getPoet() and its neighbours ask
+ * for — so they can be used while Data is still being assembled, and so their
+ * signatures say they need a lookup rather than the entire world.
+ */
+interface Lookups {
   citiesById: Record<number, City>;
   poetsById: Record<number, Poet>;
   regionsById: Record<number, Region>;
@@ -369,14 +378,15 @@ interface Data {
   govsByCityId: Record<number, CityPolitics[]>;
   govsById: Record<number, string>;
   datesByPoetId: Record<number, number[]>;
+}
 
-  // travel
+/** The travel lines and the control bar lists, derived from the CSVs through the lookups. */
+interface Derived {
   lines: Line[];
   linesByPoetId: Record<number, Line[]>;
   linesByBornCityId: Record<number, Line[]>;
   linesByActiveCityId: Record<number, Line[]>;
 
-  // control-bar contents
   genreIdsWithName: FilterOption[];
   geoImaginaryPoets: FilterOption[];
   travelPoets: FilterOption[];
@@ -384,3 +394,9 @@ interface Data {
   poetsWithUnknownTravel: FilterOption[];
   regionsForInterface: FilterOption[];
 }
+
+/**
+ * Everything the map draws from, assembled once by initializeData() and not
+ * added to afterwards. The three halves above are the order it is built in.
+ */
+interface Data extends Csvs, Lookups, Derived {}

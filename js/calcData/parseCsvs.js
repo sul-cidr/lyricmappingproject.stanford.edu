@@ -1,4 +1,25 @@
 /**
+ * Every CSV the map loads, against the key it is loaded onto.
+ *
+ * One record rather than ten calls, so the mapping is total: a key of RawCsvs
+ * with no file here, or a key here that RawCsvs does not declare, is a type
+ * error. Passing the wrong filename for a key used to typecheck perfectly.
+ * @type {Record<keyof RawCsvs, string>}
+ */
+const CSV_FILES = {
+  regions: "./dataFiles/regions.csv",
+  cities: "./dataFiles/cities.csv",
+  poetCities: "./dataFiles/poets_cities.csv",
+  poets: "./dataFiles/poets.csv",
+  genres: "./dataFiles/genres.csv",
+  geopoetCities: "./dataFiles/geographical_imaginary_group.csv",
+  cityPolitics: "./dataFiles/city_politics.csv",
+  bigRegions: "./dataFiles/big_regions.csv",
+  dates: "./dataFiles/dates.csv",
+  governments: "./dataFiles/governments.csv"
+};
+
+/**
  * @param {string} file raw CSV text
  * @returns {Promise<{ data: any[] }>}
  */
@@ -9,33 +30,28 @@ function papaParsePromise(file) {
 }
 
 /**
- * Loads every CSV in dataFiles/ onto the shared data bag. Papa Parse yields
- * every field as a string; initializeData() hydrates the numeric ones.
- * @param {Data} data
- * @returns {Promise<void[]>}
+ * Loads every CSV in dataFiles/. Papa Parse yields every field as a string;
+ * initializeData() hydrates the numeric ones.
+ * @returns {Promise<RawCsvs>}
  */
-export function parseCsvs(data) {
-  return Promise.all([
-    parseCsv(data, "regions", "./dataFiles/regions.csv"),
-    parseCsv(data, "cities", "./dataFiles/cities.csv"),
-    parseCsv(data, "poetCities", "./dataFiles/poets_cities.csv"),
-    parseCsv(data, "poets", "./dataFiles/poets.csv"),
-    parseCsv(data, "genres", "./dataFiles/genres.csv"),
-    parseCsv(data, "geopoetCities", "./dataFiles/geographical_imaginary_group.csv"),
-    parseCsv(data, "cityPolitics", "./dataFiles/city_politics.csv"),
-    parseCsv(data, "bigRegions", "./dataFiles/big_regions.csv"),
-    parseCsv(data, "dates", "./dataFiles/dates.csv"),
-    parseCsv(data, "governments", "./dataFiles/governments.csv")
-  ]);
+export async function parseCsvs() {
+  /** @type {Record<string, any[]>} */
+  const raw = {};
+  await Promise.all(
+    Object.entries(CSV_FILES).map(async ([key, filename]) => {
+      raw[key] = await parseCsv(filename);
+    })
+  );
+  // CSV_FILES is declared as a Record over every key of RawCsvs, so the loop
+  // above has filled all of them. That is the whole of what this asserts.
+  return /** @type {RawCsvs} */ (/** @type {unknown} */ (raw));
 }
 
 /**
- * @param {Data} data
- * @param {keyof Data} parameter which key on the data bag to populate
  * @param {string} filename
- * @returns {Promise<void>}
+ * @returns {Promise<any[]>}
  */
-async function parseCsv(data, parameter, filename) {
+async function parseCsv(filename) {
   const response = await fetch(filename);
   // fetch resolves for a 404, so without this the error page is parsed as CSV
   // and the map draws nothing, with no indication why.
@@ -46,5 +62,5 @@ async function parseCsv(data, parameter, filename) {
   }
   const csv = await response.text();
   const parsed = await papaParsePromise(csv);
-  data[parameter] = parsed.data;
+  return parsed.data;
 }
