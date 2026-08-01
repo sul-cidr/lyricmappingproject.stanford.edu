@@ -1,3 +1,9 @@
+/**
+ * Draws each travel arc as a geodesic curve with an arrowhead, plus a fat
+ * invisible copy underneath so thin lines are still clickable.
+ * @param {LyricMap} map
+ * @param {Record<number, DrawnLine>} calculatedLines
+ */
 export function drawLines(map, calculatedLines) {
   map.lineLayerGroup.clearLayers();
   for (const hash in calculatedLines) {

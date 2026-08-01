@@ -1,15 +1,24 @@
 import { sortAlphabetically } from "../calcData/data.js";
 import { createPopupHtml } from "../popups/popups.js";
 
+/**
+ * Groups rendered rows by city into one bubble per city, sized by how many
+ * poets it holds, and attaches each bubble's popup html.
+ * @param {State} state
+ * @param {Data} data
+ * @param {RenderedPoetCity[]} poetCities
+ * @returns {Record<number, Bubble>}
+ */
 export function calculateBubbles(state, data, poetCities) {
   const citiesById = data.citiesById;
+  /** @type {Record<number, Bubble>} */
   const bubbles = {}
 
   for (const poetCity of poetCities) {
     const cityId = poetCity.cityId;
     if (cityId && citiesById[cityId]) {
       if (!bubbles[cityId]) {
-        bubbles[cityId] = {};
+        bubbles[cityId] = /** @type {Bubble} */ ({});
         bubbles[cityId].city = citiesById[cityId];
         bubbles[cityId].poetCities = [];
       }
@@ -20,15 +29,18 @@ export function calculateBubbles(state, data, poetCities) {
   if (state.currentMapMode === "geoimaginaryMode") {
     for (const cityId in bubbles) {
       const bubbleCity = bubbles[cityId];
-      if (!bubbleCity.poets) bubbleCity.poets = {}
+      // poets starts life keyed by poetId so references can be accumulated,
+      // then is flattened to the sorted array that popups consume.
+      /** @type {Record<number, GeoBubblePoet>} */
+      const poetsById = {};
       for (const pc of bubbleCity.poetCities) {
-        if (!bubbleCity.poets[pc.poetId]) {
-          bubbleCity.poets[pc.poetId] = { ...pc };
-          bubbleCity.poets[pc.poetId].references = [];
+        if (!poetsById[pc.poetId]) {
+          poetsById[pc.poetId] = /** @type {GeoBubblePoet} */ ({ ...pc });
+          poetsById[pc.poetId].references = [];
         }
-        bubbleCity.poets[pc.poetId].references.push(pc.reference);
+        poetsById[pc.poetId].references.push(pc.reference);
       }
-      bubbleCity.poets = Object.values(bubbleCity.poets);
+      bubbleCity.poets = Object.values(poetsById);
       bubbleCity.poets.sort((a, b) => sortAlphabetically(a.poetname, b.poetname));
     }
   }
@@ -42,6 +54,10 @@ export function calculateBubbles(state, data, poetCities) {
   return bubbles;
 }
 
+/**
+ * @param {number} numberOfPoets
+ * @returns {number}
+ */
 function calculateBubblePriceFromNumberOfPoets(numberOfPoets) {
   if (numberOfPoets <= 1) return 10.0;
   if (numberOfPoets <= 2) return 13.3;

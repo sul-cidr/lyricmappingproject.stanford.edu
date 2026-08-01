@@ -1,6 +1,18 @@
 import { LYRIC_RED } from "../constants/colors.js";
 import { getGenres } from "../calcData/getters.js";
 
+/**
+ * Anything a detail paragraph can be rendered from: a rendered poet-city row in
+ * places / geographical-imaginary mode, or a travel line in travel mode. Travel
+ * lines carry no citation of their own, hence the optional reference.
+ * @typedef {PoetPrimed & { poetId: number, reference?: Reference }} DetailedPoet
+ */
+
+/**
+ * The red-numbered one-line summary at the top of a popup.
+ * @param {string[]} names
+ * @returns {string}
+ */
 export function createNumberedListOfPoets(names) {
   return (`
     <p>
@@ -11,6 +23,13 @@ export function createNumberedListOfPoets(names) {
   `);
 }
 
+/**
+ * The DETAILS block: one paragraph per poet, with dates, genres, sources and
+ * the citation.
+ * @param {DetailedPoet[]} poets
+ * @param {Data} data
+ * @returns {string}
+ */
 export function createDetailedListOfPoets(poets, data) {
   return (`
     ${poets.map((poet, idx) => {
@@ -27,6 +46,11 @@ export function createDetailedListOfPoets(poets, data) {
   `);
 }
 
+/**
+ * @param {DetailedPoet} poet
+ * @param {Data} data
+ * @returns {string}
+ */
 function createGenreString(poet, data) {
   if (poet.poetGenres) {
     const genres = getGenres(data, poet.poetId)
@@ -36,6 +60,10 @@ function createGenreString(poet, data) {
   return "";
 }
 
+/**
+ * @param {Reference | undefined} reference
+ * @returns {string}
+ */
 export function renderReference(reference) {
   if (reference) {
     let source_poem = "";

@@ -1,5 +1,11 @@
 import { createInput, createInputFromTuple } from "./commonInterface.js";
 
+/**
+ * The control bar for the places map: origin/activity, poets with no known
+ * travel, and genres.
+ * @param {Data} data
+ * @returns {string}
+ */
 export function createPlacesInterfaceHtml(data) {
   return (`
     <div class="buttonContainer" tabindex="0">

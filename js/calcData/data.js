@@ -1,27 +1,44 @@
 import { getPoet, getCity, getGenres, getGovs } from "./getters.js";
 
+/**
+ * Hydrates the raw CSV rows in place (ids and coordinates become numbers, dates
+ * become negative years) and builds every derived lookup the map needs.
+ * @param {Data} data
+ */
 export function initializeData(data) {
-  data.genres.forEach(genre => genre.genreId = parseInt(genre.genreId));
-  data.cities.forEach(city => city.cityId = parseInt(city.cityId));
-  data.cities.forEach(city => city.regionId = parseInt(city.regionId));
-  data.cities.forEach(city => city.lat = parseFloat(city.lat));
-  data.cities.forEach(city => city.long = parseFloat(city.long));
-  data.cityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
-  data.cityPolitics.forEach(city => city.governmentId = parseInt(city.governmentId));
-  data.cityPolitics.forEach(cp => cp.date = -1 * parseInt(cp.date));
-  data.poetCities.forEach(poetCity => poetCity.relationshipId = parseInt(poetCity.relationshipId));
-  data.poetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
-  data.poetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
-  data.geopoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
-  data.geopoetCities.forEach(poetCity => poetCity.imaginaryid = parseInt(poetCity.imaginaryid));
-  data.geopoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
-  data.regions.forEach(region => region.regionId = parseInt(region.regionId));
-  data.regions.forEach(region => region.bigRegionId = parseInt(region.bigRegionId));
-  data.dates.forEach(date => {
+  // Papa Parse hands back every field as a string. These arrays are aliased as
+  // any[] for the hydration pass below; everywhere else in the codebase they
+  // are the hydrated types declared in types/globals.d.ts.
+  /** @type {any[]} */ const rawGenres = data.genres;
+  /** @type {any[]} */ const rawCities = data.cities;
+  /** @type {any[]} */ const rawCityPolitics = data.cityPolitics;
+  /** @type {any[]} */ const rawPoetCities = data.poetCities;
+  /** @type {any[]} */ const rawGeopoetCities = data.geopoetCities;
+  /** @type {any[]} */ const rawRegions = data.regions;
+  /** @type {any[]} */ const rawDates = data.dates;
+  /** @type {any[]} */ const rawGovernments = data.governments;
+
+  rawGenres.forEach(genre => genre.genreId = parseInt(genre.genreId));
+  rawCities.forEach(city => city.cityId = parseInt(city.cityId));
+  rawCities.forEach(city => city.regionId = parseInt(city.regionId));
+  rawCities.forEach(city => city.lat = parseFloat(city.lat));
+  rawCities.forEach(city => city.long = parseFloat(city.long));
+  rawCityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
+  rawCityPolitics.forEach(city => city.governmentId = parseInt(city.governmentId));
+  rawCityPolitics.forEach(cp => cp.date = -1 * parseInt(cp.date));
+  rawPoetCities.forEach(poetCity => poetCity.relationshipId = parseInt(poetCity.relationshipId));
+  rawPoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
+  rawPoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
+  rawGeopoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
+  rawGeopoetCities.forEach(poetCity => poetCity.imaginaryid = parseInt(poetCity.imaginaryid));
+  rawGeopoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
+  rawRegions.forEach(region => region.regionId = parseInt(region.regionId));
+  rawRegions.forEach(region => region.bigRegionId = parseInt(region.bigRegionId));
+  rawDates.forEach(date => {
     date.poetId = parseInt(date.poetId);
     date.date = -1 * parseInt(date.date);
   })
-  data.governments.forEach(gov => gov.governmentId = parseInt(gov.governmentId));
+  rawGovernments.forEach(gov => gov.governmentId = parseInt(gov.governmentId));
 
   // create useful maps by key
   data.citiesById = {}
@@ -62,6 +79,10 @@ export function initializeData(data) {
   sortPoetCities(data, data.geopoetCities);
 }
 
+/**
+ * @param {Data} data
+ * @param {(PoetCity | GeoPoetCity)[]} poetCities
+ */
 function sortPoetCities(data, poetCities) {
   poetCities.sort((a, b) => {
     const poetA = getPoet(data, a.poetId);
@@ -70,6 +91,12 @@ function sortPoetCities(data, poetCities) {
   })
 }
 
+/**
+ * Copies a poet's display name, dates, sources and genres onto a row (or a
+ * travel line) so popups can render without a second lookup.
+ * @param {{ poetId: number, poetname?: string } & Partial<PoetPrimed>} obj
+ * @param {Data} data
+ */
 function primeObjWithPoetData(obj, data) {
   const poet = getPoet(data, obj.poetId);
 
@@ -89,6 +116,13 @@ function primeObjWithPoetData(obj, data) {
   obj.poetGenres = genres.map(genre => genre.genre).join(", ");
 }
 
+/**
+ * Sorts alphabetically, but pushes names starting with a non-letter (e.g. Greek
+ * characters) to the end.
+ * @param {string} a
+ * @param {string} b
+ * @returns {number}
+ */
 export function sortAlphabetically(a, b) {
   const aIsLetter = a.charAt(0).match(/[a-z]/i) !== null;
   const bIsLetter = b.charAt(0).match(/[a-z]/i) !== null;
@@ -97,6 +131,7 @@ export function sortAlphabetically(a, b) {
   return a < b ? -1 : 1;
 }
 
+/** @param {Data} data */
 function createGovsByCityId(data) {
   data.govsByCityId = {};
   for (const cp of data.cityPolitics) {
@@ -105,6 +140,7 @@ function createGovsByCityId(data) {
   }
 }
 
+/** @param {Data} data */
 function createGovsById(data) {
   data.govsById = {};
   for (const gov of data.governments) {
@@ -112,6 +148,7 @@ function createGovsById(data) {
   }
 }
 
+/** @param {Data} data */
 function addBigRegionIdToCities(data) {
   for (const city of data.cities) {
     if (
@@ -124,13 +161,15 @@ function addBigRegionIdToCities(data) {
   }
 }
 
+/** @param {Data} data */
 function addDatesToPoets(data) {
   data.datesByPoetId = {};
   for (const date of data.dates) {
     if (!data.datesByPoetId[date.poetId]) data.datesByPoetId[date.poetId] = [];
     data.datesByPoetId[date.poetId].push(date.date);
   }
-  for (const poetId in data.datesByPoetId) {
+  for (const poetIdStr in data.datesByPoetId) {
+    const poetId = Number(poetIdStr);
     const poet = getPoet(data, poetId);
     if (poet) {
       poet.minDate = Math.min(...data.datesByPoetId[poetId]);
@@ -139,6 +178,7 @@ function addDatesToPoets(data) {
   }
 }
 
+/** @param {Data} data */
 function createGenresByGenreId(data) {
   data.genresByGenreId = {}
   for (const genre of data.genres) {
@@ -155,17 +195,23 @@ function createGenresByGenreId(data) {
   }
 }
 
+/**
+ * @param {Iterable<number>} poetIds
+ * @param {Data} data
+ * @returns {IdNameTuple[]}
+ */
 function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
   return Array
     .from(poetIds)
     .map(poetId => {
       const poet = getPoet(data, poetId);
       const poetDetailName = poet.poetDetailName;
-      return [poetId, poetDetailName];
+      return /** @type {IdNameTuple} */ ([poetId, poetDetailName]);
     })
     .sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
+/** @param {Data} data */
 function createGeoImaginaryPoets(data) {
   const poetIdsToOmit = [
     151, // Aristotle
@@ -188,7 +234,12 @@ function createGeoImaginaryPoets(data) {
   putPoetIdAtEndOfPoetIdNameTuples(data.geoImaginaryPoets, sappAlcPoetId);
 }
 
+/**
+ * @param {IdNameTuple[]} array mutated in place
+ * @param {number} poetId
+ */
 function putPoetIdAtEndOfPoetIdNameTuples(array, poetId) {
+  /** @type {number | undefined} */
   let foundIdx;
   for (let idx = 0; idx < array.length; idx++) {
     if (array[idx][0] === poetId) {
@@ -203,6 +254,7 @@ function putPoetIdAtEndOfPoetIdNameTuples(array, poetId) {
   }
 }
 
+/** @param {Data} data */
 function createTravelPoets(data) {
   // why do we omit these guys?
   const poetIdsToOmit = [
@@ -218,6 +270,7 @@ function createTravelPoets(data) {
   data.travelPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
 }
 
+/** @param {Data} data */
 function createTravelCities(data) {
   const cityIds = new Set(
     data.lines.flatMap(line => [line.bornCityId, line.activeCityId])
@@ -226,11 +279,12 @@ function createTravelCities(data) {
     .from(cityIds)
     .map(cityId => {
       const city = getCity(data, cityId);
-      return [cityId, city.cityname];
+      return /** @type {IdNameTuple} */ ([cityId, city.cityname]);
     })
     .sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
+/** @param {Data} data */
 function createRegionsForInterface(data) {
   const regionIdsToOmit = [
     27, // Aeolis
@@ -249,11 +303,17 @@ function createRegionsForInterface(data) {
   ];
   data.regionsForInterface = data.regions
     .filter(region => !regionIdsToOmit.includes(region.regionId))
-    .map(region => [region.regionId, region.regionname])
+    .map(region => /** @type {IdNameTuple} */ ([region.regionId, region.regionname]))
     .sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
+/**
+ * Builds one travel line per (birthplace, place-of-activity) pair. Poets with
+ * several attested birthplaces therefore yield several lines.
+ * @param {Data} data
+ */
 function createLines(data) {
+  /** @type {Record<number, { bornPcs: PoetCity[], activePcs: PoetCity[] }>} */
   const poets = {}
   for (const pc of data.poetCities) {
     if (!poets[pc.poetId]) poets[pc.poetId] = {
@@ -295,7 +355,8 @@ function createLines(data) {
               .map(gov => gov.governmentId)
               .flatMap(govId => convertMixedGovIds(govId))
           )];
-          const line = {
+          // The PoetPrimed fields are filled in by primeObjWithPoetData below.
+          const line = /** @type {Line} */ ({
             poetId: poetId,
             bornCityId: bornPc.cityId,
             activeCityId: activePc.cityId,
@@ -307,7 +368,7 @@ function createLines(data) {
             poetDetailName: poet.poetDetailName,
             bornGovIds: bornGovIds,
             activeGovIds: activeGovIds
-          };
+          });
           primeObjWithPoetData(line, data);
           data.lines.push(line);
         }
@@ -317,9 +378,13 @@ function createLines(data) {
   data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
+/**
+ * Some gov ids correspond to two government types (e.g. Kingship/Tyranny ->
+ * both kingship and tyranny); here we unpack these and include those types too.
+ * @param {number} govId
+ * @returns {number[]}
+ */
 function convertMixedGovIds(govId) {
-  // some gov ids correspond to two government types (e.g. Kingship/Tyranny -> both kingship and tyranny)
-  // here we unpack these and include those types as well
   if (govId === 9) {
     return [9, 1, 2] // oligarchy/tyranny, oligarchy, tyranny
   } else if (govId === 10) {
@@ -329,6 +394,7 @@ function convertMixedGovIds(govId) {
   } else return [govId];
 }
 
+/** @param {Data} data */
 function keyLines(data) {
   data.linesByPoetId = {};
   for (const line of data.lines) {
@@ -355,6 +421,7 @@ function keyLines(data) {
   }
 }
 
+/** @param {Data} data */
 function createGenreIdsWithNames(data) {
   const genresToOmit = [
     "1", // Diaskeue
@@ -363,7 +430,7 @@ function createGenreIdsWithNames(data) {
   data.genreIdsWithName =
     Object
       .keys(data.genresByGenreId)
-      .map((id) => [id, data.genresByGenreId[id]])
+      .map((id) => /** @type {[string, string]} */ ([id, data.genresByGenreId[Number(id)]]))
       .filter(kv => !genresToOmit.includes(kv[0]))
       .sort((a, b) => sortAlphabetically(a[1], b[1]));
 }

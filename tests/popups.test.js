@@ -16,24 +16,63 @@ const { data } = loadInitializedData();
 
 const ALL_DATES = { minDate: -800, maxDate: -400 };
 
+/**
+ * @param {State["currentMapMode"]} currentMapMode
+ * @param {string} selectedId
+ * @returns {Record<number, Bubble>}
+ */
 function bubblesFor(currentMapMode, selectedId) {
-  const state = ({ currentMapMode, selectedId, ...ALL_DATES });
+  /** @type {State} */
+  const state = { currentMapMode, selectedId, ...ALL_DATES };
   return calculateBubbles(state, data, calcPoetCities(data, state));
 }
 
-const cityIdByName = (name) => {
+const cityIdByName = (/** @type {string} */ name) => {
   const city = data.cities.find((c) => c.cityname === name);
   assert.ok(city, `no city named ${name}`);
   return city.cityId;
 };
 
+/**
+ * The popup html for a city's bubble, asserting both exist. calculateBubbles()
+ * always sets popupHtml for the modes these tests exercise, but the type allows
+ * for travel mode, where bubbles are drawn without popups.
+ * @param {Record<number, Bubble>} bubbles
+ * @param {string} cityname
+ * @returns {string}
+ */
+function popupFor(bubbles, cityname) {
+  const bubble = bubbles[cityIdByName(cityname)];
+  assert.ok(bubble, `no bubble for ${cityname}`);
+  assert.ok(bubble.popupHtml, `no popup html for ${cityname}`);
+  return bubble.popupHtml;
+}
+
+/**
+ * As popupFor, for a bubble already in hand.
+ * @param {Bubble} bubble
+ * @returns {string}
+ */
+function popupOf(bubble) {
+  assert.ok(bubble.popupHtml, `no popup html for ${bubble.city.cityname}`);
+  return bubble.popupHtml;
+}
+
+/**
+ * The grouped poets on a geographical-imaginary bubble, asserting they exist.
+ * @param {Bubble} bubble
+ * @returns {GeoBubblePoet[]}
+ */
+function poetsOf(bubble) {
+  assert.ok(bubble.poets, `no grouped poets for ${bubble.city.cityname}`);
+  return bubble.poets;
+}
+
 describe("places map: origin", () => {
   const bubbles = bubblesFor("placesMode", "relationship_1");
 
   test("a birthplace bubble is titled 'POETS BORN IN <city>'", () => {
-    const sparta = bubbles[cityIdByName("Sparta")];
-    assert.ok(sparta, "no bubble for Sparta");
-    assert.match(sparta.popupHtml, /POETS BORN IN SPARTA/);
+    assert.match(popupFor(bubbles, "Sparta"), /POETS BORN IN SPARTA/);
   });
 
   test("Alcman appears under both Sparta and Sardis", () => {
@@ -41,27 +80,26 @@ describe("places map: origin", () => {
     // born, so he is currently asserted as a native of both, with no hedging.
     // When the copy changes, these two assertions are what should change.
     for (const cityname of ["Sparta", "Sardis"]) {
-      const bubble = bubbles[cityIdByName(cityname)];
-      assert.ok(bubble, `no bubble for ${cityname}`);
-      assert.match(bubble.popupHtml, /Alcman/, `Alcman missing from ${cityname}`);
-      assert.match(bubble.popupHtml, new RegExp(`POETS BORN IN ${cityname.toUpperCase()}`));
+      const html = popupFor(bubbles, cityname);
+      assert.match(html, /Alcman/, `Alcman missing from ${cityname}`);
+      assert.match(html, new RegExp(`POETS BORN IN ${cityname.toUpperCase()}`));
       // Note: /possibly/i alone would match the genre "Possibly lyric".
-      assert.doesNotMatch(bubble.popupHtml, /possibly born/i,
+      assert.doesNotMatch(html, /possibly born/i,
         `${cityname} already hedges Alcman's birth; issue #332 may have landed, so update this test`);
     }
   });
 
   test("popups carry dates, sources and the Greek text of the citation", () => {
-    const sardis = bubbles[cityIdByName("Sardis")];
-    assert.match(sardis.popupHtml, /Dates:/);
-    assert.match(sardis.popupHtml, /Source\(s\):/);
-    assert.match(sardis.popupHtml, /Citation:/);
-    assert.match(sardis.popupHtml, /Greek:/);
+    const sardis = popupFor(bubbles, "Sardis");
+    assert.match(sardis, /Dates:/);
+    assert.match(sardis, /Source\(s\):/);
+    assert.match(sardis, /Citation:/);
+    assert.match(sardis, /Greek:/);
     // Both sides are normalised defensively: the corpus is NFC (enforced by
     // data-integrity.test.js), but Greek typed into a test file can easily
     // arrive as oxia, which would render identically and never match.
     assert.ok(
-      sardis.popupHtml.normalize("NFC").includes("Ἀλκμάν".normalize("NFC")),
+      sardis.normalize("NFC").includes("Ἀλκμάν".normalize("NFC")),
       "the Suda's Greek should be quoted in the Sardis popup"
     );
   });
@@ -71,21 +109,18 @@ describe("places map: activity", () => {
   const bubbles = bubblesFor("placesMode", "relationship_3");
 
   test("a city's poets are split into natives and non-natives", () => {
-    const athens = bubbles[cityIdByName("Athens")];
-    assert.ok(athens, "no bubble for Athens");
-    assert.match(athens.popupHtml, /NATIVE LYRIC ACTIVITY IN ATHENS/);
-    assert.match(athens.popupHtml, /NON-NATIVE LYRIC ACTIVITY IN ATHENS/);
-    assert.match(athens.popupHtml, /NATIVE POETS/);
-    assert.match(athens.popupHtml, /NON-NATIVE POETS/);
+    const athens = popupFor(bubbles, "Athens");
+    assert.match(athens, /NATIVE LYRIC ACTIVITY IN ATHENS/);
+    assert.match(athens, /NON-NATIVE LYRIC ACTIVITY IN ATHENS/);
+    assert.match(athens, /NATIVE POETS/);
+    assert.match(athens, /NON-NATIVE POETS/);
   });
 
   test("every bubble produces html and a legend", () => {
     for (const bubble of Object.values(bubbles)) {
-      const b = (bubble);
-      assert.equal(typeof b.popupHtml, "string");
-      assert.ok(b.popupHtml.length > 0);
-      assert.equal(b.legend, b.city.cityname);
-      assert.ok(b.price > 0, `${b.city.cityname} has no bubble size`);
+      assert.ok(popupOf(bubble).length > 0);
+      assert.equal(bubble.legend, bubble.city.cityname);
+      assert.ok(bubble.price > 0, `${bubble.city.cityname} has no bubble size`);
     }
   });
 });
@@ -97,16 +132,16 @@ describe("geographical imaginary map", () => {
     const bubble = (Object.values(bubbles))
       .find((b) => b.poetCities.length > 1);
     assert.ok(bubble, "expected at least one city referred to more than once");
-    assert.match(bubble.popupHtml, /\d+ REFERENCES TO /);
+    assert.match(popupOf(bubble), /\d+ REFERENCES TO /);
   });
 
   test("poets are grouped, so one poet with three references is listed once", () => {
     for (const bubble of Object.values(bubbles)) {
-      const b = (bubble);
-      const poetIds = b.poets.map((p) => p.poetId);
-      assert.equal(new Set(poetIds).size, poetIds.length, `${b.city.cityname} lists a poet twice`);
-      const totalReferences = b.poets.reduce((n, p) => n + p.references.length, 0);
-      assert.equal(totalReferences, b.poetCities.length);
+      const poets = poetsOf(bubble);
+      const poetIds = poets.map((p) => p.poetId);
+      assert.equal(new Set(poetIds).size, poetIds.length, `${bubble.city.cityname} lists a poet twice`);
+      const totalReferences = poets.reduce((n, p) => n + p.references.length, 0);
+      assert.equal(totalReferences, bubble.poetCities.length);
     }
   });
 
@@ -114,8 +149,8 @@ describe("geographical imaginary map", () => {
     const single = (Object.values(bubbles))
       .find((b) => b.poetCities.length === 1);
     assert.ok(single);
-    assert.match(single.popupHtml, /1 REFERENCE TO /);
-    assert.doesNotMatch(single.popupHtml, /1 REFERENCES TO /);
+    assert.match(popupOf(single), /1 REFERENCE TO /);
+    assert.doesNotMatch(popupOf(single), /1 REFERENCES TO /);
   });
 });
 
@@ -144,14 +179,14 @@ describe("travel map", () => {
 
 describe("popup html is well formed enough to render", () => {
   test("no popup leaks 'undefined' or 'NaN' into the page", () => {
-    for (const [mode, selectedId] of [
+    for (const [mode, selectedId] of /** @type {[State["currentMapMode"], string][]} */ ([
       ["placesMode", "relationship_1"],
       ["placesMode", "relationship_3"],
       ["geoimaginaryMode", "all_1"]
-    ]) {
+    ])) {
       for (const bubble of Object.values(bubblesFor(mode, selectedId))) {
-        const html = (bubble).popupHtml;
-        const cityname = (bubble).city.cityname;
+        const html = popupOf(bubble);
+        const cityname = bubble.city.cityname;
         assert.doesNotMatch(html, /undefined/, `${mode}/${selectedId} popup for ${cityname} contains "undefined"`);
         assert.doesNotMatch(html, /NaN/, `${mode}/${selectedId} popup for ${cityname} contains "NaN"`);
       }

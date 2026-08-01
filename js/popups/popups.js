@@ -2,6 +2,14 @@ import { LYRIC_GREY, LYRIC_RED } from "../constants/colors.js";
 import { getMapTypeNum } from "../calcData/getters.js";
 import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
+/**
+ * Builds the html shown when a city bubble is clicked, for whichever of the
+ * places / geographical-imaginary maps is showing.
+ * @param {State} state
+ * @param {Data} data
+ * @param {Bubble} bubble
+ * @returns {string | undefined}
+ */
 export function createPopupHtml(state, data, bubble) {
   const [type, num] = getMapTypeNum(state);
   if (state.currentMapMode === "placesMode") {
@@ -15,10 +23,19 @@ export function createPopupHtml(state, data, bubble) {
   }
 }
 
+/**
+ * The ACTIVITY popup, which splits a city's poets into natives and incomers.
+ * @param {State} state
+ * @param {Data} data
+ * @param {Bubble} bubble
+ * @returns {string}
+ */
 function createActivePopupHtml(state, data, bubble) {
   const cityname = bubble.city.infowindowName.toUpperCase();
   const poetCities = bubble.poetCities;
+  /** @type {RenderedPoetCity[]} */
   const bornPoetCities = [];
+  /** @type {RenderedPoetCity[]} */
   const otherPoetCities = [];
   for (const pc of poetCities) {
     if (pc.relationshipId === 1) bornPoetCities.push(pc);
@@ -35,7 +52,7 @@ function createActivePopupHtml(state, data, bubble) {
   if (bornPoetCities.length > 0) {
     nativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nativeTitle}</h2>
-      ${createNumberedListOfPoets(bornPoetCities.map(pc => pc.poetDetailName), data)}    
+      ${createNumberedListOfPoets(bornPoetCities.map(pc => pc.poetDetailName))}
     `;
     nativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NATIVE POETS</h4>
@@ -46,7 +63,7 @@ function createActivePopupHtml(state, data, bubble) {
   if (otherPoetCities.length > 0) {
     nonNativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nonNativeTitle}</h2>
-      ${createNumberedListOfPoets(otherPoetCities.map(pc => pc.poetDetailName), data)}    
+      ${createNumberedListOfPoets(otherPoetCities.map(pc => pc.poetDetailName))}
     `;
     nonNativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NON-NATIVE POETS</h4>
@@ -64,6 +81,12 @@ function createActivePopupHtml(state, data, bubble) {
   `);
 }
 
+/**
+ * @param {State} state
+ * @param {Data} data
+ * @param {Bubble} bubble
+ * @returns {string}
+ */
 function createHeader(state, data, bubble) {
   const cityname = bubble.city.infowindowName.toUpperCase();
   const title = createTitle(state, data, cityname, bubble);
@@ -73,6 +96,12 @@ function createHeader(state, data, bubble) {
   `);
 }
 
+/**
+ * @param {State} state
+ * @param {Data} data
+ * @param {Bubble} bubble
+ * @returns {string}
+ */
 function createPlacesPopupHtml(state, data, bubble) {
   const poetCities = bubble.poetCities;
   return (`
@@ -83,6 +112,11 @@ function createPlacesPopupHtml(state, data, bubble) {
   `);
 }
 
+/**
+ * @param {GeoBubblePoet[]} poets
+ * @param {Data} data
+ * @returns {string}
+ */
 function createGeoHeaderListOfPoets(poets, data) {
   return (`
     <p>
@@ -95,6 +129,11 @@ function createGeoHeaderListOfPoets(poets, data) {
   `);
 }
 
+/**
+ * @param {GeoBubblePoet[]} poets
+ * @param {Data} data
+ * @returns {string}
+ */
 function createDetailedGeoListOfPoets(poets, data) {
   return (`
     ${poets.map((poet, idx) => {
@@ -109,6 +148,13 @@ function createDetailedGeoListOfPoets(poets, data) {
   `);
 }
 
+/**
+ * @param {State} state
+ * @param {Data} data
+ * @param {string} cityname already upper-cased
+ * @param {Bubble} bubble
+ * @returns {string | undefined}
+ */
 function createTitle(state, data, cityname, bubble) {
   if (state.currentMapMode === "placesMode") {
     return createPlacesModeTitle(state, data, cityname);
@@ -118,6 +164,12 @@ function createTitle(state, data, cityname, bubble) {
   }
 }
 
+/**
+ * @param {State} state
+ * @param {Data} data
+ * @param {string} cityname already upper-cased
+ * @returns {string | undefined}
+ */
 function createPlacesModeTitle(state, data, cityname) {
   const [type, num] = getMapTypeNum(state);
   if (type === "relationship" && num === 1) {
@@ -130,11 +182,19 @@ function createPlacesModeTitle(state, data, cityname) {
   }
 }
 
+/**
+ * @param {State} state
+ * @param {Data} data
+ * @param {Bubble} bubble
+ * @returns {string}
+ */
 function createGeoImaginaryPopupHtml(state, data, bubble) {
+  // calcBubbles always populates poets in geoimaginaryMode.
+  const poets = /** @type {GeoBubblePoet[]} */ (bubble.poets);
   return (`
     ${createHeader(state, data, bubble)}
-    ${createGeoHeaderListOfPoets(bubble.poets, data)}
+    ${createGeoHeaderListOfPoets(poets, data)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
-    ${createDetailedGeoListOfPoets(bubble.poets, data)}
+    ${createDetailedGeoListOfPoets(poets, data)}
   `);
 }

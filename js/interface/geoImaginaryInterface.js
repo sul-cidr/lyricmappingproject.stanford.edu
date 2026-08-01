@@ -1,5 +1,10 @@
 import { createInput, createInputFromTuple } from "./commonInterface.js";
 
+/**
+ * The control bar for the geographical-imaginary map.
+ * @param {Data} data
+ * @returns {string}
+ */
 export function createGeoImaginaryInterfaceHtml(data) {
   return (`
   <div class="buttonContainer" tabindex="0">

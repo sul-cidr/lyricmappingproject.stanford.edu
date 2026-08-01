@@ -27,3 +27,18 @@ node --test tests/*.test.js     # or: npm test
 They use Node's built-in runner, so there is nothing to install. Most check the
 CSVs in `dataFiles/`, which is where this project's bugs have historically come
 from. Some record known data problems we plan to fix.
+
+### Types
+
+Types are JSDoc comments, declared in `types/` and checked by TypeScript in
+`--noEmit` mode. Nothing is compiled: the shipped files stay plain JavaScript,
+and deleting `jsconfig.json` and `types/` would leave the site working exactly
+as it does now.
+
+```sh
+npm ci && npm run typecheck
+```
+
+The one dependency is `@types/node`, needed to check the tests. It is type
+declarations rather than code: nothing from `node_modules` is imported, served
+or deployed.

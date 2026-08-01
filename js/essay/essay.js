@@ -1,24 +1,42 @@
+/**
+ * Fills the overlay panel with either the introduction or the credits.
+ * @param {"home" | "credits"} path
+ */
 export function createEssay(path) {
   if (path === "home") {
-    document.getElementById("essayContent").innerHTML = createIntroHtml();
-    document.getElementById('creditsLink').addEventListener('click', () => createEssay("credits"));
+    byId("essayContent").innerHTML = createIntroHtml();
+    byId('creditsLink').addEventListener('click', () => createEssay("credits"));
   } else if (path === "credits") {
-    document.getElementById("essayContent").innerHTML = createCreditsHtml();
-    document.getElementById("homeLink").addEventListener('click', () => createEssay("home"));
+    byId("essayContent").innerHTML = createCreditsHtml();
+    byId("homeLink").addEventListener('click', () => createEssay("home"));
   } else {
     alert("unrecognized path in createEssay");
   }
 }
 
+/**
+ * The overlay is closed by clicking its title, its close button, or the page
+ * behind it.
+ */
 export function initializeCloseEssayClicks() {
   ["essayTitle", "essayCloseButton", "wholeScreen"].forEach(id => {
-    document.getElementById(id).addEventListener('click', closeEssay);
+    byId(id).addEventListener('click', closeEssay);
   })
 }
 
 function closeEssay() {
-  document.getElementById("essayBox").classList.add("hideEssay");
-  document.getElementById("essayContent").classList.add("hideEssay");
+  byId("essayBox").classList.add("hideEssay");
+  byId("essayContent").classList.add("hideEssay");
+}
+
+/**
+ * document.getElementById, asserting the element is present. Every id used here
+ * is hard-coded in index.html.
+ * @param {string} id
+ * @returns {HTMLElement}
+ */
+function byId(id) {
+  return /** @type {HTMLElement} */ (document.getElementById(id));
 }
 
 function createIntroHtml() {

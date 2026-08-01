@@ -1,7 +1,10 @@
 name: check
 
-# Runs the data-integrity and rendering tests. Nothing is installed: the tests
-# use Node's built-in runner and the project has no dependencies.
+# Runs the tests, then typechecks both the site source and the tests.
+#
+# Nothing is bundled or compiled. The tests run with no install at all; the
+# typecheck needs @types/node, which is the project's only dependency and is
+# type declarations rather than code.
 
 on:
   push:
@@ -20,5 +23,13 @@ jobs:
           # node:test, node:assert and node:fs, so any Node 20+ will do;
           # 'lts/*' also works if you would rather this never need touching.
           node-version: '24'
+
+      # Deliberately before the install, to keep it honest that the test suite
+      # needs nothing but Node.
       - name: Tests
         run: node --test tests/*.test.js
+
+      - name: Install type declarations
+        run: npm ci
+      - name: Typecheck
+        run: npx -y -p typescript@5 tsc -p jsconfig.json

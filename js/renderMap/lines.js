@@ -1,10 +1,15 @@
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 import { drawLines } from "../drawMap/drawLines.js";
 import { drawBubblesAndLegends } from "../drawMap/drawBubbles.js";
-import { getMapTypeNum, getCity, getGovs } from "../calcData/getters.js";
+import { getMapTypeNum } from "../calcData/getters.js";
 import { createTravelPopupHtml, createGovTravelPopupHtml } from "../popups/travelPopups.js";
 import { getDateFilterFn } from "./calcCommon.js";
 
+/**
+ * @param {LyricMap} map
+ * @param {Data} data
+ * @param {State} state
+ */
 export function calculateAndDrawLines(map, data, state) {
   const filteredPoetLines =
     filterLines(state, data)
@@ -15,6 +20,12 @@ export function calculateAndDrawLines(map, data, state) {
   drawBubblesAndLegends(map, travelBubbles);
 }
 
+/**
+ * Narrows every poet line down to those matching the selected radio button.
+ * @param {State} state
+ * @param {Data} data
+ * @returns {Line[]}
+ */
 function filterLines(state, data) {
   const [type, num] = getMapTypeNum(state);
   if (type === "all") {
@@ -40,21 +51,38 @@ function filterLines(state, data) {
   }
   else {
     alert(`unrecognized type of map in travel map: <b>${type}</b>`);
+    // Cast: unreachable for a valid State; alerting then failing on the
+    // following .filter() is the long-standing behaviour.
+    return /** @type {Line[]} */ (/** @type {unknown} */ (undefined));
   }
 }
 
+/**
+ * @param {number} from
+ * @param {number} to
+ * @returns {number}
+ */
 function hashCityIds(from, to) {
   return from * 1000 + to;
 }
 
+/**
+ * Merges every poet line sharing a city pair into a single drawn arc, then
+ * colours, weights and builds a popup for each.
+ * @param {State} state
+ * @param {Data} data
+ * @param {Line[]} filteredPoetLines
+ * @returns {Record<number, DrawnLine>}
+ */
 function calculateLines(state, data, filteredPoetLines) {
   const [type, num] = getMapTypeNum(state);
 
+  /** @type {Record<number, DrawnLine>} */
   const lines = {}
   for (const line of filteredPoetLines) {
     const hash = hashCityIds(line.bornCityId, line.activeCityId);
     if (!lines[hash]) {
-      lines[hash] = {};
+      lines[hash] = /** @type {DrawnLine} */ ({});
       lines[hash].fromCity = line.bornCity;
       lines[hash].toCity = line.activeCity;
       lines[hash].poetLines = [];
@@ -63,7 +91,7 @@ function calculateLines(state, data, filteredPoetLines) {
       lines[hash].name = (`${line.bornCity.infowindowName} -> ${line.activeCity.infowindowName}`).toUpperCase();
     }
     lines[hash].poetLines.push(line);
-    colorLine(state, data, lines[hash], line);
+    colorLine(state, data, lines[hash]);
     if (line.dotted) lines[hash].dotted = true;
   }
   for (const hash in lines) {
@@ -78,6 +106,11 @@ function calculateLines(state, data, filteredPoetLines) {
   return lines;
 }
 
+/**
+ * Thickens an arc in proportion to how many poets travelled it.
+ * @param {State} state
+ * @param {DrawnLine} line mutated in place
+ */
 function weightLine(state, line) {
   const [type, num] = getMapTypeNum(state);
   const poetsNum = line.poetLines.length;
@@ -90,6 +123,13 @@ function weightLine(state, line) {
   line.weight = multiplier * poetsNum + increment;
 }
 
+/**
+ * Recolours an arc when it leaves (purple) or stays within (yellow) whatever is
+ * currently selected. Default is red.
+ * @param {State} state
+ * @param {Data} data
+ * @param {DrawnLine} line mutated in place
+ */
 function colorLine(state, data, line) {
   const [type, num] = getMapTypeNum(state);
   // default color is red
@@ -107,7 +147,14 @@ function colorLine(state, data, line) {
   }
 }
 
+/**
+ * One plain bubble for every city touched by a visible line.
+ * @param {Data} data
+ * @param {Line[]} filteredPoetLines
+ * @returns {Record<number, DrawableBubble>}
+ */
 function calculateTravelBubbles(data, filteredPoetLines) {
+  /** @type {Set<number>} */
   const cityIds = new Set()
   for (const plId in filteredPoetLines) {
     const pl = filteredPoetLines[plId];
@@ -115,10 +162,11 @@ function calculateTravelBubbles(data, filteredPoetLines) {
     cityIds.add(pl.activeCityId);
   }
 
+  /** @type {Record<number, DrawableBubble>} */
   const bubbles = {};
   for (const cityId of cityIds) {
     const city = data.citiesById[cityId];
-    bubbles[cityId] = {};
+    bubbles[cityId] = /** @type {DrawableBubble} */ ({});
     bubbles[cityId].city = city;
     bubbles[cityId].price = 10;
   }

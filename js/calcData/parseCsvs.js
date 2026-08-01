@@ -1,9 +1,19 @@
+/**
+ * @param {string} file raw CSV text
+ * @returns {Promise<{ data: any[] }>}
+ */
 async function papaParsePromise(file) {
   return new Promise(function (complete, error) {
     Papa.parse(file, { header: true, complete, error });
   });
 }
 
+/**
+ * Loads every CSV in dataFiles/ onto the shared data bag. Papa Parse yields
+ * every field as a string; initializeData() hydrates the numeric ones.
+ * @param {Data} data
+ * @returns {Promise<any[]>}
+ */
 export async function parseCsvs(data) {
   return Promise.all([
     parseCsv(data, "regions", "./dataFiles/regions.csv"),
@@ -19,6 +29,11 @@ export async function parseCsvs(data) {
   ])
 }
 
+/**
+ * @param {Data} data
+ * @param {keyof Data} parameter which key on the data bag to populate
+ * @param {string} filename
+ */
 async function parseCsv(data, parameter, filename) {
   return fetch(filename)
     .then((file) => file.text())

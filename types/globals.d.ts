@@ -1,0 +1,343 @@
+// Type declarations for Mapping Greek Lyric.
+//
+// This file is NEVER loaded by the browser and is NOT part of the site. It exists
+// only so that editors and `npx tsc -p jsconfig.json` can check the plain ES modules
+// in js/. Deleting it does not affect the running site in any way.
+//
+// Everything here is declared globally, so the .js files can write
+// `@param {City} city` without any import boilerplate.
+
+// ---------------------------------------------------------------------------
+// Third-party globals, loaded via <script> tags in index.html.
+// Typed loosely on purpose: pinning them would mean taking on dependencies
+// (@types/leaflet etc.), and the Leaflet plugins we use (geodesic, curve,
+// polylineDecorator) have no published types anyway.
+// ---------------------------------------------------------------------------
+
+declare const L: any;
+declare const Papa: any;
+declare const noUiSlider: any;
+declare const axe: any;
+
+/** A Leaflet LayerGroup, narrowed to the methods this project calls. */
+interface LeafletLayerGroup {
+  clearLayers(): void;
+  addLayer(layer: any): void;
+}
+
+/**
+ * The Leaflet map, narrowed to the methods this project calls, plus the three
+ * layer groups initializeMap() attaches to it.
+ */
+interface LyricMap {
+  on(event: string, handler: () => void): void;
+  getZoom(): number;
+  addLayer(layer: any): void;
+  bubbleLayerGroup: LeafletLayerGroup;
+  legendLayerGroup: LeafletLayerGroup;
+  lineLayerGroup: LeafletLayerGroup;
+}
+
+// ---------------------------------------------------------------------------
+// CSV-backed entities.
+//
+// Papa Parse hands back every field as a string. initializeData() then mutates
+// the id/lat/long fields in place into numbers. The types below describe the
+// HYDRATED shape, i.e. what the rest of the codebase actually sees; the raw
+// pre-hydration arrays are cast to any[] inside initializeData().
+// ---------------------------------------------------------------------------
+
+/** A row of dataFiles/cities.csv. */
+interface City {
+  cityname: string;
+  infowindowName: string;
+  cityId: number;
+  notes: string;
+  lat: number;
+  long: number;
+  region: string;
+  regionId: number;
+  /** Added by addBigRegionIdToCities(); absent for cities with no mapped region. */
+  bigRegionId?: number;
+}
+
+/** A row of dataFiles/regions.csv. */
+interface Region {
+  regionId: number;
+  bigRegionId: number;
+  regionname: string;
+}
+
+/** A row of dataFiles/big_regions.csv. */
+interface BigRegion {
+  regionId: number;
+  regionname: string;
+}
+
+/** A row of dataFiles/governments.csv. */
+interface Government {
+  government: string;
+  governmentId: number;
+}
+
+/** A row of dataFiles/city_politics.csv: one city's regime at one date. */
+interface CityPolitics {
+  city: string;
+  cityId: number;
+  government: string;
+  governmentId: number;
+  "questionable?": string;
+  /** Negative for BCE, e.g. -600. */
+  date: number;
+  notes: string;
+}
+
+/** A row of dataFiles/dates.csv. */
+interface PoetDate {
+  dates_poetname: string;
+  poetId: number;
+  /** Negative for BCE, e.g. -600. */
+  date: number;
+  iso_8601: string;
+  notes: string;
+}
+
+/** A row of dataFiles/poets.csv. */
+interface Poet {
+  poetname: string;
+  poetDetailName: string;
+  poetId: number;
+  sources: string;
+  dates: string;
+  dates_source: string;
+  notes: string;
+  /**
+   * Added by addDatesToPoets() from dates.csv, and required here even though
+   * that function can only set it for poets that have rows in dates.csv.
+   *
+   * This is a claim about the data, not something the code guarantees: a poet
+   * with no dates would silently vanish from the map, because getDateFilterFn()
+   * compares against these. The claim is enforced by the "every poet on the map
+   * has a min and max date" test in tests/initializeData.test.js. If that test
+   * is ever deleted, these should go back to being optional.
+   */
+  minDate: number;
+  /** See minDate. */
+  maxDate: number;
+}
+
+/** A row of dataFiles/genres.csv. */
+interface Genre {
+  genres_poetname: string;
+  poetId: number;
+  genre: string;
+  genreId: number;
+  source_work: string;
+  source_workid: string;
+  source_citation: string;
+  source_greektext: string;
+  source_translation: string;
+  source_translator: string;
+  source_notes: string;
+  source_explicit: string;
+  notes: string;
+  source: string;
+}
+
+/**
+ * Poet metadata copied onto poet-city rows and travel lines by
+ * primeObjWithPoetData(), so popups can render without a second lookup.
+ */
+interface PoetPrimed {
+  poetDetailName: string;
+  poetDates: string;
+  poetSources: string;
+  poetGenres: string;
+}
+
+/** A row of dataFiles/poets_cities.csv, after hydration and priming. */
+interface PoetCity extends PoetPrimed {
+  poetname: string;
+  poetId: number;
+  cityname: string;
+  cityId: number;
+  /** Human-readable form of relationshipId; often blank in the CSV. */
+  relationship: string;
+  /** 1 = born, 2 = died, 3 = performed. Prefer this over `relationship`. */
+  relationshipId: number;
+  nativeid: string;
+  /** The literal string "dotted", or "". Marks an inferred connection. */
+  dotted: string;
+  notes: string;
+  source_work: string;
+  source_workid: string;
+  source_citation: string;
+  source_greektext: string;
+  source_translation: string;
+  source_translator: string;
+  source_notes: string;
+  source_explicit: string;
+}
+
+/** A row of dataFiles/geographical_imaginary_group.csv, after hydration and priming. */
+interface GeoPoetCity extends PoetPrimed {
+  imaginaryid: number;
+  poetname: string;
+  poetId: number;
+  cityname: string;
+  cityId: number;
+  relationship: string;
+  /**
+   * Not a column in geographical_imaginary_group.csv, so always undefined here.
+   * Declared so code can read it off either kind of row.
+   */
+  relationshipId?: number;
+  destination: string;
+  destination_id: string;
+  speaker: string;
+  speakerid: string;
+  notes: string;
+  source_poem: string;
+  source_citation: string;
+  original_source: string;
+  source_greektext: string;
+  source_translation: string;
+  source_translator: string;
+  source_notes: string;
+  source_explicit: string;
+}
+
+// ---------------------------------------------------------------------------
+// Derived structures, built at runtime.
+// ---------------------------------------------------------------------------
+
+/** A [id, displayName] pair used to build the radio buttons in the control bar. */
+type IdNameTuple = [number, string];
+
+/** One poet's attested movement from one birthplace to one place of activity. */
+interface Line extends PoetPrimed {
+  poetId: number;
+  bornCityId: number;
+  activeCityId: number;
+  bornPc: PoetCity;
+  activePc: PoetCity;
+  dotted: boolean;
+  bornCity: City;
+  activeCity: City;
+  bornGovIds: number[];
+  activeGovIds: number[];
+}
+
+/** The citation block rendered at the bottom of a popup. */
+interface Reference {
+  source_citation: string;
+  source_greektext: string;
+  source_translation: string;
+  source_translator: string;
+  source_poem?: string;
+}
+
+/**
+ * A poet-city row flattened for rendering: the subset of fields popups need,
+ * with the citation collapsed into a single `reference`.
+ */
+interface RenderedPoetCity extends PoetPrimed {
+  poetId: number;
+  cityId: number;
+  cityname: string;
+  poetname: string;
+  /** Undefined for geographical-imaginary rows, which have no relationship. */
+  relationshipId?: number;
+  reference: Reference;
+}
+
+/** A poet grouped inside a geographical-imaginary bubble, with all their citations. */
+interface GeoBubblePoet extends RenderedPoetCity {
+  references: Reference[];
+}
+
+/**
+ * The minimum a circle needs to be drawn on the map. Travel mode builds these
+ * directly; places and geographical-imaginary modes build the richer Bubble.
+ */
+interface DrawableBubble {
+  city: City;
+  /** Legacy name for bubble radius weighting. */
+  price: number;
+  popupHtml?: string;
+  legend?: string;
+}
+
+/** A circle drawn on the map for one city, with the rows behind its popup. */
+interface Bubble extends DrawableBubble {
+  poetCities: RenderedPoetCity[];
+  /** Only populated in geoimaginaryMode. */
+  poets?: GeoBubblePoet[];
+}
+
+/** One drawn arc, merging every Line that shares the same city pair. */
+interface DrawnLine {
+  fromCity: City;
+  toCity: City;
+  poetLines: Line[];
+  dotted: boolean;
+  color: string;
+  name: string;
+  /** Set by weightLine() before the arc is drawn. */
+  weight: number;
+  /** Set by calculateLines() before the arc is drawn. */
+  popupHtml: string;
+}
+
+/** Which of the three maps is showing, and the current filters. */
+interface State {
+  currentMapMode: "placesMode" | "travelMode" | "geoimaginaryMode";
+  /** Negative for BCE. */
+  minDate: number;
+  /** Negative for BCE. */
+  maxDate: number;
+  /** The checked radio button's id, e.g. "poet_93" or "relationship_1". */
+  selectedId: string;
+}
+
+/**
+ * The single mutable bag of everything. parseCsvs() fills the raw arrays;
+ * initializeData() hydrates them and adds every derived lookup below.
+ */
+interface Data {
+  // straight from CSV
+  cities: City[];
+  regions: Region[];
+  bigRegions: BigRegion[];
+  governments: Government[];
+  cityPolitics: CityPolitics[];
+  dates: PoetDate[];
+  poets: Poet[];
+  genres: Genre[];
+  poetCities: PoetCity[];
+  geopoetCities: GeoPoetCity[];
+
+  // lookups
+  citiesById: Record<number, City>;
+  poetsById: Record<number, Poet>;
+  regionsById: Record<number, Region>;
+  genresByPoetId: Record<number, Genre[]>;
+  genresByGenreId: Record<number, string>;
+  govsByCityId: Record<number, CityPolitics[]>;
+  govsById: Record<number, string>;
+  datesByPoetId: Record<number, number[]>;
+
+  // travel
+  lines: Line[];
+  linesByPoetId: Record<number, Line[]>;
+  linesByBornCityId: Record<number, Line[]>;
+  linesByActiveCityId: Record<number, Line[]>;
+
+  // control-bar contents
+  genreIdsWithName: [string, string][];
+  geoImaginaryPoets: IdNameTuple[];
+  travelPoets: IdNameTuple[];
+  travelCities: IdNameTuple[];
+  poetsWithUnknownTravel: IdNameTuple[];
+  regionsForInterface: IdNameTuple[];
+}
