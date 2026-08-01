@@ -2,7 +2,7 @@
  * @param {string} file raw CSV text
  * @returns {Promise<{ data: any[] }>}
  */
-async function papaParsePromise(file) {
+function papaParsePromise(file) {
   return new Promise(function (complete, error) {
     Papa.parse(file, { header: true, complete, error });
   });
@@ -12,9 +12,9 @@ async function papaParsePromise(file) {
  * Loads every CSV in dataFiles/ onto the shared data bag. Papa Parse yields
  * every field as a string; initializeData() hydrates the numeric ones.
  * @param {Data} data
- * @returns {Promise<any[]>}
+ * @returns {Promise<void[]>}
  */
-export async function parseCsvs(data) {
+export function parseCsvs(data) {
   return Promise.all([
     parseCsv(data, "regions", "./dataFiles/regions.csv"),
     parseCsv(data, "cities", "./dataFiles/cities.csv"),
@@ -33,10 +33,18 @@ export async function parseCsvs(data) {
  * @param {Data} data
  * @param {keyof Data} parameter which key on the data bag to populate
  * @param {string} filename
+ * @returns {Promise<void>}
  */
 async function parseCsv(data, parameter, filename) {
-  return fetch(filename)
-    .then(file => file.text())
-    .then(fileText => papaParsePromise(fileText))
-    .then(papaParsed => (data[parameter] = papaParsed.data));
+  const response = await fetch(filename);
+  // fetch resolves for a 404, so without this the error page is parsed as CSV
+  // and the map draws nothing, with no indication why.
+  if (!response.ok) {
+    const message = `could not load ${filename}: ${response.status} ${response.statusText}`;
+    alert(message);
+    throw new Error(message);
+  }
+  const csv = await response.text();
+  const parsed = await papaParsePromise(csv);
+  data[parameter] = parsed.data;
 }

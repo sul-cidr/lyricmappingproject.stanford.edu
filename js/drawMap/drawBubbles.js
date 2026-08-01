@@ -1,20 +1,31 @@
 import { LYRIC_WHITE, LYRIC_RED } from "../constants/colors.js";
 
+/** What is on the map now, read by the single zoomend handler below. */
+let drawn = /** @type {{ circles: any[], bubbles: Record<number, DrawableBubble> }} */ ({
+  circles: [],
+  bubbles: {}
+});
+let listeningToZoom = false;
+
 /**
  * Draws every city circle and its label, and re-sizes them on zoom.
  * @param {LyricMap} map
  * @param {Record<number, DrawableBubble>} bubbles
  */
 export function drawBubblesAndLegends(map, bubbles) {
-  const drawnBubbles = drawBubbles(map, bubbles);
+  drawn = { circles: drawBubbles(map, bubbles), bubbles };
   drawLegends(map, bubbles);
 
-  map.on("zoomend", function () {
+  // Bound once. Binding per redraw leaked a handler on every filter change, each
+  // holding circles that had since been cleared off the map.
+  if (listeningToZoom) return;
+  listeningToZoom = true;
+  map.on("zoomend", () => {
     const zoom = map.getZoom();
-    for (const bubble of drawnBubbles) {
-      bubble.setRadius(calculateBubbleSize(zoom, bubble._price));
+    for (const circle of drawn.circles) {
+      circle.setRadius(calculateBubbleSize(zoom, circle._price));
     }
-    drawLegends(map, bubbles);
+    drawLegends(map, drawn.bubbles);
   });
 }
 
