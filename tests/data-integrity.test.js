@@ -85,7 +85,6 @@ const ACCEPTED_CITY_LABEL_VARIANTS = [
   [179, "Therapne"],
   [206, "Euripus"],
   [216, "Parnassus"],
-  [218, "Plataea"],
   [219, "Mt. Ptoïon"],
   [254, "Camarina"], // BUG: plotted on Erythrae in Ionia. Camarina is in Sicily.
   [254, "Ionian Erythrae"],
@@ -444,16 +443,22 @@ describe("csv schema", () => {
 
 describe("hygiene", () => {
   test("names have no leading or trailing whitespace", () => {
+    // A stray space, or a newline inside a quoted field, is easy to introduce
+    // from a spreadsheet and hard to spot afterwards. The display names are
+    // checked alongside the sort names because both halves of a row are edited
+    // together and both went wrong together in Plataea and Lamynthios.
     const offenders = [];
     for (const city of raw.cities) {
-      if (city.cityname !== city.cityname.trim()) offenders.push(`cities.csv: ${JSON.stringify(city.cityname)}`);
+      for (const name of [city.cityname, city.infowindowName]) {
+        if (name !== name.trim()) offenders.push(`cities.csv: ${JSON.stringify(name)}`);
+      }
     }
     for (const poet of raw.poets) {
-      if (poet.poetname !== poet.poetname.trim()) offenders.push(`poets.csv: ${JSON.stringify(poet.poetname)}`);
+      for (const name of [poet.poetname, poet.poetDetailName]) {
+        if (name !== name.trim()) offenders.push(`poets.csv: ${JSON.stringify(name)}`);
+      }
     }
-    // Two rows are already like this; a stray newline inside a quoted field is
-    // easy to introduce from a spreadsheet and hard to spot afterwards.
-    assert.ok(offenders.length <= 2, `unexpected whitespace in names:\n  ${offenders.join("\n  ")}`);
+    assert.deepEqual(offenders, [], `unexpected whitespace in names:\n  ${offenders.join("\n  ")}`);
   });
 
   test("every poet has dates", () => {
@@ -636,16 +641,5 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
       );
       assert.equal(bad.length, 0);
     }
-  });
-
-  test("BUG: two names carry stray whitespace", () => {
-    const cityOffenders = raw.cities.filter(c => c.cityname !== c.cityname.trim());
-    const poetOffenders = raw.poets.filter(p => p.poetname !== p.poetname.trim());
-    assert.equal(cityOffenders.length, 1);
-    assert.equal(cityOffenders[0].cityname, "Plataea\r\n");
-    assert.equal(poetOffenders.length, 1);
-    assert.equal(poetOffenders[0].poetname, "Lamynthios ");
-    // A newline inside a quoted CSV field, almost certainly from a spreadsheet.
-    // Both render with stray space in tooltips and sort inconsistently.
   });
 });
