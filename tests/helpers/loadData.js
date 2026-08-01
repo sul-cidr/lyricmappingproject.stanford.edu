@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { parseCsv } from "./csv.js";
 import { initializeData } from "../../js/calcData/data.js";
+import { mapStateFrom } from "../../js/calcData/getters.js";
 
 const dataFilesDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "dataFiles");
 
@@ -67,6 +68,26 @@ export function loadInitializedData() {
     globals.alert = realAlert;
     console.log = realLog;
   }
+}
+
+/** The whole slider range, i.e. what a map shows before anything is dragged. */
+export const ALL_DATES = { minDate: -800, maxDate: -400 };
+
+/**
+ * A State as the browser holds it: a map mode paired with the filter its control
+ * bar has selected, plus a date range.
+ *
+ * Built through mapStateFrom(), which is the same call the click handlers make,
+ * so a test cannot quietly assert against a mode-and-filter pair the map has no
+ * way to produce — asking for one throws here rather than rendering something
+ * the application never shows.
+ * @param {MapMode} currentMapMode
+ * @param {string} selectedId
+ * @param {{ minDate: number, maxDate: number }} [dates]
+ * @returns {State}
+ */
+export function stateFor(currentMapMode, selectedId, dates = ALL_DATES) {
+  return { map: mapStateFrom(currentMapMode, selectedId), ...dates };
 }
 
 /**

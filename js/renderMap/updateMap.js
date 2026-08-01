@@ -12,7 +12,8 @@ import { assertUnreachable } from "../assertUnreachable.js";
  */
 export function updateMap(map, data, state) {
   clearMap(map);
-  switch (state.currentMapMode) {
+  const mapState = state.map;
+  switch (mapState.currentMapMode) {
     case "placesMode":
     case "geoimaginaryMode": {
       const poetCities = calcPoetCities(data, state);
@@ -21,10 +22,12 @@ export function updateMap(map, data, state) {
       break;
     }
     case "travelMode":
-      calculateAndDrawLines(map, data, state);
+      // Narrowed here, so the travel map is handed a travel filter rather than
+      // re-deriving one and having to consider filters it does not offer.
+      calculateAndDrawLines(map, data, state, mapState.filter);
       break;
     default:
-      assertUnreachable(state.currentMapMode, "unrecognized map mode");
+      assertUnreachable(mapState, "unrecognized map mode");
   }
   // axe-core is loaded globally by index.html, so accessibility can be checked
   // from the devtools console at any point: await axe.run()

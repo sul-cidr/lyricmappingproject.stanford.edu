@@ -343,15 +343,67 @@ interface DrawnLine extends TravelArc {
   popupHtml: string;
 }
 
-/** Which of the three maps is showing, and the current filters. */
+/** Which of the three maps is showing. */
+type MapMode = "placesMode" | "travelMode" | "geoimaginaryMode";
+
+/**
+ * One control bar selection, parsed: the kind of filter, and the id it names.
+ *
+ * `num` means something different in each case — a relationshipId, a poetId, a
+ * genreId, a cityId, a regionId or a governmentId — which is why the three
+ * aliases below exist rather than one shared shape.
+ */
+interface PlacesFilter {
+  type: PlacesFilterType;
+  num: number;
+}
+
+/** As PlacesFilter, for the geographical imaginary map. */
+interface GeoFilter {
+  type: GeoFilterType;
+  num: number;
+}
+
+/** As PlacesFilter, for the travel map. */
+interface TravelFilter {
+  type: TravelFilterType;
+  num: number;
+}
+
+/**
+ * Which map is showing and what its control bar has selected — one value,
+ * because the two are not independent. A map mode and a filter its control bar
+ * cannot produce is not a state this application has; before this was a union
+ * it was merely a state nothing happened to write.
+ *
+ * The pairing was previously enforced at runtime, by getPlacesFilter() and its
+ * neighbours re-parsing a selectedId string on every read and alerting if the
+ * halves disagreed. Now the pair is constructed once, by mapStateFrom(), and
+ * every consumer narrows it with a switch on currentMapMode.
+ */
+type MapState =
+  | { currentMapMode: "placesMode"; filter: PlacesFilter }
+  | { currentMapMode: "travelMode"; filter: TravelFilter }
+  | { currentMapMode: "geoimaginaryMode"; filter: GeoFilter };
+
+/** The map showing, its filter, and the date range every map shares. */
 interface State {
-  currentMapMode: "placesMode" | "travelMode" | "geoimaginaryMode";
+  map: MapState;
   /** Negative for BCE. */
   minDate: number;
   /** Negative for BCE. */
   maxDate: number;
-  /** The checked radio button's id, e.g. "poet_93" or "relationship_1". */
-  selectedId: string;
+}
+
+/**
+ * The filter each map opens on, before anything is clicked. Typed one field per
+ * mode, so a default its own control bar does not offer — placesMode: "all",
+ * say — is a compile error rather than an alert on first paint.
+ */
+interface DefaultFilters {
+  placesMode: PlacesFilter;
+  travelMode: TravelFilter;
+  geoimaginaryMode: GeoFilter;
 }
 
 /**

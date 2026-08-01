@@ -11,15 +11,13 @@
 
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { loadInitializedData } from "./helpers/loadData.js";
+import { loadInitializedData, stateFor } from "./helpers/loadData.js";
 import { filterLines, calculateLines } from "../js/renderMap/lines.js";
+import { selectedIdOf } from "../js/calcData/getters.js";
 import { getDateFilterFn } from "../js/renderMap/calcCommon.js";
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../js/constants/colors.js";
 
 const { data } = loadInitializedData();
-
-/** The whole slider range, i.e. what the map shows before anything is dragged. */
-const ALL_DATES = { minDate: -800, maxDate: -400 };
 
 /** governments.csv ids, as the political system control bar offers them. */
 const DEMOCRACY = 3;
@@ -33,10 +31,12 @@ const TYRANNY = 2;
  * @returns {DrawnLine[]}
  */
 function arcsFor(type, num) {
-  /** @type {State} */
-  const state = { currentMapMode: "travelMode", selectedId: `${type}_${num}`, ...ALL_DATES };
-  const poetLines = filterLines(data, type, num).filter(getDateFilterFn(data, state));
-  return Object.values(calculateLines(data, type, num, poetLines));
+  /** @type {TravelFilter} */
+  const filter = { type, num };
+  // Round-tripped through the control bar id, as a click on that button would.
+  const state = stateFor("travelMode", selectedIdOf(filter));
+  const poetLines = filterLines(data, filter).filter(getDateFilterFn(data, state));
+  return Object.values(calculateLines(data, filter, poetLines));
 }
 
 /**

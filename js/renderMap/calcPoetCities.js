@@ -1,4 +1,4 @@
-import { getGenres, getPlacesFilter, getGeoFilter } from "../calcData/getters.js";
+import { getGenres } from "../calcData/getters.js";
 import { assertUnreachable } from "../assertUnreachable.js";
 import { getDateFilterFn } from "./calcCommon.js";
 
@@ -16,27 +16,29 @@ import { getDateFilterFn } from "./calcCommon.js";
  * @returns {RenderedPoetCity[]}
  */
 export function calcPoetCities(data, state) {
-  switch (state.currentMapMode) {
+  const mapState = state.map;
+  switch (mapState.currentMapMode) {
     case "placesMode":
-      return calcPlacesPoetCities(data, state);
+      return calcPlacesPoetCities(data, state, mapState.filter);
     case "geoimaginaryMode":
-      return calcGeoPoetCities(data, state);
+      return calcGeoPoetCities(data, state, mapState.filter);
     case "travelMode":
       // The travel map draws arcs rather than bubbles, and calculates them in
       // lines.js. Nothing routes it here.
       throw new Error("calcPoetCities is not used by the travel map");
     default:
-      return assertUnreachable(state.currentMapMode, "unrecognized current map mode");
+      return assertUnreachable(mapState, "unrecognized current map mode");
   }
 }
 
 /**
  * @param {Data} data
  * @param {State} state
+ * @param {PlacesFilter} filter
  * @returns {RenderedPoetCity[]}
  */
-function calcPlacesPoetCities(data, state) {
-  const [type, num] = getPlacesFilter(state);
+function calcPlacesPoetCities(data, state, filter) {
+  const { type, num } = filter;
   const dated = data.poetCities.filter(getDateFilterFn(data, state));
 
   if (type === "genre") return renderGenreRows(dated, data, num);
@@ -47,13 +49,13 @@ function calcPlacesPoetCities(data, state) {
 /**
  * @param {Data} data
  * @param {State} state
+ * @param {GeoFilter} filter
  * @returns {RenderedPoetCity[]}
  */
-function calcGeoPoetCities(data, state) {
-  const [type, num] = getGeoFilter(state);
+function calcGeoPoetCities(data, state, filter) {
   const dated = data.geopoetCities.filter(getDateFilterFn(data, state));
 
-  return dated.filter(getGeoFilterFn(type, num)).map(poetCity => renderPoetCity(poetCity));
+  return dated.filter(getGeoFilterFn(filter.type, filter.num)).map(poetCity => renderPoetCity(poetCity));
 }
 
 /**

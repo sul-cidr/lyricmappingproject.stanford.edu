@@ -20,7 +20,7 @@ export function calculateBubbles(state, data, poetCities) {
     // bubble be built complete instead of filled in field by field.
     /** @type {BubbleContents} */
     const contents = { city: data.citiesById[cityId], poetCities: rows };
-    if (state.currentMapMode === "geoimaginaryMode") contents.poets = groupRowsByPoet(rows);
+    if (state.map.currentMapMode === "geoimaginaryMode") contents.poets = groupRowsByPoet(rows);
 
     bubbles[cityId] = {
       ...contents,

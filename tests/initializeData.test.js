@@ -7,7 +7,8 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { loadInitializedData } from "./helpers/loadData.js";
 import { sortAlphabetically } from "../js/calcData/data.js";
-import { PLACES_FILTER_TYPES, GEO_FILTER_TYPES, TRAVEL_FILTER_TYPES } from "../js/calcData/getters.js";
+import { PLACES_FILTER_TYPES, GEO_FILTER_TYPES, TRAVEL_FILTER_TYPES, selectedIdOf } from "../js/calcData/getters.js";
+import { defaultMapState } from "../js/interface/interface.js";
 import { createPlacesInterfaceHtml } from "../js/interface/placesInterface.js";
 import { createTravelInterfaceHtml } from "../js/interface/travelInterface.js";
 import { createGeoImaginaryInterfaceHtml } from "../js/interface/geoImaginaryInterface.js";
@@ -314,10 +315,25 @@ describe("each control bar offers exactly the filters its map declares", () => {
     }
   });
 
-  test("the default selectedId of each mode is one that mode can handle", () => {
-    // updateMapMode() sets these; they are what the map renders on first paint.
-    assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("relationship")));
-    assert.ok(GEO_FILTER_TYPES.includes(/** @type {GeoFilterType} */ ("all")));
-    assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ ("all")));
+  test("the button each map opens on is one its control bar actually renders", () => {
+    // DEFAULT_FILTERS is typed per mode, so a default the map cannot handle no
+    // longer compiles. What the types still cannot see is whether the radio
+    // button it names exists: updateMapMode() looks it up by id and sets
+    // .checked on it, so a default naming a button no one renders would throw
+    // on first paint. Hence this, which the previous version of the test — a
+    // membership check against the filter union — could not catch.
+    /** @type {[MapMode, string][]} */
+    const CONTROL_BARS = [
+      ["placesMode", createPlacesInterfaceHtml(data)],
+      ["travelMode", createTravelInterfaceHtml(data)],
+      ["geoimaginaryMode", createGeoImaginaryInterfaceHtml(data)]
+    ];
+    for (const [mode, html] of CONTROL_BARS) {
+      const selectedId = selectedIdOf(defaultMapState(mode).filter);
+      assert.ok(
+        idsIn(html).includes(selectedId),
+        `${mode} opens on "${selectedId}", which its control bar does not render`
+      );
+    }
   });
 });
