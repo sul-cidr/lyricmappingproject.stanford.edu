@@ -8,6 +8,13 @@
     "moduleResolution": "bundler",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "allowJs": true,
+    // A file named jsconfig.json defaults this to 2, which makes tsc read and
+    // check the JavaScript inside node_modules. Since this project has almost
+    // no dependencies, resolution walks past its own node_modules and up the
+    // filesystem, and any unrelated node_modules above the repository — a
+    // stray one in a home directory, say — gets typechecked as if it were ours.
+    // That reports a hundred errors in third-party code and none of them here.
+    "maxNodeModuleJsDepth": 0,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,

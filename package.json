@@ -5,10 +5,12 @@
   "description": "No build. This file exists so Node treats the .js files as the ES modules they already are, to pin @types/node so the tests can be typechecked, and to pin playwright for the browser smoke test. Nothing is bundled or compiled, no dependency is shipped, and the site is still plain files served as-is.",
   "scripts": {
     "test": "node --test tests/*.test.js",
+    "pretest:browser": "npm install --no-audit --no-fund && npx playwright install chromium",
     "test:browser": "node --test tests/browser/*.test.js",
     "lint": "npx -y oxlint@1 --deny-warnings -A all -D correctness -D eqeqeq -D no-var -D prefer-const -D no-self-compare -D no-template-curly-in-string -D require-await js/ tests/ index.js",
     "format": "npx -y prettier@3 --write .",
     "format:check": "npx -y prettier@3 --check .",
+    "pretypecheck": "npm install --no-audit --no-fund",
     "typecheck": "npx -y -p typescript@5 tsc -p jsconfig.json"
   },
   "devDependencies": {

@@ -33,9 +33,11 @@ headless Chromium to check each map actually paints and that nothing errors. It
 needs an install, so it is kept separate from `npm test`:
 
 ```sh
-npm ci && npx playwright install chromium
 npm run test:browser
 ```
+
+That installs its own dependencies first, downloading Chromium the first time,
+which is slow. Everything after the first run is fast.
 
 ### Formatting
 
@@ -54,9 +56,16 @@ and deleting `jsconfig.json` and `types/` would leave the site working exactly
 as it does now.
 
 ```sh
-npm ci && npm run typecheck
+npm run typecheck
 ```
 
-The one dependency is `@types/node`, needed to check the tests. It is type
-declarations rather than code: nothing from `node_modules` is imported, served
-or deployed.
+It installs what it needs first, so it is clean from a fresh clone. Skipping
+that install does not merely skip a check — it makes `tsc` report errors in
+files that are not this project's, because `@types/node` is missing and
+TypeScript resolves the missing packages by walking up to whatever
+`node_modules` it can find above the repository.
+
+The dependencies are `@types/node`, needed to check the tests, and `playwright`,
+needed to check the browser smoke test. Both are type declarations as far as
+this project is concerned: nothing from `node_modules` is imported by the site,
+served or deployed.
