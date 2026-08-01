@@ -18,9 +18,9 @@ export function createPopupHtml(state, data, bubble) {
       // Relationship 3 is "activity", which gets its own native/non-native split.
       return type === "relationship" && num === 3
         ? createActivePopupHtml(data, bubble)
-        : createPlacesPopupHtml(state, data, bubble);
+        : createPlacesPopupHtml(state, data, bubble, type, num);
     case "geoimaginaryMode":
-      return createGeoImaginaryPopupHtml(state, data, bubble);
+      return createGeoImaginaryPopupHtml(state, data, bubble, type, num);
     case "travelMode":
       // The travel map draws arcs and builds its popups in travelPopups.js.
       throw new Error("createPopupHtml is not used by the travel map");
@@ -90,11 +90,13 @@ function createActivePopupHtml(data, bubble) {
  * @param {State} state
  * @param {Data} data
  * @param {Bubble} bubble
+ * @param {PlacesFilterType} type
+ * @param {number} num
  * @returns {string}
  */
-function createHeader(state, data, bubble) {
+function createHeader(state, data, bubble, type, num) {
   const cityname = bubble.city.infowindowName.toUpperCase();
-  const title = createTitle(state, data, cityname, bubble);
+  const title = createTitle(state, data, cityname, bubble, type, num);
   return `
     <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
     <h5 style="color:${LYRIC_GREY}">${title}</h5>
@@ -105,12 +107,14 @@ function createHeader(state, data, bubble) {
  * @param {State} state
  * @param {Data} data
  * @param {Bubble} bubble
+ * @param {PlacesFilterType} type
+ * @param {number} num
  * @returns {string}
  */
-function createPlacesPopupHtml(state, data, bubble) {
+function createPlacesPopupHtml(state, data, bubble, type, num) {
   const poetCities = bubble.poetCities;
   return `
-    ${createHeader(state, data, bubble)}
+    ${createHeader(state, data, bubble, type, num)}
     ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedListOfPoets(poetCities, data)}
@@ -159,12 +163,14 @@ function createDetailedGeoListOfPoets(poets) {
  * @param {Data} data
  * @param {string} cityname already upper-cased
  * @param {Bubble} bubble
+ * @param {PlacesFilterType} type
+ * @param {number} num
  * @returns {string}
  */
-function createTitle(state, data, cityname, bubble) {
+function createTitle(state, data, cityname, bubble, type, num) {
   switch (state.currentMapMode) {
     case "placesMode":
-      return createPlacesModeTitle(state, data, cityname);
+      return createPlacesModeTitle(data, cityname, type, num);
     case "geoimaginaryMode": {
       const referenceStr = bubble.poetCities.length === 1 ? "REFERENCE" : "REFERENCES";
       return `${bubble.poetCities.length} ${referenceStr} TO ${cityname}`;
@@ -177,13 +183,13 @@ function createTitle(state, data, cityname, bubble) {
 }
 
 /**
- * @param {State} state
  * @param {Data} data
  * @param {string} cityname already upper-cased
+ * @param {PlacesFilterType} type
+ * @param {number} num
  * @returns {string}
  */
-function createPlacesModeTitle(state, data, cityname) {
-  const [type, num] = getPlacesFilter(state);
+function createPlacesModeTitle(data, cityname, type, num) {
   switch (type) {
     case "relationship":
       // Relationship 3 is "activity", which never reaches here: it is handled
@@ -208,13 +214,15 @@ function createPlacesModeTitle(state, data, cityname) {
  * @param {State} state
  * @param {Data} data
  * @param {Bubble} bubble
+ * @param {PlacesFilterType} type
+ * @param {number} num
  * @returns {string}
  */
-function createGeoImaginaryPopupHtml(state, data, bubble) {
+function createGeoImaginaryPopupHtml(state, data, bubble, type, num) {
   // calcBubbles always populates poets in geoimaginaryMode.
   const poets = /** @type {GeoBubblePoet[]} */ (bubble.poets);
   return `
-    ${createHeader(state, data, bubble)}
+    ${createHeader(state, data, bubble, type, num)}
     ${createGeoHeaderListOfPoets(poets)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedGeoListOfPoets(poets)}

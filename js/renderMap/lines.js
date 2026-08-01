@@ -12,8 +12,11 @@ import { assertUnreachable } from "../assertUnreachable.js";
  * @param {State} state
  */
 export function calculateAndDrawLines(map, data, state) {
-  const filteredPoetLines = filterLines(state, data).filter(getDateFilterFn(data, state));
-  const calculatedLines = calculateLines(state, data, filteredPoetLines);
+  // Parsed once here and threaded down. Re-deriving it inside colorLine and
+  // weightLine meant splitting state.selectedId a few hundred times per redraw.
+  const [type, num] = getTravelFilter(state);
+  const filteredPoetLines = filterLines(data, type, num).filter(getDateFilterFn(data, state));
+  const calculatedLines = calculateLines(data, type, num, filteredPoetLines);
   const travelBubbles = calculateTravelBubbles(data, filteredPoetLines);
   drawLines(map, calculatedLines);
   drawBubblesAndLegends(map, travelBubbles);
@@ -21,12 +24,12 @@ export function calculateAndDrawLines(map, data, state) {
 
 /**
  * Narrows every poet line down to those matching the selected radio button.
- * @param {State} state
  * @param {Data} data
+ * @param {TravelFilterType} type
+ * @param {number} num
  * @returns {Line[]}
  */
-function filterLines(state, data) {
-  const [type, num] = getTravelFilter(state);
+function filterLines(data, type, num) {
   switch (type) {
     case "all":
       return data.lines;
@@ -59,14 +62,13 @@ function hashCityIds(from, to) {
 /**
  * Merges every poet line sharing a city pair into a single drawn arc, then
  * colours, weights and builds a popup for each.
- * @param {State} state
  * @param {Data} data
+ * @param {TravelFilterType} type
+ * @param {number} num
  * @param {Line[]} filteredPoetLines
  * @returns {Record<number, DrawnLine>}
  */
-function calculateLines(state, data, filteredPoetLines) {
-  const [type] = getTravelFilter(state);
-
+function calculateLines(data, type, num, filteredPoetLines) {
   /** @type {Record<number, DrawnLine>} */
   const lines = {};
   for (const line of filteredPoetLines) {
@@ -81,12 +83,12 @@ function calculateLines(state, data, filteredPoetLines) {
       lines[hash].name = `${line.bornCity.infowindowName} -> ${line.activeCity.infowindowName}`.toUpperCase();
     }
     lines[hash].poetLines.push(line);
-    colorLine(state, lines[hash]);
+    colorLine(type, num, lines[hash]);
     if (line.dotted) lines[hash].dotted = true;
   }
   for (const hash in lines) {
     const line = lines[hash];
-    weightLine(state, line);
+    weightLine(type, line);
     if (type === "gov") {
       line.popupHtml = createGovTravelPopupHtml(data, line);
     } else {
@@ -98,11 +100,10 @@ function calculateLines(state, data, filteredPoetLines) {
 
 /**
  * Thickens an arc in proportion to how many poets travelled it.
- * @param {State} state
+ * @param {TravelFilterType} type
  * @param {DrawnLine} line mutated in place
  */
-function weightLine(state, line) {
-  const [type] = getTravelFilter(state);
+function weightLine(type, line) {
   const poetsNum = line.poetLines.length;
   let multiplier = 1;
   let increment = 0;
@@ -116,11 +117,11 @@ function weightLine(state, line) {
 /**
  * Recolours an arc when it leaves (purple) or stays within (yellow) whatever is
  * currently selected. Default is red.
- * @param {State} state
+ * @param {TravelFilterType} type
+ * @param {number} num
  * @param {DrawnLine} line mutated in place
  */
-function colorLine(state, line) {
-  const [type, num] = getTravelFilter(state);
+function colorLine(type, num, line) {
   // default color is red
   if (type === "destination") {
     if (line.fromCity.cityId === num) line.color = TRAVEL_PURPLE;

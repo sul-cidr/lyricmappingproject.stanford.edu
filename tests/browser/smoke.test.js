@@ -55,6 +55,29 @@ before(async () => {
   browser = await chromium.launch();
   page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
+  // Count zoomend registrations, to catch the handler-per-redraw leak coming back.
+  await page.addInitScript(() => {
+    const browserWindow = /** @type {any} */ (window);
+    browserWindow.__zoomendRegistrations = 0;
+    /** @type {any} */
+    let leaflet;
+    Object.defineProperty(window, "L", {
+      configurable: true,
+      get: () => leaflet,
+      set: (/** @type {any} */ value) => {
+        leaflet = value;
+        if (value?.Map?.prototype && !value.Map.prototype.__counted) {
+          const on = value.Map.prototype.on;
+          value.Map.prototype.on = function (/** @type {any} */ type, /** @type {any[]} */ ...rest) {
+            if (typeof type === "string" && type.includes("zoomend")) browserWindow.__zoomendRegistrations++;
+            return on.call(this, type, ...rest);
+          };
+          value.Map.prototype.__counted = true;
+        }
+      }
+    });
+  });
+
   // Keep the test hermetic: serve a stub for the basemap tiles and the YouTube
   // embed rather than reaching the network. Fulfilled rather than aborted, so
   // that a blocked request does not itself log a console error and defeat the
@@ -322,5 +345,17 @@ describe("geographical imaginary: specific views", () => {
   test("Alcman's poetic world is 32 places", async () => {
     await select("poet_93");
     assert.equal(await drawnPaths(), 64); // 32 x 2
+  });
+});
+
+describe("redrawing does not leak", () => {
+  test("zoomend is bound once, however many times the map is redrawn", async () => {
+    await mode("placesMode");
+    const before = await page.evaluate(() => /** @type {any} */ (window).__zoomendRegistrations);
+    for (let i = 0; i < 6; i++) await select(i % 2 ? "relationship_1" : "relationship_3");
+    await mode("travelMode");
+    await mode("geoimaginaryMode");
+    await mode("placesMode");
+    assert.equal(await page.evaluate(() => /** @type {any} */ (window).__zoomendRegistrations), before);
   });
 });
