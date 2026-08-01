@@ -4,7 +4,7 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
 /**
  * Builds the html shown when a travel arc is clicked.
  * @param {Data} data
- * @param {DrawnLine} line
+ * @param {TravelArc} line
  * @returns {string}
  */
 export function createTravelPopupHtml(data, line) {
@@ -23,7 +23,7 @@ export function createTravelPopupHtml(data, line) {
 
 /**
  * Renders the citation behind either end of an arc, for every poet on it.
- * @param {DrawnLine} line
+ * @param {TravelArc} line
  * @param {"bornPc" | "activePc"} direction which end of the journey to cite
  * @returns {string}
  */
@@ -44,7 +44,7 @@ function createTravelSource(line, direction) {
  * As createTravelPopupHtml, but the details block reports regimes rather than
  * genres and sources.
  * @param {Data} data
- * @param {DrawnLine} line
+ * @param {TravelArc} line
  * @returns {string}
  */
 export function createGovTravelPopupHtml(data, line) {

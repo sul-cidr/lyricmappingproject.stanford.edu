@@ -8,7 +8,7 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
  * places / geographical-imaginary maps is showing.
  * @param {State} state
  * @param {Data} data
- * @param {Bubble} bubble
+ * @param {BubbleContents} bubble
  * @returns {string}
  */
 export function createPopupHtml(state, data, bubble) {
@@ -32,7 +32,7 @@ export function createPopupHtml(state, data, bubble) {
 /**
  * The ACTIVITY popup, which splits a city's poets into natives and incomers.
  * @param {Data} data
- * @param {Bubble} bubble
+ * @param {BubbleContents} bubble
  * @returns {string}
  */
 function createActivePopupHtml(data, bubble) {
@@ -89,7 +89,7 @@ function createActivePopupHtml(data, bubble) {
 /**
  * @param {State} state
  * @param {Data} data
- * @param {Bubble} bubble
+ * @param {BubbleContents} bubble
  * @param {PlacesFilterType} type
  * @param {number} num
  * @returns {string}
@@ -106,7 +106,7 @@ function createHeader(state, data, bubble, type, num) {
 /**
  * @param {State} state
  * @param {Data} data
- * @param {Bubble} bubble
+ * @param {BubbleContents} bubble
  * @param {PlacesFilterType} type
  * @param {number} num
  * @returns {string}
@@ -162,7 +162,7 @@ function createDetailedGeoListOfPoets(poets) {
  * @param {State} state
  * @param {Data} data
  * @param {string} cityname already upper-cased
- * @param {Bubble} bubble
+ * @param {BubbleContents} bubble
  * @param {PlacesFilterType} type
  * @param {number} num
  * @returns {string}
@@ -213,7 +213,7 @@ function createPlacesModeTitle(data, cityname, type, num) {
 /**
  * @param {State} state
  * @param {Data} data
- * @param {Bubble} bubble
+ * @param {BubbleContents} bubble
  * @param {PlacesFilterType} type
  * @param {number} num
  * @returns {string}
