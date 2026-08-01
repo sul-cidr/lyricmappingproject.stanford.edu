@@ -18,9 +18,9 @@ import { test, describe, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { serveSite } from "./serve.js";
-import { loadInitializedData, stateFor } from "../helpers/loadData.js";
-import { calcPoetCities } from "../../js/renderMap/calcPoetCities.js";
-import { calculateBubbles } from "../../js/renderMap/calcBubbles.js";
+import { loadInitializedData, ALL_DATES } from "../helpers/loadData.js";
+import { calcPlacesPoetCities, calcGeoPoetCities } from "../../js/renderMap/calcPoetCities.js";
+import { calculatePlacesBubbles, calculateGeoBubbles } from "../../js/renderMap/calcBubbles.js";
 
 const { data } = loadInitializedData();
 
@@ -28,15 +28,33 @@ const { data } = loadInitializedData();
 const CIRCLES_PER_BUBBLE = 2;
 
 /**
- * How many bubbles the pure pipeline says a given view should have, counting
+ * How many bubbles the pure pipeline says a places view should have, counting
  * only those with coordinates — drawBubbles() skips the rest.
- * @param {MapMode} currentMapMode
- * @param {string} selectedId
+ * @param {PlacesFilter} filter
  * @returns {number}
  */
-function expectedBubbles(currentMapMode, selectedId) {
-  const state = stateFor(currentMapMode, selectedId);
-  const bubbles = calculateBubbles(state, data, calcPoetCities(data, state));
+function expectedPlacesBubbles(filter) {
+  /** @type {State} */
+  const state = { map: { currentMapMode: "placesMode", filter }, ...ALL_DATES };
+  return drawable(calculatePlacesBubbles(data, filter, calcPlacesPoetCities(data, state, filter)));
+}
+
+/**
+ * As expectedPlacesBubbles, for the geographical imaginary map.
+ * @param {GeoFilter} filter
+ * @returns {number}
+ */
+function expectedGeoBubbles(filter) {
+  /** @type {State} */
+  const state = { map: { currentMapMode: "geoimaginaryMode", filter }, ...ALL_DATES };
+  return drawable(calculateGeoBubbles(data, calcGeoPoetCities(data, state, filter)));
+}
+
+/**
+ * @param {Record<number, Bubble>} bubbles
+ * @returns {number}
+ */
+function drawable(bubbles) {
   return Object.values(bubbles).filter(bubble => bubble.city.lat && bubble.city.long).length;
 }
 
@@ -143,21 +161,21 @@ const popupText = async () => {
 describe("the map paints", () => {
   test("places: activity draws a circle pair for every placed city", async () => {
     await select("relationship_3");
-    assert.equal(await drawnPaths(), expectedBubbles("placesMode", "relationship_3") * CIRCLES_PER_BUBBLE);
+    assert.equal(await drawnPaths(), expectedPlacesBubbles({ type: "relationship", num: 3 }) * CIRCLES_PER_BUBBLE);
   });
 
   test("places: origin draws fewer, since not every city is a birthplace", async () => {
     await select("relationship_1");
     const origin = await drawnPaths();
-    assert.equal(origin, expectedBubbles("placesMode", "relationship_1") * CIRCLES_PER_BUBBLE);
+    assert.equal(origin, expectedPlacesBubbles({ type: "relationship", num: 1 }) * CIRCLES_PER_BUBBLE);
     assert.ok(origin > 0);
-    assert.ok(origin < expectedBubbles("placesMode", "relationship_3") * CIRCLES_PER_BUBBLE);
+    assert.ok(origin < expectedPlacesBubbles({ type: "relationship", num: 3 }) * CIRCLES_PER_BUBBLE);
   });
 
   test("geographical imaginary draws its own, larger set", async () => {
     await page.locator("#geoimaginaryMode").dispatchEvent("click");
     await page.waitForTimeout(600);
-    assert.equal(await drawnPaths(), expectedBubbles("geoimaginaryMode", "all_1") * CIRCLES_PER_BUBBLE);
+    assert.equal(await drawnPaths(), expectedGeoBubbles({ type: "all", num: 1 }) * CIRCLES_PER_BUBBLE);
   });
 
   test("travel draws arcs, not bubbles", async () => {

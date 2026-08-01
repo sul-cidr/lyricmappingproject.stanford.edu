@@ -41,10 +41,10 @@ interface LyricMap {
 // ---------------------------------------------------------------------------
 // CSV-backed entities.
 //
-// Papa Parse hands back every field as a string. initializeData() then mutates
-// the id/lat/long fields in place into numbers. The types below describe the
-// HYDRATED shape, i.e. what the rest of the codebase actually sees; the raw
-// pre-hydration arrays are cast to any[] inside initializeData().
+// Papa Parse hands back every field as a string. hydrate(), in data.js, then
+// parses the id/lat/long fields in place into numbers. The types below describe
+// the HYDRATED shape, i.e. what the rest of the codebase actually sees; the
+// pre-hydration string forms are the Raw* types in types/csv.d.ts.
 // ---------------------------------------------------------------------------
 
 /** A row of dataFiles/cities.csv. */
@@ -145,8 +145,8 @@ interface Genre {
 }
 
 /**
- * Poet metadata copied onto poet-city rows and travel lines by
- * primeObjWithPoetData(), so popups can render without a second lookup.
+ * Poet metadata copied onto poet-city rows and travel lines by poetPrimedData(),
+ * so popups can render without a second lookup.
  */
 interface PoetPrimed {
   poetDetailName: string;
@@ -226,8 +226,8 @@ interface FilterOption {
 }
 
 /**
- * The filter kinds encoded in the first half of State.selectedId, e.g. the
- * "poet" in "poet_93".
+ * The filter kinds encoded in the first half of a control bar radio button's
+ * id, e.g. the "poet" in "poet_93".
  *
  * There are three maps and three sets, overlapping rather than nesting: "poet"
  * is on all three, "all" on geographical imaginary and travel but not places,
@@ -309,23 +309,49 @@ interface DrawableBubble {
 }
 
 /**
- * The rows behind one city's bubble. Split from Bubble because it is all the
- * popup is rendered from, which is what lets calculateBubbles() build a whole
- * Bubble in one go rather than filling an empty one in field by field.
+ * The rows behind one places bubble. Split from PlacesBubble because it is all
+ * the popup is rendered from, which is what lets a whole bubble be built in one
+ * go rather than filled in field by field.
  */
-interface BubbleContents {
+interface PlacesBubbleContents {
   city: City;
   poetCities: RenderedPoetCity[];
-  /** Only populated in geoimaginaryMode. */
-  poets?: GeoBubblePoet[];
 }
 
-/** A circle drawn on the map for one city, with the rows behind its popup. */
-interface Bubble extends BubbleContents, DrawableBubble {}
+/**
+ * The rows behind one geographical imaginary bubble, which additionally groups
+ * them by poet: a poet often names the same place several times, and the popup
+ * lists each poet once with all of their citations.
+ *
+ * `poets` is required here rather than optional on a shared type. It was the
+ * latter, described as "only populated in geoimaginaryMode" — true, but not
+ * something the type said, so the popup that reads it had to cast.
+ */
+interface GeoBubbleContents extends PlacesBubbleContents {
+  poets: GeoBubblePoet[];
+}
+
+/**
+ * A circle drawn on the places map. Unlike a travel bubble it always has a
+ * popup and a label, so both are required.
+ */
+interface PlacesBubble extends PlacesBubbleContents, DrawableBubble {
+  popupHtml: string;
+  legend: string;
+}
+
+/** As PlacesBubble, for the geographical imaginary map. */
+interface GeoBubble extends GeoBubbleContents, DrawableBubble {
+  popupHtml: string;
+  legend: string;
+}
+
+/** A circle on either of the two bubble maps. */
+type Bubble = PlacesBubble | GeoBubble;
 
 /**
  * One drawn arc, merging every Line that shares the same city pair, before its
- * popup is rendered. As BubbleContents, this is everything the popup is built
+ * popup is rendered. As PlacesBubbleContents, this is everything the popup is built
  * from, so the DrawnLine below can be built complete.
  */
 interface TravelArc {

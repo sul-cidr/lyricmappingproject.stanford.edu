@@ -1,36 +1,63 @@
 import { sortAlphabetically } from "../calcData/data.js";
-import { createPopupHtml } from "../popups/popups.js";
+import { createPlacesPopupHtml, createGeoPopupHtml } from "../popups/popups.js";
 
 /**
  * Groups rendered rows by city into one bubble per city, sized by how many
  * poets it holds, and attaches each bubble's popup html.
- * @param {State} state
+ *
+ * One function per map rather than one taking the mode, because the two build
+ * different bubbles: only the geographical imaginary groups its rows by poet.
+ * Returning the narrower type is what lets its popup read `poets` without a
+ * cast asserting that this really was the geographical imaginary after all.
+ * @param {Data} data
+ * @param {PlacesFilter} filter
+ * @param {RenderedPoetCity[]} poetCities
+ * @returns {Record<number, PlacesBubble>}
+ */
+export function calculatePlacesBubbles(data, filter, poetCities) {
+  /** @type {Record<number, PlacesBubble>} */
+  const bubbles = {};
+  for (const [cityId, rows] of groupRowsByCity(data, poetCities)) {
+    /** @type {PlacesBubbleContents} */
+    const contents = { city: data.citiesById[cityId], poetCities: rows };
+    bubbles[cityId] = { ...contents, ...drawnAs(contents, createPlacesPopupHtml(data, contents, filter)) };
+  }
+  return bubbles;
+}
+
+/**
+ * As calculatePlacesBubbles, for the geographical imaginary map.
  * @param {Data} data
  * @param {RenderedPoetCity[]} poetCities
- * @returns {Record<number, Bubble>}
+ * @returns {Record<number, GeoBubble>}
  */
-export function calculateBubbles(state, data, poetCities) {
-  /** @type {Record<number, Bubble>} */
+export function calculateGeoBubbles(data, poetCities) {
+  /** @type {Record<number, GeoBubble>} */
   const bubbles = {};
-
-  for (const [key, rows] of Object.entries(groupRowsByCity(data, poetCities))) {
-    const cityId = Number(key);
-    // The contents are assembled first because the popup is rendered from them,
-    // and from nothing that is added alongside it. That ordering is what lets a
-    // bubble be built complete instead of filled in field by field.
-    /** @type {BubbleContents} */
-    const contents = { city: data.citiesById[cityId], poetCities: rows };
-    if (state.map.currentMapMode === "geoimaginaryMode") contents.poets = groupRowsByPoet(rows);
-
-    bubbles[cityId] = {
-      ...contents,
-      price: calculateBubblePriceFromNumberOfPoets(rows.length),
-      popupHtml: createPopupHtml(state, data, contents),
-      legend: contents.city.cityname
-    };
+  for (const [cityId, rows] of groupRowsByCity(data, poetCities)) {
+    /** @type {GeoBubbleContents} */
+    const contents = { city: data.citiesById[cityId], poetCities: rows, poets: groupRowsByPoet(rows) };
+    bubbles[cityId] = { ...contents, ...drawnAs(contents, createGeoPopupHtml(contents)) };
   }
-
   return bubbles;
+}
+
+/**
+ * What every bubble gets once its contents are known: the size it is drawn at,
+ * the popup it opens and the label beneath it.
+ *
+ * Taken as an argument rather than rendered here, because the popup is the one
+ * thing the two maps do not share.
+ * @param {PlacesBubbleContents} contents
+ * @param {string} popupHtml
+ * @returns {{ price: number, popupHtml: string, legend: string }}
+ */
+function drawnAs(contents, popupHtml) {
+  return {
+    price: calculateBubblePriceFromNumberOfPoets(contents.poetCities.length),
+    popupHtml,
+    legend: contents.city.cityname
+  };
 }
 
 /**
@@ -38,7 +65,7 @@ export function calculateBubbles(state, data, poetCities) {
  * from cities.csv.
  * @param {Data} data
  * @param {RenderedPoetCity[]} poetCities
- * @returns {Record<number, RenderedPoetCity[]>}
+ * @returns {[number, RenderedPoetCity[]][]}
  */
 function groupRowsByCity(data, poetCities) {
   /** @type {Record<number, RenderedPoetCity[]>} */
@@ -49,7 +76,7 @@ function groupRowsByCity(data, poetCities) {
     if (!rowsByCity[cityId]) rowsByCity[cityId] = [];
     rowsByCity[cityId].push(poetCity);
   }
-  return rowsByCity;
+  return Object.entries(rowsByCity).map(([cityId, rows]) => [Number(cityId), rows]);
 }
 
 /**

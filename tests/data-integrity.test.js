@@ -617,7 +617,7 @@ describe("known data bugs: rows that never reach the map", () => {
     const orphans = raw.geopoetCities.filter(row => filled(row.cityId) && !cityIds.has(id(row.cityId)));
     assert.equal(orphans.length, 13);
     assert.equal(new Set(orphans.map(row => id(row.cityId))).size, 12);
-    // calculateBubbles() skips any row whose cityId does not resolve, so these
+    // The bubble builders skip any row whose cityId does not resolve, so these
     // citations are researched, translated, cited — and render nowhere.
     //
     // Three are locatable in Pleiades:
