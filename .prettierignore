@@ -5,6 +5,13 @@
 # The data. Prettier has no CSV formatter, and these are edited in spreadsheets.
 dataFiles/
 
+# Transcribed minutes and research notes, kept as they were written. Reflowing
+# them would put this repository's line-length preferences into someone else's
+# words. notes/README.md is ours, so it is formatted.
+notes/corrections-2015-12.md
+notes/minutes/
+notes/research/
+
 # Generated.
 node_modules/
 package-lock.json
