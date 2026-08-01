@@ -75,7 +75,7 @@ function hashCityIds(from, to) {
  * @returns {Record<number, DrawnLine>}
  */
 function calculateLines(state, data, filteredPoetLines) {
-  const [type, num] = getTravelFilter(state);
+  const [type] = getTravelFilter(state);
 
   /** @type {Record<number, DrawnLine>} */
   const lines = {}
@@ -91,7 +91,7 @@ function calculateLines(state, data, filteredPoetLines) {
       lines[hash].name = (`${line.bornCity.infowindowName} -> ${line.activeCity.infowindowName}`).toUpperCase();
     }
     lines[hash].poetLines.push(line);
-    colorLine(state, data, lines[hash]);
+    colorLine(state, lines[hash]);
     if (line.dotted) lines[hash].dotted = true;
   }
   for (const hash in lines) {
@@ -112,7 +112,7 @@ function calculateLines(state, data, filteredPoetLines) {
  * @param {DrawnLine} line mutated in place
  */
 function weightLine(state, line) {
-  const [type, num] = getTravelFilter(state);
+  const [type] = getTravelFilter(state);
   const poetsNum = line.poetLines.length;
   let multiplier = 1;
   let increment = 0;
@@ -127,10 +127,9 @@ function weightLine(state, line) {
  * Recolours an arc when it leaves (purple) or stays within (yellow) whatever is
  * currently selected. Default is red.
  * @param {State} state
- * @param {Data} data
  * @param {DrawnLine} line mutated in place
  */
-function colorLine(state, data, line) {
+function colorLine(state, line) {
   const [type, num] = getTravelFilter(state);
   // default color is red
   if (type === "destination") {

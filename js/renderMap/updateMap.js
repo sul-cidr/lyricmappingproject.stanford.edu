@@ -26,8 +26,8 @@ export function updateMap(map, data, state) {
     default:
       assertUnreachable(state.currentMapMode, "unrecognized map mode");
   }
-  // uncomment following line to run accessibility checks while playing with the map
-  // runAxe();
+  // axe-core is loaded globally by index.html, so accessibility can be checked
+  // from the devtools console at any point: await axe.run()
 }
 
 /** @param {LyricMap} map */
@@ -35,18 +35,4 @@ function clearMap(map) {
   map.bubbleLayerGroup.clearLayers();
   map.legendLayerGroup.clearLayers();
   map.lineLayerGroup.clearLayers();
-}
-
-// Dev helper: see the commented-out call in updateMap above.
-function runAxe() {
-  axe
-    .run()
-    .then((/** @type {any} */ results) => {
-      if (results.violations.length) {
-        throw new Error('Accessibility issues found');
-      }
-    })
-    .catch((/** @type {any} */ err) => {
-      console.error('Something bad happened:', err.message);
-    });
 }
