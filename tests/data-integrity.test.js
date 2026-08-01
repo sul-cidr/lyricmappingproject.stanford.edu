@@ -59,7 +59,7 @@ const KNOWN_ORPHAN_GENRE_POET_IDS = new Set([14, 31, 33, 113]);
 /**
  * Rows whose cityname label does not match the cities.csv entry they point at,
  * as [cityId, label]. Most are harmless spelling variants (Aegina/Aigina,
- * Ceos/Ioulis). The four marked BUG are different places entirely.
+ * Ceos/Ioulis). The three marked BUG are different places entirely.
  */
 const ACCEPTED_CITY_LABEL_VARIANTS = [
   [17, "Megara (Attic)"],
@@ -87,7 +87,6 @@ const ACCEPTED_CITY_LABEL_VARIANTS = [
   [216, "Parnassus"],
   [218, "Plataea"],
   [219, "Mt. Ptoïon"],
-  [240, "Thrace"], // BUG: plotted on Priapus. Every other Thrace reference uses cityId 129.
   [254, "Camarina"], // BUG: plotted on Erythrae in Ionia. Camarina is in Sicily.
   [254, "Ionian Erythrae"],
   [255, "Cyrene"], // BUG: plotted on Phocaea in Ionia. Cyrene is in Libya.
@@ -565,18 +564,6 @@ describe("known data bugs: places plotted in the wrong location", () => {
       134,
       "the same fragment also refers to Aetolia itself"
     );
-  });
-
-  test("BUG: one Adespota reference to Thrace is plotted on Priapus", () => {
-    const thrace = raw.geopoetCities.filter(row => row.cityname === "Thrace");
-    const wrong = thrace.filter(row => id(row.cityId) === 240);
-    const right = thrace.filter(row => id(row.cityId) === 129);
-    assert.equal(wrong.length, 1);
-    assert.equal(wrong[0].poetname, "Adespota");
-    assert.ok(right.length >= 10, "every other Thrace reference uses cityId 129");
-    assert.equal(cityById(240).cityname, "Priapus");
-    assert.equal(cityById(129).cityname, "Thrace");
-    // This one needs no new city: repoint the Adespota row from 240 to 129.
   });
 });
 
