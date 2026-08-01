@@ -11,7 +11,11 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "allowJs": true
+    "allowJs": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "index.js",
