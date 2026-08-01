@@ -1,7 +1,6 @@
 // The control bar is plain HTML built as strings, so a radio button's id is the
-// only thing tying a click back to a filter. That id is `${prefix}_${num}`, it
-// becomes state.selectedId, and getPlacesFilter() / getTravelFilter() parse it
-// back apart.
+// only thing tying a click back to a filter. That id is `${prefix}_${num}`, and
+// mapStateFrom() parses it back apart into the filter its map is showing.
 //
 // The prefix is therefore typed rather than a bare string: misspell one here and
 // it stops compiling, instead of producing a button that alerts when clicked.

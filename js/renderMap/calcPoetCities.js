@@ -5,39 +5,19 @@ import { getDateFilterFn } from "./calcCommon.js";
 /** @typedef {PoetCity | GeoPoetCity} AnyPoetCity */
 
 /**
- * Picks the right source rows for the current map, applies the date slider and
- * control-bar filters, and flattens the survivors for rendering.
+ * Applies the date slider and the selected places filter, and flattens the
+ * survivors for rendering.
  *
- * The two maps are handled apart rather than together, because they do not
- * offer the same filters: places has ORIGIN, ACTIVITY and the genres,
- * geographical imaginary has ALL REFERENCES. They share only "poet".
- * @param {Data} data
- * @param {State} state
- * @returns {RenderedPoetCity[]}
- */
-export function calcPoetCities(data, state) {
-  const mapState = state.map;
-  switch (mapState.currentMapMode) {
-    case "placesMode":
-      return calcPlacesPoetCities(data, state, mapState.filter);
-    case "geoimaginaryMode":
-      return calcGeoPoetCities(data, state, mapState.filter);
-    case "travelMode":
-      // The travel map draws arcs rather than bubbles, and calculates them in
-      // lines.js. Nothing routes it here.
-      throw new Error("calcPoetCities is not used by the travel map");
-    default:
-      return assertUnreachable(mapState, "unrecognized current map mode");
-  }
-}
-
-/**
+ * Exported alongside calcGeoPoetCities() rather than behind one function that
+ * switched on the map mode. That switch needed a third branch for the travel
+ * map, which draws arcs rather than bubbles and never called it, so the branch
+ * could only throw.
  * @param {Data} data
  * @param {State} state
  * @param {PlacesFilter} filter
  * @returns {RenderedPoetCity[]}
  */
-function calcPlacesPoetCities(data, state, filter) {
+export function calcPlacesPoetCities(data, state, filter) {
   const { type, num } = filter;
   const dated = data.poetCities.filter(getDateFilterFn(data, state));
 
@@ -47,12 +27,13 @@ function calcPlacesPoetCities(data, state, filter) {
 }
 
 /**
+ * As calcPlacesPoetCities, for the geographical imaginary map's rows.
  * @param {Data} data
  * @param {State} state
  * @param {GeoFilter} filter
  * @returns {RenderedPoetCity[]}
  */
-function calcGeoPoetCities(data, state, filter) {
+export function calcGeoPoetCities(data, state, filter) {
   const dated = data.geopoetCities.filter(getDateFilterFn(data, state));
 
   return dated.filter(getGeoFilterFn(filter.type, filter.num)).map(poetCity => renderPoetCity(poetCity));

@@ -93,9 +93,9 @@ function hydrate(raw) {
  */
 function createLookups(csvs) {
   return {
-    citiesById: keyById(csvs.cities, city => city.cityId),
-    poetsById: keyById(csvs.poets, poet => poet.poetId),
-    regionsById: keyById(csvs.regions, region => region.regionId),
+    citiesById: keyById(csvs.cities, city => city.cityId, identity),
+    poetsById: keyById(csvs.poets, poet => poet.poetId, identity),
+    regionsById: keyById(csvs.regions, region => region.regionId, identity),
     genresByPoetId: groupById(csvs.genres, genre => genre.poetId, identity),
     genresByGenreId: createGenresByGenreId(csvs.genres),
     govsByCityId: groupById(csvs.cityPolitics, cityPolitics => cityPolitics.cityId, identity),
@@ -153,14 +153,14 @@ function identity(value) {
  * @template T, V
  * @param {T[]} rows
  * @param {(row: T) => number} idOf
- * @param {(row: T) => V} [valueOf] defaults to the row itself
+ * @param {(row: T) => V} valueOf pass identity to key the rows themselves
  * @returns {Record<number, V>}
  */
 function keyById(rows, idOf, valueOf) {
   /** @type {Record<number, V>} */
   const byId = {};
   for (const row of rows) {
-    byId[idOf(row)] = valueOf ? valueOf(row) : /** @type {any} */ (row);
+    byId[idOf(row)] = valueOf(row);
   }
   return byId;
 }

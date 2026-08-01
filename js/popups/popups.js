@@ -3,39 +3,36 @@ import { assertUnreachable } from "../assertUnreachable.js";
 import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
 /**
- * Builds the html shown when a city bubble is clicked, for whichever of the
- * places / geographical-imaginary maps is showing.
- * @param {State} state
+ * Builds the html shown when a city bubble on the places map is clicked.
+ *
+ * Entered directly by calculatePlacesBubbles() rather than through a function
+ * that switched on the map mode. That switch had a branch for the travel map,
+ * which draws arcs and builds its popups in travelPopups.js, so it could only
+ * throw.
  * @param {Data} data
- * @param {BubbleContents} bubble
+ * @param {PlacesBubbleContents} bubble
+ * @param {PlacesFilter} filter
  * @returns {string}
  */
-export function createPopupHtml(state, data, bubble) {
-  const mapState = state.map;
-  switch (mapState.currentMapMode) {
-    case "placesMode": {
-      const { type, num } = mapState.filter;
-      // Relationship 3 is "activity", which gets its own native/non-native split.
-      return type === "relationship" && num === 3
-        ? createActivePopupHtml(data, bubble)
-        : createPlacesPopupHtml(data, bubble, type, num);
-    }
-    case "geoimaginaryMode":
-      // Its title counts references rather than naming a filter, so unlike the
-      // places map it does not need to know which button is selected.
-      return createGeoImaginaryPopupHtml(bubble);
-    case "travelMode":
-      // The travel map draws arcs and builds its popups in travelPopups.js.
-      throw new Error("createPopupHtml is not used by the travel map");
-    default:
-      return assertUnreachable(mapState, "unrecognized map mode");
-  }
+export function createPlacesPopupHtml(data, bubble, filter) {
+  const { type, num } = filter;
+  // Relationship 3 is "activity", which gets its own native/non-native split.
+  if (type === "relationship" && num === 3) return createActivePopupHtml(data, bubble);
+
+  const cityname = bubble.city.infowindowName.toUpperCase();
+  const poetCities = bubble.poetCities;
+  return `
+    ${createHeader(cityname, createPlacesModeTitle(data, cityname, type, num))}
+    ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
+    <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
+    ${createDetailedListOfPoets(poetCities, data)}
+  `;
 }
 
 /**
  * The ACTIVITY popup, which splits a city's poets into natives and incomers.
  * @param {Data} data
- * @param {BubbleContents} bubble
+ * @param {PlacesBubbleContents} bubble
  * @returns {string}
  */
 function createActivePopupHtml(data, bubble) {
@@ -98,24 +95,6 @@ function createHeader(cityname, title) {
   return `
     <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
     <h5 style="color:${LYRIC_GREY}">${title}</h5>
-  `;
-}
-
-/**
- * @param {Data} data
- * @param {BubbleContents} bubble
- * @param {PlacesFilterType} type
- * @param {number} num
- * @returns {string}
- */
-function createPlacesPopupHtml(data, bubble, type, num) {
-  const cityname = bubble.city.infowindowName.toUpperCase();
-  const poetCities = bubble.poetCities;
-  return `
-    ${createHeader(cityname, createPlacesModeTitle(data, cityname, type, num))}
-    ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
-    <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
-    ${createDetailedListOfPoets(poetCities, data)}
   `;
 }
 
@@ -185,18 +164,23 @@ function createPlacesModeTitle(data, cityname, type, num) {
 }
 
 /**
- * @param {BubbleContents} bubble
+ * Builds the html shown when a city bubble on the geographical imaginary map is
+ * clicked. Its title counts references rather than naming a filter, so unlike
+ * the places map it never needs to know which button is selected.
+ *
+ * `bubble.poets` is read straight off a GeoBubbleContents. It used to be an
+ * optional field on a type shared with the places map, so this was the one
+ * place left that had to cast.
+ * @param {GeoBubbleContents} bubble
  * @returns {string}
  */
-function createGeoImaginaryPopupHtml(bubble) {
+export function createGeoPopupHtml(bubble) {
   const cityname = bubble.city.infowindowName.toUpperCase();
-  // calcBubbles always populates poets in geoimaginaryMode.
-  const poets = /** @type {GeoBubblePoet[]} */ (bubble.poets);
   const referenceStr = bubble.poetCities.length === 1 ? "REFERENCE" : "REFERENCES";
   return `
     ${createHeader(cityname, `${bubble.poetCities.length} ${referenceStr} TO ${cityname}`)}
-    ${createGeoHeaderListOfPoets(poets)}
+    ${createGeoHeaderListOfPoets(bubble.poets)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
-    ${createDetailedGeoListOfPoets(poets)}
+    ${createDetailedGeoListOfPoets(bubble.poets)}
   `;
 }
