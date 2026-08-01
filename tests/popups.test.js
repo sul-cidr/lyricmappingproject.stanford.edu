@@ -60,6 +60,18 @@ function popupFor(bubbles, cityname) {
   return bubble.popupHtml;
 }
 
+/**
+ * One bubble set per map view, for the sweeps that assert something no popup
+ * anywhere should contain.
+ * @type {[string, Record<number, Bubble>][]}
+ */
+const ALL_VIEWS = [
+  ["places/origin", placesBubblesFor({ type: "relationship", num: 1 })],
+  ["places/activity", placesBubblesFor({ type: "relationship", num: 3 })],
+  ["places/genre", placesBubblesFor({ type: "genre", num: 2 })],
+  ["geographical imaginary", geoBubblesFor({ type: "all", num: 1 })]
+];
+
 describe("places map: origin", () => {
   const bubbles = placesBubblesFor({ type: "relationship", num: 1 });
 
@@ -175,21 +187,43 @@ describe("travel map", () => {
   });
 });
 
+describe("citation credits", () => {
+  // Pindar's ode titles are entered with the translation but no translator, as
+  // the December 2015 corrections in notes/corrections-2015-12.md ask for:
+  // "In these cases we do not need to say whose the translation is (Race etc)."
+  const bubbles = placesBubblesFor({ type: "relationship", num: 3 });
+
+  test("a title with no translator is printed without an empty credit", () => {
+    const aitna = popupFor(bubbles, "Aitna");
+    assert.match(aitna, /Citation: P\. 1 Title: "FOR HIERON OF AETNA"<br>/);
+    assert.doesNotMatch(aitna, /trans\./, "the Aetna title has no translator, so it should carry no credit");
+  });
+
+  test("a translation that has a translator still credits them", () => {
+    assert.match(popupFor(bubbles, "Locri"), /Citation: O\. 10 Title: ".*" \(trans\. Race\)<br>/);
+  });
+});
+
 describe("popup html is well formed enough to render", () => {
   test("no popup leaks 'undefined' or 'NaN' into the page", () => {
-    /** @type {[string, Record<number, Bubble>][]} */
-    const VIEWS = [
-      ["places/origin", placesBubblesFor({ type: "relationship", num: 1 })],
-      ["places/activity", placesBubblesFor({ type: "relationship", num: 3 })],
-      ["places/genre", placesBubblesFor({ type: "genre", num: 2 })],
-      ["geographical imaginary", geoBubblesFor({ type: "all", num: 1 })]
-    ];
-    for (const [view, bubbles] of VIEWS) {
+    for (const [view, bubbles] of ALL_VIEWS) {
       for (const bubble of Object.values(bubbles)) {
         const html = bubble.popupHtml;
         const cityname = bubble.city.cityname;
         assert.doesNotMatch(html, /undefined/, `${view} popup for ${cityname} contains "undefined"`);
         assert.doesNotMatch(html, /NaN/, `${view} popup for ${cityname} contains "NaN"`);
+      }
+    }
+  });
+
+  test("no popup renders an empty translator credit", () => {
+    for (const [view, bubbles] of ALL_VIEWS) {
+      for (const bubble of Object.values(bubbles)) {
+        assert.doesNotMatch(
+          bubble.popupHtml,
+          /\(trans\. \)/,
+          `${view} popup for ${bubble.city.cityname} credits nobody in a "(trans. )"`
+        );
       }
     }
   });

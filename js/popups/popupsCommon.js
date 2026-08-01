@@ -73,10 +73,13 @@ function createGenreString(lookups, poetId) {
  */
 export function renderReference(reference) {
   if (reference) {
-    let source_poem = "";
-    if (reference.source_poem) source_poem = `${reference.source_poem}.`;
+    const source_poem = reference.source_poem ? `${reference.source_poem}.` : "";
+    // Pindar's ode titles carry no translator on purpose: the December 2015
+    // corrections in notes/corrections-2015-12.md ask for the title without a
+    // credit. Printing the parenthesis anyway left "(trans. )" on the page.
+    const translator = reference.source_translator ? ` (trans. ${reference.source_translator})` : "";
     return `
-    Citation: ${source_poem}${reference.source_citation}: "${reference.source_translation}" (trans. ${reference.source_translator})<br>
+    Citation: ${source_poem}${reference.source_citation}: "${reference.source_translation}"${translator}<br>
     Greek: ${reference.source_greektext}
     `;
   } else {
