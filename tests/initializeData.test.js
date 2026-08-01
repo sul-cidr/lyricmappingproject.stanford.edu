@@ -125,6 +125,7 @@ describe("hydration", () => {
       "govsByCityId",
       "govsById",
       "datesByPoetId",
+      "birthCityIdsByPoetId",
       "linesByPoetId",
       "linesByBornCityId",
       "linesByActiveCityId"
@@ -199,6 +200,22 @@ describe("travel lines", () => {
       "Sparta -> Messenia",
       "Sparta -> Sparta"
     ]);
+  });
+
+  test("birthplaces are counted by city, not by testimonium", () => {
+    // What "See also:" is built from. Tyrtaeus has five rows with
+    // relationshipId 1 and three cities, because three sources call him an
+    // Athenian; the alternatives offered to a reader are places.
+    const birthplaces = (/** @type {string} */ name) =>
+      data.birthCityIdsByPoetId[poetIdByName(name)].map(cityId => data.citiesById[cityId].cityname).sort();
+    assert.deepEqual(birthplaces("Tyrtaeus"), ["Athens", "Miletus", "Sparta"]);
+    assert.deepEqual(birthplaces("Alcman"), ["Sardis", "Sparta"]);
+    assert.deepEqual(birthplaces("Tynnichus"), ["Chalcis"]);
+
+    // The 13 the map has to hedge, out of 93 poets with a birthplace at all.
+    const withBirthplace = Object.values(data.birthCityIdsByPoetId);
+    assert.equal(withBirthplace.length, 93);
+    assert.equal(withBirthplace.filter(cityIds => cityIds.length > 1).length, 13);
   });
 
   test("a poet with two attested birthplaces gets a line from each", () => {

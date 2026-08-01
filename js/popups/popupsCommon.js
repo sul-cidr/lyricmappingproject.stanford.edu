@@ -1,5 +1,5 @@
 import { LYRIC_RED } from "../constants/colors.js";
-import { getGenres, getPoetDisplay } from "../calcData/getters.js";
+import { getGenres, getPoetDisplay, getOtherBirthplaces } from "../calcData/getters.js";
 
 /**
  * Anything a detail paragraph can be rendered from: a rendered poet-city row in
@@ -8,7 +8,12 @@ import { getGenres, getPoetDisplay } from "../calcData/getters.js";
  *
  * A poetId is now the whole of it. The display strings used to be carried on the
  * row as well, which is why this was an intersection with PoetPrimed.
- * @typedef {{ poetId: number, reference?: Reference }} DetailedPoet
+ *
+ * cityId and relationshipId are optional for the same reason the reference is:
+ * a Line has neither, since it is a journey between two cities rather than a
+ * claim about one. They are what renderOtherBirthplaces() needs to tell a
+ * birthplace entry from any other, and a RenderedPoetCity carries both.
+ * @typedef {{ poetId: number, cityId?: number, relationshipId?: RelationshipId, reference?: Reference }} DetailedPoet
  */
 
 /**
@@ -43,11 +48,36 @@ export function createDetailedListOfPoets(poets, data) {
         ${createGenreString(data, poet.poetId)}
         Source(s): ${display.sources}<br>
         ${renderReference(poet.reference)}
+        ${renderOtherBirthplaces(data, poet)}
       </p>
       `;
       })
       .join(" ")}
   `;
+}
+
+/**
+ * "See also: Sardis" under a birthplace whose poet has others attested.
+ *
+ * The CartoDB map derived this in SQL and showed it inside the citation block,
+ * which is how issues #208, #218 and the second half of #257 were closed; the
+ * rewrite dropped it, so the map has been asserting one birthplace per bubble
+ * with nothing to say the sources disagree. Rendered here rather than written
+ * into a notes column so that it cannot fall out of step with the rows it
+ * describes — the note added by hand for #257 overwrote Alcman's citation and
+ * has been wrong ever since.
+ *
+ * Birthplaces only. A place of activity has no alternatives to offer, and a
+ * travel line reaches this without a cityId at all.
+ * @param {Data} data
+ * @param {DetailedPoet} poet
+ * @returns {string}
+ */
+export function renderOtherBirthplaces(data, poet) {
+  if (poet.relationshipId !== 1 || poet.cityId === undefined) return "";
+  const others = getOtherBirthplaces(data, poet.poetId, poet.cityId);
+  if (others.length === 0) return "";
+  return `<br>See also: ${others.join(", ")}`;
 }
 
 /**

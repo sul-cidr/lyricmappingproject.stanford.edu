@@ -84,6 +84,24 @@ describe("places map: origin", () => {
     }
   });
 
+  test("a disputed birthplace names the alternatives", () => {
+    // Issues #208, #218 and the second half of #257, all closed in 2015 by a
+    // derived line in the CartoDB query and all silently reopened when the
+    // rewrite dropped it. The wording is that line's: "See also: " and the
+    // other cities, alphabetically.
+    assert.match(popupFor(bubbles, "Sardis"), /See also: Sparta/);
+    assert.match(popupFor(bubbles, "Sparta"), /See also: Sardis/);
+    // Three sources call Tyrtaeus an Athenian, so the naive version of this
+    // would repeat Athens at Miletus. Places, not testimonia.
+    assert.match(popupFor(bubbles, "Miletus"), /See also: Athens, Sparta/);
+    assert.match(popupFor(bubbles, "Athens"), /See also: Miletus, Sparta/);
+  });
+
+  test("an undisputed birthplace says nothing", () => {
+    // 80 of the 93 poets with a birthplace. Chalcis holds only Tynnichus.
+    assert.doesNotMatch(popupFor(bubbles, "Chalcis"), /See also:/);
+  });
+
   test("popups carry dates, sources and the Greek text of the citation", () => {
     const sardis = popupFor(bubbles, "Sardis");
     assert.match(sardis, /Dates:/);
@@ -172,6 +190,29 @@ describe("travel map", () => {
     assert.match(html, /ORIGIN SOURCE/);
     assert.match(html, /ACTIVITY SOURCE/);
     assert.match(html, /THEBES/);
+  });
+
+  test("an arc out of a disputed origin names the other traditions", () => {
+    // Where the "See also:" line earns the most: an arc asserts a journey out
+    // of one city, and Alcman's Sardis -> Sparta is drawn beside a Sparta ->
+    // Sparta that has no length and cannot be seen. Without this the travel map
+    // shows only the Lydian tradition, and says nothing of the Laconian one.
+    const line = data.lines.find(l => l.bornCity.cityname === "Sardis" && l.activeCity.cityname === "Sparta");
+    assert.ok(line, "expected Alcman's Sardis -> Sparta line");
+    const html = createTravelPopupHtml(data, {
+      fromCity: line.bornCity,
+      toCity: line.activeCity,
+      poetLines: [line],
+      dotted: false,
+      color: "#fc1804",
+      name: "SARDIS -> SPARTA",
+      weight: 3
+    });
+    const origin = html.slice(html.indexOf("ORIGIN SOURCE"), html.indexOf("ACTIVITY SOURCE"));
+    assert.match(origin, /See also: Sparta/);
+    // Only the origin end. The other end is a place of activity, which has no
+    // alternatives to offer.
+    assert.doesNotMatch(html.slice(html.indexOf("ACTIVITY SOURCE")), /See also:/);
   });
 });
 
