@@ -201,14 +201,11 @@ function createGenresByGenreId(data) {
  * @returns {IdNameTuple[]}
  */
 function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
-  return Array
+  /** @type {IdNameTuple[]} */
+  const tuples = Array
     .from(poetIds)
-    .map(poetId => {
-      const poet = getPoet(data, poetId);
-      const poetDetailName = poet.poetDetailName;
-      return /** @type {IdNameTuple} */ ([poetId, poetDetailName]);
-    })
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(poetId => [poetId, getPoet(data, poetId).poetDetailName]);
+  return tuples.sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
 /** @param {Data} data */
@@ -275,13 +272,11 @@ function createTravelCities(data) {
   const cityIds = new Set(
     data.lines.flatMap(line => [line.bornCityId, line.activeCityId])
   );
-  data.travelCities = Array
+  /** @type {IdNameTuple[]} */
+  const tuples = Array
     .from(cityIds)
-    .map(cityId => {
-      const city = getCity(data, cityId);
-      return /** @type {IdNameTuple} */ ([cityId, city.cityname]);
-    })
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(cityId => [cityId, getCity(data, cityId).cityname]);
+  data.travelCities = tuples.sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
 /** @param {Data} data */
@@ -301,10 +296,11 @@ function createRegionsForInterface(data) {
     20, // Thrace
     28 // Troad
   ];
-  data.regionsForInterface = data.regions
+  /** @type {IdNameTuple[]} */
+  const tuples = data.regions
     .filter(region => !regionIdsToOmit.includes(region.regionId))
-    .map(region => /** @type {IdNameTuple} */ ([region.regionId, region.regionname]))
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(region => [region.regionId, region.regionname]);
+  data.regionsForInterface = tuples.sort((a, b) => sortAlphabetically(a[1], b[1]));
 }
 
 /**
@@ -427,10 +423,11 @@ function createGenreIdsWithNames(data) {
     "1", // Diaskeue
     "31" // Possibly lyric
   ]
-  data.genreIdsWithName =
-    Object
-      .keys(data.genresByGenreId)
-      .map((id) => /** @type {[string, string]} */ ([id, data.genresByGenreId[Number(id)]]))
-      .filter(kv => !genresToOmit.includes(kv[0]))
-      .sort((a, b) => sortAlphabetically(a[1], b[1]));
+  /** @type {[string, string][]} */
+  const tuples = Object
+    .keys(data.genresByGenreId)
+    .map((id) => [id, data.genresByGenreId[Number(id)]]);
+  data.genreIdsWithName = tuples
+    .filter(kv => !genresToOmit.includes(kv[0]))
+    .sort((a, b) => sortAlphabetically(a[1], b[1]));
 }

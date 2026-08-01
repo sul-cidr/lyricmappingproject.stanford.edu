@@ -179,11 +179,13 @@ describe("travel map", () => {
 
 describe("popup html is well formed enough to render", () => {
   test("no popup leaks 'undefined' or 'NaN' into the page", () => {
-    for (const [mode, selectedId] of /** @type {[State["currentMapMode"], string][]} */ ([
+    /** @type {[State["currentMapMode"], string][]} */
+    const VIEWS = [
       ["placesMode", "relationship_1"],
       ["placesMode", "relationship_3"],
       ["geoimaginaryMode", "all_1"]
-    ])) {
+    ];
+    for (const [mode, selectedId] of VIEWS) {
       for (const bubble of Object.values(bubblesFor(mode, selectedId))) {
         const html = popupOf(bubble);
         const cityname = bubble.city.cityname;

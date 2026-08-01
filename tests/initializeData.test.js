@@ -62,11 +62,13 @@ describe("hydration", () => {
   });
 
   test("every lookup table is populated", () => {
-    for (const key of /** @type {(keyof Data)[]} */ ([
+    /** @type {(keyof Data)[]} */
+    const LOOKUP_TABLES = [
       "citiesById", "poetsById", "regionsById", "genresByPoetId", "genresByGenreId",
       "govsByCityId", "govsById", "datesByPoetId",
       "linesByPoetId", "linesByBornCityId", "linesByActiveCityId"
-    ])) {
+    ];
+    for (const key of LOOKUP_TABLES) {
       assert.ok(Object.keys(data[key]).length > 0, `${key} is empty`);
     }
   });
@@ -228,10 +230,12 @@ describe("known bugs: derived travel lines", () => {
     // so the map draws the foreign-origin traditions and silently drops the
     // native one. This is the travel-map half of issue #332, and it is worse
     // than the popup wording: the omission cannot be seen at all.
-    for (const [name, invisible, drawn] of /** @type {[string, string, string[]][]} */ ([
+    /** @type {[string, string, string[]][]} */
+    const CASES = [
       ["Alcman", "Sparta", ["Sardis"]],
       ["Corinna", "Thebes", ["Tanagra"]]
-    ])) {
+    ];
+    for (const [name, invisible, drawn] of CASES) {
       const lines = data.linesByPoetId[poetIdByName(name)];
       const visible = lines.filter((l) => l.bornCityId !== l.activeCityId);
       assert.deepEqual(visible.map((l) => l.bornCity.cityname).sort(), drawn,

@@ -1,6 +1,16 @@
 import { createFilterInput, createInputFromTuple } from "./commonInterface.js";
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 
+/** The regimes offered by the political system filter, in display order. */
+/** @type {[number, string][]} */
+const GOVERNMENTS = [
+  [3, "Democracy"],
+  [4, "Kingship"],
+  [7, "Mixed"],
+  [1, "Oligarchy"],
+  [2, "Tyranny"]
+];
+
 /**
  * The control bar for the travel map: poet, city, region, small region and
  * political system.
@@ -75,13 +85,7 @@ export function createTravelInterfaceHtml(data) {
       POLITICAL SYSTEM 
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>/<span style="color:${TRAVEL_YELLOW};">within</span>):
     </div>
-    ${/** @type {[number, string][]} */ ([
-      [3, "Democracy"],
-      [4, "Kingship"],
-      [7, "Mixed"],
-      [1, "Oligarchy"],
-      [2, "Tyranny"]
-    ]).map(tuple => createInputFromTuple(tuple, "gov")).join("")}
+    ${GOVERNMENTS.map(tuple => createInputFromTuple(tuple, "gov")).join("")}
     <div class="picker-label" style="cursor: auto">[Mapping in Progress]</label>		
   </fieldset>
 </div>
