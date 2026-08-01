@@ -12,15 +12,18 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
  * @returns {string}
  */
 export function createPopupHtml(state, data, bubble) {
-  const [type, num] = getPlacesFilter(state);
   switch (state.currentMapMode) {
-    case "placesMode":
+    case "placesMode": {
+      const [type, num] = getPlacesFilter(state);
       // Relationship 3 is "activity", which gets its own native/non-native split.
       return type === "relationship" && num === 3
         ? createActivePopupHtml(data, bubble)
-        : createPlacesPopupHtml(state, data, bubble, type, num);
+        : createPlacesPopupHtml(data, bubble, type, num);
+    }
     case "geoimaginaryMode":
-      return createGeoImaginaryPopupHtml(state, data, bubble, type, num);
+      // Its title counts references rather than naming a filter, so unlike the
+      // places map it does not need to know which button is selected.
+      return createGeoImaginaryPopupHtml(bubble);
     case "travelMode":
       // The travel map draws arcs and builds its popups in travelPopups.js.
       throw new Error("createPopupHtml is not used by the travel map");
@@ -87,16 +90,11 @@ function createActivePopupHtml(data, bubble) {
 }
 
 /**
- * @param {State} state
- * @param {Data} data
- * @param {BubbleContents} bubble
- * @param {PlacesFilterType} type
- * @param {number} num
+ * @param {string} cityname already upper-cased
+ * @param {string} title
  * @returns {string}
  */
-function createHeader(state, data, bubble, type, num) {
-  const cityname = bubble.city.infowindowName.toUpperCase();
-  const title = createTitle(state, data, cityname, bubble, type, num);
+function createHeader(cityname, title) {
   return `
     <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
     <h5 style="color:${LYRIC_GREY}">${title}</h5>
@@ -104,17 +102,17 @@ function createHeader(state, data, bubble, type, num) {
 }
 
 /**
- * @param {State} state
  * @param {Data} data
  * @param {BubbleContents} bubble
  * @param {PlacesFilterType} type
  * @param {number} num
  * @returns {string}
  */
-function createPlacesPopupHtml(state, data, bubble, type, num) {
+function createPlacesPopupHtml(data, bubble, type, num) {
+  const cityname = bubble.city.infowindowName.toUpperCase();
   const poetCities = bubble.poetCities;
   return `
-    ${createHeader(state, data, bubble, type, num)}
+    ${createHeader(cityname, createPlacesModeTitle(data, cityname, type, num))}
     ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedListOfPoets(poetCities, data)}
@@ -159,30 +157,10 @@ function createDetailedGeoListOfPoets(poets) {
 }
 
 /**
- * @param {State} state
- * @param {Data} data
- * @param {string} cityname already upper-cased
- * @param {BubbleContents} bubble
- * @param {PlacesFilterType} type
- * @param {number} num
- * @returns {string}
- */
-function createTitle(state, data, cityname, bubble, type, num) {
-  switch (state.currentMapMode) {
-    case "placesMode":
-      return createPlacesModeTitle(data, cityname, type, num);
-    case "geoimaginaryMode": {
-      const referenceStr = bubble.poetCities.length === 1 ? "REFERENCE" : "REFERENCES";
-      return `${bubble.poetCities.length} ${referenceStr} TO ${cityname}`;
-    }
-    case "travelMode":
-      throw new Error("createTitle is not used by the travel map");
-    default:
-      return assertUnreachable(state.currentMapMode, "unrecognized map mode");
-  }
-}
-
-/**
+ * Names the filter the bubble is being shown under. Exhaustive over the three
+ * filters the places control bar offers, and there is no fourth: the ALL that
+ * used to need a throw here belongs to the geographical imaginary map, which
+ * titles its own popups below.
  * @param {Data} data
  * @param {string} cityname already upper-cased
  * @param {PlacesFilterType} type
@@ -201,28 +179,22 @@ function createPlacesModeTitle(data, cityname, type, num) {
       const genrename = data.genresByGenreId[num].toUpperCase();
       return `POET BORN IN ${cityname} AND ASSOCIATED WITH ${genrename}`;
     }
-    case "all":
-      // Offered by the geographical imaginary control bar, which titles its
-      // popups in createTitle rather than here.
-      throw new Error("the places map has no ALL filter");
     default:
       return assertUnreachable(type, "unrecognized places filter");
   }
 }
 
 /**
- * @param {State} state
- * @param {Data} data
  * @param {BubbleContents} bubble
- * @param {PlacesFilterType} type
- * @param {number} num
  * @returns {string}
  */
-function createGeoImaginaryPopupHtml(state, data, bubble, type, num) {
+function createGeoImaginaryPopupHtml(bubble) {
+  const cityname = bubble.city.infowindowName.toUpperCase();
   // calcBubbles always populates poets in geoimaginaryMode.
   const poets = /** @type {GeoBubblePoet[]} */ (bubble.poets);
+  const referenceStr = bubble.poetCities.length === 1 ? "REFERENCE" : "REFERENCES";
   return `
-    ${createHeader(state, data, bubble, type, num)}
+    ${createHeader(cityname, `${bubble.poetCities.length} ${referenceStr} TO ${cityname}`)}
     ${createGeoHeaderListOfPoets(poets)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedGeoListOfPoets(poets)}
