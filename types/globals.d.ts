@@ -214,6 +214,24 @@ interface GeoPoetCity extends PoetPrimed {
 /** A [id, displayName] pair used to build the radio buttons in the control bar. */
 type IdNameTuple = [number, string];
 
+/**
+ * The filter kinds encoded in the first half of State.selectedId, e.g. the
+ * "poet" in "poet_93".
+ *
+ * Each map offers its own set, and the two overlap rather than nest: "all" and
+ * "poet" appear on both, "genre" only on places, "gov" only on travel. Keeping
+ * them as separate unions lets getPlacesFilter() and getTravelFilter() each
+ * hand back exactly what their map can produce, so consumers switch over four
+ * or six cases with nothing impossible left to handle.
+ */
+type PlacesFilterType = "all" | "relationship" | "poet" | "genre";
+
+/** As PlacesFilterType, for the travel map. */
+type TravelFilterType = "all" | "poet" | "destination" | "smallregion" | "region" | "gov";
+
+/** Any filter kind, whichever map produced it. */
+type MapFilterType = PlacesFilterType | TravelFilterType;
+
 /** One poet's attested movement from one birthplace to one place of activity. */
 interface Line extends PoetPrimed {
   poetId: number;

@@ -7,6 +7,10 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { loadInitializedData } from "./helpers/loadData.js";
 import { sortAlphabetically } from "../js/calcData/data.js";
+import { PLACES_FILTER_TYPES, TRAVEL_FILTER_TYPES } from "../js/calcData/getters.js";
+import { createPlacesInterfaceHtml } from "../js/interface/placesInterface.js";
+import { createTravelInterfaceHtml } from "../js/interface/travelInterface.js";
+import { createGeoImaginaryInterfaceHtml } from "../js/interface/geoImaginaryInterface.js";
 
 const { data, alerts, logs } = loadInitializedData();
 
@@ -240,5 +244,59 @@ describe("known bugs: derived travel lines", () => {
     const tyrtaeus = data.linesByPoetId[poetIdByName("Tyrtaeus")];
     assert.ok(tyrtaeus.some((l) =>
       l.bornCity.cityname === "Sparta" && l.activeCity.cityname !== "Sparta"));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The control bar is HTML strings, and a radio button's id is the only thing
+// tying a click back to a filter. The types stop a prefix being misspelt; these
+// tests stop a map offering a filter it cannot handle, which the types cannot
+// see because both builders take the same MapFilterType.
+// ---------------------------------------------------------------------------
+
+describe("control bar ids round-trip to filters", () => {
+  /** Every `${prefix}_${num}` id in a block of control bar html. */
+  const idsIn = (/** @type {string} */ html) =>
+    [...html.matchAll(/id="([^"]+)"/g)].map(match => match[1]);
+
+  const prefixesIn = (/** @type {string} */ html) =>
+    [...new Set(idsIn(html).map(id => id.split("_")[0]))].sort();
+
+  test("the places control bar offers only places filters", () => {
+    for (const prefix of prefixesIn(createPlacesInterfaceHtml(data))) {
+      assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
+        `the places control bar offers "${prefix}", which getPlacesFilter() rejects`);
+    }
+  });
+
+  test("the geographical imaginary control bar offers only places filters", () => {
+    for (const prefix of prefixesIn(createGeoImaginaryInterfaceHtml(data))) {
+      assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
+        `the geographical imaginary control bar offers "${prefix}", which getPlacesFilter() rejects`);
+    }
+  });
+
+  test("the travel control bar offers only travel filters", () => {
+    for (const prefix of prefixesIn(createTravelInterfaceHtml(data))) {
+      assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ (prefix)),
+        `the travel control bar offers "${prefix}", which getTravelFilter() rejects`);
+    }
+  });
+
+  test("every id parses back to the filter and number it was built from", () => {
+    const html = createPlacesInterfaceHtml(data) + createTravelInterfaceHtml(data)
+      + createGeoImaginaryInterfaceHtml(data);
+    for (const id of idsIn(html)) {
+      const [prefix, num] = id.split("_");
+      assert.ok(prefix.length > 0, `id "${id}" has no filter prefix`);
+      assert.ok(Number.isFinite(parseInt(num)), `id "${id}" has no numeric id`);
+    }
+  });
+
+  test("the default selectedId of each mode is one that mode can handle", () => {
+    // updateMapMode() sets these; they are what the map renders on first paint.
+    assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("relationship")));
+    assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("all")));
+    assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ ("all")));
   });
 });

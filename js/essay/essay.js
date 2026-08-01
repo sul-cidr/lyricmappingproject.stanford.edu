@@ -1,16 +1,21 @@
+import { assertUnreachable } from "../assertUnreachable.js";
+
 /**
  * Fills the overlay panel with either the introduction or the credits.
  * @param {"home" | "credits"} path
  */
 export function createEssay(path) {
-  if (path === "home") {
-    byId("essayContent").innerHTML = createIntroHtml();
-    byId('creditsLink').addEventListener('click', () => createEssay("credits"));
-  } else if (path === "credits") {
-    byId("essayContent").innerHTML = createCreditsHtml();
-    byId("homeLink").addEventListener('click', () => createEssay("home"));
-  } else {
-    alert("unrecognized path in createEssay");
+  switch (path) {
+    case "home":
+      byId("essayContent").innerHTML = createIntroHtml();
+      byId('creditsLink').addEventListener('click', () => createEssay("credits"));
+      break;
+    case "credits":
+      byId("essayContent").innerHTML = createCreditsHtml();
+      byId("homeLink").addEventListener('click', () => createEssay("home"));
+      break;
+    default:
+      assertUnreachable(path, "unrecognized path in createEssay");
   }
 }
 

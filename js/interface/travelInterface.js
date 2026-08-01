@@ -1,4 +1,4 @@
-import { createInput, createInputFromTuple } from "./commonInterface.js";
+import { createFilterInput, createInputFromTuple } from "./commonInterface.js";
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 
 /**
@@ -14,7 +14,7 @@ export function createTravelInterfaceHtml(data) {
       <div class="controlBarLabel">
         MOBILITY
       </div>
-      ${createInput("all_1", "ALL CASES")}
+      ${createFilterInput("all", 1, "ALL CASES")}
     </fieldset>
   </div>
 

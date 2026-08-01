@@ -1,4 +1,5 @@
-import { getMapTypeNum } from "../calcData/getters.js";
+import { getPlacesFilter } from "../calcData/getters.js";
+import { assertUnreachable } from "../assertUnreachable.js";
 import { getDateFilterFn } from "./calcCommon.js";
 
 /** @typedef {PoetCity | GeoPoetCity} AnyPoetCity */
@@ -29,18 +30,15 @@ export function calcPoetCities(data, state) {
  * @returns {AnyPoetCity[]}
  */
 function getPoetCitiesData(data, state) {
-  /** @type {AnyPoetCity[] | undefined} */
-  let poetCitiesData;
-  if (state.currentMapMode === "placesMode" || state.currentMapMode === "travelMode") {
-    poetCitiesData = data.poetCities;
-  } else if (state.currentMapMode === "geoimaginaryMode") {
-    poetCitiesData = data.geopoetCities;
-  } else {
-    alert(`unrecognized current map mode ${state.currentMapMode}`);
+  switch (state.currentMapMode) {
+    case "placesMode":
+    case "travelMode":
+      return [...data.poetCities];
+    case "geoimaginaryMode":
+      return [...data.geopoetCities];
+    default:
+      return assertUnreachable(state.currentMapMode, "unrecognized current map mode");
   }
-  // Cast: the else branch above is unreachable for a valid State, and alerting
-  // then throwing on the spread is the long-standing behaviour.
-  return [.../** @type {AnyPoetCity[]} */ (poetCitiesData)];
 }
 
 /**
@@ -50,34 +48,29 @@ function getPoetCitiesData(data, state) {
  * @returns {PoetCityFilter}
  */
 function getFilterFn(data, state) {
-  const [type, num] = getMapTypeNum(state);
-  /** @type {PoetCityFilter | undefined} */
-  let filterFn;
-  if (type === "all") {
-    filterFn = () => true;
-  }
-  else if (type === "relationship") {
-    if (num === 3) filterFn = () => true;
-    else filterFn = poetCity => poetCity.relationshipId === num;
-  }
-  else if (type === "poet") {
-    filterFn = poetCity => poetCity.poetId === num;
-  }
-  else if (type === "genre") {
-    filterFn = poetCity => {
-      return !!data.genresByPoetId[poetCity.poetId] &&
+  const [type, num] = getPlacesFilter(state);
+  switch (type) {
+    case "all":
+      return () => true;
+    case "relationship":
+      // Relationship 3 is "activity", which every row qualifies for.
+      if (num === 3) return () => true;
+      return poetCity => poetCity.relationshipId === num;
+    case "poet":
+      return poetCity => poetCity.poetId === num;
+    case "genre":
+      return poetCity =>
+        !!data.genresByPoetId[poetCity.poetId] &&
         data
           .genresByPoetId[poetCity.poetId]
           .map(genre => genre.genreId)
           .includes(num) &&
         poetCity.relationshipId === 1;
-    }
-  } else {
-    alert(`${type} not recognized when trying to calculate poet cities`);
+    default:
+      // Exhaustive over PlacesFilterType: add a member without handling it above
+      // and this stops compiling.
+      return assertUnreachable(type, "unrecognized filter when calculating poet cities");
   }
-  // Cast: an unrecognized type alerts and then fails at the .filter() call,
-  // which is the long-standing behaviour.
-  return /** @type {PoetCityFilter} */ (filterFn);
 }
 
 /**
@@ -89,7 +82,7 @@ function getFilterFn(data, state) {
  * @returns {RenderedPoetCity[]}
  */
 function renderPoetCities(filteredPoetCities, data, state) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getPlacesFilter(state);
 
   return filteredPoetCities.map(pc => {
     /** @type {Reference} */

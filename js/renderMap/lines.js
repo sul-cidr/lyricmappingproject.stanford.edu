@@ -1,9 +1,10 @@
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 import { drawLines } from "../drawMap/drawLines.js";
 import { drawBubblesAndLegends } from "../drawMap/drawBubbles.js";
-import { getMapTypeNum } from "../calcData/getters.js";
+import { getTravelFilter } from "../calcData/getters.js";
 import { createTravelPopupHtml, createGovTravelPopupHtml } from "../popups/travelPopups.js";
 import { getDateFilterFn } from "./calcCommon.js";
+import { assertUnreachable } from "../assertUnreachable.js";
 
 /**
  * @param {LyricMap} map
@@ -27,33 +28,32 @@ export function calculateAndDrawLines(map, data, state) {
  * @returns {Line[]}
  */
 function filterLines(state, data) {
-  const [type, num] = getMapTypeNum(state);
-  if (type === "all") {
-    return data.lines;
-  } else if (type === "poet") {
-    return data.lines.filter(line => line.poetId === num);
-  } else if (type === "destination") {
-    return data.lines.filter(line =>
-      line.bornCityId === num || line.activeCityId === num
-    );
-  } else if (type === "smallregion") {
-    return data.lines.filter(line =>
-      line.bornCity.regionId === num || line.activeCity.regionId === num
-    );
-  } else if (type === "region") {
-    return data.lines.filter(line =>
-      line.bornCity.bigRegionId === num || line.activeCity.bigRegionId === num
-    );
-  } else if (type === "gov") {
-    return data.lines.filter(line =>
-      line.bornGovIds.includes(num) || line.activeGovIds.includes(num)
-    );
-  }
-  else {
-    alert(`unrecognized type of map in travel map: <b>${type}</b>`);
-    // Cast: unreachable for a valid State; alerting then failing on the
-    // following .filter() is the long-standing behaviour.
-    return /** @type {Line[]} */ (/** @type {unknown} */ (undefined));
+  const [type, num] = getTravelFilter(state);
+  switch (type) {
+    case "all":
+      return data.lines;
+    case "poet":
+      return data.lines.filter(line => line.poetId === num);
+    case "destination":
+      return data.lines.filter(line =>
+        line.bornCityId === num || line.activeCityId === num
+      );
+    case "smallregion":
+      return data.lines.filter(line =>
+        line.bornCity.regionId === num || line.activeCity.regionId === num
+      );
+    case "region":
+      return data.lines.filter(line =>
+        line.bornCity.bigRegionId === num || line.activeCity.bigRegionId === num
+      );
+    case "gov":
+      return data.lines.filter(line =>
+        line.bornGovIds.includes(num) || line.activeGovIds.includes(num)
+      );
+    default:
+      // Exhaustive over TravelFilterType: add a member without handling it above
+      // and this stops compiling.
+      return assertUnreachable(type, "unrecognized filter in the travel map");
   }
 }
 
@@ -75,7 +75,7 @@ function hashCityIds(from, to) {
  * @returns {Record<number, DrawnLine>}
  */
 function calculateLines(state, data, filteredPoetLines) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getTravelFilter(state);
 
   /** @type {Record<number, DrawnLine>} */
   const lines = {}
@@ -112,7 +112,7 @@ function calculateLines(state, data, filteredPoetLines) {
  * @param {DrawnLine} line mutated in place
  */
 function weightLine(state, line) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getTravelFilter(state);
   const poetsNum = line.poetLines.length;
   let multiplier = 1;
   let increment = 0;
@@ -131,7 +131,7 @@ function weightLine(state, line) {
  * @param {DrawnLine} line mutated in place
  */
 function colorLine(state, data, line) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getTravelFilter(state);
   // default color is red
   if (type === "destination") {
     if (line.fromCity.cityId === num) line.color = TRAVEL_PURPLE;

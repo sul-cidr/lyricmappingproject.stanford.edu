@@ -2,6 +2,7 @@ import { updateMap } from "../renderMap/updateMap.js";
 import { createGeoImaginaryInterfaceHtml } from "./geoImaginaryInterface.js";
 import { createPlacesInterfaceHtml } from "./placesInterface.js";
 import { createTravelInterfaceHtml } from "./travelInterface.js";
+import { assertUnreachable } from "../assertUnreachable.js";
 
 /**
  * Redraws the map whenever a different filter is picked in the control bar.
@@ -43,22 +44,26 @@ export function addMapModeEventListener(map, data, state) {
  * @param {State} state
  */
 export function updateMapMode(map, data, state) {
-  /** @type {string | undefined} */
   let interfaceHtml;
-  if (state.currentMapMode === "placesMode") {
-    interfaceHtml = createPlacesInterfaceHtml(data);
-    state.selectedId = "relationship_3";
-  } else if (state.currentMapMode === "travelMode") {
-    interfaceHtml = createTravelInterfaceHtml(data);
-    state.selectedId = "all_1";
-  } else if (state.currentMapMode === "geoimaginaryMode") {
-    interfaceHtml = createGeoImaginaryInterfaceHtml(data);
-    state.selectedId = "all_1";
-  } else {
-    alert("unrecognized map mode");
+  switch (state.currentMapMode) {
+    case "placesMode":
+      interfaceHtml = createPlacesInterfaceHtml(data);
+      state.selectedId = "relationship_3";
+      break;
+    case "travelMode":
+      interfaceHtml = createTravelInterfaceHtml(data);
+      state.selectedId = "all_1";
+      break;
+    case "geoimaginaryMode":
+      interfaceHtml = createGeoImaginaryInterfaceHtml(data);
+      state.selectedId = "all_1";
+      break;
+    default:
+      // Never returns, so interfaceHtml is known to be set below.
+      assertUnreachable(state.currentMapMode, "unrecognized map mode");
   }
 
-  /** @type {HTMLElement} */ (document.getElementById("poetsSelector")).innerHTML = /** @type {string} */ (interfaceHtml);
+  /** @type {HTMLElement} */ (document.getElementById("poetsSelector")).innerHTML = interfaceHtml;
   /** @type {HTMLInputElement} */ (document.getElementById(state.selectedId)).checked = true;
   updateMap(map, data, state);
 }

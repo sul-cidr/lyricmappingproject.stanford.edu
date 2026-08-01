@@ -1,5 +1,5 @@
 import { LYRIC_GREY, LYRIC_RED } from "../constants/colors.js";
-import { getMapTypeNum } from "../calcData/getters.js";
+import { getPlacesFilter } from "../calcData/getters.js";
 import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
 /**
@@ -11,7 +11,7 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
  * @returns {string | undefined}
  */
 export function createPopupHtml(state, data, bubble) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getPlacesFilter(state);
   if (state.currentMapMode === "placesMode") {
     if (type === "relationship" && num === 3) {
       return createActivePopupHtml(state, data, bubble);
@@ -171,7 +171,7 @@ function createTitle(state, data, cityname, bubble) {
  * @returns {string | undefined}
  */
 function createPlacesModeTitle(state, data, cityname) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getPlacesFilter(state);
   if (type === "relationship" && num === 1) {
     return `POETS BORN IN ${cityname}`;
   } else if (type === "poet") {
