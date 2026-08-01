@@ -93,6 +93,20 @@ describe("hydration", () => {
     }
   });
 
+  test("relationshipId is 1, 2 or 3 on every row", () => {
+    // What RelationshipId claims, asserted against the corpus. The column was
+    // blank on eight rows until those blanks were filled in, and parseInt("") is
+    // NaN — a number that equals nothing, including itself — so those eight
+    // attestations quietly matched no filter and produced no travel line. This
+    // is what stops a blank being reintroduced silently.
+    const counts = { 1: 0, 2: 0, 3: 0 };
+    for (const pc of data.poetCities) {
+      assert.ok(pc.relationshipId in counts, `${pc.poetname} — ${pc.cityname} has relationshipId ${pc.relationshipId}`);
+      counts[pc.relationshipId] += 1;
+    }
+    assert.deepEqual(counts, { 1: 112, 2: 10, 3: 179 });
+  });
+
   test("dates become negative years, so BCE sorts naturally", () => {
     for (const date of data.dates) {
       assert.ok(date.date < 0, `date ${date.date} should be negative (BCE)`);
@@ -153,16 +167,38 @@ describe("date filtering depends on every mapped poet having dates", () => {
 
 describe("travel lines", () => {
   test("one line per (birthplace, place of activity) pair", () => {
+    // Counted over cities rather than rows: poets_cities.csv holds one row per
+    // testimonium, so a relationship attested by three sources is three rows,
+    // and createLines() takes the first of each city.
     const byPoet = new Map();
     for (const pc of data.poetCities) {
-      if (!byPoet.has(pc.poetId)) byPoet.set(pc.poetId, { born: 0, active: 0 });
-      const counts = byPoet.get(pc.poetId);
-      if (pc.relationshipId === 1) counts.born++;
-      else if (pc.relationshipId === 2 || pc.relationshipId === 3) counts.active++;
+      if (!byPoet.has(pc.poetId)) byPoet.set(pc.poetId, { born: new Set(), active: new Set() });
+      const cities = byPoet.get(pc.poetId);
+      if (pc.relationshipId === 1) cities.born.add(pc.cityId);
+      else cities.active.add(pc.cityId);
     }
     let expected = 0;
-    for (const { born, active } of byPoet.values()) expected += born * active;
+    for (const { born, active } of byPoet.values()) expected += born.size * active.size;
     assert.equal(data.lines.length, expected);
+  });
+
+  test("several sources for one relationship make one journey, not several", () => {
+    // Tyrtaeus is the only poet in the corpus attested more than once for the
+    // same relationship: three sources call him an Athenian and four put him at
+    // Sparta. Multiplied out that is 25 lines rather than 6 — and
+    // calculateLines() weights each arc by how many lines it merges, so
+    // Athens -> Sparta would be drawn as though twelve poets had walked it.
+    const tyrtaeus = poetIdByName("Tyrtaeus");
+    assert.equal(data.poetCities.filter(pc => pc.poetId === tyrtaeus).length, 10);
+    const journeys = data.linesByPoetId[tyrtaeus].map(l => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`);
+    assert.deepEqual(journeys.sort(), [
+      "Athens -> Messenia",
+      "Athens -> Sparta",
+      "Miletus -> Messenia",
+      "Miletus -> Sparta",
+      "Sparta -> Messenia",
+      "Sparta -> Sparta"
+    ]);
   });
 
   test("a poet with two attested birthplaces gets a line from each", () => {
@@ -174,12 +210,27 @@ describe("travel lines", () => {
     assert.deepEqual(journeys, ["Sardis -> Sparta", "Sparta -> Sparta"]);
   });
 
+  test("Euripides travels from Salamis as well as from Athens", () => {
+    // poets.csv has called him "Euripides (b.in Salamis)" all along, and the
+    // Life of Euripides row saying so is in poets_cities.csv — but with no
+    // relationshipId, so it produced no line and the map showed him leaving
+    // Athens only.
+    const euripides = poetIdByName("Euripides (b.in Salamis)");
+    const journeys = data.linesByPoetId[euripides].map(l => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`);
+    assert.deepEqual(journeys.sort(), [
+      "Athens -> Ikaros",
+      "Athens -> Macedonia",
+      "Salamis -> Ikaros",
+      "Salamis -> Macedonia"
+    ]);
+  });
+
   test("every line resolves both its cities and carries its citations", () => {
     for (const line of data.lines) {
       assert.ok(line.bornCity, `line for poetId ${line.poetId} has no born city`);
       assert.ok(line.activeCity, `line for poetId ${line.poetId} has no active city`);
       assert.equal(line.bornPc.relationshipId, 1);
-      assert.ok([2, 3].includes(line.activePc.relationshipId));
+      assert.ok(line.activePc.relationshipId === 2 || line.activePc.relationshipId === 3);
     }
   });
 

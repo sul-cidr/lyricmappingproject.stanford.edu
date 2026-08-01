@@ -38,3 +38,12 @@ Aristotle,151,400.00,,
 Aristotle,151,375.00,,
 Aristotle,151,350.00,,
 Aristotle,151,325.00,,
+Tyrtaeus at Messena (Sicily), erased per issue #271 ("Messena (Sicily) - Tyrtaeus - erase this
+location from his activity (it refers to the Pelop. location)"). Issue #272 replaced them with
+the Messenia (region) row from Ath. 14.630f, which is still in poets_cities.csv. These two were
+left in the file with a blank relationshipid rather than deleted, which kept them invisible on
+ORIGIN and travel but still drew Tyrtaeus into the Sicilian ACTIVITY bubble.
+
+removed poets_cities
+Tyrtaeus,145,Messena,49,,,,, (as a general or advisor?),Suda,,Suda T 1206,"χρήσαντος δὲ τοῦ θεοῦ στρατηγὸν παρὰ Ἀθηναίων λαβεῖν, λαμβάνουσι Τυρταῖον τὸν ποιητήν, χωλὸν ἄνδρα· ὃς ἐπ᾿ ἀρετὴν αὐτοὺς παρακαλῶν εἷλε τῷ κ΄ ἔτει τὴν Μεσσήνην. ","and when the god gave them [the Spartans] an oracle to take a general from the Athenians, they took the poet Tyrtaeus, a man who was lame. By exhorting them to valour he captured Messene in the 20th year.",Gerber,,yes
+Tyrtaeus,145,Messena,49,,,,,,Scholiast to Plato,,Schol. Pl. Leg. 1.629a-b,"τοῦτον Λακεδαιμονίοις ἔχρησεν ὁ Ἀπόλλων μεταπέμψασθαι, ὅτε πρὸς Μεσσηνίους εἶχον τὴν μάχην καὶ ἐν ἀπορίᾳ κατέστησαν πολλῇ, ὡς δὴ ἱκανοῦ αὐτοῖς ἐσομένου πρὸς τὸ συνιδεῖν τὸ λυσιτελές· αὐτῷ γὰρ ἐπέτρεψε χρήσασθαι συμβούλῳ.","Apollo gave the Lacedaemonians an oracle to send for him, when they were fighting the Messenians and were in great difficulty, since he would suffice for them to see what was to their advantage. Apollo ordered them to use him as an adviser.",Gerber,,no

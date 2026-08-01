@@ -47,70 +47,58 @@ interface LyricMap {
 // pre-hydration string forms are the Raw* types in types/csv.d.ts.
 // ---------------------------------------------------------------------------
 
+// Each of these extends its Raw counterpart in types/csv.d.ts with the parsed
+// columns omitted and redeclared. So the string columns are not restated here at
+// all: they come from the CSV's own header row, and renaming one in a
+// spreadsheet breaks every reader of the hydrated type, not only the tests that
+// read the file. What is spelled out below is exactly what hydration changes or
+// adds — which is the same list NUMERIC_CSV_FIELDS applies at runtime.
+
 /** A row of dataFiles/cities.csv. */
-interface City {
-  cityname: string;
-  infowindowName: string;
+interface City extends Omit<RawCity, "cityId" | "regionId" | "lat" | "long"> {
   cityId: number;
-  notes: string;
+  regionId: number;
+  /** NaN for the two cities with no coordinates; drawBubbles() skips those. */
   lat: number;
   long: number;
-  region: string;
-  regionId: number;
   /** Added by addBigRegionIdToCities(); absent for cities with no mapped region. */
   bigRegionId?: number;
 }
 
 /** A row of dataFiles/regions.csv. */
-interface Region {
+interface Region extends Omit<RawRegion, "regionId" | "bigRegionId"> {
   regionId: number;
   bigRegionId: number;
-  regionname: string;
 }
 
 /** A row of dataFiles/big_regions.csv. */
-interface BigRegion {
+interface BigRegion extends Omit<RawBigRegion, "regionId"> {
   regionId: number;
-  regionname: string;
 }
 
 /** A row of dataFiles/governments.csv. */
-interface Government {
-  government: string;
+interface Government extends Omit<RawGovernment, "governmentId"> {
   governmentId: number;
 }
 
 /** A row of dataFiles/city_politics.csv: one city's regime at one date. */
-interface CityPolitics {
-  city: string;
+interface CityPolitics extends Omit<RawCityPolitics, "cityId" | "governmentId" | "date"> {
   cityId: number;
-  government: string;
   governmentId: number;
-  "questionable?": string;
   /** Negative for BCE, e.g. -600. */
   date: number;
-  notes: string;
 }
 
 /** A row of dataFiles/dates.csv. */
-interface PoetDate {
-  dates_poetname: string;
+interface PoetDate extends Omit<RawDate, "poetId" | "date"> {
   poetId: number;
   /** Negative for BCE, e.g. -600. */
   date: number;
-  iso_8601: string;
-  notes: string;
 }
 
 /** A row of dataFiles/poets.csv. */
-interface Poet {
-  poetname: string;
-  poetDetailName: string;
+interface Poet extends Omit<RawPoet, "poetId"> {
   poetId: number;
-  sources: string;
-  dates: string;
-  dates_source: string;
-  notes: string;
   /**
    * Added by addDatesToPoets() from dates.csv, and required here even though
    * that function can only set it for poets that have rows in dates.csv.
@@ -127,21 +115,9 @@ interface Poet {
 }
 
 /** A row of dataFiles/genres.csv. */
-interface Genre {
-  genres_poetname: string;
+interface Genre extends Omit<RawGenre, "poetId" | "genreId"> {
   poetId: number;
-  genre: string;
   genreId: number;
-  source_work: string;
-  source_workid: string;
-  source_citation: string;
-  source_greektext: string;
-  source_translation: string;
-  source_translator: string;
-  source_notes: string;
-  source_explicit: string;
-  notes: string;
-  source: string;
 }
 
 /**
@@ -161,56 +137,37 @@ interface PoetDisplay {
   sources: string;
 }
 
+/**
+ * How a poet is attested to relate to a city: 1 = born, 2 = died, 3 = active
+ * there. These are the only three values poets_cities.csv uses, so a comparison
+ * against 4 is now a type error rather than a filter that silently matches
+ * nothing.
+ *
+ * A claim about the data, like Poet.minDate, and enforced the same way: by the
+ * "relationshipId is 1, 2 or 3 on every row" test in
+ * tests/initializeData.test.js.
+ */
+type RelationshipId = 1 | 2 | 3;
+
 /** A row of dataFiles/poets_cities.csv, hydrated. */
-interface PoetCity {
-  poetname: string;
+interface PoetCity extends Omit<RawPoetCity, "poetId" | "cityId" | "relationshipId"> {
   poetId: number;
-  cityname: string;
   cityId: number;
-  /** Human-readable form of relationshipId; often blank in the CSV. */
-  relationship: string;
-  /** 1 = born, 2 = died, 3 = performed. Prefer this over `relationship`. */
-  relationshipId: number;
-  nativeid: string;
-  /** The literal string "dotted", or "". Marks an inferred connection. */
-  dotted: string;
-  notes: string;
-  source_work: string;
-  source_workid: string;
-  source_citation: string;
-  source_greektext: string;
-  source_translation: string;
-  source_translator: string;
-  source_notes: string;
-  source_explicit: string;
+  /** Required: every row of the CSV classifies its attestation. */
+  relationshipId: RelationshipId;
 }
 
 /** A row of dataFiles/geographical_imaginary_group.csv, hydrated. */
-interface GeoPoetCity {
-  imaginaryid: number;
-  poetname: string;
+interface GeoPoetCity extends Omit<RawGeoPoetCity, "poetId" | "cityId" | "imaginaryid"> {
   poetId: number;
-  cityname: string;
   cityId: number;
-  relationship: string;
+  imaginaryid: number;
   /**
-   * Not a column in geographical_imaginary_group.csv, so always undefined here.
-   * Declared so code can read it off either kind of row.
+   * Not a column in geographical_imaginary_group.csv, so always absent here.
+   * Declared, as undefined rather than as a number, so that code reading it off
+   * either kind of row gets RelationshipId | undefined and no more.
    */
-  relationshipId?: number;
-  destination: string;
-  destination_id: string;
-  speaker: string;
-  speakerid: string;
-  notes: string;
-  source_poem: string;
-  source_citation: string;
-  original_source: string;
-  source_greektext: string;
-  source_translation: string;
-  source_translator: string;
-  source_notes: string;
-  source_explicit: string;
+  relationshipId?: undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -292,8 +249,8 @@ interface RenderedPoetCity {
   cityId: number;
   cityname: string;
   poetname: string;
-  /** Undefined for geographical-imaginary rows, which have no relationship. */
-  relationshipId?: number;
+  /** Absent for geographical-imaginary rows, which have no relationship. */
+  relationshipId?: RelationshipId;
   reference: Reference;
 }
 

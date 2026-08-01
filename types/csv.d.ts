@@ -36,9 +36,11 @@ interface RawPoetCity {
   poetId: string;
   cityname: string;
   cityId: string;
+  /** Human-readable form of relationshipId; often blank in the CSV. */
   relationship: string;
   relationshipId: string;
   nativeid: string;
+  /** The literal string "dotted", or "". Marks an inferred connection. */
   dotted: string;
   notes: string;
   source_work: string;
