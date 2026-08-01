@@ -133,7 +133,7 @@ describe("travel lines", () => {
   test("poets with a birthplace but nowhere to go are listed as unknown travel", () => {
     assert.ok(data.poetsWithUnknownTravel.length > 0);
     const travelling = new Set(data.lines.map((l) => l.poetId));
-    for (const [poetId] of data.poetsWithUnknownTravel) {
+    for (const { id: poetId } of data.poetsWithUnknownTravel) {
       assert.ok(!travelling.has(poetId), `poetId ${poetId} both travels and has unknown travel`);
     }
   });
@@ -152,14 +152,14 @@ describe("control bar contents", () => {
   test("Pindar and Bacchylides are excluded from the geographical imaginary", () => {
     // Their geographical imaginary is a pilot of one poem each (Olympian 1 and
     // Ode 17), so they are deliberately kept out of the poet list. See issue #326.
-    const names = data.geoImaginaryPoets.map((t) => t[1]);
+    const names = data.geoImaginaryPoets.map(poet => poet.name);
     assert.ok(!names.includes("Pindar"));
     assert.ok(!names.includes("Bacchylides"));
   });
 
   test("Sappho or Alcaeus sorts last, after the individually named poets", () => {
     const last = data.geoImaginaryPoets[data.geoImaginaryPoets.length - 1];
-    assert.match(last[1], /Sappho/);
+    assert.match(last.name, /Sappho/);
   });
 
   test("every control bar list is sorted and non-empty", () => {
@@ -167,23 +167,23 @@ describe("control bar contents", () => {
       (["travelPoets", "travelCities", "poetsWithUnknownTravel", "regionsForInterface"])) {
       const list = data[key];
       assert.ok(list.length > 0, `${key} is empty`);
-      const names = list.map((t) => t[1]);
+      const names = list.map(option => option.name);
       assert.deepEqual(names, [...names].sort(sortAlphabetically), `${key} is not sorted`);
     }
   });
 
   test("the geographical imaginary poets are sorted apart from Sappho/Alcaeus at the end", () => {
-    const names = data.geoImaginaryPoets.map((t) => t[1]);
+    const names = data.geoImaginaryPoets.map(poet => poet.name);
     assert.ok(names.length > 0);
     const allButLast = names.slice(0, -1);
     assert.deepEqual(allButLast, [...allButLast].sort(sortAlphabetically));
   });
 
   test("every control bar entry points at something real", () => {
-    for (const [poetId] of [...data.travelPoets, ...data.geoImaginaryPoets, ...data.poetsWithUnknownTravel]) {
+    for (const { id: poetId } of [...data.travelPoets, ...data.geoImaginaryPoets, ...data.poetsWithUnknownTravel]) {
       assert.ok(data.poetsById[poetId], `control bar offers unknown poetId ${poetId}`);
     }
-    for (const [cityId] of data.travelCities) {
+    for (const { id: cityId } of data.travelCities) {
       assert.ok(data.citiesById[cityId], `control bar offers unknown cityId ${cityId}`);
     }
   });

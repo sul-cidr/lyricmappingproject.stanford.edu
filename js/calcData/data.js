@@ -198,14 +198,13 @@ function createGenresByGenreId(data) {
 /**
  * @param {Iterable<number>} poetIds
  * @param {Data} data
- * @returns {IdNameTuple[]}
+ * @returns {FilterOption[]}
  */
 function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
-  /** @type {IdNameTuple[]} */
-  const tuples = Array
+  return Array
     .from(poetIds)
-    .map(poetId => [poetId, getPoet(data, poetId).poetDetailName]);
-  return tuples.sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(poetId => ({ id: poetId, name: getPoet(data, poetId).poetDetailName }))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /** @param {Data} data */
@@ -228,18 +227,18 @@ function createGeoImaginaryPoets(data) {
 
   // put sappho / alcaeus at end of array
   const sappAlcPoetId = 157;
-  putPoetIdAtEndOfPoetIdNameTuples(data.geoImaginaryPoets, sappAlcPoetId);
+  putPoetIdAtEnd(data.geoImaginaryPoets, sappAlcPoetId);
 }
 
 /**
- * @param {IdNameTuple[]} array mutated in place
+ * @param {FilterOption[]} array mutated in place
  * @param {number} poetId
  */
-function putPoetIdAtEndOfPoetIdNameTuples(array, poetId) {
+function putPoetIdAtEnd(array, poetId) {
   /** @type {number | undefined} */
   let foundIdx;
   for (let idx = 0; idx < array.length; idx++) {
-    if (array[idx][0] === poetId) {
+    if (array[idx].id === poetId) {
       foundIdx = idx;
       break;
     }
@@ -272,11 +271,10 @@ function createTravelCities(data) {
   const cityIds = new Set(
     data.lines.flatMap(line => [line.bornCityId, line.activeCityId])
   );
-  /** @type {IdNameTuple[]} */
-  const tuples = Array
+  data.travelCities = Array
     .from(cityIds)
-    .map(cityId => [cityId, getCity(data, cityId).cityname]);
-  data.travelCities = tuples.sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(cityId => ({ id: cityId, name: getCity(data, cityId).cityname }))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /** @param {Data} data */
@@ -296,11 +294,10 @@ function createRegionsForInterface(data) {
     20, // Thrace
     28 // Troad
   ];
-  /** @type {IdNameTuple[]} */
-  const tuples = data.regions
+  data.regionsForInterface = data.regions
     .filter(region => !regionIdsToOmit.includes(region.regionId))
-    .map(region => [region.regionId, region.regionname]);
-  data.regionsForInterface = tuples.sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(region => ({ id: region.regionId, name: region.regionname }))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /**
@@ -330,7 +327,7 @@ function createLines(data) {
     if (poet.bornPcs.length === 0 || poet.activePcs.length === 0) {
       const poet = getPoet(data, poetId);
       const poetDetailName = poet.poetDetailName
-      data.poetsWithUnknownTravel.push([poetId, poetDetailName]);
+      data.poetsWithUnknownTravel.push({ id: poetId, name: poetDetailName });
     } else {
       for (const bornPc of poet.bornPcs) {
         for (const activePc of poet.activePcs) {
@@ -371,7 +368,7 @@ function createLines(data) {
       }
     }
   }
-  data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a[1], b[1]));
+  data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /**
@@ -420,14 +417,12 @@ function keyLines(data) {
 /** @param {Data} data */
 function createGenreIdsWithNames(data) {
   const genresToOmit = [
-    "1", // Diaskeue
-    "31" // Possibly lyric
+    1, // Diaskeue
+    31 // Possibly lyric
   ]
-  /** @type {[string, string][]} */
-  const tuples = Object
+  data.genreIdsWithName = Object
     .keys(data.genresByGenreId)
-    .map((id) => [id, data.genresByGenreId[Number(id)]]);
-  data.genreIdsWithName = tuples
-    .filter(kv => !genresToOmit.includes(kv[0]))
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(id => ({ id: Number(id), name: data.genresByGenreId[Number(id)] }))
+    .filter(genre => !genresToOmit.includes(genre.id))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }

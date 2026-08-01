@@ -211,8 +211,19 @@ interface GeoPoetCity extends PoetPrimed {
 // Derived structures, built at runtime.
 // ---------------------------------------------------------------------------
 
-/** A [id, displayName] pair used to build the radio buttons in the control bar. */
-type IdNameTuple = [number, string];
+/**
+ * One option in the control bar: the id it filters by, and the label shown.
+ *
+ * An object rather than an [id, name] tuple. TypeScript widens an array literal
+ * to `(number | string)[]` unless it is given a contextual tuple type, so every
+ * place that built one needed an annotation to say so — and a tuple of two
+ * same-typed values could still be filled in the wrong order silently. Named
+ * fields infer correctly on their own and cannot be transposed.
+ */
+interface FilterOption {
+  id: number;
+  name: string;
+}
 
 /**
  * The filter kinds encoded in the first half of State.selectedId, e.g. the
@@ -352,10 +363,10 @@ interface Data {
   linesByActiveCityId: Record<number, Line[]>;
 
   // control-bar contents
-  genreIdsWithName: [string, string][];
-  geoImaginaryPoets: IdNameTuple[];
-  travelPoets: IdNameTuple[];
-  travelCities: IdNameTuple[];
-  poetsWithUnknownTravel: IdNameTuple[];
-  regionsForInterface: IdNameTuple[];
+  genreIdsWithName: FilterOption[];
+  geoImaginaryPoets: FilterOption[];
+  travelPoets: FilterOption[];
+  travelCities: FilterOption[];
+  poetsWithUnknownTravel: FilterOption[];
+  regionsForInterface: FilterOption[];
 }
