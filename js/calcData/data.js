@@ -1,103 +1,196 @@
 import { getPoet, getCity, getGenres, getGovs } from "./getters.js";
 
 /**
- * Hydrates the raw CSV rows in place (ids and coordinates become numbers, dates
- * become negative years) and builds every derived lookup the map needs.
- * @param {Data} data
+ * Hydrates the raw CSV rows (ids and coordinates become numbers, dates become
+ * negative years) and builds everything the map draws from.
+ *
+ * Assembled and returned rather than written into a bag the caller supplies.
+ * The three stages below are a real dependency order — the lookups are
+ * regroupings of the CSVs, and the travel lines and control bar lists are
+ * derived through those lookups — so each is complete before the next reads it,
+ * and no half-built Data is ever visible.
+ * @param {RawCsvs} raw
+ * @returns {Data}
  */
-export function initializeData(data) {
-  // Papa Parse hands back every field as a string. These arrays are aliased as
-  // any[] for the hydration pass below; everywhere else in the codebase they
-  // are the hydrated types declared in types/globals.d.ts.
-  /** @type {any[]} */ const rawGenres = data.genres;
-  /** @type {any[]} */ const rawCities = data.cities;
-  /** @type {any[]} */ const rawCityPolitics = data.cityPolitics;
-  /** @type {any[]} */ const rawPoetCities = data.poetCities;
-  /** @type {any[]} */ const rawGeopoetCities = data.geopoetCities;
-  /** @type {any[]} */ const rawRegions = data.regions;
-  /** @type {any[]} */ const rawDates = data.dates;
-  /** @type {any[]} */ const rawGovernments = data.governments;
+export function initializeData(raw) {
+  const csvs = hydrate(raw);
+  const lookups = createLookups(csvs);
 
-  rawGenres.forEach(genre => (genre.genreId = parseInt(genre.genreId)));
-  rawCities.forEach(city => (city.cityId = parseInt(city.cityId)));
-  rawCities.forEach(city => (city.regionId = parseInt(city.regionId)));
-  rawCities.forEach(city => (city.lat = parseFloat(city.lat)));
-  rawCities.forEach(city => (city.long = parseFloat(city.long)));
-  rawCityPolitics.forEach(city => (city.cityId = parseInt(city.cityId)));
-  rawCityPolitics.forEach(city => (city.governmentId = parseInt(city.governmentId)));
-  rawCityPolitics.forEach(cp => (cp.date = -1 * parseInt(cp.date)));
-  rawPoetCities.forEach(poetCity => (poetCity.relationshipId = parseInt(poetCity.relationshipId)));
-  rawPoetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
-  rawPoetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
-  rawGeopoetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
-  rawGeopoetCities.forEach(poetCity => (poetCity.imaginaryid = parseInt(poetCity.imaginaryid)));
-  rawGeopoetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
-  rawRegions.forEach(region => (region.regionId = parseInt(region.regionId)));
-  rawRegions.forEach(region => (region.bigRegionId = parseInt(region.bigRegionId)));
-  rawDates.forEach(date => {
-    date.poetId = parseInt(date.poetId);
-    date.date = -1 * parseInt(date.date);
-  });
-  rawGovernments.forEach(gov => (gov.governmentId = parseInt(gov.governmentId)));
+  // Two passes that write back onto the CSV rows, because a row is what the
+  // rest of the code passes around: a city gains its big region, a poet the
+  // range of dates attested for them.
+  addBigRegionIdToCities(csvs, lookups);
+  addDatesToPoets(lookups);
 
-  // create useful maps by key
-  data.citiesById = {};
-  for (const city of data.cities) {
-    data.citiesById[city.cityId] = city;
-  }
-  data.poetsById = {};
-  for (const poet of data.poets) {
-    data.poetsById[poet.poetId] = poet;
-  }
-  data.genresByPoetId = {};
-  for (const genre of data.genres) {
-    if (!data.genresByPoetId[genre.poetId]) {
-      data.genresByPoetId[genre.poetId] = [];
-    }
-    data.genresByPoetId[genre.poetId].push(genre);
-  }
-  data.regionsById = {};
-  for (const region of data.regions) {
-    data.regionsById[region.regionId] = region;
-  }
-  addBigRegionIdToCities(data);
-  addDatesToPoets(data);
+  const derived = derive(csvs, lookups);
 
-  createGovsByCityId(data);
-  createGovsById(data);
-  createGenresByGenreId(data);
-  createGenreIdsWithNames(data);
-  createGeoImaginaryPoets(data);
-  createLines(data);
-  keyLines(data);
-  createTravelPoets(data);
-  createTravelCities(data);
-  createRegionsForInterface(data);
-  // Assigned onto the rows, not built into them, which is the one place this
-  // commit leaves a type ahead of the object it describes.
+  // Assigned onto the rows, not built into them, which is the one place left
+  // where a type runs ahead of the object it describes: until this line, a
+  // PoetCity is missing the four PoetPrimed fields its type says it has.
   //
   // A travel line could be built complete because createLines() makes it. These
-  // rows are made by Papa Parse and mutated in place ever since, and createLines
-  // has already captured these exact objects as bornPc and activePc, so handing
+  // rows are made by Papa Parse and mutated in place ever since, and derive()
+  // above has captured these exact objects as bornPc and activePc, so handing
   // back primed copies would leave those references pointing at the originals.
   //
-  // Until this runs, then, a PoetCity is missing the four PoetPrimed fields its
-  // type says it has. The "every row is primed with its poet's display data"
-  // test in tests/initializeData.test.js is what currently holds that together.
-  data.poetCities.forEach(pc => Object.assign(pc, poetPrimedData(data, pc.poetId)));
-  data.geopoetCities.forEach(pc => Object.assign(pc, poetPrimedData(data, pc.poetId)));
-  sortPoetCities(data, data.poetCities);
-  sortPoetCities(data, data.geopoetCities);
+  // Last, and in this order: createLines() reads poetCities in file order, so
+  // sorting them any earlier would reorder the poets on every travel arc. The
+  // "every row is primed with its poet's display data" test in
+  // tests/initializeData.test.js is what holds the claim above together.
+  for (const pc of [...csvs.poetCities, ...csvs.geopoetCities]) {
+    Object.assign(pc, poetPrimedData(lookups, pc.poetId));
+  }
+  sortPoetCities(lookups, csvs.poetCities);
+  sortPoetCities(lookups, csvs.geopoetCities);
+
+  return { ...csvs, ...lookups, ...derived };
 }
 
 /**
- * @param {Data} data
- * @param {(PoetCity | GeoPoetCity)[]} poetCities
+ * Papa Parse hands back every field as a string. This parses the numeric ones in
+ * place and hands the rows back under their hydrated types, which is the only
+ * form the rest of the codebase ever sees.
+ *
+ * The one cast is that reinterpretation itself: these are the same objects,
+ * described by RawCsvs going in and by Csvs coming out.
+ * @param {RawCsvs} raw
+ * @returns {Csvs}
  */
-function sortPoetCities(data, poetCities) {
+function hydrate(raw) {
+  /** @type {Record<keyof RawCsvs, any[]>} */
+  const rows = raw;
+
+  rows.genres.forEach(genre => (genre.genreId = parseInt(genre.genreId)));
+  rows.cities.forEach(city => (city.cityId = parseInt(city.cityId)));
+  rows.cities.forEach(city => (city.regionId = parseInt(city.regionId)));
+  rows.cities.forEach(city => (city.lat = parseFloat(city.lat)));
+  rows.cities.forEach(city => (city.long = parseFloat(city.long)));
+  rows.cityPolitics.forEach(city => (city.cityId = parseInt(city.cityId)));
+  rows.cityPolitics.forEach(city => (city.governmentId = parseInt(city.governmentId)));
+  rows.cityPolitics.forEach(cp => (cp.date = -1 * parseInt(cp.date)));
+  rows.poetCities.forEach(poetCity => (poetCity.relationshipId = parseInt(poetCity.relationshipId)));
+  rows.poetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
+  rows.poetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
+  rows.geopoetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
+  rows.geopoetCities.forEach(poetCity => (poetCity.imaginaryid = parseInt(poetCity.imaginaryid)));
+  rows.geopoetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
+  rows.regions.forEach(region => (region.regionId = parseInt(region.regionId)));
+  rows.regions.forEach(region => (region.bigRegionId = parseInt(region.bigRegionId)));
+  rows.dates.forEach(date => {
+    date.poetId = parseInt(date.poetId);
+    date.date = -1 * parseInt(date.date);
+  });
+  rows.governments.forEach(gov => (gov.governmentId = parseInt(gov.governmentId)));
+
+  return rows;
+}
+
+/**
+ * The by-id regroupings of the CSVs. Each reads one CSV and nothing else, so
+ * they are all built together, before anything that needs them.
+ * @param {Csvs} csvs
+ * @returns {Lookups}
+ */
+function createLookups(csvs) {
+  return {
+    citiesById: keyById(csvs.cities, city => city.cityId),
+    poetsById: keyById(csvs.poets, poet => poet.poetId),
+    regionsById: keyById(csvs.regions, region => region.regionId),
+    genresByPoetId: groupById(csvs.genres, genre => genre.poetId, identity),
+    genresByGenreId: createGenresByGenreId(csvs.genres),
+    govsByCityId: groupById(csvs.cityPolitics, cityPolitics => cityPolitics.cityId, identity),
+    govsById: keyById(
+      csvs.governments,
+      gov => gov.governmentId,
+      gov => gov.government
+    ),
+    datesByPoetId: groupById(
+      csvs.dates,
+      date => date.poetId,
+      date => date.date
+    )
+  };
+}
+
+/**
+ * The travel lines and the control bar lists. Built in the order they were
+ * before, so that anything they report about bad data is still reported in the
+ * same order.
+ * @param {Csvs} csvs
+ * @param {Lookups} lookups
+ * @returns {Derived}
+ */
+function derive(csvs, lookups) {
+  const genreIdsWithName = createGenreIdsWithNames(lookups);
+  const geoImaginaryPoets = createGeoImaginaryPoets(csvs, lookups);
+  const { lines, poetsWithUnknownTravel } = createLines(csvs, lookups);
+
+  return {
+    genreIdsWithName,
+    geoImaginaryPoets,
+    lines,
+    poetsWithUnknownTravel,
+    linesByPoetId: groupById(lines, line => line.poetId, identity),
+    linesByBornCityId: groupById(lines, line => line.bornCityId, identity),
+    linesByActiveCityId: groupById(lines, line => line.activeCityId, identity),
+    travelPoets: createTravelPoets(lines, lookups),
+    travelCities: createTravelCities(lines, lookups),
+    regionsForInterface: createRegionsForInterface(csvs)
+  };
+}
+
+/**
+ * @template T
+ * @param {T} value
+ * @returns {T}
+ */
+function identity(value) {
+  return value;
+}
+
+/**
+ * The last row wins, as it did when these were written out one loop at a time.
+ * @template T, V
+ * @param {T[]} rows
+ * @param {(row: T) => number} idOf
+ * @param {(row: T) => V} [valueOf] defaults to the row itself
+ * @returns {Record<number, V>}
+ */
+function keyById(rows, idOf, valueOf) {
+  /** @type {Record<number, V>} */
+  const byId = {};
+  for (const row of rows) {
+    byId[idOf(row)] = valueOf ? valueOf(row) : /** @type {any} */ (row);
+  }
+  return byId;
+}
+
+/**
+ * @template T, V
+ * @param {T[]} rows
+ * @param {(row: T) => number} idOf
+ * @param {(row: T) => V} valueOf
+ * @returns {Record<number, V[]>}
+ */
+function groupById(rows, idOf, valueOf) {
+  /** @type {Record<number, V[]>} */
+  const byId = {};
+  for (const row of rows) {
+    const id = idOf(row);
+    if (!byId[id]) byId[id] = [];
+    byId[id].push(valueOf(row));
+  }
+  return byId;
+}
+
+/**
+ * @param {Lookups} lookups
+ * @param {(PoetCity | GeoPoetCity)[]} poetCities mutated in place
+ */
+function sortPoetCities(lookups, poetCities) {
   poetCities.sort((a, b) => {
-    const poetA = getPoet(data, a.poetId);
-    const poetB = getPoet(data, b.poetId);
+    const poetA = getPoet(lookups, a.poetId);
+    const poetB = getPoet(lookups, b.poetId);
     return sortAlphabetically(poetA.poetname, poetB.poetname);
   });
 }
@@ -108,12 +201,12 @@ function sortPoetCities(data, poetCities) {
  *
  * Returned rather than assigned, so a travel line can be built with these fields
  * already on it instead of existing briefly without them.
- * @param {Data} data
+ * @param {Lookups} lookups
  * @param {number} poetId
  * @returns {PoetPrimed}
  */
-function poetPrimedData(data, poetId) {
-  const poet = getPoet(data, poetId);
+function poetPrimedData(lookups, poetId) {
+  const poet = getPoet(lookups, poetId);
 
   let poetDetailName = "";
   if (poet.poetDetailName) poetDetailName = poet.poetDetailName;
@@ -131,7 +224,7 @@ function poetPrimedData(data, poetId) {
     poetDetailName,
     poetDates,
     poetSources,
-    poetGenres: getGenres(data, poetId)
+    poetGenres: getGenres(lookups, poetId)
       .map(genre => genre.genre)
       .join(", ")
   };
@@ -152,58 +245,45 @@ export function sortAlphabetically(a, b) {
   return a < b ? -1 : 1;
 }
 
-/** @param {Data} data */
-function createGovsByCityId(data) {
-  data.govsByCityId = {};
-  for (const cp of data.cityPolitics) {
-    if (!data.govsByCityId[cp.cityId]) data.govsByCityId[cp.cityId] = [];
-    data.govsByCityId[cp.cityId].push(cp);
-  }
-}
-
-/** @param {Data} data */
-function createGovsById(data) {
-  data.govsById = {};
-  for (const gov of data.governments) {
-    data.govsById[gov.governmentId] = gov.government;
-  }
-}
-
-/** @param {Data} data */
-function addBigRegionIdToCities(data) {
-  for (const city of data.cities) {
-    if (city.regionId && data.regionsById[city.regionId] && data.regionsById[city.regionId].bigRegionId) {
-      city.bigRegionId = data.regionsById[city.regionId].bigRegionId;
+/**
+ * @param {Csvs} csvs cities are mutated in place
+ * @param {Lookups} lookups
+ */
+function addBigRegionIdToCities(csvs, lookups) {
+  for (const city of csvs.cities) {
+    if (city.regionId && lookups.regionsById[city.regionId] && lookups.regionsById[city.regionId].bigRegionId) {
+      city.bigRegionId = lookups.regionsById[city.regionId].bigRegionId;
     }
   }
 }
 
-/** @param {Data} data */
-function addDatesToPoets(data) {
-  data.datesByPoetId = {};
-  for (const date of data.dates) {
-    if (!data.datesByPoetId[date.poetId]) data.datesByPoetId[date.poetId] = [];
-    data.datesByPoetId[date.poetId].push(date.date);
-  }
-  for (const poetIdStr in data.datesByPoetId) {
+/**
+ * @param {Lookups} lookups poets are mutated in place
+ */
+function addDatesToPoets(lookups) {
+  for (const poetIdStr in lookups.datesByPoetId) {
     const poetId = Number(poetIdStr);
-    const poet = getPoet(data, poetId);
+    const poet = getPoet(lookups, poetId);
     if (poet) {
-      poet.minDate = Math.min(...data.datesByPoetId[poetId]);
-      poet.maxDate = Math.max(...data.datesByPoetId[poetId]);
+      poet.minDate = Math.min(...lookups.datesByPoetId[poetId]);
+      poet.maxDate = Math.max(...lookups.datesByPoetId[poetId]);
     }
   }
 }
 
-/** @param {Data} data */
-function createGenresByGenreId(data) {
-  data.genresByGenreId = {};
-  for (const genre of data.genres) {
+/**
+ * @param {Genre[]} genres
+ * @returns {Record<number, string>}
+ */
+function createGenresByGenreId(genres) {
+  /** @type {Record<number, string>} */
+  const genresByGenreId = {};
+  for (const genre of genres) {
     const genreName = genre.genre;
-    if (!data.genresByGenreId[genre.genreId]) {
-      data.genresByGenreId[genre.genreId] = genreName;
+    if (!genresByGenreId[genre.genreId]) {
+      genresByGenreId[genre.genreId] = genreName;
     } else {
-      const existingGenreName = data.genresByGenreId[genre.genreId];
+      const existingGenreName = genresByGenreId[genre.genreId];
       if (genreName !== existingGenreName) {
         console.log(
           `${genreName} has genreId ${genre.genreId} but does not match existing ${existingGenreName}. Source translation: "${genre.source_translation}"`
@@ -211,21 +291,26 @@ function createGenresByGenreId(data) {
       }
     }
   }
+  return genresByGenreId;
 }
 
 /**
  * @param {Iterable<number>} poetIds
- * @param {Data} data
+ * @param {Lookups} lookups
  * @returns {FilterOption[]}
  */
-function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
+function createAlphabetizedListOfPoetsFromIds(poetIds, lookups) {
   return Array.from(poetIds)
-    .map(poetId => ({ id: poetId, name: getPoet(data, poetId).poetDetailName }))
+    .map(poetId => ({ id: poetId, name: getPoet(lookups, poetId).poetDetailName }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
-/** @param {Data} data */
-function createGeoImaginaryPoets(data) {
+/**
+ * @param {Csvs} csvs
+ * @param {Lookups} lookups
+ * @returns {FilterOption[]}
+ */
+function createGeoImaginaryPoets(csvs, lookups) {
   const poetIdsToOmit = [
     151, // Aristotle
     33, // Castorion
@@ -234,13 +319,14 @@ function createGeoImaginaryPoets(data) {
     149 // Pindar
   ];
 
-  const poetIds = new Set(data.geopoetCities.map(pc => pc.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
+  const poetIds = new Set(csvs.geopoetCities.map(pc => pc.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
 
-  data.geoImaginaryPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
+  const geoImaginaryPoets = createAlphabetizedListOfPoetsFromIds(poetIds, lookups);
 
   // put sappho / alcaeus at end of array
   const sappAlcPoetId = 157;
-  putPoetIdAtEnd(data.geoImaginaryPoets, sappAlcPoetId);
+  putPoetIdAtEnd(geoImaginaryPoets, sappAlcPoetId);
+  return geoImaginaryPoets;
 }
 
 /**
@@ -263,28 +349,39 @@ function putPoetIdAtEnd(array, poetId) {
   }
 }
 
-/** @param {Data} data */
-function createTravelPoets(data) {
+/**
+ * @param {Line[]} lines
+ * @param {Lookups} lookups
+ * @returns {FilterOption[]}
+ */
+function createTravelPoets(lines, lookups) {
   // why do we omit these guys?
   const poetIdsToOmit = [
     29, // Oeniades
     38 // Aristonous
   ];
 
-  const poetIds = new Set(data.lines.map(line => line.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
-  data.travelPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
+  const poetIds = new Set(lines.map(line => line.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
+  return createAlphabetizedListOfPoetsFromIds(poetIds, lookups);
 }
 
-/** @param {Data} data */
-function createTravelCities(data) {
-  const cityIds = new Set(data.lines.flatMap(line => [line.bornCityId, line.activeCityId]));
-  data.travelCities = Array.from(cityIds)
-    .map(cityId => ({ id: cityId, name: getCity(data, cityId).cityname }))
+/**
+ * @param {Line[]} lines
+ * @param {Lookups} lookups
+ * @returns {FilterOption[]}
+ */
+function createTravelCities(lines, lookups) {
+  const cityIds = new Set(lines.flatMap(line => [line.bornCityId, line.activeCityId]));
+  return Array.from(cityIds)
+    .map(cityId => ({ id: cityId, name: getCity(lookups, cityId).cityname }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
-/** @param {Data} data */
-function createRegionsForInterface(data) {
+/**
+ * @param {Csvs} csvs
+ * @returns {FilterOption[]}
+ */
+function createRegionsForInterface(csvs) {
   const regionIdsToOmit = [
     27, // Aeolis
     21, // Asia
@@ -300,7 +397,7 @@ function createRegionsForInterface(data) {
     20, // Thrace
     28 // Troad
   ];
-  data.regionsForInterface = data.regions
+  return csvs.regions
     .filter(region => !regionIdsToOmit.includes(region.regionId))
     .map(region => ({ id: region.regionId, name: region.regionname }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
@@ -308,13 +405,17 @@ function createRegionsForInterface(data) {
 
 /**
  * Builds one travel line per (birthplace, place-of-activity) pair. Poets with
- * several attested birthplaces therefore yield several lines.
- * @param {Data} data
+ * several attested birthplaces therefore yield several lines. Poets with a
+ * birthplace but nowhere to go are handed back separately, for the places
+ * control bar to list.
+ * @param {Csvs} csvs
+ * @param {Lookups} lookups
+ * @returns {{ lines: Line[], poetsWithUnknownTravel: FilterOption[] }}
  */
-function createLines(data) {
+function createLines(csvs, lookups) {
   /** @type {Record<number, { bornPcs: PoetCity[], activePcs: PoetCity[] }>} */
   const poets = {};
-  for (const pc of data.poetCities) {
+  for (const pc of csvs.poetCities) {
     if (!poets[pc.poetId])
       poets[pc.poetId] = {
         bornPcs: [],
@@ -324,25 +425,26 @@ function createLines(data) {
     else if (pc.relationshipId === 1) poets[pc.poetId].bornPcs.push(pc);
   }
 
-  data.poetsWithUnknownTravel = [];
-  data.lines = [];
+  /** @type {FilterOption[]} */
+  const poetsWithUnknownTravel = [];
+  /** @type {Line[]} */
+  const lines = [];
   for (const poetIdStr in poets) {
     const poetId = parseInt(poetIdStr);
     const poet = poets[poetId];
     if (poet.bornPcs.length === 0 || poet.activePcs.length === 0) {
-      const poet = getPoet(data, poetId);
-      const poetDetailName = poet.poetDetailName;
-      data.poetsWithUnknownTravel.push({ id: poetId, name: poetDetailName });
+      const poetDetailName = getPoet(lookups, poetId).poetDetailName;
+      poetsWithUnknownTravel.push({ id: poetId, name: poetDetailName });
     } else {
       for (const bornPc of poet.bornPcs) {
         for (const activePc of poet.activePcs) {
           const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
-          const fromCity = getCity(data, bornPc.cityId);
-          const toCity = getCity(data, activePc.cityId);
-          const poetDates = data.datesByPoetId[poetId];
+          const fromCity = getCity(lookups, bornPc.cityId);
+          const toCity = getCity(lookups, activePc.cityId);
+          const poetDates = lookups.datesByPoetId[poetId];
           const bornGovIds = [
             ...new Set(
-              getGovs(data, bornPc.cityId)
+              getGovs(lookups, bornPc.cityId)
                 .filter(gov => poetDates.includes(gov.date))
                 .map(gov => gov.governmentId)
                 .flatMap(govId => convertMixedGovIds(govId))
@@ -350,7 +452,7 @@ function createLines(data) {
           ];
           const activeGovIds = [
             ...new Set(
-              getGovs(data, activePc.cityId)
+              getGovs(lookups, activePc.cityId)
                 .filter(gov => poetDates.includes(gov.date))
                 .map(gov => gov.governmentId)
                 .flatMap(govId => convertMixedGovIds(govId))
@@ -368,14 +470,15 @@ function createLines(data) {
             activeCity: toCity,
             bornGovIds: bornGovIds,
             activeGovIds: activeGovIds,
-            ...poetPrimedData(data, poetId)
+            ...poetPrimedData(lookups, poetId)
           };
-          data.lines.push(line);
+          lines.push(line);
         }
       }
     }
   }
-  data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a.name, b.name));
+  poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a.name, b.name));
+  return { lines, poetsWithUnknownTravel };
 }
 
 /**
@@ -394,41 +497,17 @@ function convertMixedGovIds(govId) {
   } else return [govId];
 }
 
-/** @param {Data} data */
-function keyLines(data) {
-  data.linesByPoetId = {};
-  for (const line of data.lines) {
-    if (!data.linesByPoetId[line.poetId]) {
-      data.linesByPoetId[line.poetId] = [];
-    }
-    data.linesByPoetId[line.poetId].push(line);
-  }
-
-  data.linesByBornCityId = {};
-  for (const line of data.lines) {
-    if (!data.linesByBornCityId[line.bornCityId]) {
-      data.linesByBornCityId[line.bornCityId] = [];
-    }
-    data.linesByBornCityId[line.bornCityId].push(line);
-  }
-
-  data.linesByActiveCityId = {};
-  for (const line of data.lines) {
-    if (!data.linesByActiveCityId[line.activeCityId]) {
-      data.linesByActiveCityId[line.activeCityId] = [];
-    }
-    data.linesByActiveCityId[line.activeCityId].push(line);
-  }
-}
-
-/** @param {Data} data */
-function createGenreIdsWithNames(data) {
+/**
+ * @param {Lookups} lookups
+ * @returns {FilterOption[]}
+ */
+function createGenreIdsWithNames(lookups) {
   const genresToOmit = [
     1, // Diaskeue
     31 // Possibly lyric
   ];
-  data.genreIdsWithName = Object.keys(data.genresByGenreId)
-    .map(id => ({ id: Number(id), name: data.genresByGenreId[Number(id)] }))
+  return Object.keys(lookups.genresByGenreId)
+    .map(id => ({ id: Number(id), name: lookups.genresByGenreId[Number(id)] }))
     .filter(genre => !genresToOmit.includes(genre.id))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }

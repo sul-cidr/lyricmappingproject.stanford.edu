@@ -50,10 +50,6 @@ export function loadRawCsvs() {
  * @returns {{ data: Data, alerts: string[], logs: string[] }}
  */
 export function loadInitializedData() {
-  // initializeData() hydrates the raw rows in place, turning the RawCsvs shape
-  // into the Data shape js/ works with.
-  const data = /** @type {Data} */ (/** @type {unknown} */ (loadRawCsvs()));
-
   /** @type {string[]} */
   const alerts = [];
   /** @type {string[]} */
@@ -66,13 +62,11 @@ export function loadInitializedData() {
   console.log = (/** @type {unknown[]} */ ...args) => logs.push(args.join(" "));
 
   try {
-    initializeData(data);
+    return { data: initializeData(loadRawCsvs()), alerts, logs };
   } finally {
     globals.alert = realAlert;
     console.log = realLog;
   }
-
-  return { data, alerts, logs };
 }
 
 /**

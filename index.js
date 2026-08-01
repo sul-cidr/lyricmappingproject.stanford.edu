@@ -5,13 +5,12 @@ import { initializeMap } from "./js/drawMap/initializeMap.js";
 import { initializeSlider } from "./js/interface/slider.js";
 import { createEssay, initializeCloseEssayClicks } from "./js/essay/essay.js";
 
-function main() {
+async function main() {
   createEssay("home");
   initializeCloseEssayClicks();
 
   const map = initializeMap();
-  // Starts empty; parseCsvs fills the raw arrays and initializeData derives the rest.
-  const data = /** @type {Data} */ ({});
+  const data = initializeData(await parseCsvs());
   /** @type {State} */
   const state = {
     currentMapMode: "placesMode",
@@ -20,15 +19,11 @@ function main() {
     selectedId: "relationship_3"
   };
 
-  parseCsvs(data).then(() => {
-    initializeData(data);
+  addMapModeEventListener(map, data, state);
+  addPoetsEventListener(map, data, state);
 
-    addMapModeEventListener(map, data, state);
-    addPoetsEventListener(map, data, state);
-
-    updateMapMode(map, data, state);
-    initializeSlider(map, data, state);
-  });
+  updateMapMode(map, data, state);
+  initializeSlider(map, data, state);
 }
 
 main();
