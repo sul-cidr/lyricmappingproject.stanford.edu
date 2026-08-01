@@ -99,7 +99,7 @@ const acceptedCityLabels = new Set(ACCEPTED_CITY_LABEL_VARIANTS.map(([cityId, la
 const KNOWN_INCOMPLETE_CITATION_COUNT = 18;
 
 /** Cities whose coordinates are malformed and plot far outside the map. */
-const KNOWN_BROKEN_COORDINATE_CITY_IDS = new Set([226, 197]);
+const KNOWN_BROKEN_COORDINATE_CITY_IDS = new Set([226]);
 
 /**
  * The mapped world runs from Ethiopia in the south to Scythia in the north, and
@@ -580,7 +580,7 @@ describe("known data bugs: places plotted in the wrong location", () => {
   });
 });
 
-describe("known data bugs: malformed coordinates", () => {
+describe("known data bugs: malformed coordinate", () => {
   test("BUG: Claros' latitude is missing its decimal point", () => {
     const claros = cityByName("Claros");
     assert.equal(id(claros.cityId), 226);
@@ -592,23 +592,6 @@ describe("known data bugs: malformed coordinates", () => {
     // Nothing references Claros yet, so nothing is visibly misplaced today.
     const referenced = [...raw.poetCities, ...raw.geopoetCities].filter(row => id(row.cityId) === 226);
     assert.equal(referenced.length, 0);
-  });
-
-  test("BUG: Etruria's longitude is missing its decimal point", () => {
-    const etruria = cityByName("Etruria");
-    assert.equal(id(etruria.cityId), 197);
-    assert.equal(etruria.long, "118301");
-    assert.equal(etruria.lat, "42.924252");
-    // Should be 11.8301, which with the existing latitude lands in Etruria.
-    // Alternatively pleiades:413122 gives 42.6734380491, 11.5337751287 for the
-    // region as a whole.
-    const referenced = [...raw.poetCities, ...raw.geopoetCities].filter(row => id(row.cityId) === 197);
-    assert.equal(referenced.length, 1);
-    assert.equal(
-      referenced[0].poetname,
-      "Critias",
-      "Critias refers to Etruria, so a dot is visibly misplaced on the map"
-    );
   });
 });
 
