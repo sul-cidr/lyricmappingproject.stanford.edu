@@ -1,4 +1,4 @@
-import { createFilterInput, createInputFromTuple } from "./commonInterface.js";
+import { createFilterInput, createInputFromOption } from "./commonInterface.js";
 
 /**
  * The control bar for the geographical-imaginary map.
@@ -22,7 +22,7 @@ export function createGeoImaginaryInterfaceHtml(data) {
         POETIC WORLD OF: 
       </div>
       ${data.geoImaginaryPoets
-      .map(poetIdWithName => createInputFromTuple(poetIdWithName, "poet"))
+      .map(poet => createInputFromOption(poet, "poet"))
       .join("")
     }
     </fieldset>

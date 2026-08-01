@@ -1,5 +1,15 @@
-import { createFilterInput, createInputFromTuple } from "./commonInterface.js";
+import { createFilterInput, createInputFromOption } from "./commonInterface.js";
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
+
+/** The regimes offered by the political system filter, in display order. */
+/** @type {FilterOption[]} */
+const GOVERNMENTS = [
+  { id: 3, name: "Democracy" },
+  { id: 4, name: "Kingship" },
+  { id: 7, name: "Mixed" },
+  { id: 1, name: "Oligarchy" },
+  { id: 2, name: "Tyranny" }
+];
 
 /**
  * The control bar for the travel map: poet, city, region, small region and
@@ -24,7 +34,7 @@ export function createTravelInterfaceHtml(data) {
         POET: 
       </div>
       ${data.travelPoets
-      .map(poetIdWithName => createInputFromTuple(poetIdWithName, "poet"))
+      .map(poet => createInputFromOption(poet, "poet"))
       .join("")
     }
     </fieldset>
@@ -37,7 +47,7 @@ export function createTravelInterfaceHtml(data) {
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>):
     </div>
     ${data.travelCities
-      .map(cityIdWithName => createInputFromTuple(cityIdWithName, "destination"))
+      .map(city => createInputFromOption(city, "destination"))
       .join("")
     }
   </fieldset>
@@ -50,7 +60,7 @@ export function createTravelInterfaceHtml(data) {
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>):
     </div>
     ${data.bigRegions
-      .map(region => createInputFromTuple([region.regionId, region.regionname], "region"))
+      .map(region => createInputFromOption({ id: region.regionId, name: region.regionname }, "region"))
       .join("")
     }
   </fieldset>
@@ -63,7 +73,7 @@ export function createTravelInterfaceHtml(data) {
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>):
     </div>
     ${data.regionsForInterface
-      .map(regionTuple => createInputFromTuple(regionTuple, "smallregion"))
+      .map(region => createInputFromOption(region, "smallregion"))
       .join("")
     }
   </fieldset>
@@ -75,13 +85,7 @@ export function createTravelInterfaceHtml(data) {
       POLITICAL SYSTEM 
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>/<span style="color:${TRAVEL_YELLOW};">within</span>):
     </div>
-    ${/** @type {[number, string][]} */ ([
-      [3, "Democracy"],
-      [4, "Kingship"],
-      [7, "Mixed"],
-      [1, "Oligarchy"],
-      [2, "Tyranny"]
-    ]).map(tuple => createInputFromTuple(tuple, "gov")).join("")}
+    ${GOVERNMENTS.map(government => createInputFromOption(government, "gov")).join("")}
     <div class="picker-label" style="cursor: auto">[Mapping in Progress]</label>		
   </fieldset>
 </div>

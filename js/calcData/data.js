@@ -198,17 +198,13 @@ function createGenresByGenreId(data) {
 /**
  * @param {Iterable<number>} poetIds
  * @param {Data} data
- * @returns {IdNameTuple[]}
+ * @returns {FilterOption[]}
  */
 function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
   return Array
     .from(poetIds)
-    .map(poetId => {
-      const poet = getPoet(data, poetId);
-      const poetDetailName = poet.poetDetailName;
-      return /** @type {IdNameTuple} */ ([poetId, poetDetailName]);
-    })
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(poetId => ({ id: poetId, name: getPoet(data, poetId).poetDetailName }))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /** @param {Data} data */
@@ -231,18 +227,18 @@ function createGeoImaginaryPoets(data) {
 
   // put sappho / alcaeus at end of array
   const sappAlcPoetId = 157;
-  putPoetIdAtEndOfPoetIdNameTuples(data.geoImaginaryPoets, sappAlcPoetId);
+  putPoetIdAtEnd(data.geoImaginaryPoets, sappAlcPoetId);
 }
 
 /**
- * @param {IdNameTuple[]} array mutated in place
+ * @param {FilterOption[]} array mutated in place
  * @param {number} poetId
  */
-function putPoetIdAtEndOfPoetIdNameTuples(array, poetId) {
+function putPoetIdAtEnd(array, poetId) {
   /** @type {number | undefined} */
   let foundIdx;
   for (let idx = 0; idx < array.length; idx++) {
-    if (array[idx][0] === poetId) {
+    if (array[idx].id === poetId) {
       foundIdx = idx;
       break;
     }
@@ -277,11 +273,8 @@ function createTravelCities(data) {
   );
   data.travelCities = Array
     .from(cityIds)
-    .map(cityId => {
-      const city = getCity(data, cityId);
-      return /** @type {IdNameTuple} */ ([cityId, city.cityname]);
-    })
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(cityId => ({ id: cityId, name: getCity(data, cityId).cityname }))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /** @param {Data} data */
@@ -303,8 +296,8 @@ function createRegionsForInterface(data) {
   ];
   data.regionsForInterface = data.regions
     .filter(region => !regionIdsToOmit.includes(region.regionId))
-    .map(region => /** @type {IdNameTuple} */ ([region.regionId, region.regionname]))
-    .sort((a, b) => sortAlphabetically(a[1], b[1]));
+    .map(region => ({ id: region.regionId, name: region.regionname }))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /**
@@ -334,7 +327,7 @@ function createLines(data) {
     if (poet.bornPcs.length === 0 || poet.activePcs.length === 0) {
       const poet = getPoet(data, poetId);
       const poetDetailName = poet.poetDetailName
-      data.poetsWithUnknownTravel.push([poetId, poetDetailName]);
+      data.poetsWithUnknownTravel.push({ id: poetId, name: poetDetailName });
     } else {
       for (const bornPc of poet.bornPcs) {
         for (const activePc of poet.activePcs) {
@@ -375,7 +368,7 @@ function createLines(data) {
       }
     }
   }
-  data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a[1], b[1]));
+  data.poetsWithUnknownTravel.sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /**
@@ -424,13 +417,12 @@ function keyLines(data) {
 /** @param {Data} data */
 function createGenreIdsWithNames(data) {
   const genresToOmit = [
-    "1", // Diaskeue
-    "31" // Possibly lyric
+    1, // Diaskeue
+    31 // Possibly lyric
   ]
-  data.genreIdsWithName =
-    Object
-      .keys(data.genresByGenreId)
-      .map((id) => /** @type {[string, string]} */ ([id, data.genresByGenreId[Number(id)]]))
-      .filter(kv => !genresToOmit.includes(kv[0]))
-      .sort((a, b) => sortAlphabetically(a[1], b[1]));
+  data.genreIdsWithName = Object
+    .keys(data.genresByGenreId)
+    .map(id => ({ id: Number(id), name: data.genresByGenreId[Number(id)] }))
+    .filter(genre => !genresToOmit.includes(genre.id))
+    .sort((a, b) => sortAlphabetically(a.name, b.name));
 }

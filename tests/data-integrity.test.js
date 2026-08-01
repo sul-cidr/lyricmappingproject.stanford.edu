@@ -24,6 +24,14 @@ const regionIds = new Set(raw.regions.map(r => id(r.regionId)));
 const bigRegionIds = new Set(raw.bigRegions.map(r => id(r.regionId)));
 const cityNameById = new Map(raw.cities.map(c => [id(c.cityId), c.cityname]));
 
+/** The join tables that carry a cityname label. */
+/** @type {PoetCityCsv[]} */
+const POET_CITY_CSVS = ["poetCities", "geopoetCities"];
+
+/** The cited tables with no known incomplete citations. */
+/** @type {CitedCsv[]} */
+const CLEAN_CITED_CSVS = ["geopoetCities", "genres"];
+
 // ---------------------------------------------------------------------------
 // Exceptions for data that is currently broken. See "known data bugs" at the
 // bottom of this file for what each one actually is.
@@ -105,7 +113,9 @@ const WORLD_BOUNDS = { minLat: 5, maxLat: 50, minLong: -10, maxLong: 55 };
 // ---------------------------------------------------------------------------
 
 describe("primary keys", () => {
-  for (const [file, key] of /** @type {[keyof RawCsvs, string][]} */ ([["cities", "cityId"], ["poets", "poetId"], ["governments", "governmentId"]])) {
+  /** @type {[keyof RawCsvs, string][]} */
+  const KEYED_FILES = [["cities", "cityId"], ["poets", "poetId"], ["governments", "governmentId"]];
+  for (const [file, key] of KEYED_FILES) {
     test(`${file}.csv has unique ${key}`, () => {
       const seen = new Map();
       for (const row of raw[file]) {
@@ -195,7 +205,7 @@ describe("labels agree with the ids they point at", () => {
   // A row labelled with one place but pointing at another's id draws the
   // reference in the wrong location, which is invisible without this check.
   test("no NEW cityname disagrees with the city it references", () => {
-    for (const file of /** @type {PoetCityCsv[]} */ (["poetCities", "geopoetCities"])) {
+    for (const file of POET_CITY_CSVS) {
       for (const row of raw[file]) {
         const cityId = id(row.cityId);
         if (!filled(row.cityname) || !cityNameById.has(cityId)) continue;
@@ -575,7 +585,7 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
     assert.equal(incomplete.length, KNOWN_INCOMPLETE_CITATION_COUNT);
     // renderReference() prints `Citation: X: "" (trans. )` for these. This is
     // the shape of issues #313 and #329. geopoetCities and genres are clean.
-    for (const file of /** @type {CitedCsv[]} */ (["geopoetCities", "genres"])) {
+    for (const file of CLEAN_CITED_CSVS) {
       const bad = raw[file].filter(row =>
         filled(row.source_citation) &&
         !(filled(row.source_translation) && filled(row.source_translator)));

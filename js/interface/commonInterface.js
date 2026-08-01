@@ -8,13 +8,13 @@
 // Which prefixes each map is allowed to emit is checked by the control bar tests.
 
 /**
- * Builds one control-bar radio button from an [id, label] pair.
- * @param {[number | string, string]} tuple
+ * Builds one control-bar radio button from a filter option.
+ * @param {FilterOption} option
  * @param {MapFilterType} prefix
  * @returns {string}
  */
-export function createInputFromTuple(tuple, prefix) {
-  return createFilterInput(prefix, tuple[0], tuple[1]);
+export function createInputFromOption(option, prefix) {
+  return createFilterInput(prefix, option.id, option.name);
 }
 
 /**

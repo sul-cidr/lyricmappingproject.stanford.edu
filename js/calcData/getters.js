@@ -44,14 +44,12 @@ export function getGovs(data, cityId) {
 }
 
 /** The filters the places and geographical imaginary control bars offer. */
-export const PLACES_FILTER_TYPES = /** @type {PlacesFilterType[]} */ ([
-  "all", "relationship", "poet", "genre"
-]);
+/** @type {PlacesFilterType[]} */
+export const PLACES_FILTER_TYPES = ["all", "relationship", "poet", "genre"];
 
 /** The filters the travel control bar offers. */
-export const TRAVEL_FILTER_TYPES = /** @type {TravelFilterType[]} */ ([
-  "all", "poet", "destination", "smallregion", "region", "gov"
-]);
+/** @type {TravelFilterType[]} */
+export const TRAVEL_FILTER_TYPES = ["all", "poet", "destination", "smallregion", "region", "gov"];
 
 /**
  * Splits state.selectedId (e.g. "poet_93") into its filter type and numeric id,
