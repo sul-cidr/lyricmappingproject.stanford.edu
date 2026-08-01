@@ -1,0 +1,10 @@
+# Commits that only reformatted code, with no behaviour change. Skipped by
+# `git blame` so they do not obscure who last touched a line.
+#
+# Configure once per clone:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# GitHub reads this file automatically.
+
+# Reformat with Prettier, and correct the config to match the code
+d5b117750381aea4d39095b0e1140e5f0d2d4eb1

@@ -18,7 +18,7 @@ const GOVERNMENTS = [
  * @returns {string}
  */
 export function createTravelInterfaceHtml(data) {
-  return (`
+  return `
   <div class="buttonContainer tabindex="0"">
     <fieldset class="controlForm">
       <div class="controlBarLabel">
@@ -33,10 +33,7 @@ export function createTravelInterfaceHtml(data) {
       <div class="controlBarLabel">
         POET: 
       </div>
-      ${data.travelPoets
-      .map(poet => createInputFromOption(poet, "poet"))
-      .join("")
-    }
+      ${data.travelPoets.map(poet => createInputFromOption(poet, "poet")).join("")}
     </fieldset>
   </div>
 
@@ -46,10 +43,7 @@ export function createTravelInterfaceHtml(data) {
       PLACES 
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>):
     </div>
-    ${data.travelCities
-      .map(city => createInputFromOption(city, "destination"))
-      .join("")
-    }
+    ${data.travelCities.map(city => createInputFromOption(city, "destination")).join("")}
   </fieldset>
 </div>
 
@@ -61,8 +55,7 @@ export function createTravelInterfaceHtml(data) {
     </div>
     ${data.bigRegions
       .map(region => createInputFromOption({ id: region.regionId, name: region.regionname }, "region"))
-      .join("")
-    }
+      .join("")}
   </fieldset>
 </div>
 
@@ -72,10 +65,7 @@ export function createTravelInterfaceHtml(data) {
       SMALL GEOGRAPHICAL REGION 
       (<span style="color:${TRAVEL_RED};">to</span>/<span style="color:${TRAVEL_PURPLE};">from</span>):
     </div>
-    ${data.regionsForInterface
-      .map(region => createInputFromOption(region, "smallregion"))
-      .join("")
-    }
+    ${data.regionsForInterface.map(region => createInputFromOption(region, "smallregion")).join("")}
   </fieldset>
 </div>
 
@@ -90,5 +80,5 @@ export function createTravelInterfaceHtml(data) {
   </fieldset>
 </div>
 </div>
-  `);
+  `;
 }

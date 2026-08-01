@@ -8,7 +8,7 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
  * @returns {string}
  */
 export function createTravelPopupHtml(data, line) {
-  return (`
+  return `
   <h3 style="color:${LYRIC_GREY}">${line.name}</h3>
   <h5 style="color:${LYRIC_GREY}">POET(S)</h5>
   ${createNumberedListOfPoets(line.poetLines.map(pl => pl.poetDetailName))}
@@ -18,7 +18,7 @@ export function createTravelPopupHtml(data, line) {
   ${createTravelSource(line, "bornPc")}
   <h4 style="color:${LYRIC_GREY}">ACTIVITY SOURCE</h4>
   ${createTravelSource(line, "activePc")}
-  `);
+  `;
 }
 
 /**
@@ -28,14 +28,16 @@ export function createTravelPopupHtml(data, line) {
  * @returns {string}
  */
 function createTravelSource(line, direction) {
-  return line.poetLines.map((pl, idx) => {
-    return (`
+  return line.poetLines
+    .map((pl, idx) => {
+      return `
     <p>
     <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${pl.poetDetailName}<br>
     ${renderReference(pl[direction])}
     </p>
-    `)
-  }).join("")
+    `;
+    })
+    .join("");
 }
 
 /**
@@ -46,7 +48,7 @@ function createTravelSource(line, direction) {
  * @returns {string}
  */
 export function createGovTravelPopupHtml(data, line) {
-  return (`
+  return `
   <h3 style="color:${LYRIC_GREY}">${line.name}</h3>
   <h5 style="color:${LYRIC_GREY}">POET(S)</h5>
   ${createNumberedListOfPoets(line.poetLines.map(pl => pl.poetDetailName))}
@@ -56,7 +58,7 @@ export function createGovTravelPopupHtml(data, line) {
   ${createTravelSource(line, "bornPc")}
   <h4 style="color:${LYRIC_GREY}">ACTIVITY SOURCE</h4>
   ${createTravelSource(line, "activePc")}
-  `);
+  `;
 }
 
 /**
@@ -65,17 +67,19 @@ export function createGovTravelPopupHtml(data, line) {
  * @returns {string}
  */
 function createRegimeTravelListOfPoets(poets, data) {
-  return (`
-    ${poets.map((poet, idx) => {
-    return (`
+  return `
+    ${poets
+      .map((poet, idx) => {
+        return `
       <p>
         <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetDetailName}<br>
         Regime (data from Hansen and Nielsen): ${renderGovNames(poet.bornGovIds, data)} -> ${renderGovNames(poet.activeGovIds, data)}<br>
         Dates: ${poet.poetDates}<br>
       </p>
-      `);
-  }).join(" ")}
-  `);
+      `;
+      })
+      .join(" ")}
+  `;
 }
 
 /**

@@ -50,7 +50,7 @@ const KNOWN_UNMAPPED_GEO_CITY_IDS = new Set([
   227, // Corax - Hipponax 2.1
   228, // Cylicrania - Hermippus 4
   238, // Mytalis - Hipponax 42.4
-  239  // Phlyesia - Hipponax 47.2
+  239 // Phlyesia - Hipponax 47.2
 ]);
 
 /** genres.csv rows whose poetId is not in poets.csv. */
@@ -93,9 +93,7 @@ const ACCEPTED_CITY_LABEL_VARIANTS = [
   [255, "Cyrene"], // BUG: plotted on Phocaea in Ionia. Cyrene is in Libya.
   [257, "Orchomenus"]
 ];
-const acceptedCityLabels = new Set(
-  ACCEPTED_CITY_LABEL_VARIANTS.map(([cityId, label]) => `${cityId}|${label}`)
-);
+const acceptedCityLabels = new Set(ACCEPTED_CITY_LABEL_VARIANTS.map(([cityId, label]) => `${cityId}|${label}`));
 
 /** poets_cities rows carrying a citation but no translation or translator. */
 const KNOWN_INCOMPLETE_CITATION_COUNT = 18;
@@ -114,7 +112,11 @@ const WORLD_BOUNDS = { minLat: 5, maxLat: 50, minLong: -10, maxLong: 55 };
 
 describe("primary keys", () => {
   /** @type {[keyof RawCsvs, string][]} */
-  const KEYED_FILES = [["cities", "cityId"], ["poets", "poetId"], ["governments", "governmentId"]];
+  const KEYED_FILES = [
+    ["cities", "cityId"],
+    ["poets", "poetId"],
+    ["governments", "governmentId"]
+  ];
   for (const [file, key] of KEYED_FILES) {
     test(`${file}.csv has unique ${key}`, () => {
       const seen = new Map();
@@ -162,7 +164,7 @@ describe("referential integrity", () => {
       assert.ok(
         cityIds.has(id(row.cityId)),
         `${row.poetname} -> ${row.cityname} (cityId ${row.cityId}) is not in cities.csv, ` +
-        `so this citation will not appear on the map`
+          `so this citation will not appear on the map`
       );
     }
   });
@@ -196,7 +198,10 @@ describe("referential integrity", () => {
     }
     for (const region of raw.regions) {
       if (!filled(region.bigRegionId)) continue;
-      assert.ok(bigRegionIds.has(id(region.bigRegionId)), `${region.regionname} has unknown bigRegionId ${region.bigRegionId}`);
+      assert.ok(
+        bigRegionIds.has(id(region.bigRegionId)),
+        `${region.regionname} has unknown bigRegionId ${region.bigRegionId}`
+      );
     }
   });
 });
@@ -285,14 +290,17 @@ describe("citations", () => {
   });
 
   test("incomplete poets_cities citations do not increase", () => {
-    const incomplete = raw.poetCities.filter(row =>
-      filled(row.source_citation) && !(filled(row.source_translation) && filled(row.source_translator))
+    const incomplete = raw.poetCities.filter(
+      row => filled(row.source_citation) && !(filled(row.source_translation) && filled(row.source_translator))
     );
     assert.ok(
       incomplete.length <= KNOWN_INCOMPLETE_CITATION_COUNT,
       `${incomplete.length} poets_cities rows have a citation without a full translation ` +
-      `(was ${KNOWN_INCOMPLETE_CITATION_COUNT}); newly incomplete: ` +
-      incomplete.slice(0, 5).map(r => `${r.poetname}/${r.cityname}`).join(", ")
+        `(was ${KNOWN_INCOMPLETE_CITATION_COUNT}); newly incomplete: ` +
+        incomplete
+          .slice(0, 5)
+          .map(r => `${r.poetname}/${r.cityname}`)
+          .join(", ")
     );
   });
 });
@@ -332,18 +340,24 @@ describe("Greek text", () => {
     // the poet as genres_poetname.
     for (const row of raw.poetCities) {
       if (!filled(row.source_greektext) || /\p{Script=Greek}/u.test(row.source_greektext)) continue;
-      assert.ok(LATIN_SOURCE_WORKS.has(row.source_work),
-        `poets_cities: ${row.poetname} has non-Greek source_greektext from "${row.source_work}"`);
+      assert.ok(
+        LATIN_SOURCE_WORKS.has(row.source_work),
+        `poets_cities: ${row.poetname} has non-Greek source_greektext from "${row.source_work}"`
+      );
     }
     for (const row of raw.geopoetCities) {
       if (!filled(row.source_greektext) || /\p{Script=Greek}/u.test(row.source_greektext)) continue;
-      assert.ok(LATIN_SOURCE_WORKS.has(row.original_source),
-        `geographical_imaginary: ${row.poetname} has non-Greek source_greektext from "${row.original_source}"`);
+      assert.ok(
+        LATIN_SOURCE_WORKS.has(row.original_source),
+        `geographical_imaginary: ${row.poetname} has non-Greek source_greektext from "${row.original_source}"`
+      );
     }
     for (const row of raw.genres) {
       if (!filled(row.source_greektext) || /\p{Script=Greek}/u.test(row.source_greektext)) continue;
-      assert.ok(LATIN_SOURCE_WORKS.has(row.source_work),
-        `genres: ${row.genres_poetname} has non-Greek source_greektext from "${row.source_work}"`);
+      assert.ok(
+        LATIN_SOURCE_WORKS.has(row.source_work),
+        `genres: ${row.genres_poetname} has non-Greek source_greektext from "${row.source_work}"`
+      );
     }
   });
 });
@@ -357,14 +371,67 @@ describe("csv schema", () => {
   const EXPECTED_COLUMNS = {
     regions: ["regionId", "bigRegionId", "regionname"],
     cities: ["cityname", "infowindowName", "cityId", "notes", "lat", "long", "region", "regionId"],
-    poetCities: ["poetname", "poetId", "cityname", "cityId", "relationship", "relationshipId", "nativeid", "dotted", "notes", "source_work", "source_workid", "source_citation", "source_greektext", "source_translation", "source_translator", "source_notes", "source_explicit"],
+    poetCities: [
+      "poetname",
+      "poetId",
+      "cityname",
+      "cityId",
+      "relationship",
+      "relationshipId",
+      "nativeid",
+      "dotted",
+      "notes",
+      "source_work",
+      "source_workid",
+      "source_citation",
+      "source_greektext",
+      "source_translation",
+      "source_translator",
+      "source_notes",
+      "source_explicit"
+    ],
     poets: ["poetname", "poetDetailName", "poetId", "sources", "dates", "dates_source", "notes"],
-    genres: ["genres_poetname", "poetId", "genre", "genreId", "source_work", "source_workid", "source_citation", "source_greektext", "source_translation", "source_translator", "source_notes", "source_explicit", "notes", "source"],
-    geopoetCities: ["imaginaryid", "poetname", "poetId", "cityname", "cityId", "relationship", "destination", "destination_id", "speaker", "speakerid", "notes", "source_poem", "source_citation", "original_source", "source_greektext", "source_translation", "source_translator", "source_notes", "source_explicit"],
+    genres: [
+      "genres_poetname",
+      "poetId",
+      "genre",
+      "genreId",
+      "source_work",
+      "source_workid",
+      "source_citation",
+      "source_greektext",
+      "source_translation",
+      "source_translator",
+      "source_notes",
+      "source_explicit",
+      "notes",
+      "source"
+    ],
+    geopoetCities: [
+      "imaginaryid",
+      "poetname",
+      "poetId",
+      "cityname",
+      "cityId",
+      "relationship",
+      "destination",
+      "destination_id",
+      "speaker",
+      "speakerid",
+      "notes",
+      "source_poem",
+      "source_citation",
+      "original_source",
+      "source_greektext",
+      "source_translation",
+      "source_translator",
+      "source_notes",
+      "source_explicit"
+    ],
     cityPolitics: ["city", "cityId", "government", "governmentId", "questionable?", "date", "notes"],
     bigRegions: ["regionId", "regionname"],
     dates: ["dates_poetname", "poetId", "date", "iso_8601", "notes"],
-    governments: ["government", "governmentId"],
+    governments: ["government", "governmentId"]
   };
 
   for (const [name, expected] of Object.entries(EXPECTED_COLUMNS)) {
@@ -397,8 +464,10 @@ describe("hygiene", () => {
     // only the poets currently placed on it.
     const dated = new Set(raw.dates.map(row => id(row.poetId)));
     for (const poet of raw.poets) {
-      assert.ok(dated.has(id(poet.poetId)),
-        `${poet.poetname} has no rows in dates.csv, so would be invisible on the map`);
+      assert.ok(
+        dated.has(id(poet.poetId)),
+        `${poet.poetname} has no rows in dates.csv, so would be invisible on the map`
+      );
     }
   });
 });
@@ -455,7 +524,6 @@ function soleRowLabelled(file, label) {
 }
 
 describe("known data bugs: places plotted in the wrong location", () => {
-
   test("BUG: Pindar's Camarina is plotted on Erythrae, in Ionia rather than Sicily", () => {
     assert.equal(id(soleRowLabelled("poetCities", "Camarina").cityId), 254);
     const city = cityById(254);
@@ -466,8 +534,10 @@ describe("known data bugs: places plotted in the wrong location", () => {
     // foundation of 599 BC, and the city of Psaumis in Olympians 4 and 5. It is
     // roughly 1,100km from where it is currently drawn, in a different sea.
     // Fixing means adding Camarina to cities.csv and repointing this row.
-    assert.ok(!raw.cities.some(c => c.cityname === "Camarina"),
-      "Camarina now exists in cities.csv; repoint the row and delete this test");
+    assert.ok(
+      !raw.cities.some(c => c.cityname === "Camarina"),
+      "Camarina now exists in cities.csv; repoint the row and delete this test"
+    );
   });
 
   test("BUG: Pindar's Cyrene is plotted on Phocaea, in Ionia rather than Libya", () => {
@@ -479,8 +549,10 @@ describe("known data bugs: places plotted in the wrong location", () => {
     // Cyrene is pleiades:373778 at 32.8200266273, 21.8565385134 — the city of
     // Arcesilas and Telesicrates in Pythians 4, 5 and 9. It is currently drawn
     // on the wrong continent.
-    assert.ok(!raw.cities.some(c => c.cityname === "Cyrene"),
-      "Cyrene now exists in cities.csv; repoint the row and delete this test");
+    assert.ok(
+      !raw.cities.some(c => c.cityname === "Cyrene"),
+      "Cyrene now exists in cities.csv; repoint the row and delete this test"
+    );
   });
 
   test("BUG: Stesichorus' Phocis is plotted on Aetolia", () => {
@@ -488,8 +560,11 @@ describe("known data bugs: places plotted in the wrong location", () => {
     assert.equal(cityById(134).cityname, "Aetolia");
     // Stesichorus fr. 222 names both places, and both rows were given cityId 134.
     // Phocis is pleiades:541048 at 38.5557075728, 22.686575589.
-    assert.equal(id(soleRowLabelled("geopoetCities", "Aetolia").cityId), 134,
-      "the same fragment also refers to Aetolia itself");
+    assert.equal(
+      id(soleRowLabelled("geopoetCities", "Aetolia").cityId),
+      134,
+      "the same fragment also refers to Aetolia itself"
+    );
   });
 
   test("BUG: one Adespota reference to Thrace is plotted on Priapus", () => {
@@ -515,8 +590,7 @@ describe("known data bugs: malformed coordinates", () => {
     // simply reinserting a decimal point would give.
     assert.equal(claros.long, "27.192987");
     // Nothing references Claros yet, so nothing is visibly misplaced today.
-    const referenced = [...raw.poetCities, ...raw.geopoetCities]
-      .filter(row => id(row.cityId) === 226);
+    const referenced = [...raw.poetCities, ...raw.geopoetCities].filter(row => id(row.cityId) === 226);
     assert.equal(referenced.length, 0);
   });
 
@@ -528,18 +602,19 @@ describe("known data bugs: malformed coordinates", () => {
     // Should be 11.8301, which with the existing latitude lands in Etruria.
     // Alternatively pleiades:413122 gives 42.6734380491, 11.5337751287 for the
     // region as a whole.
-    const referenced = [...raw.poetCities, ...raw.geopoetCities]
-      .filter(row => id(row.cityId) === 197);
+    const referenced = [...raw.poetCities, ...raw.geopoetCities].filter(row => id(row.cityId) === 197);
     assert.equal(referenced.length, 1);
-    assert.equal(referenced[0].poetname, "Critias",
-      "Critias refers to Etruria, so a dot is visibly misplaced on the map");
+    assert.equal(
+      referenced[0].poetname,
+      "Critias",
+      "Critias refers to Etruria, so a dot is visibly misplaced on the map"
+    );
   });
 });
 
 describe("known data bugs: rows that never reach the map", () => {
   test("BUG: 13 geographical imaginary citations point at cities that do not exist", () => {
-    const orphans = raw.geopoetCities.filter(row =>
-      filled(row.cityId) && !cityIds.has(id(row.cityId)));
+    const orphans = raw.geopoetCities.filter(row => filled(row.cityId) && !cityIds.has(id(row.cityId)));
     assert.equal(orphans.length, 13);
     assert.equal(new Set(orphans.map(row => id(row.cityId))).size, 12);
     // calculateBubbles() skips any row whose cityId does not resolve, so these
@@ -579,16 +654,16 @@ describe("known data bugs: rows that never reach the map", () => {
 
 describe("known data bugs: incomplete or inconsistent fields", () => {
   test("BUG: 18 poets_cities citations have no translation or translator", () => {
-    const incomplete = raw.poetCities.filter(row =>
-      filled(row.source_citation) &&
-      !(filled(row.source_translation) && filled(row.source_translator)));
+    const incomplete = raw.poetCities.filter(
+      row => filled(row.source_citation) && !(filled(row.source_translation) && filled(row.source_translator))
+    );
     assert.equal(incomplete.length, KNOWN_INCOMPLETE_CITATION_COUNT);
     // renderReference() prints `Citation: X: "" (trans. )` for these. This is
     // the shape of issues #313 and #329. geopoetCities and genres are clean.
     for (const file of CLEAN_CITED_CSVS) {
-      const bad = raw[file].filter(row =>
-        filled(row.source_citation) &&
-        !(filled(row.source_translation) && filled(row.source_translator)));
+      const bad = raw[file].filter(
+        row => filled(row.source_citation) && !(filled(row.source_translation) && filled(row.source_translator))
+      );
       assert.equal(bad.length, 0);
     }
   });

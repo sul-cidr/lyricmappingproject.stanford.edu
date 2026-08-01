@@ -28,7 +28,7 @@ function bubblesFor(currentMapMode, selectedId) {
 }
 
 const cityIdByName = (/** @type {string} */ name) => {
-  const city = data.cities.find((c) => c.cityname === name);
+  const city = data.cities.find(c => c.cityname === name);
   assert.ok(city, `no city named ${name}`);
   return city.cityId;
 };
@@ -84,8 +84,11 @@ describe("places map: origin", () => {
       assert.match(html, /Alcman/, `Alcman missing from ${cityname}`);
       assert.match(html, new RegExp(`POETS BORN IN ${cityname.toUpperCase()}`));
       // Note: /possibly/i alone would match the genre "Possibly lyric".
-      assert.doesNotMatch(html, /possibly born/i,
-        `${cityname} already hedges Alcman's birth; issue #332 may have landed, so update this test`);
+      assert.doesNotMatch(
+        html,
+        /possibly born/i,
+        `${cityname} already hedges Alcman's birth; issue #332 may have landed, so update this test`
+      );
     }
   });
 
@@ -129,8 +132,7 @@ describe("geographical imaginary map", () => {
   const bubbles = bubblesFor("geoimaginaryMode", "all_1");
 
   test("a bubble counts the references made to it", () => {
-    const bubble = (Object.values(bubbles))
-      .find((b) => b.poetCities.length > 1);
+    const bubble = Object.values(bubbles).find(b => b.poetCities.length > 1);
     assert.ok(bubble, "expected at least one city referred to more than once");
     assert.match(popupOf(bubble), /\d+ REFERENCES TO /);
   });
@@ -138,7 +140,7 @@ describe("geographical imaginary map", () => {
   test("poets are grouped, so one poet with three references is listed once", () => {
     for (const bubble of Object.values(bubbles)) {
       const poets = poetsOf(bubble);
-      const poetIds = poets.map((p) => p.poetId);
+      const poetIds = poets.map(p => p.poetId);
       assert.equal(new Set(poetIds).size, poetIds.length, `${bubble.city.cityname} lists a poet twice`);
       const totalReferences = poets.reduce((n, p) => n + p.references.length, 0);
       assert.equal(totalReferences, bubble.poetCities.length);
@@ -146,8 +148,7 @@ describe("geographical imaginary map", () => {
   });
 
   test("singular and plural are used correctly", () => {
-    const single = (Object.values(bubbles))
-      .find((b) => b.poetCities.length === 1);
+    const single = Object.values(bubbles).find(b => b.poetCities.length === 1);
     assert.ok(single);
     assert.match(popupOf(single), /1 REFERENCE TO /);
     assert.doesNotMatch(popupOf(single), /1 REFERENCES TO /);
@@ -156,7 +157,7 @@ describe("geographical imaginary map", () => {
 
 describe("travel map", () => {
   test("an arc popup names both ends, the poets, and both citations", () => {
-    const line = data.lines.find((l) => l.poetDetailName === "Pindar");
+    const line = data.lines.find(l => l.poetDetailName === "Pindar");
     assert.ok(line, "expected Pindar to have a travel line");
     const drawnLine = {
       fromCity: line.bornCity,
@@ -168,7 +169,7 @@ describe("travel map", () => {
       weight: 3,
       popupHtml: ""
     };
-    const html = createTravelPopupHtml(data, (drawnLine));
+    const html = createTravelPopupHtml(data, drawnLine);
     assert.match(html, /POET\(S\)/);
     assert.match(html, /Pindar/);
     assert.match(html, /ORIGIN SOURCE/);

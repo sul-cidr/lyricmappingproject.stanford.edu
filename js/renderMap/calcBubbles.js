@@ -12,7 +12,7 @@ import { createPopupHtml } from "../popups/popups.js";
 export function calculateBubbles(state, data, poetCities) {
   const citiesById = data.citiesById;
   /** @type {Record<number, Bubble>} */
-  const bubbles = {}
+  const bubbles = {};
 
   for (const poetCity of poetCities) {
     const cityId = poetCity.cityId;

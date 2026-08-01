@@ -8,11 +8,11 @@ export function createEssay(path) {
   switch (path) {
     case "home":
       byId("essayContent").innerHTML = createIntroHtml();
-      byId('creditsLink').addEventListener('click', () => createEssay("credits"));
+      byId("creditsLink").addEventListener("click", () => createEssay("credits"));
       break;
     case "credits":
       byId("essayContent").innerHTML = createCreditsHtml();
-      byId("homeLink").addEventListener('click', () => createEssay("home"));
+      byId("homeLink").addEventListener("click", () => createEssay("home"));
       break;
     default:
       assertUnreachable(path, "unrecognized path in createEssay");
@@ -25,8 +25,8 @@ export function createEssay(path) {
  */
 export function initializeCloseEssayClicks() {
   ["essayTitle", "essayCloseButton", "wholeScreen"].forEach(id => {
-    byId(id).addEventListener('click', closeEssay);
-  })
+    byId(id).addEventListener("click", closeEssay);
+  });
 }
 
 function closeEssay() {
@@ -45,7 +45,7 @@ function byId(id) {
 }
 
 function createIntroHtml() {
-  return (`
+  return `
   <div id="intro-top">
    	<h2>Mapping Greek Lyric: Places, Travel, Geographical Imaginary</h2>
 	  <p>This project is the first-ever attempt to illustrate on an interactive map key geocultural aspects of the rich lyric production that was generated and spread throughout the Greek world from the 8<sup>th</sup> to the beginning of the 4<sup>th</sup> century BC. We report and display data based on the ancient sources, without judging whether they are all historically accurate. It is the users’ responsibility to explore further.</p>
@@ -59,11 +59,11 @@ function createIntroHtml() {
 		  <a href="#" id="creditsLink">Credits and Acknowledgements</a></p>
 	  </div>
   </div>
-  `);
+  `;
 }
 
 function createCreditsHtml() {
-  return (`
+  return `
   <h2>Works Cited:</h2>
   <p>Aspiotes, Nikolaos. 2006. <em>Prosopographia Musica Graeca: Personenlexikon Mit Daten Zu 2350 (heidnischen) Musikern</em>. Berlin: Frank &amp; Timme.</p>
   <p>Babbitt, F. C. 1936. <em>Plutarch: Moralia, Volume IV, Roman Questions. Greek Questions. Greek and Roman Parallel Stories</em>. Harvard University Press.</p>
@@ -103,5 +103,5 @@ function createCreditsHtml() {
   <p>&nbsp;</p>
   <hr>
   <a href="#" id="homeLink">Return to Introduction</a></p>
-  `);
+  `;
 }

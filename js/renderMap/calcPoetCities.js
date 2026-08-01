@@ -14,10 +14,7 @@ import { getDateFilterFn } from "./calcCommon.js";
  */
 export function calcPoetCities(data, state) {
   const poetCitiesData = getPoetCitiesData(data, state);
-  const filteredPoetCities =
-    poetCitiesData
-      .filter(getDateFilterFn(data, state))
-      .filter(getFilterFn(data, state));
+  const filteredPoetCities = poetCitiesData.filter(getDateFilterFn(data, state)).filter(getFilterFn(data, state));
 
   const renderedPoetCities = renderPoetCities(filteredPoetCities, data, state);
 
@@ -61,10 +58,7 @@ function getFilterFn(data, state) {
     case "genre":
       return poetCity =>
         !!data.genresByPoetId[poetCity.poetId] &&
-        data
-          .genresByPoetId[poetCity.poetId]
-          .map(genre => genre.genreId)
-          .includes(num) &&
+        data.genresByPoetId[poetCity.poetId].map(genre => genre.genreId).includes(num) &&
         poetCity.relationshipId === 1;
     default:
       // Exhaustive over PlacesFilterType: add a member without handling it above
@@ -91,16 +85,16 @@ function renderPoetCities(filteredPoetCities, data, state) {
       source_greektext: pc.source_greektext,
       source_translation: pc.source_translation,
       source_translator: pc.source_translator
-    }
+    };
     if (type === "genre") {
-      const genrePoetCities = data
-        .genresByPoetId[pc.poetId]
-        .filter(genre => genre.genreId === num);
+      const genrePoetCities = data.genresByPoetId[pc.poetId].filter(genre => genre.genreId === num);
       if (genrePoetCities.length > 1) {
         console.log(`poet with name ${pc.poetname} and ${pc.poetId} has more than one entry for genreId ${num}`);
       }
       if (genrePoetCities.length === 0) {
-        console.log(`poet with name ${pc.poetname} and ${pc.poetId} has no entries for genreId ${num} (though we filtered to this genreId)`);
+        console.log(
+          `poet with name ${pc.poetname} and ${pc.poetId} has no entries for genreId ${num} (though we filtered to this genreId)`
+        );
       }
       const genrePoetCity = genrePoetCities[0];
       reference.source_citation = genrePoetCity.source_citation;

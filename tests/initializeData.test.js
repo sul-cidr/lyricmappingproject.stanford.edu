@@ -15,7 +15,7 @@ import { createGeoImaginaryInterfaceHtml } from "../js/interface/geoImaginaryInt
 const { data, alerts, logs } = loadInitializedData();
 
 const poetIdByName = (/** @type {string} */ name) => {
-  const poet = data.poets.find((p) => p.poetname === name);
+  const poet = data.poets.find(p => p.poetname === name);
   assert.ok(poet, `no poet named ${name}`);
   return poet.poetId;
 };
@@ -58,15 +58,23 @@ describe("hydration", () => {
     for (const date of data.dates) {
       assert.ok(date.date < 0, `date ${date.date} should be negative (BCE)`);
     }
-    assert.ok(data.dates.every((d) => d.date >= -900 && d.date <= -300));
+    assert.ok(data.dates.every(d => d.date >= -900 && d.date <= -300));
   });
 
   test("every lookup table is populated", () => {
     /** @type {(keyof Data)[]} */
     const LOOKUP_TABLES = [
-      "citiesById", "poetsById", "regionsById", "genresByPoetId", "genresByGenreId",
-      "govsByCityId", "govsById", "datesByPoetId",
-      "linesByPoetId", "linesByBornCityId", "linesByActiveCityId"
+      "citiesById",
+      "poetsById",
+      "regionsById",
+      "genresByPoetId",
+      "genresByGenreId",
+      "govsByCityId",
+      "govsById",
+      "datesByPoetId",
+      "linesByPoetId",
+      "linesByBornCityId",
+      "linesByActiveCityId"
     ];
     for (const key of LOOKUP_TABLES) {
       assert.ok(Object.keys(data[key]).length > 0, `${key} is empty`);
@@ -87,7 +95,7 @@ describe("date filtering depends on every mapped poet having dates", () => {
   // entirely. Nothing in the code enforces that they exist, so it is asserted
   // here instead.
   test("every poet on the map has a min and max date", () => {
-    const mapped = new Set([...data.poetCities, ...data.geopoetCities].map((pc) => pc.poetId));
+    const mapped = new Set([...data.poetCities, ...data.geopoetCities].map(pc => pc.poetId));
     for (const poetId of mapped) {
       const poet = data.poetsById[poetId];
       assert.ok(poet, `poetId ${poetId} is on the map but not in poets.csv`);
@@ -117,7 +125,7 @@ describe("travel lines", () => {
     // (Crates); the map shows both, which is what issue #332 is about.
     const alcman = poetIdByName("Alcman");
     const lines = data.linesByPoetId[alcman];
-    const journeys = lines.map((l) => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`).sort();
+    const journeys = lines.map(l => `${l.bornCity.cityname} -> ${l.activeCity.cityname}`).sort();
     assert.deepEqual(journeys, ["Sardis -> Sparta", "Sparta -> Sparta"]);
   });
 
@@ -132,7 +140,7 @@ describe("travel lines", () => {
 
   test("poets with a birthplace but nowhere to go are listed as unknown travel", () => {
     assert.ok(data.poetsWithUnknownTravel.length > 0);
-    const travelling = new Set(data.lines.map((l) => l.poetId));
+    const travelling = new Set(data.lines.map(l => l.poetId));
     for (const { id: poetId } of data.poetsWithUnknownTravel) {
       assert.ok(!travelling.has(poetId), `poetId ${poetId} both travels and has unknown travel`);
     }
@@ -140,10 +148,12 @@ describe("travel lines", () => {
 
   test("government ids are unpacked for mixed regimes", () => {
     // convertMixedGovIds: 9 = oligarchy/tyranny, so it implies 1 and 2 as well.
-    const mixed = data.lines.filter((l) => l.bornGovIds.includes(9));
+    const mixed = data.lines.filter(l => l.bornGovIds.includes(9));
     for (const line of mixed) {
-      assert.ok(line.bornGovIds.includes(1) && line.bornGovIds.includes(2),
-        "a line born under oligarchy/tyranny should match both oligarchy and tyranny filters");
+      assert.ok(
+        line.bornGovIds.includes(1) && line.bornGovIds.includes(2),
+        "a line born under oligarchy/tyranny should match both oligarchy and tyranny filters"
+      );
     }
   });
 });
@@ -164,7 +174,7 @@ describe("control bar contents", () => {
 
   test("every control bar list is sorted and non-empty", () => {
     for (const key of /** @type {("travelPoets" | "travelCities" | "poetsWithUnknownTravel" | "regionsForInterface")[]} */
-      (["travelPoets", "travelCities", "poetsWithUnknownTravel", "regionsForInterface"])) {
+    (["travelPoets", "travelCities", "poetsWithUnknownTravel", "regionsForInterface"])) {
       const list = data[key];
       assert.ok(list.length > 0, `${key} is empty`);
       const names = list.map(option => option.name);
@@ -209,11 +219,12 @@ describe("known bugs: derived travel lines", () => {
   test("BUG: a poet born and active in the same city gets a zero-length line", () => {
     // createLines() takes the cartesian product of birthplaces and places of
     // activity without excluding the case where the two are the same city.
-    const degenerate = data.lines.filter((l) => l.bornCityId === l.activeCityId);
-    assert.deepEqual(
-      degenerate.map((l) => `${l.poetDetailName}: ${l.bornCity.cityname}`).sort(),
-      ["Alcman: Sparta", "Corinna: Thebes", "Tyrtaeus: Sparta"]
-    );
+    const degenerate = data.lines.filter(l => l.bornCityId === l.activeCityId);
+    assert.deepEqual(degenerate.map(l => `${l.poetDetailName}: ${l.bornCity.cityname}`).sort(), [
+      "Alcman: Sparta",
+      "Corinna: Thebes",
+      "Tyrtaeus: Sparta"
+    ]);
 
     // L.geodesic draws nothing for a zero-length pair, so these lines are
     // invisible. drawLines() still adds a transparent click target of
@@ -237,17 +248,19 @@ describe("known bugs: derived travel lines", () => {
     ];
     for (const [name, invisible, drawn] of CASES) {
       const lines = data.linesByPoetId[poetIdByName(name)];
-      const visible = lines.filter((l) => l.bornCityId !== l.activeCityId);
-      assert.deepEqual(visible.map((l) => l.bornCity.cityname).sort(), drawn,
-        `${name}'s only drawn origin is the one the sources dispute`);
-      assert.ok(lines.some((l) => l.bornCity.cityname === invisible && l.bornCityId === l.activeCityId));
+      const visible = lines.filter(l => l.bornCityId !== l.activeCityId);
+      assert.deepEqual(
+        visible.map(l => l.bornCity.cityname).sort(),
+        drawn,
+        `${name}'s only drawn origin is the one the sources dispute`
+      );
+      assert.ok(lines.some(l => l.bornCity.cityname === invisible && l.bornCityId === l.activeCityId));
     }
 
     // Tyrtaeus is affected too, but has a second place of activity (Messenia),
     // so his Spartan origin still reaches the map via Sparta -> Messenia.
     const tyrtaeus = data.linesByPoetId[poetIdByName("Tyrtaeus")];
-    assert.ok(tyrtaeus.some((l) =>
-      l.bornCity.cityname === "Sparta" && l.activeCity.cityname !== "Sparta"));
+    assert.ok(tyrtaeus.some(l => l.bornCity.cityname === "Sparta" && l.activeCity.cityname !== "Sparta"));
   });
 });
 
@@ -260,36 +273,40 @@ describe("known bugs: derived travel lines", () => {
 
 describe("control bar ids round-trip to filters", () => {
   /** Every `${prefix}_${num}` id in a block of control bar html. */
-  const idsIn = (/** @type {string} */ html) =>
-    [...html.matchAll(/id="([^"]+)"/g)].map(match => match[1]);
+  const idsIn = (/** @type {string} */ html) => [...html.matchAll(/id="([^"]+)"/g)].map(match => match[1]);
 
-  const prefixesIn = (/** @type {string} */ html) =>
-    [...new Set(idsIn(html).map(id => id.split("_")[0]))].sort();
+  const prefixesIn = (/** @type {string} */ html) => [...new Set(idsIn(html).map(id => id.split("_")[0]))].sort();
 
   test("the places control bar offers only places filters", () => {
     for (const prefix of prefixesIn(createPlacesInterfaceHtml(data))) {
-      assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
-        `the places control bar offers "${prefix}", which getPlacesFilter() rejects`);
+      assert.ok(
+        PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
+        `the places control bar offers "${prefix}", which getPlacesFilter() rejects`
+      );
     }
   });
 
   test("the geographical imaginary control bar offers only places filters", () => {
     for (const prefix of prefixesIn(createGeoImaginaryInterfaceHtml(data))) {
-      assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
-        `the geographical imaginary control bar offers "${prefix}", which getPlacesFilter() rejects`);
+      assert.ok(
+        PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
+        `the geographical imaginary control bar offers "${prefix}", which getPlacesFilter() rejects`
+      );
     }
   });
 
   test("the travel control bar offers only travel filters", () => {
     for (const prefix of prefixesIn(createTravelInterfaceHtml(data))) {
-      assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ (prefix)),
-        `the travel control bar offers "${prefix}", which getTravelFilter() rejects`);
+      assert.ok(
+        TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ (prefix)),
+        `the travel control bar offers "${prefix}", which getTravelFilter() rejects`
+      );
     }
   });
 
   test("every id parses back to the filter and number it was built from", () => {
-    const html = createPlacesInterfaceHtml(data) + createTravelInterfaceHtml(data)
-      + createGeoImaginaryInterfaceHtml(data);
+    const html =
+      createPlacesInterfaceHtml(data) + createTravelInterfaceHtml(data) + createGeoImaginaryInterfaceHtml(data);
     for (const id of idsIn(html)) {
       const [prefix, num] = id.split("_");
       assert.ok(prefix.length > 0, `id "${id}" has no filter prefix`);

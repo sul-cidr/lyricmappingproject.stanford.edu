@@ -6,25 +6,13 @@
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "bundler",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "allowJs": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "index.js",
-    "js/**/*.js",
-    "tests/**/*.js",
-    "types/**/*.d.ts"
-  ],
-  "exclude": [
-    "3rdparty",
-    "node_modules"
-  ]
+  "include": ["index.js", "js/**/*.js", "tests/**/*.js", "types/**/*.d.ts"],
+  "exclude": ["3rdparty", "node_modules"]
 }

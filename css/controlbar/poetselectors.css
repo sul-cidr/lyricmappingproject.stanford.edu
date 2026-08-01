@@ -30,7 +30,7 @@
 }
 
 .picker-label:before {
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   bottom: -2px;
@@ -40,6 +40,6 @@
   opacity: 0;
 }
 
-input:checked+.picker-label:before {
+input:checked + .picker-label:before {
   opacity: 1;
 }

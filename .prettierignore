@@ -1,0 +1,10 @@
+# Vendored libraries, kept exactly as published so the integrity hashes in
+# index.html stay meaningful.
+3rdparty/
+
+# The data. Prettier has no CSV formatter, and these are edited in spreadsheets.
+dataFiles/
+
+# Generated.
+node_modules/
+package-lock.json

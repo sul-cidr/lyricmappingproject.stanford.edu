@@ -7,6 +7,8 @@
     "test": "node --test tests/*.test.js",
     "test:browser": "node --test tests/browser/*.test.js",
     "lint": "npx -y oxlint@1 --deny-warnings -A all -D correctness -D eqeqeq -D no-var -D prefer-const -D no-self-compare -D no-template-curly-in-string js/ tests/ index.js",
+    "format": "npx -y prettier@3 --write .",
+    "format:check": "npx -y prettier@3 --check .",
     "typecheck": "npx -y -p typescript@5 tsc -p jsconfig.json"
   },
   "devDependencies": {

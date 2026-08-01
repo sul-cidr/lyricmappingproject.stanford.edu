@@ -12,9 +12,7 @@ import { assertUnreachable } from "../assertUnreachable.js";
  * @param {State} state
  */
 export function calculateAndDrawLines(map, data, state) {
-  const filteredPoetLines =
-    filterLines(state, data)
-      .filter(getDateFilterFn(data, state));
+  const filteredPoetLines = filterLines(state, data).filter(getDateFilterFn(data, state));
   const calculatedLines = calculateLines(state, data, filteredPoetLines);
   const travelBubbles = calculateTravelBubbles(data, filteredPoetLines);
   drawLines(map, calculatedLines);
@@ -35,21 +33,13 @@ function filterLines(state, data) {
     case "poet":
       return data.lines.filter(line => line.poetId === num);
     case "destination":
-      return data.lines.filter(line =>
-        line.bornCityId === num || line.activeCityId === num
-      );
+      return data.lines.filter(line => line.bornCityId === num || line.activeCityId === num);
     case "smallregion":
-      return data.lines.filter(line =>
-        line.bornCity.regionId === num || line.activeCity.regionId === num
-      );
+      return data.lines.filter(line => line.bornCity.regionId === num || line.activeCity.regionId === num);
     case "region":
-      return data.lines.filter(line =>
-        line.bornCity.bigRegionId === num || line.activeCity.bigRegionId === num
-      );
+      return data.lines.filter(line => line.bornCity.bigRegionId === num || line.activeCity.bigRegionId === num);
     case "gov":
-      return data.lines.filter(line =>
-        line.bornGovIds.includes(num) || line.activeGovIds.includes(num)
-      );
+      return data.lines.filter(line => line.bornGovIds.includes(num) || line.activeGovIds.includes(num));
     default:
       // Exhaustive over TravelFilterType: add a member without handling it above
       // and this stops compiling.
@@ -78,7 +68,7 @@ function calculateLines(state, data, filteredPoetLines) {
   const [type] = getTravelFilter(state);
 
   /** @type {Record<number, DrawnLine>} */
-  const lines = {}
+  const lines = {};
   for (const line of filteredPoetLines) {
     const hash = hashCityIds(line.bornCityId, line.activeCityId);
     if (!lines[hash]) {
@@ -88,7 +78,7 @@ function calculateLines(state, data, filteredPoetLines) {
       lines[hash].poetLines = [];
       lines[hash].dotted = false;
       lines[hash].color = TRAVEL_RED;
-      lines[hash].name = (`${line.bornCity.infowindowName} -> ${line.activeCity.infowindowName}`).toUpperCase();
+      lines[hash].name = `${line.bornCity.infowindowName} -> ${line.activeCity.infowindowName}`.toUpperCase();
     }
     lines[hash].poetLines.push(line);
     colorLine(state, lines[hash]);
@@ -154,7 +144,7 @@ function colorLine(state, line) {
  */
 function calculateTravelBubbles(data, filteredPoetLines) {
   /** @type {Set<number>} */
-  const cityIds = new Set()
+  const cityIds = new Set();
   for (const plId in filteredPoetLines) {
     const pl = filteredPoetLines[plId];
     cityIds.add(pl.bornCityId);

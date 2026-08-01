@@ -14,7 +14,7 @@
   border-bottom: 4px solid transparent;
 }
 
-input:checked+.mainlinks-label {
+input:checked + .mainlinks-label {
   border-bottom: 4px solid rgba(199, 47, 42, 0.5);
   /* rgba color = #c72f2a */
 }
