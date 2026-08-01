@@ -1,5 +1,6 @@
 import { LYRIC_GREY, LYRIC_RED } from "../constants/colors.js";
 import { assertUnreachable } from "../assertUnreachable.js";
+import { getPoetDisplay } from "../calcData/getters.js";
 import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
 /**
@@ -23,7 +24,7 @@ export function createPlacesPopupHtml(data, bubble, filter) {
   const poetCities = bubble.poetCities;
   return `
     ${createHeader(cityname, createPlacesModeTitle(data, cityname, type, num))}
-    ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
+    ${createNumberedListOfPoets(poetCities.map(pc => getPoetDisplay(data, pc.poetId).detailName))}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedListOfPoets(poetCities, data)}
   `;
@@ -57,7 +58,7 @@ function createActivePopupHtml(data, bubble) {
   if (bornPoetCities.length > 0) {
     nativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nativeTitle}</h2>
-      ${createNumberedListOfPoets(bornPoetCities.map(pc => pc.poetDetailName))}
+      ${createNumberedListOfPoets(bornPoetCities.map(pc => getPoetDisplay(data, pc.poetId).detailName))}
     `;
     nativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NATIVE POETS</h4>
@@ -68,7 +69,7 @@ function createActivePopupHtml(data, bubble) {
   if (otherPoetCities.length > 0) {
     nonNativeHeader = `
       <h5 style="color:${LYRIC_GREY}">${nonNativeTitle}</h2>
-      ${createNumberedListOfPoets(otherPoetCities.map(pc => pc.poetDetailName))}
+      ${createNumberedListOfPoets(otherPoetCities.map(pc => getPoetDisplay(data, pc.poetId).detailName))}
     `;
     nonNativeDetails = `
       <h4 style="color:${LYRIC_GREY}">NON-NATIVE POETS</h4>
@@ -117,16 +118,17 @@ function createGeoHeaderListOfPoets(poets) {
 
 /**
  * @param {GeoBubblePoet[]} poets
+ * @param {Data} data
  * @returns {string}
  */
-function createDetailedGeoListOfPoets(poets) {
+function createDetailedGeoListOfPoets(poets, data) {
   return `
     ${poets
       .map((poet, idx) => {
         return `
       <p>
         <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}<br>
-        Dates: ${poet.poetDates}<br>
+        Dates: ${getPoetDisplay(data, poet.poetId).dates}<br>
         ${poet.references.map(reference => renderReference(reference)).join("<br><br>")}
       </p >
       `;
@@ -172,15 +174,16 @@ function createPlacesModeTitle(data, cityname, type, num) {
  * optional field on a type shared with the places map, so this was the one
  * place left that had to cast.
  * @param {GeoBubbleContents} bubble
+ * @param {Data} data
  * @returns {string}
  */
-export function createGeoPopupHtml(bubble) {
+export function createGeoPopupHtml(bubble, data) {
   const cityname = bubble.city.infowindowName.toUpperCase();
   const referenceStr = bubble.poetCities.length === 1 ? "REFERENCE" : "REFERENCES";
   return `
     ${createHeader(cityname, `${bubble.poetCities.length} ${referenceStr} TO ${cityname}`)}
     ${createGeoHeaderListOfPoets(bubble.poets)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
-    ${createDetailedGeoListOfPoets(bubble.poets)}
+    ${createDetailedGeoListOfPoets(bubble.poets, data)}
   `;
 }

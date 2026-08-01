@@ -1,4 +1,4 @@
-import { getPoet, getCity, getGenres, getGovs } from "./getters.js";
+import { getPoet, getCity, getGovs } from "./getters.js";
 
 /**
  * Hydrates the raw CSV rows (ids and coordinates become numbers, dates become
@@ -24,22 +24,14 @@ export function initializeData(raw) {
 
   const derived = derive(csvs, lookups);
 
-  // Assigned onto the rows, not built into them, which is the one place left
-  // where a type runs ahead of the object it describes: until this line, a
-  // PoetCity is missing the four PoetPrimed fields its type says it has.
-  //
-  // A travel line could be built complete because createLines() makes it. These
-  // rows are made by Papa Parse and mutated in place ever since, and derive()
-  // above has captured these exact objects as bornPc and activePc, so handing
-  // back primed copies would leave those references pointing at the originals.
-  //
-  // Last, and in this order: createLines() reads poetCities in file order, so
-  // sorting them any earlier would reorder the poets on every travel arc. The
-  // "every row is primed with its poet's display data" test in
-  // tests/initializeData.test.js is what holds the claim above together.
-  for (const pc of [...csvs.poetCities, ...csvs.geopoetCities]) {
-    Object.assign(pc, poetPrimedData(lookups, pc.poetId));
-  }
+  // What used to be the priming pass: the four display strings were copied onto
+  // every poet-city row and travel line here, and these warnings fired as a side
+  // effect of the copy. Popups now look the poet up when they render, so all
+  // that is left is the check — which is what it always really was.
+  warnAboutIncompletePoets(csvs, lookups);
+
+  // createLines() reads poetCities in file order, so sorting any earlier would
+  // reorder the poets on every travel arc.
   sortPoetCities(lookups, csvs.poetCities);
   sortPoetCities(lookups, csvs.geopoetCities);
 
@@ -196,38 +188,25 @@ function sortPoetCities(lookups, poetCities) {
 }
 
 /**
- * A poet's display name, dates, sources and genres, to be copied onto a row (or
- * a travel line) so popups can render without a second lookup.
+ * Reports poets that are on the map but missing the display data popups show.
  *
- * Returned rather than assigned, so a travel line can be built with these fields
- * already on it instead of existing briefly without them.
+ * Reported once per poet rather than once per row, which is what the priming
+ * pass did — a poet with five rows alerted five times. Reporting it here rather
+ * than where popups read it keeps it to startup: at render time the same alert
+ * would fire again on every redraw.
+ * @param {Csvs} csvs
  * @param {Lookups} lookups
- * @param {number} poetId
- * @returns {PoetPrimed}
  */
-function poetPrimedData(lookups, poetId) {
-  const poet = getPoet(lookups, poetId);
-
-  let poetDetailName = "";
-  if (poet.poetDetailName) poetDetailName = poet.poetDetailName;
-  else alert(`Poet ${poet.poetname} with poetId ${poetId} lacks a details name`);
-
-  let poetDates = "";
-  if (poet.dates) poetDates = poet.dates;
-  else console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks dates`);
-
-  let poetSources = "";
-  if (poet.sources) poetSources = poet.sources;
-  else console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks sources`);
-
-  return {
-    poetDetailName,
-    poetDates,
-    poetSources,
-    poetGenres: getGenres(lookups, poetId)
-      .map(genre => genre.genre)
-      .join(", ")
-  };
+function warnAboutIncompletePoets(csvs, lookups) {
+  const poetIds = new Set([...csvs.poetCities, ...csvs.geopoetCities].map(pc => pc.poetId));
+  for (const poetId of poetIds) {
+    const poet = getPoet(lookups, poetId);
+    // getPoet has already logged the missing id; there is nothing more to say.
+    if (!poet) continue;
+    if (!poet.poetDetailName) alert(`Poet ${poet.poetname} with poetId ${poetId} lacks a details name`);
+    if (!poet.dates) console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks dates`);
+    if (!poet.sources) console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks sources`);
+  }
 }
 
 /**
@@ -469,8 +448,7 @@ function createLines(csvs, lookups) {
             bornCity: fromCity,
             activeCity: toCity,
             bornGovIds: bornGovIds,
-            activeGovIds: activeGovIds,
-            ...poetPrimedData(lookups, poetId)
+            activeGovIds: activeGovIds
           };
           lines.push(line);
         }

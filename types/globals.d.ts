@@ -145,18 +145,24 @@ interface Genre {
 }
 
 /**
- * Poet metadata copied onto poet-city rows and travel lines by poetPrimedData(),
- * so popups can render without a second lookup.
+ * The strings a popup shows about a poet, read through getPoetDisplay() when the
+ * popup is built.
+ *
+ * These used to be four fields copied onto every poet-city row and travel line
+ * at startup — "priming" — so that popups could render without a second lookup.
+ * The lookup they saved is a property access on poetsById. What they cost was
+ * four fields on each of PoetCity, GeoPoetCity, Line and RenderedPoetCity that
+ * the rows did not have for part of startup, and an ordering constraint between
+ * the priming pass and createLines().
  */
-interface PoetPrimed {
-  poetDetailName: string;
-  poetDates: string;
-  poetSources: string;
-  poetGenres: string;
+interface PoetDisplay {
+  detailName: string;
+  dates: string;
+  sources: string;
 }
 
-/** A row of dataFiles/poets_cities.csv, after hydration and priming. */
-interface PoetCity extends PoetPrimed {
+/** A row of dataFiles/poets_cities.csv, hydrated. */
+interface PoetCity {
   poetname: string;
   poetId: number;
   cityname: string;
@@ -179,8 +185,8 @@ interface PoetCity extends PoetPrimed {
   source_explicit: string;
 }
 
-/** A row of dataFiles/geographical_imaginary_group.csv, after hydration and priming. */
-interface GeoPoetCity extends PoetPrimed {
+/** A row of dataFiles/geographical_imaginary_group.csv, hydrated. */
+interface GeoPoetCity {
   imaginaryid: number;
   poetname: string;
   poetId: number;
@@ -255,7 +261,7 @@ type TravelFilterType = "all" | "poet" | "destination" | "smallregion" | "region
 type MapFilterType = PlacesFilterType | GeoFilterType | TravelFilterType;
 
 /** One poet's attested movement from one birthplace to one place of activity. */
-interface Line extends PoetPrimed {
+interface Line {
   poetId: number;
   bornCityId: number;
   activeCityId: number;
@@ -281,7 +287,7 @@ interface Reference {
  * A poet-city row flattened for rendering: the subset of fields popups need,
  * with the citation collapsed into a single `reference`.
  */
-interface RenderedPoetCity extends PoetPrimed {
+interface RenderedPoetCity {
   poetId: number;
   cityId: number;
   cityname: string;

@@ -37,7 +37,7 @@ export function calculateGeoBubbles(data, poetCities) {
   for (const [cityId, rows] of groupRowsByCity(data, poetCities)) {
     /** @type {GeoBubbleContents} */
     const contents = { city: data.citiesById[cityId], poetCities: rows, poets: groupRowsByPoet(rows) };
-    bubbles[cityId] = { ...contents, ...drawnAs(contents, createGeoPopupHtml(contents)) };
+    bubbles[cityId] = { ...contents, ...drawnAs(contents, createGeoPopupHtml(contents, data)) };
   }
   return bubbles;
 }

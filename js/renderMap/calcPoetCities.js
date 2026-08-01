@@ -116,10 +116,6 @@ function renderPoetCity(poetCity, genre) {
     cityId: poetCity.cityId,
     cityname: poetCity.cityname,
     poetname: poetCity.poetname,
-    poetDetailName: poetCity.poetDetailName,
-    poetDates: poetCity.poetDates,
-    poetGenres: poetCity.poetGenres,
-    poetSources: poetCity.poetSources,
     relationshipId: poetCity.relationshipId,
     reference: reference
   };
