@@ -110,8 +110,30 @@ function createLookups(csvs) {
       csvs.dates,
       date => date.poetId,
       date => date.date
-    )
+    ),
+    birthCityIdsByPoetId: createBirthCityIdsByPoetId(csvs.poetCities)
   };
+}
+
+/**
+ * Every city a poet is attested as born in, in file order and without repeats.
+ *
+ * Distinct by city rather than by row, because what this feeds — the "See also:"
+ * line on a birthplace popup — names places and not testimonia. Three sources
+ * call Tyrtaeus an Athenian; a reader standing on Athens wants to be told about
+ * Miletus and Sparta, once each.
+ * @param {PoetCity[]} poetCities
+ * @returns {Record<number, number[]>}
+ */
+function createBirthCityIdsByPoetId(poetCities) {
+  /** @type {Record<number, number[]>} */
+  const byPoetId = {};
+  for (const poetCity of poetCities) {
+    if (poetCity.relationshipId !== 1) continue;
+    if (!byPoetId[poetCity.poetId]) byPoetId[poetCity.poetId] = [];
+    if (!byPoetId[poetCity.poetId].includes(poetCity.cityId)) byPoetId[poetCity.poetId].push(poetCity.cityId);
+  }
+  return byPoetId;
 }
 
 /**

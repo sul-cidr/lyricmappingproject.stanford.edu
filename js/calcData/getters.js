@@ -33,6 +33,27 @@ export function getCity(lookups, cityId) {
 }
 
 /**
+ * The poet's other attested birthplaces, named, for a popup being shown at
+ * `cityId`. Empty for the 80 poets the sources agree about, which is why
+ * callers render nothing rather than an empty label.
+ *
+ * Sorted by name so the order does not depend on which row of the CSV came
+ * first, and plainly rather than with sortAlphabetically(): that lives in
+ * data.js, which imports this module, and city names all start with a letter.
+ * @param {Lookups} lookups
+ * @param {number} poetId
+ * @param {number} cityId the birthplace the popup is already showing
+ * @returns {string[]}
+ */
+export function getOtherBirthplaces(lookups, poetId, cityId) {
+  const cityIds = lookups.birthCityIdsByPoetId[poetId] ?? [];
+  return cityIds
+    .filter(otherCityId => otherCityId !== cityId)
+    .map(otherCityId => getCity(lookups, otherCityId).cityname)
+    .sort();
+}
+
+/**
  * @param {Lookups} lookups
  * @param {number} cityId
  * @returns {CityPolitics[]}

@@ -430,6 +430,12 @@ interface Lookups {
   govsByCityId: Record<number, CityPolitics[]>;
   govsById: Record<number, string>;
   datesByPoetId: Record<number, number[]>;
+  /**
+   * Every city a poet is attested as born in, distinct. Only 13 of the 93 poets
+   * with a birthplace have more than one entry; those are the ones whose popups
+   * carry a "See also:" line.
+   */
+  birthCityIdsByPoetId: Record<number, number[]>;
 }
 
 /** The travel lines and the control bar lists, derived from the CSVs through the lookups. */
