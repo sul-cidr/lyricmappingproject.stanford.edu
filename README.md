@@ -37,6 +37,15 @@ npm ci && npx playwright install chromium
 npm run test:browser
 ```
 
+### Formatting
+
+Prettier, checked in CI. Run it before committing, or let your editor do it —
+`.vscode/settings.json` already formats on save.
+
+```sh
+npm run format
+```
+
 ### Types
 
 Types are JSDoc comments, declared in `types/` and checked by TypeScript in

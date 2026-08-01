@@ -9,7 +9,8 @@ name: check
 # Most of what a linter would tell us comes from the typechecker instead —
 # jsconfig.json turns on noUnusedLocals, noUnusedParameters, noImplicitReturns
 # and noFallthroughCasesInSwitch. oxlint covers the few things a typechecker
-# cannot see, such as == versus ===.
+# cannot see, such as == versus ===, and Prettier covers layout, which is not a
+# linter's job at all.
 
 on:
   push:
@@ -36,6 +37,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Format
+        run: npm run format:check
 
       - name: Install type declarations and playwright
         run: npm ci
