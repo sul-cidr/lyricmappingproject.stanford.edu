@@ -18,7 +18,7 @@ import { test, describe, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { serveSite } from "./serve.js";
-import { loadInitializedData } from "../helpers/loadData.js";
+import { loadInitializedData, stateFor } from "../helpers/loadData.js";
 import { calcPoetCities } from "../../js/renderMap/calcPoetCities.js";
 import { calculateBubbles } from "../../js/renderMap/calcBubbles.js";
 
@@ -30,13 +30,12 @@ const CIRCLES_PER_BUBBLE = 2;
 /**
  * How many bubbles the pure pipeline says a given view should have, counting
  * only those with coordinates — drawBubbles() skips the rest.
- * @param {State["currentMapMode"]} currentMapMode
+ * @param {MapMode} currentMapMode
  * @param {string} selectedId
  * @returns {number}
  */
 function expectedBubbles(currentMapMode, selectedId) {
-  /** @type {State} */
-  const state = { currentMapMode, selectedId, minDate: -800, maxDate: -400 };
+  const state = stateFor(currentMapMode, selectedId);
   const bubbles = calculateBubbles(state, data, calcPoetCities(data, state));
   return Object.values(bubbles).filter(bubble => bubble.city.lat && bubble.city.long).length;
 }

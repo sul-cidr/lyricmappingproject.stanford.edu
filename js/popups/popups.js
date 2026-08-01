@@ -1,5 +1,4 @@
 import { LYRIC_GREY, LYRIC_RED } from "../constants/colors.js";
-import { getPlacesFilter } from "../calcData/getters.js";
 import { assertUnreachable } from "../assertUnreachable.js";
 import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
@@ -12,9 +11,10 @@ import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference }
  * @returns {string}
  */
 export function createPopupHtml(state, data, bubble) {
-  switch (state.currentMapMode) {
+  const mapState = state.map;
+  switch (mapState.currentMapMode) {
     case "placesMode": {
-      const [type, num] = getPlacesFilter(state);
+      const { type, num } = mapState.filter;
       // Relationship 3 is "activity", which gets its own native/non-native split.
       return type === "relationship" && num === 3
         ? createActivePopupHtml(data, bubble)
@@ -28,7 +28,7 @@ export function createPopupHtml(state, data, bubble) {
       // The travel map draws arcs and builds its popups in travelPopups.js.
       throw new Error("createPopupHtml is not used by the travel map");
     default:
-      return assertUnreachable(state.currentMapMode, "unrecognized map mode");
+      return assertUnreachable(mapState, "unrecognized map mode");
   }
 }
 

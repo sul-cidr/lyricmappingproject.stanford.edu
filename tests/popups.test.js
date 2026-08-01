@@ -7,23 +7,20 @@
 
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { loadInitializedData } from "./helpers/loadData.js";
+import { loadInitializedData, stateFor } from "./helpers/loadData.js";
 import { calcPoetCities } from "../js/renderMap/calcPoetCities.js";
 import { calculateBubbles } from "../js/renderMap/calcBubbles.js";
 import { createTravelPopupHtml } from "../js/popups/travelPopups.js";
 
 const { data } = loadInitializedData();
 
-const ALL_DATES = { minDate: -800, maxDate: -400 };
-
 /**
- * @param {State["currentMapMode"]} currentMapMode
+ * @param {MapMode} currentMapMode
  * @param {string} selectedId
  * @returns {Record<number, Bubble>}
  */
 function bubblesFor(currentMapMode, selectedId) {
-  /** @type {State} */
-  const state = { currentMapMode, selectedId, ...ALL_DATES };
+  const state = stateFor(currentMapMode, selectedId);
   return calculateBubbles(state, data, calcPoetCities(data, state));
 }
 
@@ -180,7 +177,7 @@ describe("travel map", () => {
 
 describe("popup html is well formed enough to render", () => {
   test("no popup leaks 'undefined' or 'NaN' into the page", () => {
-    /** @type {[State["currentMapMode"], string][]} */
+    /** @type {[MapMode, string][]} */
     const VIEWS = [
       ["placesMode", "relationship_1"],
       ["placesMode", "relationship_3"],

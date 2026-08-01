@@ -1,7 +1,6 @@
 import { TRAVEL_RED, TRAVEL_PURPLE, TRAVEL_YELLOW } from "../constants/colors.js";
 import { drawLines } from "../drawMap/drawLines.js";
 import { drawBubblesAndLegends } from "../drawMap/drawBubbles.js";
-import { getTravelFilter } from "../calcData/getters.js";
 import { createTravelPopupHtml, createGovTravelPopupHtml } from "../popups/travelPopups.js";
 import { getDateFilterFn } from "./calcCommon.js";
 import { assertUnreachable } from "../assertUnreachable.js";
@@ -10,13 +9,11 @@ import { assertUnreachable } from "../assertUnreachable.js";
  * @param {LyricMap} map
  * @param {Data} data
  * @param {State} state
+ * @param {TravelFilter} filter narrowed by updateMap, from state.map
  */
-export function calculateAndDrawLines(map, data, state) {
-  // Parsed once here and threaded down. Re-deriving it inside colorLine and
-  // weightLine meant splitting state.selectedId a few hundred times per redraw.
-  const [type, num] = getTravelFilter(state);
-  const filteredPoetLines = filterLines(data, type, num).filter(getDateFilterFn(data, state));
-  const calculatedLines = calculateLines(data, type, num, filteredPoetLines);
+export function calculateAndDrawLines(map, data, state, filter) {
+  const filteredPoetLines = filterLines(data, filter).filter(getDateFilterFn(data, state));
+  const calculatedLines = calculateLines(data, filter, filteredPoetLines);
   const travelBubbles = calculateTravelBubbles(data, filteredPoetLines);
   drawLines(map, calculatedLines);
   drawBubblesAndLegends(map, travelBubbles);
@@ -25,11 +22,10 @@ export function calculateAndDrawLines(map, data, state) {
 /**
  * Narrows every poet line down to those matching the selected radio button.
  * @param {Data} data
- * @param {TravelFilterType} type
- * @param {number} num
+ * @param {TravelFilter} filter
  * @returns {Line[]}
  */
-export function filterLines(data, type, num) {
+export function filterLines(data, { type, num }) {
   switch (type) {
     case "all":
       return data.lines;
@@ -63,12 +59,11 @@ function hashCityIds(from, to) {
  * Merges every poet line sharing a city pair into a single drawn arc, then
  * colours, weights and builds a popup for each.
  * @param {Data} data
- * @param {TravelFilterType} type
- * @param {number} num
+ * @param {TravelFilter} filter
  * @param {Line[]} filteredPoetLines
  * @returns {Record<number, DrawnLine>}
  */
-export function calculateLines(data, type, num, filteredPoetLines) {
+export function calculateLines(data, { type, num }, filteredPoetLines) {
   /** @type {Record<number, DrawnLine>} */
   const lines = {};
 
