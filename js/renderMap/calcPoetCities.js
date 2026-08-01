@@ -1,30 +1,65 @@
-import { getGenres, getPlacesFilter } from "../calcData/getters.js";
+import { getGenres, getPlacesFilter, getGeoFilter } from "../calcData/getters.js";
 import { assertUnreachable } from "../assertUnreachable.js";
 import { getDateFilterFn } from "./calcCommon.js";
 
 /** @typedef {PoetCity | GeoPoetCity} AnyPoetCity */
-/** @typedef {(poetCity: AnyPoetCity) => boolean} PoetCityFilter */
 
 /**
  * Picks the right source rows for the current map, applies the date slider and
  * control-bar filters, and flattens the survivors for rendering.
+ *
+ * The two maps are handled apart rather than together, because they do not
+ * offer the same filters: places has ORIGIN, ACTIVITY and the genres,
+ * geographical imaginary has ALL REFERENCES. They share only "poet".
  * @param {Data} data
  * @param {State} state
  * @returns {RenderedPoetCity[]}
  */
 export function calcPoetCities(data, state) {
+  switch (state.currentMapMode) {
+    case "placesMode":
+      return calcPlacesPoetCities(data, state);
+    case "geoimaginaryMode":
+      return calcGeoPoetCities(data, state);
+    case "travelMode":
+      // The travel map draws arcs rather than bubbles, and calculates them in
+      // lines.js. Nothing routes it here.
+      throw new Error("calcPoetCities is not used by the travel map");
+    default:
+      return assertUnreachable(state.currentMapMode, "unrecognized current map mode");
+  }
+}
+
+/**
+ * @param {Data} data
+ * @param {State} state
+ * @returns {RenderedPoetCity[]}
+ */
+function calcPlacesPoetCities(data, state) {
   const [type, num] = getPlacesFilter(state);
-  const dated = getPoetCitiesData(data, state).filter(getDateFilterFn(data, state));
+  const dated = data.poetCities.filter(getDateFilterFn(data, state));
 
   if (type === "genre") return renderGenreRows(dated, data, num);
 
-  return dated.filter(getFilterFn(type, num)).map(poetCity => renderPoetCity(poetCity));
+  return dated.filter(getPlacesFilterFn(type, num)).map(poetCity => renderPoetCity(poetCity));
+}
+
+/**
+ * @param {Data} data
+ * @param {State} state
+ * @returns {RenderedPoetCity[]}
+ */
+function calcGeoPoetCities(data, state) {
+  const [type, num] = getGeoFilter(state);
+  const dated = data.geopoetCities.filter(getDateFilterFn(data, state));
+
+  return dated.filter(getGeoFilterFn(type, num)).map(poetCity => renderPoetCity(poetCity));
 }
 
 /**
  * Filters and renders together, so the entry that qualifies a row is the one
  * that supplies its citation.
- * @param {AnyPoetCity[]} poetCities
+ * @param {PoetCity[]} poetCities
  * @param {Data} data
  * @param {number} genreId
  * @returns {RenderedPoetCity[]}
@@ -38,33 +73,14 @@ function renderGenreRows(poetCities, data, genreId) {
 }
 
 /**
- * @param {Data} data
- * @param {State} state
- * @returns {AnyPoetCity[]}
- */
-function getPoetCitiesData(data, state) {
-  switch (state.currentMapMode) {
-    case "placesMode":
-    case "travelMode":
-      return [...data.poetCities];
-    case "geoimaginaryMode":
-      return [...data.geopoetCities];
-    default:
-      return assertUnreachable(state.currentMapMode, "unrecognized current map mode");
-  }
-}
-
-/**
- * Builds the predicate for the selected radio button. Genre is excluded from
- * the type because renderGenreRows handles it.
+ * Builds the predicate for the selected places radio button. Genre is excluded
+ * from the type because renderGenreRows handles it.
  * @param {Exclude<PlacesFilterType, "genre">} type
  * @param {number} num
- * @returns {PoetCityFilter}
+ * @returns {(poetCity: PoetCity) => boolean}
  */
-function getFilterFn(type, num) {
+function getPlacesFilterFn(type, num) {
   switch (type) {
-    case "all":
-      return () => true;
     case "relationship":
       // Relationship 3 is "activity", which every row qualifies for.
       if (num === 3) return () => true;
@@ -72,7 +88,24 @@ function getFilterFn(type, num) {
     case "poet":
       return poetCity => poetCity.poetId === num;
     default:
-      return assertUnreachable(type, "unrecognized filter when calculating poet cities");
+      return assertUnreachable(type, "unrecognized filter on the places map");
+  }
+}
+
+/**
+ * As getPlacesFilterFn, for the geographical imaginary map's two filters.
+ * @param {GeoFilterType} type
+ * @param {number} num
+ * @returns {(poetCity: GeoPoetCity) => boolean}
+ */
+function getGeoFilterFn(type, num) {
+  switch (type) {
+    case "all":
+      return () => true;
+    case "poet":
+      return poetCity => poetCity.poetId === num;
+    default:
+      return assertUnreachable(type, "unrecognized filter on the geographical imaginary map");
   }
 }
 

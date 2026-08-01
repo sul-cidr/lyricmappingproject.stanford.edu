@@ -229,19 +229,30 @@ interface FilterOption {
  * The filter kinds encoded in the first half of State.selectedId, e.g. the
  * "poet" in "poet_93".
  *
- * Each map offers its own set, and the two overlap rather than nest: "all" and
- * "poet" appear on both, "genre" only on places, "gov" only on travel. Keeping
- * them as separate unions lets getPlacesFilter() and getTravelFilter() each
- * hand back exactly what their map can produce, so consumers switch over four
- * or six cases with nothing impossible left to handle.
+ * There are three maps and three sets, overlapping rather than nesting: "poet"
+ * is on all three, "all" on geographical imaginary and travel but not places,
+ * "relationship" and "genre" only on places, "gov" only on travel. Keeping them
+ * as separate unions lets each getter hand back exactly what its own control
+ * bar can produce, so consumers switch over two or three cases with nothing
+ * impossible left to handle.
+ *
+ * These are what createPlacesInterfaceHtml() actually emits: ORIGIN and
+ * ACTIVITY (relationship), the poets with unknown travel, and the genres.
  */
-type PlacesFilterType = "all" | "relationship" | "poet" | "genre";
+type PlacesFilterType = "relationship" | "poet" | "genre";
 
-/** As PlacesFilterType, for the travel map. */
+/**
+ * What createGeoImaginaryInterfaceHtml() emits: ALL REFERENCES, and one button
+ * per poet. It offers no relationship and no genre, and it is the only one of
+ * the three place-and-bubble maps with an ALL.
+ */
+type GeoFilterType = "all" | "poet";
+
+/** As above, for the travel map. */
 type TravelFilterType = "all" | "poet" | "destination" | "smallregion" | "region" | "gov";
 
 /** Any filter kind, whichever map produced it. */
-type MapFilterType = PlacesFilterType | TravelFilterType;
+type MapFilterType = PlacesFilterType | GeoFilterType | TravelFilterType;
 
 /** One poet's attested movement from one birthplace to one place of activity. */
 interface Line extends PoetPrimed {
