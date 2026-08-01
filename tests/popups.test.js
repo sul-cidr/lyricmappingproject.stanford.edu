@@ -149,7 +149,12 @@ describe("geographical imaginary map", () => {
 
 describe("travel map", () => {
   test("an arc popup names both ends, the poets, and both citations", () => {
-    const line = data.lines.find(l => l.poetDetailName === "Pindar");
+    // Looked up through poetsById, as the popup does. Comparing against
+    // poet.poetId directly would not work: poets.csv's poetId is never parsed,
+    // so a Poet holds the string "149" where its type promises a number. It goes
+    // unnoticed because these ids are only ever used as object keys, which
+    // coerce. Worth fixing, but not here.
+    const line = data.lines.find(l => data.poetsById[l.poetId].poetDetailName === "Pindar");
     assert.ok(line, "expected Pindar to have a travel line");
     const drawnLine = {
       fromCity: line.bornCity,

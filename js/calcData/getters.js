@@ -113,3 +113,27 @@ function parseFilter(selectedId, allowed, mapName) {
   }
   return { type: filterType, num: parseInt(stringNum) };
 }
+
+/**
+ * The strings popups show about a poet, looked up when the popup is built.
+ *
+ * Called at render time rather than copied onto every row at startup. The
+ * lookups are property accesses on poetsById and genresByPoetId, so the copy
+ * they replaced was saving nothing worth the four fields it added to four types
+ * — fields the rows did not have until the priming pass ran.
+ *
+ * The empty-string fallbacks are for data that is missing rather than absent:
+ * warnAboutIncompletePoets() reports it at startup, and this keeps a popup
+ * rendering a blank line instead of the word "undefined".
+ * @param {Lookups} lookups
+ * @param {number} poetId
+ * @returns {PoetDisplay}
+ */
+export function getPoetDisplay(lookups, poetId) {
+  const poet = getPoet(lookups, poetId);
+  return {
+    detailName: poet?.poetDetailName ?? "",
+    dates: poet?.dates ?? "",
+    sources: poet?.sources ?? ""
+  };
+}

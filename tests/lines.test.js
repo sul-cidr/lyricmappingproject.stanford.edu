@@ -50,6 +50,13 @@ function arcNamed(arcs, name) {
   return matching[0];
 }
 
+/**
+ * A travel line no longer carries its poet's display name; popups look it up.
+ * @param {Line} line
+ * @returns {string}
+ */
+const detailNameOf = line => data.poetsById[line.poetId].poetDetailName;
+
 const cityIdByName = (/** @type {string} */ cityname) => {
   const city = data.cities.find(c => c.cityname === cityname);
   assert.ok(city, `no city named ${cityname}`);
@@ -61,7 +68,7 @@ describe("arcs merge the poets who made the same journey", () => {
 
   test("three poets going from Thebes to Athens draw one arc, not three", () => {
     const arc = arcNamed(arcs, "THEBES -> ATHENS");
-    assert.deepEqual(arc.poetLines.map(line => line.poetDetailName).sort(), ["Khairis", "Pindar", "Pronomus"]);
+    assert.deepEqual(arc.poetLines.map(line => detailNameOf(line)).sort(), ["Khairis", "Pindar", "Pronomus"]);
   });
 
   test("one poet's uncertain journey dots the whole arc", () => {
@@ -69,7 +76,7 @@ describe("arcs merge the poets who made the same journey", () => {
     // Simonides' is not. They share an arc, so the arc is drawn dotted: the
     // hedge belongs to one of the two, but the map cannot say so.
     const arc = arcNamed(arcs, "IOULIS (CEOS) -> ATHENS");
-    assert.deepEqual(arc.poetLines.map(line => `${line.poetDetailName}:${line.dotted}`).sort(), [
+    assert.deepEqual(arc.poetLines.map(line => `${detailNameOf(line)}:${line.dotted}`).sort(), [
       "Bacchylides:true",
       "Simonides:false"
     ]);

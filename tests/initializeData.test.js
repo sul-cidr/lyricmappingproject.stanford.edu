@@ -82,11 +82,17 @@ describe("hydration", () => {
     }
   });
 
-  test("every row is primed with its poet's display data", () => {
-    for (const pc of [...data.poetCities, ...data.geopoetCities]) {
-      assert.equal(typeof pc.poetDetailName, "string");
-      assert.ok(pc.poetDetailName.length > 0, `row for poetId ${pc.poetId} has no poetDetailName`);
-      assert.equal(typeof pc.poetDates, "string");
+  test("every poet on the map has the display data popups show", () => {
+    // Popups read these through getPoetDisplay() when they render, and it falls
+    // back to "" rather than leaking "undefined" into the page — so a poet
+    // missing them renders a blank line instead of failing. This is what
+    // warnAboutIncompletePoets() alerts about at startup, asserted directly.
+    const mapped = new Set([...data.poetCities, ...data.geopoetCities].map(pc => pc.poetId));
+    for (const poetId of mapped) {
+      const poet = data.poetsById[poetId];
+      assert.ok(poet.poetDetailName.length > 0, `poetId ${poetId} has no poetDetailName`);
+      assert.ok(poet.dates.length > 0, `${poet.poetname} has no dates`);
+      assert.ok(poet.sources.length > 0, `${poet.poetname} has no sources`);
     }
   });
 });
@@ -221,7 +227,7 @@ describe("known bugs: derived travel lines", () => {
     // createLines() takes the cartesian product of birthplaces and places of
     // activity without excluding the case where the two are the same city.
     const degenerate = data.lines.filter(l => l.bornCityId === l.activeCityId);
-    assert.deepEqual(degenerate.map(l => `${l.poetDetailName}: ${l.bornCity.cityname}`).sort(), [
+    assert.deepEqual(degenerate.map(l => `${data.poetsById[l.poetId].poetDetailName}: ${l.bornCity.cityname}`).sort(), [
       "Alcman: Sparta",
       "Corinna: Thebes",
       "Tyrtaeus: Sparta"
