@@ -1,0 +1,24 @@
+name: check
+
+# Runs the data-integrity and rendering tests. Nothing is installed: the tests
+# use Node's built-in runner and the project has no dependencies.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Active LTS, supported until April 2028. Node 26 becomes LTS in
+          # October 2026 and is the natural next bump. The tests only use
+          # node:test, node:assert and node:fs, so any Node 20+ will do;
+          # 'lts/*' also works if you would rather this never need touching.
+          node-version: '24'
+      - name: Tests
+        run: node --test tests/*.test.js

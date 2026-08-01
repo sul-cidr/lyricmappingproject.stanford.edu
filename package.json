@@ -1,0 +1,9 @@
+{
+  "name": "lyricmappingproject",
+  "private": true,
+  "type": "module",
+  "description": "Not a build. This file exists so Node treats the .js files as the ES modules they already are, which is what lets the tests import them directly. There are no dependencies and nothing to install; the site is still plain files served as-is.",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

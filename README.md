@@ -9,3 +9,21 @@ Created and implemented by David Driscoll, designed and researched by David Dris
 Please cite as: D. Driscoll, I. McMullin, S. Sansom, S. Brennan-McMahon, A.-E. Peponi. Mapping Greek Lyric : Places, Travel, Geographical Imaginary [Date of access] (http://lyricmappingproject.stanford.edu)
 
 Many thanks to: Stanford's Department of Classics for financial support, Ancient World Mapping Center, CartoDB, jQRangeSlider, Mapbox, Orbis, Pleiades, and Stanford's Humanities + Design Lab.
+
+## Working on the code
+
+The code is vanilla JS and is served without a build step. The goal is to
+require minimal maintenance and let the site work as-is for as long as possible.
+To develop, serve the directory — for example `python3 -m http.server 8000`.
+
+### Tests
+
+There are nevertheless tests, run in CI on every pull request.
+
+```sh
+node --test tests/*.test.js     # or: npm test
+```
+
+They use Node's built-in runner, so there is nothing to install. Most check the
+CSVs in `dataFiles/`, which is where this project's bugs have historically come
+from. Some record known data problems we plan to fix.
