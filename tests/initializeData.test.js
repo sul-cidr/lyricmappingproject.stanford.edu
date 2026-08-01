@@ -7,10 +7,14 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { loadInitializedData } from "./helpers/loadData.js";
 import { sortAlphabetically } from "../js/calcData/data.js";
+import { PLACES_FILTER_TYPES, TRAVEL_FILTER_TYPES } from "../js/calcData/getters.js";
+import { createPlacesInterfaceHtml } from "../js/interface/placesInterface.js";
+import { createTravelInterfaceHtml } from "../js/interface/travelInterface.js";
+import { createGeoImaginaryInterfaceHtml } from "../js/interface/geoImaginaryInterface.js";
 
 const { data, alerts, logs } = loadInitializedData();
 
-const poetIdByName = (name) => {
+const poetIdByName = (/** @type {string} */ name) => {
   const poet = data.poets.find((p) => p.poetname === name);
   assert.ok(poet, `no poet named ${name}`);
   return poet.poetId;
@@ -28,13 +32,25 @@ describe("initializeData runs clean", () => {
 
 describe("hydration", () => {
   test("ids and coordinates become numbers", () => {
-    for (const city of data.cities.slice(0, 20)) {
-      assert.equal(typeof city.cityId, "number");
-      if (city.lat !== "") assert.equal(typeof city.lat, "number");
+    for (const city of data.cities) {
+      assert.equal(typeof city.cityId, "number", `${city.cityname} has a non-numeric cityId`);
+      assert.equal(typeof city.lat, "number", `${city.cityname} has a non-numeric lat`);
+      assert.equal(typeof city.long, "number", `${city.cityname} has a non-numeric long`);
     }
-    for (const pc of data.poetCities.slice(0, 20)) {
+    for (const pc of data.poetCities) {
       assert.equal(typeof pc.poetId, "number");
       assert.equal(typeof pc.cityId, "number");
+    }
+  });
+
+  test("cities with no coordinates hydrate to NaN, and are skipped when drawing", () => {
+    // parseFloat("") is NaN, and drawBubbles() tests `if (bubble.city.lat && ...)`,
+    // so these two cities are simply never drawn. Asserted explicitly because
+    // `typeof NaN === "number"` makes them invisible to the check above.
+    const unplaced = data.cities.filter(city => Number.isNaN(city.lat) || Number.isNaN(city.long));
+    assert.deepEqual(unplaced.map(city => city.cityname).sort(), ["Onogloi", "Stathmi"]);
+    for (const city of unplaced) {
+      assert.ok(Number.isNaN(city.lat) && Number.isNaN(city.long), "one coordinate without the other");
     }
   });
 
@@ -46,11 +62,11 @@ describe("hydration", () => {
   });
 
   test("every lookup table is populated", () => {
-    for (const key of [
+    for (const key of /** @type {(keyof Data)[]} */ ([
       "citiesById", "poetsById", "regionsById", "genresByPoetId", "genresByGenreId",
       "govsByCityId", "govsById", "datesByPoetId",
       "linesByPoetId", "linesByBornCityId", "linesByActiveCityId"
-    ]) {
+    ])) {
       assert.ok(Object.keys(data[key]).length > 0, `${key} is empty`);
     }
   });
@@ -145,7 +161,8 @@ describe("control bar contents", () => {
   });
 
   test("every control bar list is sorted and non-empty", () => {
-    for (const key of ["travelPoets", "travelCities", "poetsWithUnknownTravel", "regionsForInterface"]) {
+    for (const key of /** @type {("travelPoets" | "travelCities" | "poetsWithUnknownTravel" | "regionsForInterface")[]} */
+      (["travelPoets", "travelCities", "poetsWithUnknownTravel", "regionsForInterface"])) {
       const list = data[key];
       assert.ok(list.length > 0, `${key} is empty`);
       const names = list.map((t) => t[1]);
@@ -211,10 +228,10 @@ describe("known bugs: derived travel lines", () => {
     // so the map draws the foreign-origin traditions and silently drops the
     // native one. This is the travel-map half of issue #332, and it is worse
     // than the popup wording: the omission cannot be seen at all.
-    for (const [name, invisible, drawn] of [
+    for (const [name, invisible, drawn] of /** @type {[string, string, string[]][]} */ ([
       ["Alcman", "Sparta", ["Sardis"]],
       ["Corinna", "Thebes", ["Tanagra"]]
-    ]) {
+    ])) {
       const lines = data.linesByPoetId[poetIdByName(name)];
       const visible = lines.filter((l) => l.bornCityId !== l.activeCityId);
       assert.deepEqual(visible.map((l) => l.bornCity.cityname).sort(), drawn,
@@ -227,5 +244,59 @@ describe("known bugs: derived travel lines", () => {
     const tyrtaeus = data.linesByPoetId[poetIdByName("Tyrtaeus")];
     assert.ok(tyrtaeus.some((l) =>
       l.bornCity.cityname === "Sparta" && l.activeCity.cityname !== "Sparta"));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The control bar is HTML strings, and a radio button's id is the only thing
+// tying a click back to a filter. The types stop a prefix being misspelt; these
+// tests stop a map offering a filter it cannot handle, which the types cannot
+// see because both builders take the same MapFilterType.
+// ---------------------------------------------------------------------------
+
+describe("control bar ids round-trip to filters", () => {
+  /** Every `${prefix}_${num}` id in a block of control bar html. */
+  const idsIn = (/** @type {string} */ html) =>
+    [...html.matchAll(/id="([^"]+)"/g)].map(match => match[1]);
+
+  const prefixesIn = (/** @type {string} */ html) =>
+    [...new Set(idsIn(html).map(id => id.split("_")[0]))].sort();
+
+  test("the places control bar offers only places filters", () => {
+    for (const prefix of prefixesIn(createPlacesInterfaceHtml(data))) {
+      assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
+        `the places control bar offers "${prefix}", which getPlacesFilter() rejects`);
+    }
+  });
+
+  test("the geographical imaginary control bar offers only places filters", () => {
+    for (const prefix of prefixesIn(createGeoImaginaryInterfaceHtml(data))) {
+      assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
+        `the geographical imaginary control bar offers "${prefix}", which getPlacesFilter() rejects`);
+    }
+  });
+
+  test("the travel control bar offers only travel filters", () => {
+    for (const prefix of prefixesIn(createTravelInterfaceHtml(data))) {
+      assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ (prefix)),
+        `the travel control bar offers "${prefix}", which getTravelFilter() rejects`);
+    }
+  });
+
+  test("every id parses back to the filter and number it was built from", () => {
+    const html = createPlacesInterfaceHtml(data) + createTravelInterfaceHtml(data)
+      + createGeoImaginaryInterfaceHtml(data);
+    for (const id of idsIn(html)) {
+      const [prefix, num] = id.split("_");
+      assert.ok(prefix.length > 0, `id "${id}" has no filter prefix`);
+      assert.ok(Number.isFinite(parseInt(num)), `id "${id}" has no numeric id`);
+    }
+  });
+
+  test("the default selectedId of each mode is one that mode can handle", () => {
+    // updateMapMode() sets these; they are what the map renders on first paint.
+    assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("relationship")));
+    assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("all")));
+    assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ ("all")));
   });
 });

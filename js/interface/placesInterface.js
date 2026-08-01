@@ -1,5 +1,11 @@
-import { createInput, createInputFromTuple } from "./commonInterface.js";
+import { createFilterInput, createInputFromTuple } from "./commonInterface.js";
 
+/**
+ * The control bar for the places map: origin/activity, poets with no known
+ * travel, and genres.
+ * @param {Data} data
+ * @returns {string}
+ */
 export function createPlacesInterfaceHtml(data) {
   return (`
     <div class="buttonContainer" tabindex="0">
@@ -7,8 +13,8 @@ export function createPlacesInterfaceHtml(data) {
         <div class="controlBarLabel">
           PLACE OF:
         </div>
-        ${createInput("relationship_1", "ORIGIN")}
-        ${createInput("relationship_3", "ACTIVITY")}
+        ${createFilterInput("relationship", 1, "ORIGIN")}
+        ${createFilterInput("relationship", 3, "ACTIVITY")}
       </fieldset>
     </div>
 

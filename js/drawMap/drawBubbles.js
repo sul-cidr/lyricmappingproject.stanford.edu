@@ -1,5 +1,10 @@
 import { LYRIC_WHITE, LYRIC_RED } from "../constants/colors.js";
 
+/**
+ * Draws every city circle and its label, and re-sizes them on zoom.
+ * @param {LyricMap} map
+ * @param {Record<number, DrawableBubble>} bubbles
+ */
 export function drawBubblesAndLegends(map, bubbles) {
   const drawnBubbles = drawBubbles(map, bubbles);
   drawLegends(map, bubbles);
@@ -13,7 +18,13 @@ export function drawBubblesAndLegends(map, bubbles) {
   });
 }
 
+/**
+ * @param {LyricMap} map
+ * @param {Record<number, DrawableBubble>} bubbles
+ * @returns {any[]} the Leaflet circles, for re-sizing on zoom
+ */
 function drawBubbles(map, bubbles) {
+  /** @type {any[]} */
   const drawnBubbles = [];
 
   for (const bubble of Object.values(bubbles)) {
@@ -29,6 +40,14 @@ function drawBubbles(map, bubbles) {
   return drawnBubbles;
 }
 
+/**
+ * Draws a visible circle plus a larger invisible one, so small bubbles are
+ * still easy to click.
+ * @param {any} location a Leaflet LatLng
+ * @param {LyricMap} map
+ * @param {DrawableBubble} bubble
+ * @returns {any[]}
+ */
 function drawBubble(location, map, bubble) {
   const radius = calculateBubbleSize(map.getZoom(), bubble.price);
   const transparentCircle = L.circle(location,
@@ -59,6 +78,10 @@ function drawBubble(location, map, bubble) {
   return [transparentCircle, circle];
 }
 
+/**
+ * @param {LyricMap} map
+ * @param {Record<number, DrawableBubble>} bubbles
+ */
 function drawLegends(map, bubbles) {
   map.legendLayerGroup.clearLayers();
   for (const bubble of Object.values(bubbles)) {
@@ -72,6 +95,11 @@ function drawLegends(map, bubbles) {
   }
 }
 
+/**
+ * @param {any} location a Leaflet LatLng
+ * @param {LyricMap} map
+ * @param {DrawableBubble} bubble
+ */
 function drawLegend(location, map, bubble) {
   if (map.getZoom() >= minimumZoomToShowLegend(bubble.price)) {
     const textMarker = L.marker(location, {
@@ -86,6 +114,11 @@ function drawLegend(location, map, bubble) {
   }
 }
 
+/**
+ * Bigger bubbles get labelled sooner as you zoom out.
+ * @param {number} price
+ * @returns {number}
+ */
 function minimumZoomToShowLegend(price) {
   if (price >= 22) return 0;
   if (price >= 20) return 7;
@@ -93,6 +126,11 @@ function minimumZoomToShowLegend(price) {
   return 9;
 }
 
+/**
+ * @param {number} zoom
+ * @param {number} price
+ * @returns {number} radius in metres
+ */
 function calculateBubbleSize(zoom, price) {
   let multiplier = 900; // base zoom at 6 and below
 

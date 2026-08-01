@@ -1,5 +1,10 @@
-import { createInput, createInputFromTuple } from "./commonInterface.js";
+import { createFilterInput, createInputFromTuple } from "./commonInterface.js";
 
+/**
+ * The control bar for the geographical-imaginary map.
+ * @param {Data} data
+ * @returns {string}
+ */
 export function createGeoImaginaryInterfaceHtml(data) {
   return (`
   <div class="buttonContainer" tabindex="0">
@@ -7,7 +12,7 @@ export function createGeoImaginaryInterfaceHtml(data) {
       <div class="controlBarLabel">
       LOCATIONS IN POETRY: 
       </div>
-      ${createInput("all_1", "ALL REFERENCES")}
+      ${createFilterInput("all", 1, "ALL REFERENCES")}
     </fieldset>
   </div>
 

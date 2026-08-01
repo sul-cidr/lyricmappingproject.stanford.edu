@@ -10,11 +10,14 @@ function main() {
   initializeCloseEssayClicks();
 
   const map = initializeMap();
-  const data = {};
+  // Starts empty; parseCsvs fills the raw arrays and initializeData derives the rest.
+  const data = /** @type {Data} */ ({});
+  /** @type {State} */
   const state = {
     "currentMapMode": "placesMode",
     "minDate": -800,
-    "maxDate": -400
+    "maxDate": -400,
+    "selectedId": "relationship_3"
   };
 
   parseCsvs(data)

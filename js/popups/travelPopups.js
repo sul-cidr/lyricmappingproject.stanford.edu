@@ -1,6 +1,12 @@
 import { LYRIC_GREY, LYRIC_RED } from "../constants/colors.js";
 import { createNumberedListOfPoets, createDetailedListOfPoets, renderReference } from "./popupsCommon.js";
 
+/**
+ * Builds the html shown when a travel arc is clicked.
+ * @param {Data} data
+ * @param {DrawnLine} line
+ * @returns {string}
+ */
 export function createTravelPopupHtml(data, line) {
   return (`
   <h3 style="color:${LYRIC_GREY}">${line.name}</h3>
@@ -15,6 +21,12 @@ export function createTravelPopupHtml(data, line) {
   `);
 }
 
+/**
+ * Renders the citation behind either end of an arc, for every poet on it.
+ * @param {DrawnLine} line
+ * @param {"bornPc" | "activePc"} direction which end of the journey to cite
+ * @returns {string}
+ */
 function createTravelSource(line, direction) {
   return line.poetLines.map((pl, idx) => {
     return (`
@@ -26,6 +38,13 @@ function createTravelSource(line, direction) {
   }).join("")
 }
 
+/**
+ * As createTravelPopupHtml, but the details block reports regimes rather than
+ * genres and sources.
+ * @param {Data} data
+ * @param {DrawnLine} line
+ * @returns {string}
+ */
 export function createGovTravelPopupHtml(data, line) {
   return (`
   <h3 style="color:${LYRIC_GREY}">${line.name}</h3>
@@ -40,6 +59,11 @@ export function createGovTravelPopupHtml(data, line) {
   `);
 }
 
+/**
+ * @param {Line[]} poets
+ * @param {Data} data
+ * @returns {string}
+ */
 function createRegimeTravelListOfPoets(poets, data) {
   return (`
     ${poets.map((poet, idx) => {
@@ -54,6 +78,11 @@ function createRegimeTravelListOfPoets(poets, data) {
   `);
 }
 
+/**
+ * @param {number[]} govIds
+ * @param {Data} data
+ * @returns {string}
+ */
 function renderGovNames(govIds, data) {
   return govIds.map(govId => data.govsById[govId]).join(", ");
 }

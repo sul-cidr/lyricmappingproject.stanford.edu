@@ -1,6 +1,17 @@
-import { getGenres, getMapTypeNum, getPoet } from "../calcData/getters.js";
+import { getPlacesFilter } from "../calcData/getters.js";
+import { assertUnreachable } from "../assertUnreachable.js";
 import { getDateFilterFn } from "./calcCommon.js";
 
+/** @typedef {PoetCity | GeoPoetCity} AnyPoetCity */
+/** @typedef {(poetCity: AnyPoetCity) => boolean} PoetCityFilter */
+
+/**
+ * Picks the right source rows for the current map, applies the date slider and
+ * control-bar filters, and flattens the survivors for rendering.
+ * @param {Data} data
+ * @param {State} state
+ * @returns {RenderedPoetCity[]}
+ */
 export function calcPoetCities(data, state) {
   const poetCitiesData = getPoetCitiesData(data, state);
   const filteredPoetCities =
@@ -13,50 +24,68 @@ export function calcPoetCities(data, state) {
   return renderedPoetCities;
 }
 
+/**
+ * @param {Data} data
+ * @param {State} state
+ * @returns {AnyPoetCity[]}
+ */
 function getPoetCitiesData(data, state) {
-  let poetCitiesData;
-  if (state.currentMapMode === "placesMode" || state.currentMapMode === "travelMode") {
-    poetCitiesData = data.poetCities;
-  } else if (state.currentMapMode === "geoimaginaryMode") {
-    poetCitiesData = data.geopoetCities;
-  } else {
-    alert(`unrecognized current map mode ${state.currentMapMode}`);
+  switch (state.currentMapMode) {
+    case "placesMode":
+    case "travelMode":
+      return [...data.poetCities];
+    case "geoimaginaryMode":
+      return [...data.geopoetCities];
+    default:
+      return assertUnreachable(state.currentMapMode, "unrecognized current map mode");
   }
-  return [...poetCitiesData];
 }
 
+/**
+ * Builds the predicate for whichever radio button is currently selected.
+ * @param {Data} data
+ * @param {State} state
+ * @returns {PoetCityFilter}
+ */
 function getFilterFn(data, state) {
-  const [type, num] = getMapTypeNum(state);
-  let filterFn;
-  if (type === "all") {
-    filterFn = () => true;
-  }
-  else if (type === "relationship") {
-    if (num === 3) filterFn = () => true;
-    else filterFn = poetCity => poetCity.relationshipId === num;
-  }
-  else if (type === "poet") {
-    filterFn = poetCity => poetCity.poetId === num;
-  }
-  else if (type === "genre") {
-    filterFn = poetCity => {
-      return data.genresByPoetId[poetCity.poetId] &&
+  const [type, num] = getPlacesFilter(state);
+  switch (type) {
+    case "all":
+      return () => true;
+    case "relationship":
+      // Relationship 3 is "activity", which every row qualifies for.
+      if (num === 3) return () => true;
+      return poetCity => poetCity.relationshipId === num;
+    case "poet":
+      return poetCity => poetCity.poetId === num;
+    case "genre":
+      return poetCity =>
+        !!data.genresByPoetId[poetCity.poetId] &&
         data
           .genresByPoetId[poetCity.poetId]
           .map(genre => genre.genreId)
           .includes(num) &&
         poetCity.relationshipId === 1;
-    }
-  } else {
-    alert(`${type} not recognized when trying to calculate poet cities`);
+    default:
+      // Exhaustive over PlacesFilterType: add a member without handling it above
+      // and this stops compiling.
+      return assertUnreachable(type, "unrecognized filter when calculating poet cities");
   }
-  return filterFn;
 }
 
+/**
+ * Flattens rows to the subset popups need, collapsing the citation columns into
+ * a single reference. In genre mode the citation comes from genres.csv instead.
+ * @param {AnyPoetCity[]} filteredPoetCities
+ * @param {Data} data
+ * @param {State} state
+ * @returns {RenderedPoetCity[]}
+ */
 function renderPoetCities(filteredPoetCities, data, state) {
-  const [type, num] = getMapTypeNum(state);
+  const [type, num] = getPlacesFilter(state);
 
   return filteredPoetCities.map(pc => {
+    /** @type {Reference} */
     const reference = {
       source_citation: pc.source_citation,
       source_greektext: pc.source_greektext,
@@ -68,10 +97,10 @@ function renderPoetCities(filteredPoetCities, data, state) {
         .genresByPoetId[pc.poetId]
         .filter(genre => genre.genreId === num);
       if (genrePoetCities.length > 1) {
-        console.log(`poet with name ${pc.poetname} and ${poetId} has more than one entry for genreId ${num}`);
+        console.log(`poet with name ${pc.poetname} and ${pc.poetId} has more than one entry for genreId ${num}`);
       }
       if (genrePoetCities.length === 0) {
-        console.log(`poet with name ${pc.poetname} and ${poetId} has no entries for genreId ${num} (though we filtered to this genreId)`);
+        console.log(`poet with name ${pc.poetname} and ${pc.poetId} has no entries for genreId ${num} (though we filtered to this genreId)`);
       }
       const genrePoetCity = genrePoetCities[0];
       reference.source_citation = genrePoetCity.source_citation;
@@ -80,6 +109,7 @@ function renderPoetCities(filteredPoetCities, data, state) {
       reference.source_translator = genrePoetCity.source_translator;
     }
 
+    /** @type {RenderedPoetCity} */
     const renderedPc = {
       poetId: pc.poetId,
       cityId: pc.cityId,
@@ -92,7 +122,8 @@ function renderPoetCities(filteredPoetCities, data, state) {
       relationshipId: pc.relationshipId,
       reference: reference
     };
-    if (pc.source_poem) renderedPc.reference.source_poem = pc.source_poem;
+    // Only geographical-imaginary rows carry a source_poem column.
+    if ("source_poem" in pc && pc.source_poem) renderedPc.reference.source_poem = pc.source_poem;
     return renderedPc;
   });
 }

@@ -14,8 +14,8 @@ import assert from "node:assert/strict";
 import { loadRawCsvs } from "./helpers/loadData.js";
 
 const raw = loadRawCsvs();
-const id = (value) => parseInt(value);
-const filled = (value) => String(value ?? "").trim() !== "";
+const id = (/** @type {string} */ value) => parseInt(value);
+const filled = (/** @type {string | undefined} */ value) => String(value ?? "").trim() !== "";
 
 const cityIds = new Set(raw.cities.map(c => id(c.cityId)));
 const poetIds = new Set(raw.poets.map(p => id(p.poetId)));
@@ -105,11 +105,11 @@ const WORLD_BOUNDS = { minLat: 5, maxLat: 50, minLong: -10, maxLong: 55 };
 // ---------------------------------------------------------------------------
 
 describe("primary keys", () => {
-  for (const [file, key] of [["cities", "cityId"], ["poets", "poetId"], ["governments", "governmentId"]]) {
+  for (const [file, key] of /** @type {[keyof RawCsvs, string][]} */ ([["cities", "cityId"], ["poets", "poetId"], ["governments", "governmentId"]])) {
     test(`${file}.csv has unique ${key}`, () => {
       const seen = new Map();
       for (const row of raw[file]) {
-        const value = id(row[key]);
+        const value = id(/** @type {Record<string, string>} */ (/** @type {unknown} */ (row))[key]);
         assert.ok(!seen.has(value), `${key} ${value} appears twice in ${file}.csv`);
         seen.set(value, row);
       }
@@ -195,7 +195,7 @@ describe("labels agree with the ids they point at", () => {
   // A row labelled with one place but pointing at another's id draws the
   // reference in the wrong location, which is invisible without this check.
   test("no NEW cityname disagrees with the city it references", () => {
-    for (const file of ["poetCities", "geopoetCities"]) {
+    for (const file of /** @type {PoetCityCsv[]} */ (["poetCities", "geopoetCities"])) {
       for (const row of raw[file]) {
         const cityId = id(row.cityId);
         if (!filled(row.cityname) || !cityNameById.has(cityId)) continue;
@@ -317,18 +317,53 @@ describe("Greek text", () => {
     // house of Scopas, and Pliny on Telestes. Anything else in there without a
     // Greek letter is a data-entry slip.
     const LATIN_SOURCE_WORKS = new Set(["Quintilian", "Cicero", "Pliny"]);
-    for (const file of ["poetCities", "geopoetCities", "genres"]) {
-      for (const row of raw[file]) {
-        if (!filled(row.source_greektext)) continue;
-        if (/\p{Script=Greek}/u.test(row.source_greektext)) continue;
-        assert.ok(
-          LATIN_SOURCE_WORKS.has(row.source_work),
-          `${file}: ${row.poetname ?? row.genres_poetname} has a source_greektext with no Greek ` +
-          `and an unexpected source_work "${row.source_work}"`
-        );
-      }
+    // The three tables name these columns differently: geographical_imaginary_group
+    // has original_source where the others have source_work, and genres.csv keys
+    // the poet as genres_poetname.
+    for (const row of raw.poetCities) {
+      if (!filled(row.source_greektext) || /\p{Script=Greek}/u.test(row.source_greektext)) continue;
+      assert.ok(LATIN_SOURCE_WORKS.has(row.source_work),
+        `poets_cities: ${row.poetname} has non-Greek source_greektext from "${row.source_work}"`);
+    }
+    for (const row of raw.geopoetCities) {
+      if (!filled(row.source_greektext) || /\p{Script=Greek}/u.test(row.source_greektext)) continue;
+      assert.ok(LATIN_SOURCE_WORKS.has(row.original_source),
+        `geographical_imaginary: ${row.poetname} has non-Greek source_greektext from "${row.original_source}"`);
+    }
+    for (const row of raw.genres) {
+      if (!filled(row.source_greektext) || /\p{Script=Greek}/u.test(row.source_greektext)) continue;
+      assert.ok(LATIN_SOURCE_WORKS.has(row.source_work),
+        `genres: ${row.genres_poetname} has non-Greek source_greektext from "${row.source_work}"`);
     }
   });
+});
+
+describe("csv schema", () => {
+  // types/csv.d.ts declares the columns of each file, and loadRawCsvs() casts
+  // the parsed rows to those types. This test is what keeps that cast honest:
+  // rename or reorder a column in a spreadsheet and it fails here, pointing at
+  // the declaration that now needs updating.
+  /** @type {Record<keyof RawCsvs, string[]>} */
+  const EXPECTED_COLUMNS = {
+    regions: ["regionId", "bigRegionId", "regionname"],
+    cities: ["cityname", "infowindowName", "cityId", "notes", "lat", "long", "region", "regionId"],
+    poetCities: ["poetname", "poetId", "cityname", "cityId", "relationship", "relationshipId", "nativeid", "dotted", "notes", "source_work", "source_workid", "source_citation", "source_greektext", "source_translation", "source_translator", "source_notes", "source_explicit"],
+    poets: ["poetname", "poetDetailName", "poetId", "sources", "dates", "dates_source", "notes"],
+    genres: ["genres_poetname", "poetId", "genre", "genreId", "source_work", "source_workid", "source_citation", "source_greektext", "source_translation", "source_translator", "source_notes", "source_explicit", "notes", "source"],
+    geopoetCities: ["imaginaryid", "poetname", "poetId", "cityname", "cityId", "relationship", "destination", "destination_id", "speaker", "speakerid", "notes", "source_poem", "source_citation", "original_source", "source_greektext", "source_translation", "source_translator", "source_notes", "source_explicit"],
+    cityPolitics: ["city", "cityId", "government", "governmentId", "questionable?", "date", "notes"],
+    bigRegions: ["regionId", "regionname"],
+    dates: ["dates_poetname", "poetId", "date", "iso_8601", "notes"],
+    governments: ["government", "governmentId"],
+  };
+
+  for (const [name, expected] of Object.entries(EXPECTED_COLUMNS)) {
+    test(`${name} has exactly the columns types/csv.d.ts declares`, () => {
+      const rows = raw[/** @type {keyof RawCsvs} */ (name)];
+      assert.ok(rows.length > 0, `${name} is empty`);
+      assert.deepEqual(Object.keys(rows[0]), expected);
+    });
+  }
 });
 
 describe("hygiene", () => {
@@ -374,16 +409,45 @@ describe("hygiene", () => {
 // Trachinia matches pleiades:541157 to all six decimal places.
 // ---------------------------------------------------------------------------
 
-describe("known data bugs: places plotted in the wrong location", () => {
-  const cityById = (cityId) => raw.cities.find(c => id(c.cityId) === cityId);
+/**
+ * cities.csv row for an id, asserting it exists. Used by the bug tests below,
+ * where a missing row means the bug has been fixed and the test should go.
+ * @param {number} cityId
+ * @returns {RawCity}
+ */
+function cityById(cityId) {
+  const city = raw.cities.find(c => id(c.cityId) === cityId);
+  assert.ok(city, `cityId ${cityId} is no longer in cities.csv`);
+  return city;
+}
 
-  const rowsLabelled = (file, label) =>
-    raw[file].filter(row => row.cityname === label);
+/**
+ * cities.csv row for a name, asserting it exists.
+ * @param {string} cityname
+ * @returns {RawCity}
+ */
+function cityByName(cityname) {
+  const city = raw.cities.find(c => c.cityname === cityname);
+  assert.ok(city, `${cityname} is no longer in cities.csv`);
+  return city;
+}
+
+/**
+ * The single row in a join table carrying a given cityname label.
+ * @param {PoetCityCsv} file
+ * @param {string} label
+ * @returns {RawPoetCity | RawGeoPoetCity}
+ */
+function soleRowLabelled(file, label) {
+  const rows = raw[file].filter(row => row.cityname === label);
+  assert.equal(rows.length, 1, `expected exactly one row labelled ${label} in ${file}`);
+  return rows[0];
+}
+
+describe("known data bugs: places plotted in the wrong location", () => {
 
   test("BUG: Pindar's Camarina is plotted on Erythrae, in Ionia rather than Sicily", () => {
-    const rows = rowsLabelled("poetCities", "Camarina");
-    assert.equal(rows.length, 1);
-    assert.equal(id(rows[0].cityId), 254);
+    assert.equal(id(soleRowLabelled("poetCities", "Camarina").cityId), 254);
     const city = cityById(254);
     assert.equal(city.cityname, "Erythrae");
     assert.equal(city.lat, "38.382778");
@@ -397,9 +461,7 @@ describe("known data bugs: places plotted in the wrong location", () => {
   });
 
   test("BUG: Pindar's Cyrene is plotted on Phocaea, in Ionia rather than Libya", () => {
-    const rows = rowsLabelled("poetCities", "Cyrene");
-    assert.equal(rows.length, 1);
-    assert.equal(id(rows[0].cityId), 255);
+    assert.equal(id(soleRowLabelled("poetCities", "Cyrene").cityId), 255);
     const city = cityById(255);
     assert.equal(city.cityname, "Phocaea");
     assert.equal(city.lat, "38.670353");
@@ -412,19 +474,16 @@ describe("known data bugs: places plotted in the wrong location", () => {
   });
 
   test("BUG: Stesichorus' Phocis is plotted on Aetolia", () => {
-    const rows = rowsLabelled("geopoetCities", "Phocis");
-    assert.equal(rows.length, 1);
-    assert.equal(id(rows[0].cityId), 134);
+    assert.equal(id(soleRowLabelled("geopoetCities", "Phocis").cityId), 134);
     assert.equal(cityById(134).cityname, "Aetolia");
     // Stesichorus fr. 222 names both places, and both rows were given cityId 134.
     // Phocis is pleiades:541048 at 38.5557075728, 22.686575589.
-    const aetolia = rowsLabelled("geopoetCities", "Aetolia");
-    assert.equal(aetolia.length, 1, "the same fragment also refers to Aetolia itself");
-    assert.equal(id(aetolia[0].cityId), 134);
+    assert.equal(id(soleRowLabelled("geopoetCities", "Aetolia").cityId), 134,
+      "the same fragment also refers to Aetolia itself");
   });
 
   test("BUG: one Adespota reference to Thrace is plotted on Priapus", () => {
-    const thrace = rowsLabelled("geopoetCities", "Thrace");
+    const thrace = raw.geopoetCities.filter(row => row.cityname === "Thrace");
     const wrong = thrace.filter(row => id(row.cityId) === 240);
     const right = thrace.filter(row => id(row.cityId) === 129);
     assert.equal(wrong.length, 1);
@@ -438,7 +497,7 @@ describe("known data bugs: places plotted in the wrong location", () => {
 
 describe("known data bugs: malformed coordinates", () => {
   test("BUG: Claros' latitude is missing its decimal point", () => {
-    const claros = raw.cities.find(c => c.cityname === "Claros");
+    const claros = cityByName("Claros");
     assert.equal(id(claros.cityId), 226);
     assert.equal(claros.lat, "384725");
     // The longitude, 27.192987, matches pleiades:599719 to five decimals, so the
@@ -452,7 +511,7 @@ describe("known data bugs: malformed coordinates", () => {
   });
 
   test("BUG: Etruria's longitude is missing its decimal point", () => {
-    const etruria = raw.cities.find(c => c.cityname === "Etruria");
+    const etruria = cityByName("Etruria");
     assert.equal(id(etruria.cityId), 197);
     assert.equal(etruria.long, "118301");
     assert.equal(etruria.lat, "42.924252");
@@ -516,7 +575,7 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
     assert.equal(incomplete.length, KNOWN_INCOMPLETE_CITATION_COUNT);
     // renderReference() prints `Citation: X: "" (trans. )` for these. This is
     // the shape of issues #313 and #329. geopoetCities and genres are clean.
-    for (const file of ["geopoetCities", "genres"]) {
+    for (const file of /** @type {CitedCsv[]} */ (["geopoetCities", "genres"])) {
       const bad = raw[file].filter(row =>
         filled(row.source_citation) &&
         !(filled(row.source_translation) && filled(row.source_translator)));
@@ -531,7 +590,9 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
     // poets.csv, so this is cosmetic — but calcBubbles sorts geographical
     // imaginary poets by poetname, so a misspelling can misorder a list.
     assert.ok(misspelt.every(row => id(row.poetId) === 145));
-    assert.equal(raw.poets.find(p => id(p.poetId) === 145).poetname, "Tyrtaeus");
+    const tyrtaeus = raw.poets.find(p => id(p.poetId) === 145);
+    assert.ok(tyrtaeus);
+    assert.equal(tyrtaeus.poetname, "Tyrtaeus");
   });
 
   test("BUG: two names carry stray whitespace", () => {
