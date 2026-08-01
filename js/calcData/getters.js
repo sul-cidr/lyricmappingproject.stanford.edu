@@ -1,43 +1,43 @@
 /**
- * @param {Data} data
+ * @param {Lookups} lookups
  * @param {number} poetId
  * @returns {Poet}
  */
-export function getPoet(data, poetId) {
-  const poet = data.poetsById[poetId];
+export function getPoet(lookups, poetId) {
+  const poet = lookups.poetsById[poetId];
   if (!poet) console.log(`poetId ${poetId} does not exist in poetsById`);
   return poet;
 }
 
 /**
- * @param {Data} data
+ * @param {Lookups} lookups
  * @param {number} poetId
  * @returns {Genre[]}
  */
-export function getGenres(data, poetId) {
-  if (data.genresByPoetId[poetId]) return data.genresByPoetId[poetId];
+export function getGenres(lookups, poetId) {
+  if (lookups.genresByPoetId[poetId]) return lookups.genresByPoetId[poetId];
   else return [];
 }
 
 /**
- * @param {Data} data
+ * @param {Lookups} lookups
  * @param {number} cityId
  * @returns {City}
  */
-export function getCity(data, cityId) {
-  const city = data.citiesById[cityId];
+export function getCity(lookups, cityId) {
+  const city = lookups.citiesById[cityId];
   if (!city) console.log(`cityId ${cityId} does not exist in citiesById`);
   return city;
 }
 
 /**
- * @param {Data} data
+ * @param {Lookups} lookups
  * @param {number} cityId
  * @returns {CityPolitics[]}
  */
-export function getGovs(data, cityId) {
-  if (data.govsByCityId[cityId]) {
-    return data.govsByCityId[cityId];
+export function getGovs(lookups, cityId) {
+  if (lookups.govsByCityId[cityId]) {
+    return lookups.govsByCityId[cityId];
   }
   console.log(`cityId ${cityId} does not exist in govsByCityId`);
   return [];
