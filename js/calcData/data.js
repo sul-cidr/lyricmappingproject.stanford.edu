@@ -73,8 +73,19 @@ export function initializeData(data) {
   createTravelPoets(data);
   createTravelCities(data);
   createRegionsForInterface(data);
-  data.poetCities.forEach(pc => primeObjWithPoetData(pc, data));
-  data.geopoetCities.forEach(pc => primeObjWithPoetData(pc, data));
+  // Assigned onto the rows, not built into them, which is the one place this
+  // commit leaves a type ahead of the object it describes.
+  //
+  // A travel line could be built complete because createLines() makes it. These
+  // rows are made by Papa Parse and mutated in place ever since, and createLines
+  // has already captured these exact objects as bornPc and activePc, so handing
+  // back primed copies would leave those references pointing at the originals.
+  //
+  // Until this runs, then, a PoetCity is missing the four PoetPrimed fields its
+  // type says it has. The "every row is primed with its poet's display data"
+  // test in tests/initializeData.test.js is what currently holds that together.
+  data.poetCities.forEach(pc => Object.assign(pc, poetPrimedData(data, pc.poetId)));
+  data.geopoetCities.forEach(pc => Object.assign(pc, poetPrimedData(data, pc.poetId)));
   sortPoetCities(data, data.poetCities);
   sortPoetCities(data, data.geopoetCities);
 }
@@ -92,28 +103,38 @@ function sortPoetCities(data, poetCities) {
 }
 
 /**
- * Copies a poet's display name, dates, sources and genres onto a row (or a
- * travel line) so popups can render without a second lookup.
- * @param {{ poetId: number, poetname?: string } & Partial<PoetPrimed>} obj
+ * A poet's display name, dates, sources and genres, to be copied onto a row (or
+ * a travel line) so popups can render without a second lookup.
+ *
+ * Returned rather than assigned, so a travel line can be built with these fields
+ * already on it instead of existing briefly without them.
  * @param {Data} data
+ * @param {number} poetId
+ * @returns {PoetPrimed}
  */
-function primeObjWithPoetData(obj, data) {
-  const poet = getPoet(data, obj.poetId);
+function poetPrimedData(data, poetId) {
+  const poet = getPoet(data, poetId);
 
-  obj.poetDetailName = "";
-  if (poet.poetDetailName) obj.poetDetailName = poet.poetDetailName;
-  else alert(`Poet ${obj.poetname} with poetId ${obj.poetId} lacks a details name`);
+  let poetDetailName = "";
+  if (poet.poetDetailName) poetDetailName = poet.poetDetailName;
+  else alert(`Poet ${poet.poetname} with poetId ${poetId} lacks a details name`);
 
-  obj.poetDates = "";
-  if (poet.dates) obj.poetDates = poet.dates;
-  else console.log(`Poet ${obj.poetname} with poetId ${obj.poetId} lacks dates`);
+  let poetDates = "";
+  if (poet.dates) poetDates = poet.dates;
+  else console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks dates`);
 
-  obj.poetSources = "";
-  if (poet.sources) obj.poetSources = poet.sources;
-  else console.log(`Poet ${obj.poetname} with poetId ${obj.poetId} lacks sources`);
+  let poetSources = "";
+  if (poet.sources) poetSources = poet.sources;
+  else console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks sources`);
 
-  const genres = getGenres(data, obj.poetId);
-  obj.poetGenres = genres.map(genre => genre.genre).join(", ");
+  return {
+    poetDetailName,
+    poetDates,
+    poetSources,
+    poetGenres: getGenres(data, poetId)
+      .map(genre => genre.genre)
+      .join(", ")
+  };
 }
 
 /**
@@ -318,7 +339,6 @@ function createLines(data) {
           const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
           const fromCity = getCity(data, bornPc.cityId);
           const toCity = getCity(data, activePc.cityId);
-          const poet = getPoet(data, poetId);
           const poetDates = data.datesByPoetId[poetId];
           const bornGovIds = [
             ...new Set(
@@ -336,8 +356,8 @@ function createLines(data) {
                 .flatMap(govId => convertMixedGovIds(govId))
             )
           ];
-          // The PoetPrimed fields are filled in by primeObjWithPoetData below.
-          const line = /** @type {Line} */ ({
+          /** @type {Line} */
+          const line = {
             poetId: poetId,
             bornCityId: bornPc.cityId,
             activeCityId: activePc.cityId,
@@ -346,11 +366,10 @@ function createLines(data) {
             dotted: dotted,
             bornCity: fromCity,
             activeCity: toCity,
-            poetDetailName: poet.poetDetailName,
             bornGovIds: bornGovIds,
-            activeGovIds: activeGovIds
-          });
-          primeObjWithPoetData(line, data);
+            activeGovIds: activeGovIds,
+            ...poetPrimedData(data, poetId)
+          };
           data.lines.push(line);
         }
       }

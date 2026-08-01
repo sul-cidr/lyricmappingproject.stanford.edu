@@ -297,24 +297,38 @@ interface DrawableBubble {
   legend?: string;
 }
 
-/** A circle drawn on the map for one city, with the rows behind its popup. */
-interface Bubble extends DrawableBubble {
+/**
+ * The rows behind one city's bubble. Split from Bubble because it is all the
+ * popup is rendered from, which is what lets calculateBubbles() build a whole
+ * Bubble in one go rather than filling an empty one in field by field.
+ */
+interface BubbleContents {
+  city: City;
   poetCities: RenderedPoetCity[];
   /** Only populated in geoimaginaryMode. */
   poets?: GeoBubblePoet[];
 }
 
-/** One drawn arc, merging every Line that shares the same city pair. */
-interface DrawnLine {
+/** A circle drawn on the map for one city, with the rows behind its popup. */
+interface Bubble extends BubbleContents, DrawableBubble {}
+
+/**
+ * One drawn arc, merging every Line that shares the same city pair, before its
+ * popup is rendered. As BubbleContents, this is everything the popup is built
+ * from, so the DrawnLine below can be built complete.
+ */
+interface TravelArc {
   fromCity: City;
   toCity: City;
   poetLines: Line[];
   dotted: boolean;
   color: string;
   name: string;
-  /** Set by weightLine() before the arc is drawn. */
   weight: number;
-  /** Set by calculateLines() before the arc is drawn. */
+}
+
+/** A TravelArc with its popup rendered, ready to draw. */
+interface DrawnLine extends TravelArc {
   popupHtml: string;
 }
 
