@@ -6,7 +6,7 @@ import { createFilterInput, createInputFromOption } from "./commonInterface.js";
  * @returns {string}
  */
 export function createGeoImaginaryInterfaceHtml(data) {
-  return (`
+  return `
   <div class="buttonContainer" tabindex="0">
     <fieldset class="controlForm">
       <div class="controlBarLabel">
@@ -21,11 +21,8 @@ export function createGeoImaginaryInterfaceHtml(data) {
       <div class="controlBarLabel">
         POETIC WORLD OF: 
       </div>
-      ${data.geoImaginaryPoets
-      .map(poet => createInputFromOption(poet, "poet"))
-      .join("")
-    }
+      ${data.geoImaginaryPoets.map(poet => createInputFromOption(poet, "poet")).join("")}
     </fieldset>
   </div>
-  `);
+  `;
 }

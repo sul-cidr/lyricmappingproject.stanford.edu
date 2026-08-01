@@ -18,38 +18,32 @@ export function drawLines(map, calculatedLines) {
       dashArray = "8, 8";
     }
 
-    const geodesic = L.geodesic(
-      [fromLatLng, toLatLng],
-      {
-        color: line.color,
-        weight: line.weight,
-        dashArray: dashArray
-      }
-    );
+    const geodesic = L.geodesic([fromLatLng, toLatLng], {
+      color: line.color,
+      weight: line.weight,
+      dashArray: dashArray
+    });
     const arrowSize = 3 * line.weight + 2;
     const decorator = L.polylineDecorator(geodesic, {
       patterns: [
         {
-          offset: '25%',
+          offset: "25%",
           repeat: 250,
           symbol: L.Symbol.arrowHead({
             pixelSize: arrowSize,
             pathOptions: {
               color: line.color,
               fillOpacity: 1,
-              weight: 0,
+              weight: 0
             }
           })
         }
       ]
     });
-    const transparentLine = L.geodesic(
-      [fromLatLng, toLatLng],
-      {
-        opacity: 0,
-        weight: line.weight * 20
-      }
-    );
+    const transparentLine = L.geodesic([fromLatLng, toLatLng], {
+      opacity: 0,
+      weight: line.weight * 20
+    });
 
     if (line.popupHtml) {
       geodesic.bindPopup(line.popupHtml);

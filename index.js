@@ -1,9 +1,9 @@
-import { initializeData } from './js/calcData/data.js';
-import { parseCsvs } from './js/calcData/parseCsvs.js';
-import { addMapModeEventListener, addPoetsEventListener, updateMapMode } from './js/interface/interface.js';
-import { initializeMap } from './js/drawMap/initializeMap.js';
-import { initializeSlider } from './js/interface/slider.js';
-import { createEssay, initializeCloseEssayClicks } from './js/essay/essay.js';
+import { initializeData } from "./js/calcData/data.js";
+import { parseCsvs } from "./js/calcData/parseCsvs.js";
+import { addMapModeEventListener, addPoetsEventListener, updateMapMode } from "./js/interface/interface.js";
+import { initializeMap } from "./js/drawMap/initializeMap.js";
+import { initializeSlider } from "./js/interface/slider.js";
+import { createEssay, initializeCloseEssayClicks } from "./js/essay/essay.js";
 
 function main() {
   createEssay("home");
@@ -14,22 +14,21 @@ function main() {
   const data = /** @type {Data} */ ({});
   /** @type {State} */
   const state = {
-    "currentMapMode": "placesMode",
-    "minDate": -800,
-    "maxDate": -400,
-    "selectedId": "relationship_3"
+    currentMapMode: "placesMode",
+    minDate: -800,
+    maxDate: -400,
+    selectedId: "relationship_3"
   };
 
-  parseCsvs(data)
-    .then(() => {
-      initializeData(data);
+  parseCsvs(data).then(() => {
+    initializeData(data);
 
-      addMapModeEventListener(map, data, state);
-      addPoetsEventListener(map, data, state);
+    addMapModeEventListener(map, data, state);
+    addPoetsEventListener(map, data, state);
 
-      updateMapMode(map, data, state);
-      initializeSlider(map, data, state);
-    });
+    updateMapMode(map, data, state);
+    initializeSlider(map, data, state);
+  });
 }
 
 main();

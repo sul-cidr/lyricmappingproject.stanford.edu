@@ -11,8 +11,10 @@ import { assertUnreachable } from "../assertUnreachable.js";
  * @param {State} state
  */
 export function addPoetsEventListener(map, data, state) {
-  /** @type {HTMLElement} */ (document.querySelector('#poetsSelector')).addEventListener('click', () => {
-    const currentSelected = /** @type {HTMLInputElement} */ (document.querySelector('div.buttonContainer input:checked')).id;
+  /** @type {HTMLElement} */ (document.querySelector("#poetsSelector")).addEventListener("click", () => {
+    const currentSelected = /** @type {HTMLInputElement} */ (
+      document.querySelector("div.buttonContainer input:checked")
+    ).id;
     if (state.selectedId !== currentSelected) {
       state.selectedId = currentSelected;
       updateMap(map, data, state);
@@ -27,8 +29,8 @@ export function addPoetsEventListener(map, data, state) {
  * @param {State} state
  */
 export function addMapModeEventListener(map, data, state) {
-  /** @type {HTMLElement} */ (document.querySelector('#mapModeSelector')).addEventListener('click', () => {
-    const currentSelected = /** @type {HTMLInputElement} */ (document.querySelector('fieldset input:checked')).id;
+  /** @type {HTMLElement} */ (document.querySelector("#mapModeSelector")).addEventListener("click", () => {
+    const currentSelected = /** @type {HTMLInputElement} */ (document.querySelector("fieldset input:checked")).id;
     if (state.currentMapMode !== currentSelected) {
       state.currentMapMode = /** @type {State["currentMapMode"]} */ (currentSelected);
       updateMapMode(map, data, state);

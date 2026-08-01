@@ -7,7 +7,7 @@ import { createFilterInput, createInputFromOption } from "./commonInterface.js";
  * @returns {string}
  */
 export function createPlacesInterfaceHtml(data) {
-  return (`
+  return `
     <div class="buttonContainer" tabindex="0">
       <fieldset class="controlForm">
         <div class="controlBarLabel">
@@ -23,10 +23,7 @@ export function createPlacesInterfaceHtml(data) {
         <div class="controlBarLabel">
           POETS WITH UNKNOWN TRAVELS:
         </div>
-        ${data.poetsWithUnknownTravel
-      .map(poet => createInputFromOption(poet, "poet"))
-      .join("")
-    }
+        ${data.poetsWithUnknownTravel.map(poet => createInputFromOption(poet, "poet")).join("")}
       </fieldset>
     </div>
 
@@ -35,11 +32,8 @@ export function createPlacesInterfaceHtml(data) {
         <div class="controlBarLabel">
           GENRE:
         </div>
-        ${data.genreIdsWithName
-      .map(genre => createInputFromOption(genre, "genre"))
-      .join("")
-    }
+        ${data.genreIdsWithName.map(genre => createInputFromOption(genre, "genre")).join("")}
       </fieldset>
     </div>
-  `);
+  `;
 }

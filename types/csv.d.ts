@@ -149,7 +149,6 @@ interface RawCsvs {
   governments: RawGovernment[];
 }
 
-
 /** The three tables that carry source citations. */
 type CitedCsv = "poetCities" | "geopoetCities" | "genres";
 

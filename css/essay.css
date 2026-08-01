@@ -4,7 +4,7 @@
 
 #essayBox {
   position: fixed;
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
   left: 0px;
   right: 0px;
   top: 0px;
@@ -14,7 +14,7 @@
 
 #essayTitle {
   height: 25px;
-  background: #B81609;
+  background: #b81609;
   position: absolute;
   left: 5%;
   right: 65%;
@@ -41,7 +41,7 @@
 }
 
 #essayCloseButton {
-  background: #B81609;
+  background: #b81609;
   color: white;
   font-size: 14px;
   top: 7px;

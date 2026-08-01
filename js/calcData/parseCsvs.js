@@ -26,7 +26,7 @@ export async function parseCsvs(data) {
     parseCsv(data, "bigRegions", "./dataFiles/big_regions.csv"),
     parseCsv(data, "dates", "./dataFiles/dates.csv"),
     parseCsv(data, "governments", "./dataFiles/governments.csv")
-  ])
+  ]);
 }
 
 /**
@@ -36,7 +36,7 @@ export async function parseCsvs(data) {
  */
 async function parseCsv(data, parameter, filename) {
   return fetch(filename)
-    .then((file) => file.text())
-    .then((fileText) => papaParsePromise(fileText))
-    .then((papaParsed) => data[parameter] = papaParsed.data);
+    .then(file => file.text())
+    .then(fileText => papaParsePromise(fileText))
+    .then(papaParsed => (data[parameter] = papaParsed.data));
 }

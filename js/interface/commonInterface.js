@@ -34,8 +34,8 @@ export function createFilterInput(prefix, num, label) {
  * @returns {string}
  */
 function createInput(id, label) {
-  return (`
+  return `
     <input type="radio" name="city" id="${id}" class="hiddenRadio">
     <label for="${id}" class="picker-label">${label}</label>
-  `);
+  `;
 }

@@ -18,45 +18,45 @@ export function initializeData(data) {
   /** @type {any[]} */ const rawDates = data.dates;
   /** @type {any[]} */ const rawGovernments = data.governments;
 
-  rawGenres.forEach(genre => genre.genreId = parseInt(genre.genreId));
-  rawCities.forEach(city => city.cityId = parseInt(city.cityId));
-  rawCities.forEach(city => city.regionId = parseInt(city.regionId));
-  rawCities.forEach(city => city.lat = parseFloat(city.lat));
-  rawCities.forEach(city => city.long = parseFloat(city.long));
-  rawCityPolitics.forEach(city => city.cityId = parseInt(city.cityId));
-  rawCityPolitics.forEach(city => city.governmentId = parseInt(city.governmentId));
-  rawCityPolitics.forEach(cp => cp.date = -1 * parseInt(cp.date));
-  rawPoetCities.forEach(poetCity => poetCity.relationshipId = parseInt(poetCity.relationshipId));
-  rawPoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
-  rawPoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
-  rawGeopoetCities.forEach(poetCity => poetCity.poetId = parseInt(poetCity.poetId));
-  rawGeopoetCities.forEach(poetCity => poetCity.imaginaryid = parseInt(poetCity.imaginaryid));
-  rawGeopoetCities.forEach(poetCity => poetCity.cityId = parseInt(poetCity.cityId));
-  rawRegions.forEach(region => region.regionId = parseInt(region.regionId));
-  rawRegions.forEach(region => region.bigRegionId = parseInt(region.bigRegionId));
+  rawGenres.forEach(genre => (genre.genreId = parseInt(genre.genreId)));
+  rawCities.forEach(city => (city.cityId = parseInt(city.cityId)));
+  rawCities.forEach(city => (city.regionId = parseInt(city.regionId)));
+  rawCities.forEach(city => (city.lat = parseFloat(city.lat)));
+  rawCities.forEach(city => (city.long = parseFloat(city.long)));
+  rawCityPolitics.forEach(city => (city.cityId = parseInt(city.cityId)));
+  rawCityPolitics.forEach(city => (city.governmentId = parseInt(city.governmentId)));
+  rawCityPolitics.forEach(cp => (cp.date = -1 * parseInt(cp.date)));
+  rawPoetCities.forEach(poetCity => (poetCity.relationshipId = parseInt(poetCity.relationshipId)));
+  rawPoetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
+  rawPoetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
+  rawGeopoetCities.forEach(poetCity => (poetCity.poetId = parseInt(poetCity.poetId)));
+  rawGeopoetCities.forEach(poetCity => (poetCity.imaginaryid = parseInt(poetCity.imaginaryid)));
+  rawGeopoetCities.forEach(poetCity => (poetCity.cityId = parseInt(poetCity.cityId)));
+  rawRegions.forEach(region => (region.regionId = parseInt(region.regionId)));
+  rawRegions.forEach(region => (region.bigRegionId = parseInt(region.bigRegionId)));
   rawDates.forEach(date => {
     date.poetId = parseInt(date.poetId);
     date.date = -1 * parseInt(date.date);
-  })
-  rawGovernments.forEach(gov => gov.governmentId = parseInt(gov.governmentId));
+  });
+  rawGovernments.forEach(gov => (gov.governmentId = parseInt(gov.governmentId)));
 
   // create useful maps by key
-  data.citiesById = {}
+  data.citiesById = {};
   for (const city of data.cities) {
     data.citiesById[city.cityId] = city;
   }
-  data.poetsById = {}
+  data.poetsById = {};
   for (const poet of data.poets) {
     data.poetsById[poet.poetId] = poet;
   }
-  data.genresByPoetId = {}
+  data.genresByPoetId = {};
   for (const genre of data.genres) {
     if (!data.genresByPoetId[genre.poetId]) {
       data.genresByPoetId[genre.poetId] = [];
     }
     data.genresByPoetId[genre.poetId].push(genre);
   }
-  data.regionsById = {}
+  data.regionsById = {};
   for (const region of data.regions) {
     data.regionsById[region.regionId] = region;
   }
@@ -88,7 +88,7 @@ function sortPoetCities(data, poetCities) {
     const poetA = getPoet(data, a.poetId);
     const poetB = getPoet(data, b.poetId);
     return sortAlphabetically(poetA.poetname, poetB.poetname);
-  })
+  });
 }
 
 /**
@@ -151,11 +151,7 @@ function createGovsById(data) {
 /** @param {Data} data */
 function addBigRegionIdToCities(data) {
   for (const city of data.cities) {
-    if (
-      city.regionId &&
-      data.regionsById[city.regionId] &&
-      data.regionsById[city.regionId].bigRegionId
-    ) {
+    if (city.regionId && data.regionsById[city.regionId] && data.regionsById[city.regionId].bigRegionId) {
       city.bigRegionId = data.regionsById[city.regionId].bigRegionId;
     }
   }
@@ -180,16 +176,17 @@ function addDatesToPoets(data) {
 
 /** @param {Data} data */
 function createGenresByGenreId(data) {
-  data.genresByGenreId = {}
+  data.genresByGenreId = {};
   for (const genre of data.genres) {
     const genreName = genre.genre;
     if (!data.genresByGenreId[genre.genreId]) {
       data.genresByGenreId[genre.genreId] = genreName;
-    }
-    else {
+    } else {
       const existingGenreName = data.genresByGenreId[genre.genreId];
       if (genreName !== existingGenreName) {
-        console.log(`${genreName} has genreId ${genre.genreId} but does not match existing ${existingGenreName}. Source translation: "${genre.source_translation}"`);
+        console.log(
+          `${genreName} has genreId ${genre.genreId} but does not match existing ${existingGenreName}. Source translation: "${genre.source_translation}"`
+        );
       }
     }
   }
@@ -201,8 +198,7 @@ function createGenresByGenreId(data) {
  * @returns {FilterOption[]}
  */
 function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
-  return Array
-    .from(poetIds)
+  return Array.from(poetIds)
     .map(poetId => ({ id: poetId, name: getPoet(data, poetId).poetDetailName }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
@@ -211,17 +207,13 @@ function createAlphabetizedListOfPoetsFromIds(poetIds, data) {
 function createGeoImaginaryPoets(data) {
   const poetIdsToOmit = [
     151, // Aristotle
-    33,  // Castorion
-    4,   // Cinesias
+    33, // Castorion
+    4, // Cinesias
     100, // Bacchylides
-    149  // Pindar
-  ]
+    149 // Pindar
+  ];
 
-  const poetIds = new Set(
-    data.geopoetCities
-      .map(pc => pc.poetId)
-      .filter(poetId => !poetIdsToOmit.includes(poetId))
-  );
+  const poetIds = new Set(data.geopoetCities.map(pc => pc.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
 
   data.geoImaginaryPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
 
@@ -255,24 +247,17 @@ function createTravelPoets(data) {
   // why do we omit these guys?
   const poetIdsToOmit = [
     29, // Oeniades
-    38, // Aristonous
+    38 // Aristonous
   ];
 
-  const poetIds = new Set(
-    data.lines
-      .map(line => line.poetId)
-      .filter(poetId => !poetIdsToOmit.includes(poetId))
-  );
+  const poetIds = new Set(data.lines.map(line => line.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
   data.travelPoets = createAlphabetizedListOfPoetsFromIds(poetIds, data);
 }
 
 /** @param {Data} data */
 function createTravelCities(data) {
-  const cityIds = new Set(
-    data.lines.flatMap(line => [line.bornCityId, line.activeCityId])
-  );
-  data.travelCities = Array
-    .from(cityIds)
+  const cityIds = new Set(data.lines.flatMap(line => [line.bornCityId, line.activeCityId]));
+  data.travelCities = Array.from(cityIds)
     .map(cityId => ({ id: cityId, name: getCity(data, cityId).cityname }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
@@ -307,16 +292,15 @@ function createRegionsForInterface(data) {
  */
 function createLines(data) {
   /** @type {Record<number, { bornPcs: PoetCity[], activePcs: PoetCity[] }>} */
-  const poets = {}
+  const poets = {};
   for (const pc of data.poetCities) {
-    if (!poets[pc.poetId]) poets[pc.poetId] = {
-      bornPcs: [],
-      activePcs: []
-    }
-    if (pc.relationshipId === 3 || pc.relationshipId === 2)
-      poets[pc.poetId].activePcs.push(pc);
-    else if (pc.relationshipId === 1)
-      poets[pc.poetId].bornPcs.push(pc);
+    if (!poets[pc.poetId])
+      poets[pc.poetId] = {
+        bornPcs: [],
+        activePcs: []
+      };
+    if (pc.relationshipId === 3 || pc.relationshipId === 2) poets[pc.poetId].activePcs.push(pc);
+    else if (pc.relationshipId === 1) poets[pc.poetId].bornPcs.push(pc);
   }
 
   data.poetsWithUnknownTravel = [];
@@ -326,7 +310,7 @@ function createLines(data) {
     const poet = poets[poetId];
     if (poet.bornPcs.length === 0 || poet.activePcs.length === 0) {
       const poet = getPoet(data, poetId);
-      const poetDetailName = poet.poetDetailName
+      const poetDetailName = poet.poetDetailName;
       data.poetsWithUnknownTravel.push({ id: poetId, name: poetDetailName });
     } else {
       for (const bornPc of poet.bornPcs) {
@@ -336,18 +320,22 @@ function createLines(data) {
           const toCity = getCity(data, activePc.cityId);
           const poet = getPoet(data, poetId);
           const poetDates = data.datesByPoetId[poetId];
-          const bornGovIds = [... new Set(
-            getGovs(data, bornPc.cityId)
-              .filter(gov => poetDates.includes(gov.date))
-              .map(gov => gov.governmentId)
-              .flatMap(govId => convertMixedGovIds(govId))
-          )];
-          const activeGovIds = [... new Set(
-            getGovs(data, activePc.cityId)
-              .filter(gov => poetDates.includes(gov.date))
-              .map(gov => gov.governmentId)
-              .flatMap(govId => convertMixedGovIds(govId))
-          )];
+          const bornGovIds = [
+            ...new Set(
+              getGovs(data, bornPc.cityId)
+                .filter(gov => poetDates.includes(gov.date))
+                .map(gov => gov.governmentId)
+                .flatMap(govId => convertMixedGovIds(govId))
+            )
+          ];
+          const activeGovIds = [
+            ...new Set(
+              getGovs(data, activePc.cityId)
+                .filter(gov => poetDates.includes(gov.date))
+                .map(gov => gov.governmentId)
+                .flatMap(govId => convertMixedGovIds(govId))
+            )
+          ];
           // The PoetPrimed fields are filled in by primeObjWithPoetData below.
           const line = /** @type {Line} */ ({
             poetId: poetId,
@@ -379,11 +367,11 @@ function createLines(data) {
  */
 function convertMixedGovIds(govId) {
   if (govId === 9) {
-    return [9, 1, 2] // oligarchy/tyranny, oligarchy, tyranny
+    return [9, 1, 2]; // oligarchy/tyranny, oligarchy, tyranny
   } else if (govId === 10) {
-    return [10, 1, 3] // oligarchy/democracy, oligarchy, democracy
+    return [10, 1, 3]; // oligarchy/democracy, oligarchy, democracy
   } else if (govId === 12) {
-    return [12, 4, 2] // kingship/tyranny, kingship, tyranny
+    return [12, 4, 2]; // kingship/tyranny, kingship, tyranny
   } else return [govId];
 }
 
@@ -397,7 +385,7 @@ function keyLines(data) {
     data.linesByPoetId[line.poetId].push(line);
   }
 
-  data.linesByBornCityId = {}
+  data.linesByBornCityId = {};
   for (const line of data.lines) {
     if (!data.linesByBornCityId[line.bornCityId]) {
       data.linesByBornCityId[line.bornCityId] = [];
@@ -405,7 +393,7 @@ function keyLines(data) {
     data.linesByBornCityId[line.bornCityId].push(line);
   }
 
-  data.linesByActiveCityId = {}
+  data.linesByActiveCityId = {};
   for (const line of data.lines) {
     if (!data.linesByActiveCityId[line.activeCityId]) {
       data.linesByActiveCityId[line.activeCityId] = [];
@@ -419,9 +407,8 @@ function createGenreIdsWithNames(data) {
   const genresToOmit = [
     1, // Diaskeue
     31 // Possibly lyric
-  ]
-  data.genreIdsWithName = Object
-    .keys(data.genresByGenreId)
+  ];
+  data.genreIdsWithName = Object.keys(data.genresByGenreId)
     .map(id => ({ id: Number(id), name: data.genresByGenreId[Number(id)] }))
     .filter(genre => !genresToOmit.includes(genre.id))
     .sort((a, b) => sortAlphabetically(a.name, b.name));

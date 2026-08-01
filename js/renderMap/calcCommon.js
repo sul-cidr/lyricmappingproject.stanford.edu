@@ -8,7 +8,7 @@ import { getPoet } from "../calcData/getters.js";
  * @returns {(obj: { poetId: number }) => boolean}
  */
 export function getDateFilterFn(data, state) {
-  return (obj) => {
+  return obj => {
     const poet = getPoet(data, obj.poetId);
     return poet.maxDate >= state.minDate && poet.minDate <= state.maxDate;
   };

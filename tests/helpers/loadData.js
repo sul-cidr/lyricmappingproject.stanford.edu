@@ -62,7 +62,7 @@ export function loadInitializedData() {
   const globals = /** @type {{ alert?: (message: string) => void }} */ (globalThis);
   const realAlert = globals.alert;
   const realLog = console.log;
-  globals.alert = (message) => alerts.push(String(message));
+  globals.alert = message => alerts.push(String(message));
   console.log = (/** @type {unknown[]} */ ...args) => logs.push(args.join(" "));
 
   try {

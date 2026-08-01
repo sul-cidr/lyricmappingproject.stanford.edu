@@ -27,7 +27,7 @@ jobs:
           # October 2026 and is the natural next bump. The tests only use
           # node:test, node:assert and node:fs, so any Node 20+ will do;
           # 'lts/*' also works if you would rather this never need touching.
-          node-version: '24'
+          node-version: "24"
 
       # Deliberately before the install, to keep it honest that the test suite
       # needs nothing but Node.

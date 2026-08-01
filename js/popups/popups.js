@@ -76,14 +76,14 @@ function createActivePopupHtml(data, bubble) {
     `;
   }
 
-  return (`
+  return `
     <h3 style="color:${LYRIC_GREY}">${cityname}</h2>
     ${nonNativeHeader}
     ${nativeHeader}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${nonNativeDetails}
     ${nativeDetails}
-  `);
+  `;
 }
 
 /**
@@ -95,10 +95,10 @@ function createActivePopupHtml(data, bubble) {
 function createHeader(state, data, bubble) {
   const cityname = bubble.city.infowindowName.toUpperCase();
   const title = createTitle(state, data, cityname, bubble);
-  return (`
+  return `
     <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
     <h5 style="color:${LYRIC_GREY}">${title}</h5>
-  `);
+  `;
 }
 
 /**
@@ -109,12 +109,12 @@ function createHeader(state, data, bubble) {
  */
 function createPlacesPopupHtml(state, data, bubble) {
   const poetCities = bubble.poetCities;
-  return (`
+  return `
     ${createHeader(state, data, bubble)}
     ${createNumberedListOfPoets(poetCities.map(pc => pc.poetDetailName))}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedListOfPoets(poetCities, data)}
-  `);
+  `;
 }
 
 /**
@@ -122,15 +122,16 @@ function createPlacesPopupHtml(state, data, bubble) {
  * @returns {string}
  */
 function createGeoHeaderListOfPoets(poets) {
-  return (`
+  return `
     <p>
-    ${poets.map((poet, idx) => {
-    const referenceStr = poet.references.length > 1 ? "references" : "reference";
-    return `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}: ${poet.references.length} ${referenceStr}`
-  }
-  ).join("<br>")}
+    ${poets
+      .map((poet, idx) => {
+        const referenceStr = poet.references.length > 1 ? "references" : "reference";
+        return `<span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}: ${poet.references.length} ${referenceStr}`;
+      })
+      .join("<br>")}
     </p>
-  `);
+  `;
 }
 
 /**
@@ -138,17 +139,19 @@ function createGeoHeaderListOfPoets(poets) {
  * @returns {string}
  */
 function createDetailedGeoListOfPoets(poets) {
-  return (`
-    ${poets.map((poet, idx) => {
-    return (`
+  return `
+    ${poets
+      .map((poet, idx) => {
+        return `
       <p>
         <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}<br>
         Dates: ${poet.poetDates}<br>
         ${poet.references.map(reference => renderReference(reference)).join("<br><br>")}
       </p >
-      `);
-  }).join(" ")}
-  `);
+      `;
+      })
+      .join(" ")}
+  `;
 }
 
 /**
@@ -210,10 +213,10 @@ function createPlacesModeTitle(state, data, cityname) {
 function createGeoImaginaryPopupHtml(state, data, bubble) {
   // calcBubbles always populates poets in geoimaginaryMode.
   const poets = /** @type {GeoBubblePoet[]} */ (bubble.poets);
-  return (`
+  return `
     ${createHeader(state, data, bubble)}
     ${createGeoHeaderListOfPoets(poets)}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
     ${createDetailedGeoListOfPoets(poets)}
-  `);
+  `;
 }

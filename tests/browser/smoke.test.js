@@ -61,11 +61,12 @@ before(async () => {
   // "nothing errors" check below.
   const TRANSPARENT_PNG = Buffer.from(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
-    "base64");
-  await page.route("**d3msn78fivoryj.cloudfront.net**",
-    route => route.fulfill({ status: 200, contentType: "image/png", body: TRANSPARENT_PNG }));
-  await page.route("**youtube.com**",
-    route => route.fulfill({ status: 200, contentType: "text/html", body: "" }));
+    "base64"
+  );
+  await page.route("**d3msn78fivoryj.cloudfront.net**", route =>
+    route.fulfill({ status: 200, contentType: "image/png", body: TRANSPARENT_PNG })
+  );
+  await page.route("**youtube.com**", route => route.fulfill({ status: 200, contentType: "text/html", body: "" }));
 
   page.on("console", message => {
     if (message.type() === "error") consoleErrors.push(message.text());
@@ -90,7 +91,8 @@ after(async () => {
 /** Selects a control bar radio button and waits for the redraw to settle. */
 const select = async (/** @type {string} */ id) => {
   await page.locator(`#${id}`).dispatchEvent("click");
-  await page.waitForFunction(() => !document.querySelector(".leaflet-tile-loading"), null, { timeout: 5000 })
+  await page
+    .waitForFunction(() => !document.querySelector(".leaflet-tile-loading"), null, { timeout: 5000 })
     .catch(() => undefined);
   await page.waitForTimeout(300);
 };
@@ -141,7 +143,7 @@ describe("the map paints", () => {
     await page.waitForTimeout(1200);
     // Each arc is a visible geodesic, an invisible click target and an
     // arrowhead decorator, so this is not a simple multiple of the line count.
-    assert.ok(await drawnPaths() > data.lines.length, "expected at least one path per travel line");
+    assert.ok((await drawnPaths()) > data.lines.length, "expected at least one path per travel line");
   });
 
   test("a travel filter narrows the arcs", async () => {
@@ -180,8 +182,7 @@ describe("the map is usable", () => {
     for (const [mode, allowed] of expected) {
       await page.locator(`#${mode}`).dispatchEvent("click");
       await page.waitForTimeout(500);
-      const ids = await page.locator("#poetsSelector input").evaluateAll(
-        inputs => inputs.map(input => input.id));
+      const ids = await page.locator("#poetsSelector input").evaluateAll(inputs => inputs.map(input => input.id));
       assert.ok(ids.length > 0, `${mode} rendered no filters`);
       for (const id of ids) {
         assert.match(id, allowed, `${mode} offers "${id}", which it cannot handle`);
