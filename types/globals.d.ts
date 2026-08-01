@@ -161,6 +161,16 @@ interface PoetDisplay {
   sources: string;
 }
 
+/**
+ * How a poet is attested to relate to a city. These are the only three values
+ * poets_cities.csv uses, so a comparison against 4 is now a type error rather
+ * than a filter that silently matches nothing.
+ *
+ * A claim about the data, like Poet.minDate, and enforced the same way: by the
+ * "relationshipId is 1, 2, 3 or absent" test in tests/initializeData.test.js.
+ */
+type RelationshipId = 1 | 2 | 3;
+
 /** A row of dataFiles/poets_cities.csv, hydrated. */
 interface PoetCity {
   poetname: string;
@@ -169,8 +179,15 @@ interface PoetCity {
   cityId: number;
   /** Human-readable form of relationshipId; often blank in the CSV. */
   relationship: string;
-  /** 1 = born, 2 = died, 3 = performed. Prefer this over `relationship`. */
-  relationshipId: number;
+  /**
+   * Absent for the eight rows of poets_cities.csv that leave the column blank.
+   * Those rows show under ACTIVITY, which every row qualifies for, and are
+   * classed non-native there; they never show under ORIGIN and never become a
+   * travel line. That was already true when the blank parsed to NaN — this
+   * says so, rather than leaving it to a value that equals nothing including
+   * itself.
+   */
+  relationshipId?: RelationshipId;
   nativeid: string;
   /** The literal string "dotted", or "". Marks an inferred connection. */
   dotted: string;
@@ -194,10 +211,11 @@ interface GeoPoetCity {
   cityId: number;
   relationship: string;
   /**
-   * Not a column in geographical_imaginary_group.csv, so always undefined here.
-   * Declared so code can read it off either kind of row.
+   * Not a column in geographical_imaginary_group.csv, so always absent here.
+   * Declared, as undefined rather than as a number, so that code reading it off
+   * either kind of row gets RelationshipId | undefined and no more.
    */
-  relationshipId?: number;
+  relationshipId?: undefined;
   destination: string;
   destination_id: string;
   speaker: string;
@@ -292,8 +310,8 @@ interface RenderedPoetCity {
   cityId: number;
   cityname: string;
   poetname: string;
-  /** Undefined for geographical-imaginary rows, which have no relationship. */
-  relationshipId?: number;
+  /** Absent for geographical-imaginary rows, which have no relationship. */
+  relationshipId?: RelationshipId;
   reference: Reference;
 }
 

@@ -51,7 +51,7 @@ export function initializeData(raw) {
 export const NUMERIC_CSV_FIELDS = {
   regions: { int: ["regionId", "bigRegionId"] },
   cities: { int: ["cityId", "regionId"], float: ["lat", "long"] },
-  poetCities: { int: ["poetId", "cityId", "relationshipId"] },
+  poetCities: { int: ["poetId", "cityId"], optionalInt: ["relationshipId"] },
   poets: { int: ["poetId"] }, // was missing
   genres: { int: ["poetId", "genreId"] }, // poetId was missing
   geopoetCities: { int: ["poetId", "cityId", "imaginaryid"] },
@@ -79,6 +79,11 @@ function hydrate(raw) {
     const fields = NUMERIC_CSV_FIELDS[table];
     for (const row of rows[table]) {
       for (const field of fields.int ?? []) row[field] = parseInt(row[field]);
+      for (const field of fields.optionalInt ?? []) {
+        const parsed = parseInt(row[field]);
+        if (Number.isNaN(parsed)) delete row[field];
+        else row[field] = parsed;
+      }
       for (const field of fields.float ?? []) row[field] = parseFloat(row[field]);
       for (const field of fields.bce ?? []) row[field] = -1 * parseInt(row[field]);
     }

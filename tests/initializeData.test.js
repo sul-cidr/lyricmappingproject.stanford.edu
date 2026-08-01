@@ -48,7 +48,7 @@ describe("hydration", () => {
       ["dates", ["poetId", "date"]],
       ["poets", ["poetId"]],
       ["genres", ["poetId", "genreId"]],
-      ["poetCities", ["poetId", "cityId", "relationshipId"]],
+      ["poetCities", ["poetId", "cityId"]],
       ["geopoetCities", ["imaginaryid", "poetId", "cityId"]]
     ];
     for (const [table, fields] of NUMERIC) {
@@ -90,6 +90,44 @@ describe("hydration", () => {
     assert.deepEqual(unplaced.map(city => city.cityname).sort(), ["Onogloi", "Stathmi"]);
     for (const city of unplaced) {
       assert.ok(Number.isNaN(city.lat) && Number.isNaN(city.long), "one coordinate without the other");
+    }
+  });
+
+  test("relationshipId is 1, 2, 3 or absent — never NaN", () => {
+    // What RelationshipId claims, asserted against the corpus. The blank column
+    // used to parse to NaN, a number that equals nothing including itself, so
+    // the eight rows below quietly matched no filter and produced no travel
+    // line. They still do neither; the difference is that the type now says so.
+    const counts = { 1: 0, 2: 0, 3: 0, absent: 0 };
+    for (const pc of data.poetCities) {
+      const key = pc.relationshipId ?? "absent";
+      assert.ok(key in counts, `relationshipId ${pc.relationshipId} is not 1, 2, 3 or absent`);
+      assert.ok(!Number.isNaN(pc.relationshipId), `${pc.poetname} — ${pc.cityname} has a NaN relationshipId`);
+      counts[key] += 1;
+    }
+    assert.deepEqual(counts, { 1: 109, 2: 10, 3: 176, absent: 8 });
+  });
+
+  test("the rows with no relationshipId are the ones travel cannot see", () => {
+    // Named rather than counted, because this is a gap in the CSV rather than a
+    // property of the code: these attestations show under ACTIVITY, which every
+    // row qualifies for, are classed non-native there, and never reach ORIGIN or
+    // the travel map. Every poet involved still reaches travel by another row,
+    // so nobody vanishes — but these particular attestations do.
+    const blank = data.poetCities.filter(pc => pc.relationshipId === undefined);
+    assert.deepEqual(blank.map(pc => `${pc.poetname} — ${pc.cityname}`).sort(), [
+      "Euripides — Salamis",
+      "Trytaeus — Athens",
+      "Trytaeus — Athens",
+      "Trytaeus — Sparta",
+      "Tyrtaeus — Messena",
+      "Tyrtaeus — Messena",
+      "Tyrtaeus — Sparta",
+      "Tyrtaeus — Sparta"
+    ]);
+    const travelling = new Set(data.lines.flatMap(line => [line.bornPc.poetId, line.activePc.poetId]));
+    for (const pc of blank) {
+      assert.ok(travelling.has(pc.poetId), `${pc.poetname} reaches the travel map by no row at all`);
     }
   });
 
@@ -179,7 +217,7 @@ describe("travel lines", () => {
       assert.ok(line.bornCity, `line for poetId ${line.poetId} has no born city`);
       assert.ok(line.activeCity, `line for poetId ${line.poetId} has no active city`);
       assert.equal(line.bornPc.relationshipId, 1);
-      assert.ok([2, 3].includes(line.activePc.relationshipId));
+      assert.ok(line.activePc.relationshipId === 2 || line.activePc.relationshipId === 3);
     }
   });
 

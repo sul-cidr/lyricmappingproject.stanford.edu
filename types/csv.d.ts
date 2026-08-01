@@ -164,6 +164,12 @@ interface RawCsvs {
 type NumericCsvFields = {
   [K in keyof RawCsvs]: {
     int?: (keyof RawCsvs[K][number])[];
+    /**
+     * As int, but a blank cell leaves the field absent rather than NaN. For
+     * columns the spreadsheet legitimately leaves empty, where NaN would be a
+     * value that compares equal to nothing, including itself.
+     */
+    optionalInt?: (keyof RawCsvs[K][number])[];
     float?: (keyof RawCsvs[K][number])[];
     /** Written as a positive year BCE in the CSV, stored negative so it sorts. */
     bce?: (keyof RawCsvs[K][number])[];
