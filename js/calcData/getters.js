@@ -43,9 +43,13 @@ export function getGovs(lookups, cityId) {
   return [];
 }
 
-/** The filters the places and geographical imaginary control bars offer. */
+/** The filters the places control bar offers. */
 /** @type {PlacesFilterType[]} */
-export const PLACES_FILTER_TYPES = ["all", "relationship", "poet", "genre"];
+export const PLACES_FILTER_TYPES = ["relationship", "poet", "genre"];
+
+/** The filters the geographical imaginary control bar offers. */
+/** @type {GeoFilterType[]} */
+export const GEO_FILTER_TYPES = ["all", "poet"];
 
 /** The filters the travel control bar offers. */
 /** @type {TravelFilterType[]} */
@@ -56,8 +60,8 @@ export const TRAVEL_FILTER_TYPES = ["all", "poet", "destination", "smallregion",
  * checking the type against the filters the given map actually offers.
  *
  * Validating here rather than trusting the string is what lets callers switch
- * exhaustively over four or six cases instead of eight, with no branch for a
- * filter their map cannot produce. selectedId always comes from a radio button
+ * exhaustively over two, three or six cases instead of eight, with no branch for
+ * a filter their map cannot produce. selectedId always comes from a radio button
  * this code generated, so a mismatch means the interface builders and the map
  * modes have got out of step.
  * @template {MapFilterType} T
@@ -83,6 +87,14 @@ function getFilter(state, allowed, mapName) {
  */
 export function getPlacesFilter(state) {
   return getFilter(state, PLACES_FILTER_TYPES, "places");
+}
+
+/**
+ * @param {State} state
+ * @returns {[GeoFilterType, number]}
+ */
+export function getGeoFilter(state) {
+  return getFilter(state, GEO_FILTER_TYPES, "geographical imaginary");
 }
 
 /**

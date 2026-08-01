@@ -7,7 +7,7 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { loadInitializedData } from "./helpers/loadData.js";
 import { sortAlphabetically } from "../js/calcData/data.js";
-import { PLACES_FILTER_TYPES, TRAVEL_FILTER_TYPES } from "../js/calcData/getters.js";
+import { PLACES_FILTER_TYPES, GEO_FILTER_TYPES, TRAVEL_FILTER_TYPES } from "../js/calcData/getters.js";
 import { createPlacesInterfaceHtml } from "../js/interface/placesInterface.js";
 import { createTravelInterfaceHtml } from "../js/interface/travelInterface.js";
 import { createGeoImaginaryInterfaceHtml } from "../js/interface/geoImaginaryInterface.js";
@@ -267,41 +267,41 @@ describe("known bugs: derived travel lines", () => {
 // ---------------------------------------------------------------------------
 // The control bar is HTML strings, and a radio button's id is the only thing
 // tying a click back to a filter. The types stop a prefix being misspelt; these
-// tests stop a map offering a filter it cannot handle, which the types cannot
-// see because both builders take the same MapFilterType.
+// tests tie each map's declared filter union to what its builder actually emits,
+// which the types cannot see because all three builders take MapFilterType.
+//
+// Asserted as an equality rather than a subset, in both directions at once: a
+// map that offers a filter it cannot handle fails, and so does a map that
+// declares a filter it never offers — which is the dead branch that used to
+// need a throw in createPlacesModeTitle().
 // ---------------------------------------------------------------------------
 
-describe("control bar ids round-trip to filters", () => {
+describe("each control bar offers exactly the filters its map declares", () => {
   /** Every `${prefix}_${num}` id in a block of control bar html. */
   const idsIn = (/** @type {string} */ html) => [...html.matchAll(/id="([^"]+)"/g)].map(match => match[1]);
 
   const prefixesIn = (/** @type {string} */ html) => [...new Set(idsIn(html).map(id => id.split("_")[0]))].sort();
 
-  test("the places control bar offers only places filters", () => {
-    for (const prefix of prefixesIn(createPlacesInterfaceHtml(data))) {
-      assert.ok(
-        PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
-        `the places control bar offers "${prefix}", which getPlacesFilter() rejects`
-      );
-    }
+  test("places: ORIGIN and ACTIVITY, the poets, and the genres", () => {
+    assert.deepEqual(prefixesIn(createPlacesInterfaceHtml(data)), [...PLACES_FILTER_TYPES].sort());
   });
 
-  test("the geographical imaginary control bar offers only places filters", () => {
-    for (const prefix of prefixesIn(createGeoImaginaryInterfaceHtml(data))) {
-      assert.ok(
-        PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ (prefix)),
-        `the geographical imaginary control bar offers "${prefix}", which getPlacesFilter() rejects`
-      );
-    }
+  test("geographical imaginary: ALL REFERENCES and the poets, and nothing else", () => {
+    assert.deepEqual(prefixesIn(createGeoImaginaryInterfaceHtml(data)), [...GEO_FILTER_TYPES].sort());
   });
 
-  test("the travel control bar offers only travel filters", () => {
-    for (const prefix of prefixesIn(createTravelInterfaceHtml(data))) {
-      assert.ok(
-        TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ (prefix)),
-        `the travel control bar offers "${prefix}", which getTravelFilter() rejects`
-      );
-    }
+  test("travel: all six", () => {
+    assert.deepEqual(prefixesIn(createTravelInterfaceHtml(data)), [...TRAVEL_FILTER_TYPES].sort());
+  });
+
+  test("the two bubble maps really do offer different filters", () => {
+    // The point of splitting PlacesFilterType from GeoFilterType. If these ever
+    // coincide the split has stopped earning its keep.
+    const places = prefixesIn(createPlacesInterfaceHtml(data));
+    const geo = prefixesIn(createGeoImaginaryInterfaceHtml(data));
+    assert.notDeepEqual(places, geo);
+    assert.ok(!places.includes("all"), "the places map has no ALL button");
+    assert.ok(!geo.includes("genre"), "the geographical imaginary map has no genre buttons");
   });
 
   test("every id parses back to the filter and number it was built from", () => {
@@ -317,7 +317,7 @@ describe("control bar ids round-trip to filters", () => {
   test("the default selectedId of each mode is one that mode can handle", () => {
     // updateMapMode() sets these; they are what the map renders on first paint.
     assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("relationship")));
-    assert.ok(PLACES_FILTER_TYPES.includes(/** @type {PlacesFilterType} */ ("all")));
+    assert.ok(GEO_FILTER_TYPES.includes(/** @type {GeoFilterType} */ ("all")));
     assert.ok(TRAVEL_FILTER_TYPES.includes(/** @type {TravelFilterType} */ ("all")));
   });
 });
