@@ -1,4 +1,4 @@
-import { getPoet, getCity, getGovs } from "./getters.js";
+import { getPoet, getCity, getGovs, getDates } from "./getters.js";
 
 /**
  * Hydrates the raw CSV rows (ids and coordinates become numbers, dates become
@@ -136,7 +136,7 @@ function derive(csvs, lookups) {
     linesByBornCityId: groupById(lines, line => line.bornCityId, identity),
     linesByActiveCityId: groupById(lines, line => line.activeCityId, identity),
     travelPoets: createTravelPoets(lines, lookups),
-    travelCities: createTravelCities(lines, lookups),
+    travelCities: createTravelCities(lines),
     regionsForInterface: createRegionsForInterface(csvs)
   };
 }
@@ -191,9 +191,12 @@ function groupById(rows, idOf, valueOf) {
  */
 function sortPoetCities(lookups, poetCities) {
   poetCities.sort((a, b) => {
-    const poetA = getPoet(lookups, a.poetId);
-    const poetB = getPoet(lookups, b.poetId);
-    return sortAlphabetically(poetA.poetname, poetB.poetname);
+    // A row cannot be dropped from a comparator, so an unresolvable poet sorts
+    // under the empty name — which sortAlphabetically puts at the end, with the
+    // Greek ones. getPoet has already reported the id.
+    const nameA = getPoet(lookups, a.poetId)?.poetname ?? "";
+    const nameB = getPoet(lookups, b.poetId)?.poetname ?? "";
+    return sortAlphabetically(nameA, nameB);
   });
 }
 
@@ -284,13 +287,18 @@ function createGenresByGenreId(genres) {
 }
 
 /**
+ * Poets with no row in poets.csv are left out: a control bar button is a name
+ * and nothing else, so there is nothing to render for one, and getPoet has
+ * already reported the id.
  * @param {Iterable<number>} poetIds
  * @param {Lookups} lookups
  * @returns {FilterOption[]}
  */
 function createAlphabetizedListOfPoetsFromIds(poetIds, lookups) {
   return Array.from(poetIds)
-    .map(poetId => ({ id: poetId, name: getPoet(lookups, poetId).poetDetailName }))
+    .map(poetId => getPoet(lookups, poetId))
+    .filter(poet => poet !== undefined)
+    .map(poet => ({ id: poet.poetId, name: poet.poetDetailName }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
@@ -356,15 +364,21 @@ function createTravelPoets(lines, lookups) {
 }
 
 /**
+ * Read off the lines rather than looked up again. createLines() only builds a
+ * line once both of its cities have resolved, so every city named here is one
+ * the line is already holding — there is no second chance for the lookup to
+ * fail, and no unnamed button to guard against.
  * @param {Line[]} lines
- * @param {Lookups} lookups
  * @returns {FilterOption[]}
  */
-function createTravelCities(lines, lookups) {
-  const cityIds = new Set(lines.flatMap(line => [line.bornCityId, line.activeCityId]));
-  return Array.from(cityIds)
-    .map(cityId => ({ id: cityId, name: getCity(lookups, cityId).cityname }))
-    .sort((a, b) => sortAlphabetically(a.name, b.name));
+function createTravelCities(lines) {
+  /** @type {Map<number, string>} */
+  const nameByCityId = new Map();
+  for (const line of lines) {
+    nameByCityId.set(line.bornCityId, line.bornCity.cityname);
+    nameByCityId.set(line.activeCityId, line.activeCity.cityname);
+  }
+  return Array.from(nameByCityId, ([id, name]) => ({ id, name })).sort((a, b) => sortAlphabetically(a.name, b.name));
 }
 
 /**
@@ -423,15 +437,21 @@ function createLines(csvs, lookups) {
     const poetId = parseInt(poetIdStr);
     const poet = poets[poetId];
     if (poet.bornPcs.length === 0 || poet.activePcs.length === 0) {
-      const poetDetailName = getPoet(lookups, poetId).poetDetailName;
-      poetsWithUnknownTravel.push({ id: poetId, name: poetDetailName });
+      // As in createAlphabetizedListOfPoetsFromIds(): a poet with no row in
+      // poets.csv has no name to put on a button, so gets no button.
+      const unknownTravelPoet = getPoet(lookups, poetId);
+      if (unknownTravelPoet) poetsWithUnknownTravel.push({ id: poetId, name: unknownTravelPoet.poetDetailName });
     } else {
       for (const bornPc of poet.bornPcs) {
         for (const activePc of poet.activePcs) {
-          const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
           const fromCity = getCity(lookups, bornPc.cityId);
           const toCity = getCity(lookups, activePc.cityId);
-          const poetDates = lookups.datesByPoetId[poetId];
+          // A line is two endpoints. Without both there is nothing to draw, so
+          // this pair is dropped and the rest of the poet's travel still is;
+          // getCity has already reported whichever id did not resolve.
+          if (!fromCity || !toCity) continue;
+          const dotted = bornPc.dotted === "dotted" || activePc.dotted === "dotted";
+          const poetDates = getDates(lookups, poetId);
           const bornGovIds = [
             ...new Set(
               getGovs(lookups, bornPc.cityId)
