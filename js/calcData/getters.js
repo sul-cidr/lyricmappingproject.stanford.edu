@@ -1,9 +1,16 @@
 import { assertUnreachable } from "../assertUnreachable.js";
 
 /**
+ * The poet a row points at, or undefined if the id resolves to nothing.
+ *
+ * Undefined is in the return type because it is a value this really returns: a
+ * poetId in poets_cities.csv that poets.csv does not have is a data bug the
+ * referential-integrity tests are there to catch, but the code should report it
+ * and carry on rather than take the map down with it. Callers are expected to
+ * drop whatever they were building for that id; the log below is the report.
  * @param {Lookups} lookups
  * @param {number} poetId
- * @returns {Poet}
+ * @returns {Poet | undefined}
  */
 export function getPoet(lookups, poetId) {
   const poet = lookups.poetsById[poetId];
@@ -22,9 +29,11 @@ export function getGenres(lookups, poetId) {
 }
 
 /**
+ * The city a row points at, or undefined if the id resolves to nothing. See
+ * getPoet() for why undefined is in the type.
  * @param {Lookups} lookups
  * @param {number} cityId
- * @returns {City}
+ * @returns {City | undefined}
  */
 export function getCity(lookups, cityId) {
   const city = lookups.citiesById[cityId];
@@ -42,6 +51,22 @@ export function getGovs(lookups, cityId) {
     return lookups.govsByCityId[cityId];
   }
   console.log(`cityId ${cityId} does not exist in govsByCityId`);
+  return [];
+}
+
+/**
+ * The years attested for a poet, or an empty list if dates.csv has no row for
+ * them — in which case they are already invisible on the map, because
+ * getDateFilterFn() compares against the minDate and maxDate these produce.
+ * @param {Lookups} lookups
+ * @param {number} poetId
+ * @returns {number[]}
+ */
+export function getDates(lookups, poetId) {
+  if (lookups.datesByPoetId[poetId]) {
+    return lookups.datesByPoetId[poetId];
+  }
+  console.log(`poetId ${poetId} does not exist in datesByPoetId`);
   return [];
 }
 
@@ -122,9 +147,10 @@ function parseFilter(selectedId, allowed, mapName) {
  * they replaced was saving nothing worth the four fields it added to four types
  * — fields the rows did not have until the priming pass ran.
  *
- * The empty-string fallbacks are for data that is missing rather than absent:
- * warnAboutIncompletePoets() reports it at startup, and this keeps a popup
- * rendering a blank line instead of the word "undefined".
+ * The empty-string fallbacks cover both a poet whose fields are blank and a
+ * poetId with no poet behind it at all: warnAboutIncompletePoets() and getPoet()
+ * report each of those at startup, and this keeps a popup rendering a blank line
+ * instead of the word "undefined".
  * @param {Lookups} lookups
  * @param {number} poetId
  * @returns {PoetDisplay}

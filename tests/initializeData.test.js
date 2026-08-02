@@ -5,9 +5,10 @@
 
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { loadInitializedData } from "./helpers/loadData.js";
+import { loadInitializedData, loadRawCsvs, captureReports, stateFor } from "./helpers/loadData.js";
 import { sortAlphabetically } from "../js/calcData/data.js";
 import { PLACES_FILTER_TYPES, GEO_FILTER_TYPES, TRAVEL_FILTER_TYPES, selectedIdOf } from "../js/calcData/getters.js";
+import { getDateFilterFn } from "../js/renderMap/calcCommon.js";
 import { defaultMapState } from "../js/interface/interface.js";
 import { createPlacesInterfaceHtml } from "../js/interface/placesInterface.js";
 import { createTravelInterfaceHtml } from "../js/interface/travelInterface.js";
@@ -28,6 +29,95 @@ describe("initializeData runs clean", () => {
 
   test("no console warnings about unresolved ids", () => {
     assert.deepEqual(logs, [], `initializeData logged:\n  ${logs.join("\n  ")}`);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// What startup does with an id that resolves to nothing.
+//
+// Against the real CSVs this is unreachable, which is what the referential
+// integrity tests in data-integrity.test.js are for — and the reason getPoet()
+// and getCity() could claim to always return a row for as long as they did. So
+// these break one row on purpose and assert the behaviour the console.log in
+// each getter was written for: the row is dropped and reported, and everything
+// else is still built. See issue #369.
+// ---------------------------------------------------------------------------
+
+describe("an id that resolves to nothing costs one row, not the map", () => {
+  const MISSING = 99999;
+
+  /** The id poets.csv gives a poet, as the string a raw row holds. */
+  const rawPoetIdByName = (/** @type {RawCsvs} */ raw, /** @type {string} */ name) => {
+    const poet = raw.poets.find(rawPoet => rawPoet.poetname === name);
+    assert.ok(poet, `no poet named ${name}`);
+    return poet.poetId;
+  };
+
+  test("a poet named in poets_cities.csv but absent from poets.csv", () => {
+    // Alcman travels, so moving every one of his rows onto an id poets.csv does
+    // not have reaches all three startup paths that read a poet: the sort of
+    // poets_cities, the travel poet list, and the dates behind a travel line.
+    const raw = loadRawCsvs();
+    const alcmanId = rawPoetIdByName(raw, "Alcman");
+    const moved = raw.poetCities.filter(pc => pc.poetId === alcmanId);
+    assert.ok(moved.length > 0, "expected Alcman to have poets_cities rows");
+    for (const pc of moved) pc.poetId = String(MISSING);
+
+    const { data: broken, logs: brokenLogs } = loadInitializedData(raw);
+
+    assert.ok(
+      brokenLogs.includes(`poetId ${MISSING} does not exist in poetsById`),
+      "the unresolved poetId should be reported"
+    );
+    assert.ok(
+      brokenLogs.includes(`poetId ${MISSING} does not exist in datesByPoetId`),
+      "a poet with no row also has no dates, which should be reported too"
+    );
+
+    // The rest of the map is untouched: only Alcman leaves the control bar.
+    assert.ok(broken.lines.length > 0);
+    assert.ok(broken.travelCities.length > 0);
+    assert.ok(!broken.travelPoets.some(option => option.id === MISSING));
+    assert.ok(!broken.travelPoets.some(option => option.id === Number(alcmanId)));
+    for (const { id: poetId } of [...broken.travelPoets, ...broken.poetsWithUnknownTravel]) {
+      assert.ok(broken.poetsById[poetId], `control bar offers unknown poetId ${poetId}`);
+    }
+
+    // His lines survive initializeData, since both of their cities are real,
+    // but nothing draws them: every render path filters through
+    // getDateFilterFn(), which has no dates to admit them by.
+    const orphaned = broken.lines.filter(line => line.poetId === MISSING);
+    assert.ok(orphaned.length > 0);
+    const inDateRange = getDateFilterFn(broken, stateFor("travelMode", "all_0"));
+    const { result: anyDrawn } = captureReports(() => orphaned.some(inDateRange));
+    assert.ok(!anyDrawn, "a poet with no dates should be off the map at every date");
+  });
+
+  test("a city named in poets_cities.csv but absent from cities.csv", () => {
+    // Alcman is reported born in both Sparta and Sardis. Break the Sardis row
+    // and the Sardis -> Sparta line cannot be drawn, but Sparta -> Sparta still
+    // is: the pair is dropped, not the poet.
+    const raw = loadRawCsvs();
+    const alcmanId = rawPoetIdByName(raw, "Alcman");
+    const sardis = raw.poetCities.find(pc => pc.poetId === alcmanId && pc.cityname === "Sardis");
+    assert.ok(sardis, "expected Alcman to have a Sardis row");
+    sardis.cityId = String(MISSING);
+
+    const { data: broken, logs: brokenLogs } = loadInitializedData(raw);
+
+    assert.ok(
+      brokenLogs.includes(`cityId ${MISSING} does not exist in citiesById`),
+      "the unresolved cityId should be reported"
+    );
+
+    const journeys = broken.linesByPoetId[Number(alcmanId)].map(
+      line => `${line.bornCity.cityname} -> ${line.activeCity.cityname}`
+    );
+    assert.deepEqual(journeys, ["Sparta -> Sparta"]);
+    assert.ok(!broken.travelCities.some(option => option.id === MISSING));
+    for (const { id: cityId } of broken.travelCities) {
+      assert.ok(broken.citiesById[cityId], `control bar offers unknown cityId ${cityId}`);
+    }
   });
 });
 
