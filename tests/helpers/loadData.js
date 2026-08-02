@@ -42,15 +42,18 @@ export function loadRawCsvs() {
 }
 
 /**
- * The CSVs run through the real initializeData(), i.e. the same object the
- * browser builds before it draws anything. Use this for behaviour assertions.
+ * Runs fn with console.error() and console.log() collected rather than printed,
+ * and hands back what it returned alongside what it said.
  *
- * The app reports missing lookups by calling console.error() and console.log(),
- * neither of which should ever fire against good data, so both are captured and
- * handed back for assertion rather than printed.
- * @returns {{ data: Data, errors: string[], logs: string[] }}
+ * Those two are how the app reports an id that resolves to nothing, and neither
+ * should ever fire against good data — so capturing them is both what lets a
+ * test assert on the report and what keeps a test that provokes one on purpose
+ * from printing it into the TAP output.
+ * @template T
+ * @param {() => T} fn
+ * @returns {{ result: T, errors: string[], logs: string[] }}
  */
-export function loadInitializedData() {
+export function captureReports(fn) {
   /** @type {string[]} */
   const errors = [];
   /** @type {string[]} */
@@ -62,11 +65,28 @@ export function loadInitializedData() {
   console.log = (/** @type {unknown[]} */ ...args) => logs.push(args.join(" "));
 
   try {
-    return { data: initializeData(loadRawCsvs()), errors, logs };
+    return { result: fn(), errors, logs };
   } finally {
     console.error = realError;
     console.log = realLog;
   }
+}
+
+/**
+ * The CSVs run through the real initializeData(), i.e. the same object the
+ * browser builds before it draws anything. Use this for behaviour assertions.
+ *
+ * Takes the raw CSVs so that a test can break one row on purpose and watch what
+ * startup does with it — the only way to reach the missing-id paths, since the
+ * referential-integrity tests exist to keep the real files off them. Pass a
+ * fresh loadRawCsvs(): hydrate() parses the rows in place, so they are not
+ * reusable between calls.
+ * @param {RawCsvs} [raw] defaults to the CSVs as they sit on disk
+ * @returns {{ data: Data, errors: string[], logs: string[] }}
+ */
+export function loadInitializedData(raw = loadRawCsvs()) {
+  const { result, errors, logs } = captureReports(() => initializeData(raw));
+  return { data: result, errors, logs };
 }
 
 /** The whole slider range, i.e. what a map shows before anything is dragged. */
