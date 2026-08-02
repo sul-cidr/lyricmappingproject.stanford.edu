@@ -42,8 +42,8 @@ export function loadRawCsvs() {
 }
 
 /**
- * Runs fn with alert() and console.log() collected rather than printed, and
- * hands back what it returned alongside what it said.
+ * Runs fn with console.error() and console.log() collected rather than printed,
+ * and hands back what it returned alongside what it said.
  *
  * Those two are how the app reports an id that resolves to nothing, and neither
  * should ever fire against good data — so capturing them is both what lets a
@@ -51,24 +51,23 @@ export function loadRawCsvs() {
  * from printing it into the TAP output.
  * @template T
  * @param {() => T} fn
- * @returns {{ result: T, alerts: string[], logs: string[] }}
+ * @returns {{ result: T, errors: string[], logs: string[] }}
  */
 export function captureReports(fn) {
   /** @type {string[]} */
-  const alerts = [];
+  const errors = [];
   /** @type {string[]} */
   const logs = [];
 
-  const globals = /** @type {{ alert?: (message: string) => void }} */ (globalThis);
-  const realAlert = globals.alert;
+  const realError = console.error;
   const realLog = console.log;
-  globals.alert = message => alerts.push(String(message));
+  console.error = (/** @type {unknown[]} */ ...args) => errors.push(args.join(" "));
   console.log = (/** @type {unknown[]} */ ...args) => logs.push(args.join(" "));
 
   try {
-    return { result: fn(), alerts, logs };
+    return { result: fn(), errors, logs };
   } finally {
-    globals.alert = realAlert;
+    console.error = realError;
     console.log = realLog;
   }
 }
@@ -83,11 +82,11 @@ export function captureReports(fn) {
  * fresh loadRawCsvs(): hydrate() parses the rows in place, so they are not
  * reusable between calls.
  * @param {RawCsvs} [raw] defaults to the CSVs as they sit on disk
- * @returns {{ data: Data, alerts: string[], logs: string[] }}
+ * @returns {{ data: Data, errors: string[], logs: string[] }}
  */
 export function loadInitializedData(raw = loadRawCsvs()) {
-  const { result, alerts, logs } = captureReports(() => initializeData(raw));
-  return { data: result, alerts, logs };
+  const { result, errors, logs } = captureReports(() => initializeData(raw));
+  return { data: result, errors, logs };
 }
 
 /** The whole slider range, i.e. what a map shows before anything is dragged. */
