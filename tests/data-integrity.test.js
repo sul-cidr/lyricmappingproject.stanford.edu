@@ -57,6 +57,24 @@ const KNOWN_UNMAPPED_GEO_CITY_IDS = new Set([
 const KNOWN_ORPHAN_GENRE_POET_IDS = new Set([14, 31, 33, 113]);
 
 /**
+ * Cities no citation points at, so no map draws them.
+ *
+ * Each still has nine city_politics rows, which is why they are here rather
+ * than in removed_data.txt with the other eight: deleting the city means
+ * deleting that regime history too, and Attica shows the rows can outlive the
+ * citation by accident — the geographical imaginary row that referenced it was
+ * archived in December 2023 and the city was left behind. Whether the politics
+ * is worth keeping without a poet attached is an editorial call.
+ */
+const KNOWN_UNREFERENCED_CITY_IDS = new Set([
+  24, // Megalopolis
+  25, // Stageira
+  67, // Siris
+  86, // Kynoskephalai
+  198 // Attica (region), orphaned by the Aristotle archiving
+]);
+
+/**
  * Rows whose cityname label does not match the cities.csv entry they point at,
  * as [cityId, label]. Most are harmless spelling variants (Aegina/Aigina,
  * Ceos/Ioulis). The three marked BUG are different places entirely.
@@ -196,6 +214,25 @@ describe("referential integrity", () => {
       assert.ok(
         bigRegionIds.has(id(region.bigRegionId)),
         `${region.regionname} has unknown bigRegionId ${region.bigRegionId}`
+      );
+    }
+  });
+
+  // The other direction. Every test above asks whether a row's cityId resolves;
+  // this asks whether a city is reachable from any row, which is what decides
+  // whether it is ever drawn or exercised. Claros sat in cities.csv for two
+  // years with a latitude of 384725 because nothing referenced it, so nothing
+  // ran over it — the coordinate check skipped it by way of an exception set.
+  test("every city is referenced by some citation", () => {
+    const referenced = new Set(
+      [...raw.poetCities, ...raw.geopoetCities].filter(row => filled(row.cityId)).map(row => id(row.cityId))
+    );
+    for (const city of raw.cities) {
+      if (KNOWN_UNREFERENCED_CITY_IDS.has(id(city.cityId))) continue;
+      assert.ok(
+        referenced.has(id(city.cityId)),
+        `${city.cityname} (cityId ${city.cityId}) is in cities.csv but no citation points at it, ` +
+          `so no map draws it — add the citation, or move the row to removed_data.txt`
       );
     }
   });
