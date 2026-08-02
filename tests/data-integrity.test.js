@@ -53,9 +53,6 @@ const KNOWN_UNMAPPED_GEO_CITY_IDS = new Set([
   239 // Phlyesia - Hipponax 47.2
 ]);
 
-/** genres.csv rows whose poetId is not in poets.csv. */
-const KNOWN_ORPHAN_GENRE_POET_IDS = new Set([14, 31, 33, 113]);
-
 /**
  * Cities no citation points at, so no map draws them.
  *
@@ -214,9 +211,8 @@ describe("referential integrity", () => {
     }
   });
 
-  test("no NEW genres row points at a missing poet", () => {
+  test("every genres row resolves to a poet", () => {
     for (const row of raw.genres) {
-      if (KNOWN_ORPHAN_GENRE_POET_IDS.has(id(row.poetId))) continue;
       assert.ok(poetIds.has(id(row.poetId)), `${row.genres_poetname} has unknown poetId ${row.poetId}`);
     }
   });
@@ -669,18 +665,6 @@ describe("known data bugs: rows that never reach the map", () => {
       [...new Set(orphans.map(row => id(row.cityId)))].sort((a, b) => a - b),
       [154, 156, 165, 170, 172, 173, 217, 221, 227, 228, 238, 239]
     );
-  });
-
-  test("BUG: 8 genres rows belong to poets that are not in poets.csv", () => {
-    const orphans = raw.genres.filter(row => !poetIds.has(id(row.poetId)));
-    assert.equal(orphans.length, 8);
-    assert.deepEqual(
-      [...new Set(orphans.map(row => id(row.poetId)))].sort((a, b) => a - b),
-      [14, 31, 33, 113]
-    );
-    // These poets appear to have been renumbered: there is both an Aristotle 31
-    // and an Aristotle 151, a Kastorion 33 and a Castorion, a Kinesias 14 and a
-    // Cinesias 4. getGenres() returns [] for them, so the rows are simply dead.
   });
 });
 
