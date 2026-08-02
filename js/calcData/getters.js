@@ -108,7 +108,7 @@ function parseFilter(selectedId, allowed, mapName) {
   const filterType = allowed.find(known => known === type);
   if (!filterType) {
     const message = `"${type}" is not a ${mapName} filter (selectedId "${selectedId}")`;
-    alert(message);
+    console.error(message);
     throw new Error(message);
   }
   return { type: filterType, num: parseInt(stringNum) };

@@ -13,7 +13,7 @@ import { createPlacesInterfaceHtml } from "../js/interface/placesInterface.js";
 import { createTravelInterfaceHtml } from "../js/interface/travelInterface.js";
 import { createGeoImaginaryInterfaceHtml } from "../js/interface/geoImaginaryInterface.js";
 
-const { data, alerts, logs } = loadInitializedData();
+const { data, errors, logs } = loadInitializedData();
 
 const poetIdByName = (/** @type {string} */ name) => {
   const poet = data.poets.find(p => p.poetname === name);
@@ -22,8 +22,8 @@ const poetIdByName = (/** @type {string} */ name) => {
 };
 
 describe("initializeData runs clean", () => {
-  test("no alerts", () => {
-    assert.deepEqual(alerts, [], "initializeData alerted, which means a poet lookup failed");
+  test("no console errors", () => {
+    assert.deepEqual(errors, [], `initializeData reported an error:\n  ${errors.join("\n  ")}`);
   });
 
   test("no console warnings about unresolved ids", () => {
@@ -124,7 +124,7 @@ describe("hydration", () => {
     // Popups read these through getPoetDisplay() when they render, and it falls
     // back to "" rather than leaking "undefined" into the page — so a poet
     // missing them renders a blank line instead of failing. This is what
-    // warnAboutIncompletePoets() alerts about at startup, asserted directly.
+    // warnAboutIncompletePoets() reports at startup, asserted directly.
     const mapped = new Set([...data.poetCities, ...data.geopoetCities].map(pc => pc.poetId));
     for (const poetId of mapped) {
       const poet = data.poetsById[poetId];

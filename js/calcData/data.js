@@ -201,9 +201,9 @@ function sortPoetCities(lookups, poetCities) {
  * Reports poets that are on the map but missing the display data popups show.
  *
  * Reported once per poet rather than once per row, which is what the priming
- * pass did — a poet with five rows alerted five times. Reporting it here rather
- * than where popups read it keeps it to startup: at render time the same alert
- * would fire again on every redraw.
+ * pass did — a poet with five rows was reported five times. Reporting it here
+ * rather than where popups read it keeps it to startup: at render time the same
+ * message would be repeated on every redraw.
  * @param {Csvs} csvs
  * @param {Lookups} lookups
  */
@@ -213,7 +213,7 @@ function warnAboutIncompletePoets(csvs, lookups) {
     const poet = getPoet(lookups, poetId);
     // getPoet has already logged the missing id; there is nothing more to say.
     if (!poet) continue;
-    if (!poet.poetDetailName) alert(`Poet ${poet.poetname} with poetId ${poetId} lacks a details name`);
+    if (!poet.poetDetailName) console.error(`Poet ${poet.poetname} with poetId ${poetId} lacks a details name`);
     if (!poet.dates) console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks dates`);
     if (!poet.sources) console.log(`Poet ${poet.poetname} with poetId ${poetId} lacks sources`);
   }

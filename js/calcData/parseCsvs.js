@@ -54,7 +54,9 @@ export async function parseCsvs() {
 async function parseCsv(filename) {
   const response = await fetch(filename);
   // fetch resolves for a 404, so without this the error page is parsed as CSV
-  // and the map draws nothing, with no indication why.
+  // and the map draws nothing, with no indication why. This is the one place
+  // the app still alerts: the failure is one a reader can see but not diagnose,
+  // and everything else it used to alert about was a note to ourselves.
   if (!response.ok) {
     const message = `could not load ${filename}: ${response.status} ${response.statusText}`;
     alert(message);

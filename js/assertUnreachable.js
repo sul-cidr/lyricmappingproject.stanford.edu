@@ -6,10 +6,10 @@
  * compiling. That is what lets the callers drop their casts — after an
  * if/else chain ending here, the remaining values are known, not merely assumed.
  *
- * At runtime it does what this codebase has always done with an unexpected
- * state — alert, then fail — except that it fails immediately and names the
- * offending value, instead of continuing and throwing something unrelated a
- * few lines later.
+ * At runtime it names the offending value and fails immediately, instead of
+ * continuing and throwing something unrelated a few lines later. It reports to
+ * the console rather than to a dialog: a reader of the map can do nothing about
+ * a union we failed to handle, so the message is for us.
  *
  * @param {never} value
  * @param {string} message
@@ -17,6 +17,6 @@
  */
 export function assertUnreachable(value, message) {
   const description = `${message}: ${String(value)}`;
-  alert(description);
+  console.error(description);
   throw new Error(description);
 }

@@ -45,27 +45,26 @@ export function loadRawCsvs() {
  * The CSVs run through the real initializeData(), i.e. the same object the
  * browser builds before it draws anything. Use this for behaviour assertions.
  *
- * The app reports missing lookups by calling alert() and console.log(), neither
- * of which should ever fire against good data, so both are captured and handed
- * back for assertion rather than printed.
- * @returns {{ data: Data, alerts: string[], logs: string[] }}
+ * The app reports missing lookups by calling console.error() and console.log(),
+ * neither of which should ever fire against good data, so both are captured and
+ * handed back for assertion rather than printed.
+ * @returns {{ data: Data, errors: string[], logs: string[] }}
  */
 export function loadInitializedData() {
   /** @type {string[]} */
-  const alerts = [];
+  const errors = [];
   /** @type {string[]} */
   const logs = [];
 
-  const globals = /** @type {{ alert?: (message: string) => void }} */ (globalThis);
-  const realAlert = globals.alert;
+  const realError = console.error;
   const realLog = console.log;
-  globals.alert = message => alerts.push(String(message));
+  console.error = (/** @type {unknown[]} */ ...args) => errors.push(args.join(" "));
   console.log = (/** @type {unknown[]} */ ...args) => logs.push(args.join(" "));
 
   try {
-    return { data: initializeData(loadRawCsvs()), alerts, logs };
+    return { data: initializeData(loadRawCsvs()), errors, logs };
   } finally {
-    globals.alert = realAlert;
+    console.error = realError;
     console.log = realLog;
   }
 }
