@@ -1,6 +1,11 @@
-# Vendored libraries, kept exactly as published so the integrity hashes in
-# index.html stay meaningful.
-3rdparty/
+# Vendored libraries, kept exactly as published so 3rdparty/checksums.txt and
+# the integrity hashes in index.html stay meaningful. Reformatting one would
+# fail tests/3rdparty.test.js, which is the point. Listed by extension rather
+# than as 3rdparty/, because ignoring the directory would also ignore
+# 3rdparty/README.md, which is ours, and a later "!3rdparty/README.md" cannot
+# bring it back: nothing under an ignored directory can be re-included.
+3rdparty/**/*.js
+3rdparty/**/*.css
 
 # The data. Prettier has no CSV formatter, and these are edited in spreadsheets.
 dataFiles/
