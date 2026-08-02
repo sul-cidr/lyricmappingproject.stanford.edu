@@ -22,8 +22,6 @@ Colophon,Colophon,20,,38.109632,27.14711,Ionia,6
 Leucas,Leucas,21,,38.716667,20.65,Ionian Sea,19
 Selymbria,Selymbria,22,city not listed,41.078496,28.247677,Northern Greece,11
 Himera,Himera,23,dates not listed,37.970797,13.822496,Sicily,7
-Megalopolis,Megalopolis,24,city founded 378,37.414256,22.126238,Peloponnese,9
-Stageira,Stageira,25,city not listed,40.592218,23.795769,Northern Greece,11
 Soli (Soloi/Pompeiopolis),Soli (Soloi/Pompeiopolis),26,"i.e. Soloi, Dem. 333-?",36.744896,34.542284,,
 Nemea,Nemea,27,"city not listed; games overseen by Corinth or others, so...?",37.808904,22.7108171,Peloponnese,9
 Marathon,Marathon,28,city not listed,38.137916,23.979372,Attica,2
@@ -62,7 +60,6 @@ Soli (Cyprus),Soli (Cyprus),63,,35.139761,32.811959,Cyprus,18
 Katane,Katane,64,,37.502959,15.088142,Sicily,7
 Abdera,Abdera,65,,40.95,24.983333,Northern Greece,11
 Naxos,Naxos,66,,37.05,25.49,Cyclades,1
-Siris,Siris,67,,40.149042,16.54137,Italy,10
 Sicily,SICILY (region),68,Coordinates are Enna,37.567652,14.279558,Sicily,7
 Tainaron,Tainaron,69,,36.387567,22.482064,Peloponnese,9
 Mantineia,Mantineia,70,,37.618138,22.393259,Peloponnese,9
@@ -81,7 +78,6 @@ Salamis,Salamis,82,,37.93,23.51,Attica,2
 Pallantion,Pallantion,83,,37.462155,22.336587,Peloponnese,9
 Locris Ozolia,Locris Ozolia,84,coordinates are Amphissa,38.518403,22.374172,Central Greece,4
 Persia,"PERSIA (region, at Persepolis)",85,Location is for Persepolis,29.935945,52.88841,Asia,21
-Kynoskephalai,Kynoskephalai,86,"coordinates are modern Loutoufi (following Munn, CA 6 (1987): 113n27)",38.276667,23.27027,Boeotia,3
 Olympia,Olympia,87,,37.637807,21.630049,Peloponnese,9
 Metapontion,Metapontion,88,,40.383868,16.824063,Italy,10
 Aigina,Aigina,89,coordinates are temple of Aphaia on Aegina,37.754475,23.53304,Cyclades & western Aegean islands,1
@@ -174,7 +170,6 @@ Lethaeus,Lethaeus,193,pin dropped near Aydin,37.809784,27.58667,,
 Nineveh,Nineveh,195,,36.359444,43.150278,Asia,21
 Priene,Priene,196,,37.659722,27.297778,Ionia,6
 Etruria,ETRURIA (region),197,a random pin drop north of Grosseto,42.924252,11.8301,Italy,10
-Attica,ATTICA (region),198,"roughly the center the of Attica, also the intersection of the Attiki Odos and A/D Pathe Highways.",38.06,23.75,Attica,2
 Celaenae,Celaenae,201,ancient city of Phrygia and capital of the Persian satrapy of Greater Phrygia and modern Dinar,38.065,30.1655,,
 Cephisus,Cephisus,202,"The Cephissus or Kifisos (Greek: Κηφισός) is a river in central Greece. In Greek mythology the river god Cephissus was associated with this river. The river rises at Lilaia in Phocis, on the northwestern slope of Mount Parnassus. It flows east through the Boeotian plain, passing the towns Amfikleia, Kato Tithorea and Orchomenos. https://en.wikipedia.org/wiki/Cephissus_(Boeotia)",38.43,23.24,,
 Cimmeria,Cimmeria,203,modern day Crimea,45.3,34.4,,

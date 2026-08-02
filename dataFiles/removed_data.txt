@@ -78,3 +78,65 @@ Eunicus,113,Elegy,3,,,,,,,,,,
 Kastorion,33,Unclassified melic,30,,,,,,,,,,
 Kastorion,33,Hymn,6,Athenaeus,,Ath. 10.455a,"τὸ δὲ Καστορίωνος τοῦ Σολέως, ὡς ὁ Κλέαρχός φησιν, εἰς τὸν Πᾶνα ποίημα τοιοῦτόν ἐστι...","According to Clearchus (fr. 88 Wehrli), Castorion of Soli’s poem in honor of Pan (SH 310) is composed in the following way.",Campbell,,no,,
 Kinesias,14,Dithyramb,2,Pherecrates,,Pherecr. fr. 155 = [Plut.] Mus. 30. 1141e-f,"Κινησίας δέ <μ᾿> ὁ κατάρατος Ἀττικός, / ἐξαρμονίους καμπὰς ποιῶν ἐν ταῖς στροφαῖς / ἀπολώλεχ᾿ οὕτως ὥστε τῆς ποιήσεως / τῶν διθυράμβων, καθάπερ ἐν ταῖς ἀσπίσιν, / ἀριστέρ᾿ αὐτοῦ φαίνεται τὰ δεξιά.","Cinesias on the other hand, that damned Athenian, has so damaged me with the exharmonic twists he makes within his strophes that just as in shields you can’t tell his right from his left when he composes his dithyrambs.",Campbell,,yes,,
+
+
+removed cities that only had political regimes
+No citation has ever pointed at these five, so no map drew them, and the regime
+history below could not be reached either: getGovs() is consulted only for the
+endpoints of a travel line, and a city with no poets_cities row is never an
+endpoint. Attica came to be here by accident -- the geographical imaginary row
+that referenced it is the Aristotle one archived above.
+cityname,infowindowName,cityId,notes,lat,long,region,regionId
+Megalopolis,Megalopolis,24,city founded 378,37.414256,22.126238,Peloponnese,9
+Stageira,Stageira,25,city not listed,40.592218,23.795769,Northern Greece,11
+Siris,Siris,67,,40.149042,16.54137,Italy,10
+Kynoskephalai,Kynoskephalai,86,"coordinates are modern Loutoufi (following Munn, CA 6 (1987): 113n27)",38.276667,23.27027,Boeotia,3
+Attica,ATTICA (region),198,"roughly the center the of Attica, also the intersection of the Attiki Odos and A/D Pathe Highways.",38.06,23.75,Attica,2
+
+removed city_politics for those five cities
+city,cityId,government,governmentId,questionable?,date,notes
+Attica (region),198,Oligarchy,1,,700,
+Attica (region),198,Oligarchy,1,,650,
+Attica (region),198,Oligarchy,1,,600,
+Attica (region),198,Tyranny,2,,550,
+Attica (region),198,Democracy,3,,500,
+Attica (region),198,Democracy,3,,450,
+Attica (region),198,Democracy,3,,400,
+Attica (region),198,Democracy,3,,350,
+Attica (region),198,Uncertain,5,,300,
+Kynoskephalai,86,Uncertain,5,,700,
+Kynoskephalai,86,Uncertain,5,,650,
+Kynoskephalai,86,Uncertain,5,,600,
+Kynoskephalai,86,Uncertain,5,,550,
+Kynoskephalai,86,Oligarchy,5,,500,
+Kynoskephalai,86,Oligarchy,5,,450,
+Kynoskephalai,86,Oligarchy,5,,400,
+Kynoskephalai,86,Democracy,5,,350,
+Kynoskephalai,86,Uncertain,5,,300,
+Megalopolis,24,Uncertain,5,,700,
+Megalopolis,24,N/A,6,,650,
+Megalopolis,24,N/A,6,,600,
+Megalopolis,24,N/A,6,,550,
+Megalopolis,24,N/A,6,,500,
+Megalopolis,24,N/A,6,,450,
+Megalopolis,24,N/A,6,,400,
+Megalopolis,24,Democracy,3,,350,
+Megalopolis,24,Uncertain,5,,300,
+Siris,67,Uncertain,5,,700,
+Siris,67,Uncertain,5,,650,
+Siris,67,Uncertain,5,,600,
+Siris,67,Uncertain,5,,550,
+Siris,67,Uncertain,5,,500,
+Siris,67,Uncertain,5,,450,
+Siris,67,Uncertain,5,,400,
+Siris,67,Uncertain,5,,350,
+Siris,67,Uncertain,5,,300,
+Stageira,25,Uncertain,5,,700,
+Stageira,25,Uncertain,5,,650,
+Stageira,25,Uncertain,5,,600,
+Stageira,25,Uncertain,5,,550,
+Stageira,25,Uncertain,5,,500,
+Stageira,25,Uncertain,5,,450,
+Stageira,25,Uncertain,5,,400,
+Stageira,25,Uncertain,5,,350,
+Stageira,25,Uncertain,5,,300,
