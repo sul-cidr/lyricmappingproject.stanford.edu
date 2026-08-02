@@ -60,3 +60,40 @@
 #youtubeVideo {
   border: 0px;
 }
+
+/*
+ * The stand-in shown until someone asks to watch. Sized to the embed it is
+ * replaced by, which is the browser's default iframe box, so that clicking it
+ * does not shift the introduction around.
+ */
+#youtubeFacade {
+  width: 300px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid gray;
+  background: #2b2b2b;
+  color: white;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+#youtubeFacade:hover,
+#youtubeFacade:focus-visible {
+  background: #b81609;
+}
+
+#youtubePlayIcon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+#youtubeFacadeNote {
+  font-size: 85%;
+  font-style: italic;
+}

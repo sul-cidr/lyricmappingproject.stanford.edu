@@ -376,3 +376,69 @@ describe("redrawing does not leak", () => {
     assert.equal(await page.evaluate(() => /** @type {any} */ (window).__zoomendRegistrations), before);
   });
 });
+
+// The introduction is open when the page loads, so anything embedded in it is
+// loaded by every visitor. It used to hold a YouTube iframe, which meant every
+// visit fetched doubleclick.net, googleads and a Google-hosted font before
+// anyone had asked to watch anything. It is now a button that becomes the embed
+// on click, and these tests are what keep it that way.
+//
+// A page of its own, because the shared one above closes the introduction in
+// before() and has already been past this point.
+describe("the introduction does not load YouTube until asked", () => {
+  /** Hosts that an embed drags in, none of which should be touched on load. */
+  const THIRD_PARTY = /youtube|ytimg|doubleclick|googleads|googlevideo|gstatic|jnn-pa/;
+
+  /** @type {import("playwright").Page} */
+  let intro;
+  /** @type {string[]} */
+  let requested;
+
+  before(async () => {
+    intro = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    requested = [];
+    intro.on("request", request => requested.push(request.url()));
+    await intro.route("**d3msn78fivoryj.cloudfront.net**", route => route.fulfill({ status: 204, body: "" }));
+    // Stubbed so that clicking play stays hermetic; the assertion is about
+    // which host is asked for, not about YouTube answering.
+    await intro.route("**youtube-nocookie.com**", route =>
+      route.fulfill({ status: 200, contentType: "text/html", body: "" })
+    );
+    await intro.goto(site.url);
+    await intro.waitForSelector("#youtubeFacade");
+  });
+
+  after(async () => {
+    await intro?.close();
+  });
+
+  test("loading the page asks nothing of YouTube or Google", () => {
+    assert.deepEqual(
+      requested.filter(url => THIRD_PARTY.test(url)),
+      []
+    );
+  });
+
+  test("the stand-in is a real button, so it is reachable by keyboard", async () => {
+    const facade = intro.locator("#youtubeFacade");
+    assert.equal(await facade.evaluate(node => node.tagName), "BUTTON");
+    assert.match(await facade.innerText(), /watch a video/i);
+  });
+
+  test("the stand-in is the size of the embed, so playing shifts no layout", async () => {
+    const box = await intro.locator("#youtubeFacade").boundingBox();
+    assert.deepEqual({ width: box?.width, height: box?.height }, { width: 300, height: 150 });
+  });
+
+  test("clicking it loads the embed, from the no-cookie host", async () => {
+    await intro.locator("#youtubeFacade").click();
+    const video = intro.locator("iframe#youtubeVideo");
+    await video.waitFor({ timeout: 5000 });
+    assert.match(String(await video.getAttribute("src")), /^https:\/\/www\.youtube-nocookie\.com\/embed\//);
+    assert.equal(await intro.locator("#youtubeFacade").count(), 0, "the stand-in should be gone");
+    assert.ok(
+      requested.some(url => url.includes("youtube-nocookie.com")),
+      "expected the embed to be fetched once asked for"
+    );
+  });
+});
