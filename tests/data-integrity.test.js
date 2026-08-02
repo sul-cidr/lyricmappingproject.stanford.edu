@@ -96,9 +96,6 @@ const acceptedCityLabels = new Set(ACCEPTED_CITY_LABEL_VARIANTS.map(([cityId, la
 /** poets_cities rows carrying a citation but no translation or translator. */
 const KNOWN_INCOMPLETE_CITATION_COUNT = 18;
 
-/** Cities whose coordinates are malformed and plot far outside the map. */
-const KNOWN_BROKEN_COORDINATE_CITY_IDS = new Set([226]);
-
 /**
  * The mapped world runs from Ethiopia in the south to Scythia in the north, and
  * from Tartessus and Erytheia beyond the Pillars of Heracles in the west
@@ -243,7 +240,6 @@ describe("field values", () => {
       const lat = parseFloat(city.lat);
       const long = parseFloat(city.long);
       assert.ok(Number.isFinite(lat) && Number.isFinite(long), `${city.cityname} has unparseable coordinates`);
-      if (KNOWN_BROKEN_COORDINATE_CITY_IDS.has(id(city.cityId))) continue;
       assert.ok(
         lat > WORLD_BOUNDS.minLat && lat < WORLD_BOUNDS.maxLat,
         `${city.cityname} latitude ${lat} is outside the mapped world — a lost decimal point?`
@@ -505,17 +501,6 @@ function cityById(cityId) {
 }
 
 /**
- * cities.csv row for a name, asserting it exists.
- * @param {string} cityname
- * @returns {RawCity}
- */
-function cityByName(cityname) {
-  const city = raw.cities.find(c => c.cityname === cityname);
-  assert.ok(city, `${cityname} is no longer in cities.csv`);
-  return city;
-}
-
-/**
  * The single row in a join table carrying a given cityname label.
  * @param {PoetCityCsv} file
  * @param {string} label
@@ -569,21 +554,6 @@ describe("known data bugs: places plotted in the wrong location", () => {
       134,
       "the same fragment also refers to Aetolia itself"
     );
-  });
-});
-
-describe("known data bugs: malformed coordinate", () => {
-  test("BUG: Claros' latitude is missing its decimal point", () => {
-    const claros = cityByName("Claros");
-    assert.equal(id(claros.cityId), 226);
-    assert.equal(claros.lat, "384725");
-    // The longitude, 27.192987, matches pleiades:599719 to five decimals, so the
-    // latitude should be that entry's 38.0047324117 — not 38.4725, which is what
-    // simply reinserting a decimal point would give.
-    assert.equal(claros.long, "27.192987");
-    // Nothing references Claros yet, so nothing is visibly misplaced today.
-    const referenced = [...raw.poetCities, ...raw.geopoetCities].filter(row => id(row.cityId) === 226);
-    assert.equal(referenced.length, 0);
   });
 });
 
