@@ -75,6 +75,38 @@ const KNOWN_UNREFERENCED_CITY_IDS = new Set([
 ]);
 
 /**
+ * Poets no citation places anywhere, so no map draws them.
+ *
+ * Deliberately kept, unlike the cities archived in #362. An unreferenced city
+ * was a coordinate looked up ahead of a citation that never came; an unplaced
+ * poet is a finding — the catalogue attests the poet and dates them, and no
+ * source puts them in a place. All fourteen have rows in dates.csv, twelve have
+ * sources, five have genres, and none is a renumbering of a poet who is on the
+ * map: the near-misses in poets_cities are other people (Dionysius Chalkus and
+ * Dionysius of Thebes are not Dionysius of Chios, Euripides is not Euripides
+ * the Younger, Phrynis is not Phrynichos).
+ *
+ * A NEW name here is much more likely to be a data-entry slip, which is what
+ * the test below is for.
+ */
+const KNOWN_UNPLACED_POET_IDS = new Set([
+  47, // Kydides
+  58, // Chares
+  62, // Dionysius of Chios
+  63, // Diphilos
+  67, // Euripides the Younger
+  74, // Karkinos
+  77, // Leotrophides
+  79, // Pankrates
+  81, // Phrynichos
+  88, // Timonides
+  90, // Xenokrates
+  95, // Ananius
+  103, // Charixena
+  125 // Panarces
+]);
+
+/**
  * Rows whose cityname label does not match the cities.csv entry they point at,
  * as [cityId, label]. Most are harmless spelling variants (Aegina/Aigina,
  * Ceos/Ioulis). The three marked BUG are different places entirely.
@@ -233,6 +265,24 @@ describe("referential integrity", () => {
         referenced.has(id(city.cityId)),
         `${city.cityname} (cityId ${city.cityId}) is in cities.csv but no citation points at it, ` +
           `so no map draws it — add the citation, or move the row to removed_data.txt`
+      );
+    }
+  });
+
+  // The same question for poets. Every control bar list is built from the join
+  // tables rather than from poets.csv — createGeoImaginaryPoets() from
+  // geopoetCities, createTravelPoets() from the drawn lines, and even
+  // "poets with unknown travels" from poets that have poets_cities rows but no
+  // born-and-active pair — so a poet neither table names appears nowhere at all,
+  // not even as a filter that draws nothing.
+  test("every poet is placed by some citation", () => {
+    const placed = new Set([...raw.poetCities, ...raw.geopoetCities].map(row => id(row.poetId)));
+    for (const poet of raw.poets) {
+      if (KNOWN_UNPLACED_POET_IDS.has(id(poet.poetId))) continue;
+      assert.ok(
+        placed.has(id(poet.poetId)),
+        `${poet.poetname} (poetId ${poet.poetId}) has no poets_cities or geographical imaginary row, ` +
+          `so no map places them — check the poetId before adding them to KNOWN_UNPLACED_POET_IDS`
       );
     }
   });
