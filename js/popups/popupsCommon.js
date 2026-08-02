@@ -59,12 +59,15 @@ export function createDetailedListOfPoets(poets, data) {
  * @returns {string}
  */
 function createGenreString(lookups, poetId) {
-  const genres = getGenres(lookups, poetId);
-  const genreNames = genres.map(genre => genre.genre).join(", ");
+  // genres.csv is one row per citation rather than per genre, so a poet
+  // attested in the same genre by two sources has two rows. This line names the
+  // genres a poet worked in and shows none of the citations behind them, so a
+  // name repeated is only ever a repetition.
+  const genreNames = [...new Set(getGenres(lookups, poetId).map(genre => genre.genre))].filter(Boolean);
   // Blank when a poet has no genres, and also when the ones they have are
   // unnamed, which is what reading the joined string off the row did.
-  if (!genreNames) return "";
-  return `${genres.length > 1 ? "Genres" : "Genre"}: ${genreNames}<br>`;
+  if (!genreNames.length) return "";
+  return `${genreNames.length > 1 ? "Genres" : "Genre"}: ${genreNames.join(", ")}<br>`;
 }
 
 /**

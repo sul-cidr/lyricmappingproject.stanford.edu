@@ -655,8 +655,13 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
       row => filled(row.source_citation) && !(filled(row.source_translation) && filled(row.source_translator))
     );
     assert.equal(incomplete.length, KNOWN_INCOMPLETE_CITATION_COUNT);
-    // renderReference() prints `Citation: X: "" (trans. )` for these. This is
-    // the shape of issues #313 and #329. geopoetCities and genres are clean.
+    // These used to render `Citation: X: "..." (trans. )`, which is the shape of
+    // issues #313 and #329, until #356 stopped renderReference() printing a
+    // credit with nobody in it. Seventeen of the eighteen are Pindar titles and
+    // are meant to carry no translator, per the December 2015 corrections; the
+    // eighteenth, Stesandros at Ath. 14.638b, is a real omission. The count is
+    // still worth pinning, because it is now invisible on the page.
+    // geopoetCities and genres are clean.
     for (const file of CLEAN_CITED_CSVS) {
       const bad = raw[file].filter(
         row => filled(row.source_citation) && !(filled(row.source_translation) && filled(row.source_translator))
