@@ -26,7 +26,9 @@ node --test tests/*.test.js     # or: npm test
 
 They use Node's built-in runner, so there is nothing to install. Most check the
 CSVs in `dataFiles/`, which is where this project's bugs have historically come
-from. Some record known data problems we plan to fix.
+from. Some record known data problems we plan to fix. The rest check that the
+copied-in libraries still match what they were copied from — see
+[3rdparty/README.md](3rdparty/README.md).
 
 There is also a browser smoke test, which serves the repository and opens it in
 headless Chromium to check each map actually paints and that nothing errors. It

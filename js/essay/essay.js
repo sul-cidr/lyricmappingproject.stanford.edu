@@ -9,6 +9,7 @@ export function createEssay(path) {
     case "home":
       byId("essayContent").innerHTML = createIntroHtml();
       byId("creditsLink").addEventListener("click", () => createEssay("credits"));
+      byId("youtubeFacade").addEventListener("click", playVideo);
       break;
     case "credits":
       byId("essayContent").innerHTML = createCreditsHtml();
@@ -17,6 +18,30 @@ export function createEssay(path) {
     default:
       assertUnreachable(path, "unrecognized path in createEssay");
   }
+}
+
+/**
+ * Replaces the stand-in in the introduction with the real YouTube embed.
+ *
+ * The introduction is open when the page loads, so an <iframe> written into it
+ * directly is an embed every single visitor loads, whether or not they ever
+ * watch. That is not one request: it pulls in doubleclick.net, googleads,
+ * i.ytimg.com and a Google-hosted font, so opening a map of archaic Greece
+ * announced itself to Google's ad network. Nothing is fetched from YouTube now
+ * until someone clicks, and clicking is the consent.
+ *
+ * youtube-nocookie.com is YouTube's own no-tracking-until-you-play host, and
+ * autoplay starts the video the click has already asked for.
+ */
+function playVideo() {
+  const video = document.createElement("iframe");
+  video.id = "youtubeVideo";
+  video.src = "https://www.youtube-nocookie.com/embed/XvlZzQkwy1Y?rel=0&autoplay=1";
+  video.title = "Youtube video demonstrating use of the map";
+  video.allow = "autoplay; fullscreen";
+  video.allowFullscreen = true;
+  byId("youtubeFacade").replaceWith(video);
+  video.focus();
 }
 
 /**
@@ -55,7 +80,7 @@ function createIntroHtml() {
   </div>
   <div id="intro-bottom" class="flex-wrapper" style="justify-content: center;">
 	  <div id="bottom-center" class="box-column">
-		  <iframe id="youtubeVideo" src="https://www.youtube.com/embed/XvlZzQkwy1Y?rel=0&autoplay=0" allowfullscreen title="Youtube video demonstrating use of the map"></iframe><br>
+		  <button type="button" id="youtubeFacade"><span id="youtubePlayIcon" aria-hidden="true">&#9654;</span><span>Watch a video demonstrating use of the map</span><span id="youtubeFacadeNote">Plays from YouTube</span></button><br>
 		  <a href="#" id="creditsLink">Credits and Acknowledgements</a></p>
 	  </div>
   </div>
