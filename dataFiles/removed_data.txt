@@ -38,3 +38,18 @@ Aristotle,151,400.00,,
 Aristotle,151,375.00,,
 Aristotle,151,350.00,,
 Aristotle,151,325.00,,
+
+removed cities
+Nothing has ever referenced these: no poets_cities row, no geographical_imaginary_group
+row, and none of them is a destination_id, in any revision of those files. They read as
+places staged in the gazetteer for a citation that never arrived. Coordinates are kept
+here so that restoring one is a paste rather than a fresh lookup.
+cityname,infowindowName,cityId,notes,lat,long,region,regionId
+Italy,ITALY (region),92,coordinates are mod. Acri,39.481432,16.390228,Italy,10
+Mt. Ida,Mt. Ida,96,,35.226667,24.7725,Crete,17
+Knossos,Knossos,97,,35.298056,25.163056,Crete,17
+Sea of Crete,Sea of Crete,98,or Knossian Sea,35.926953,24.944044,Crete,17
+Troezen,Troezen,99,,37.483333,23.35,Peloponnese,9
+Sipylus,Sipylus,103,"(Lydian city near Smyrna). The location of this city is unknown. I'm basically just making this up -- ""imagineering"" it, as it were. In reality, the following coordinates are for Mount Sipylos, which is the best I could do.",38.5672198,27.454722,Lydia,14
+Aphidnae,Aphidnae,157,,38.2,23.833333,,
+Claros,Claros,226,http://pleiades.stoa.org/places/599719,38.0047324117,27.192987,,

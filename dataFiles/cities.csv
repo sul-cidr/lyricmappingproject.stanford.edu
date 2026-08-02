@@ -87,18 +87,12 @@ Metapontion,Metapontion,88,,40.383868,16.824063,Italy,10
 Aigina,Aigina,89,coordinates are temple of Aphaia on Aegina,37.754475,23.53304,Cyclades & western Aegean islands,1
 Pyrrha,Pyrrha,90,coordinates from Inventory,39.1,26.15,Lesbos,8
 Egypt,EGYPT (region),91,coordinates are Naucratis,30.90071,30.591777,,
-Italy,ITALY (region),92,coordinates are mod. Acri,39.481432,16.390228,Italy,10
 Ionia,IONIA (region),93,coordinates are Mount Mycale (near Panionium),37.666667,27.083333,Ionia,6
 Sanctuary of Poseidon Petraios,Sanctuary of Poseidon Petraios,94,"coordinates are the vale of Tempe, where the sanctuary lay (though it is still undiscovered)",39.875996,22.554418,Thessaly,12
 Acharnae,Acharnae,95,,38.083333,23.733333,Attica,2
-Mt. Ida,Mt. Ida,96,,35.226667,24.7725,Crete,17
-Knossos,Knossos,97,,35.298056,25.163056,Crete,17
-Sea of Crete,Sea of Crete,98,or Knossian Sea,35.926953,24.944044,Crete,17
-Troezen,Troezen,99,,37.483333,23.35,Peloponnese,9
 Mt. Olympus,Mt. Olympus,100,,40.085556,22.358611,Northern Greece,11
 Alpheos,Alpheos,101,(river at Olympia),37.634566,21.6263755,Peloponnese,9
 Lydia,LYDIA (region),102,Should we just use Sardis for this instead of following coordinates?,38.8131598,29.7190513,Lydia,14
-Sipylus,Sipylus,103,"(Lydian city near Smyrna). The location of this city is unknown. I'm basically just making this up -- ""imagineering"" it, as it were. In reality, the following coordinates are for Mount Sipylos, which is the best I could do.",38.5672198,27.454722,Lydia,14
 Pisa,Pisa,104,,37.644,21.654,Peloponnese,9
 Peloponnese,PELOPONNESE (region),105,,37.2641846,22.4967727,Peloponnese,9
 Cyprus,Cyprus,106,,35.1697515,33.4369908,Cyprus,18
@@ -147,7 +141,6 @@ Lycia,LYCIA (region),150,"A coastal region in southern Turkey. The coordinates a
 Mt. Parnes,Mt. Parnes,151,"Parnes is a mountain in between Boitia and Attica, modern Mount Parnitha.",38.1734,23.7174,Attica,2
 Zacynthus,Zacynthus,153,island in Ionian Sea,37.8,20.75,Ionian Sea,19
 Amyclae,Amyclae,155,,37.033333,22.433333,Peloponnese,9
-Aphidnae,Aphidnae,157,,38.2,23.833333,,
 Assos,Assos,160,,39.487778,26.336944,Troad,28
 Carystus,Carystus,161,,38.016541,24.420381,euboeia,22
 Cerbesia,Cerbesia,162,"coordinates are for Hierapolis, cf. Ogden 2013 p. 112 citing Strabo",37.925,29.125833,Phrygia,23
@@ -203,7 +196,6 @@ Susa,Susa,222,,32.19,48.26,,
 Syria,Syria,223,,35.79,36.79,,
 Tartessus,Tartessus,224,"Tartessos (Greek: Ταρτησσός) or Tartessus was a semi-mythical harbor city and the surrounding culture on the south coast of the Iberian Peninsula (in modern Andalusia, Spain), at the mouth of the Guadalquivir River. It appears in sources from Greece and the Near East starting during the first millennium BC, for example Herodotus, who describes it as beyond the Pillars of Heracles(Strait of Gibraltar)",37.5,-6.5,,
 Megara Hyblaia,Megara Hyblaia,225,Sicilian Megara,37.203717,15.181777,Sicily,7
-Claros,Claros,226,http://pleiades.stoa.org/places/599719,38.0047324117,27.192987,,
 Daskyleion,Daskyleion,229,,40.128889,28.071667,,
 Gyrae,Gyrae,230,"Can't find this one, it is a reference to the cliffs that the lesser Ajax died on. (probably a mountain chain on Tenos; see Sandback CR 1942 pp. 63-5; coordinates are now the rugged mountain of Exomvourgo on tenos)",37.577222,25.1675,Cyclades,1
 Ismaros,Ismaros,232,"Thracian Ismaros, pin dropped in possible area",40.980201,25.263959,,
