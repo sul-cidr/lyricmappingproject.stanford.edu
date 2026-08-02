@@ -638,18 +638,6 @@ describe("known data bugs: incomplete or inconsistent fields", () => {
     }
   });
 
-  test("BUG: Tyrtaeus is misspelt Trytaeus in four poets_cities rows", () => {
-    const misspelt = raw.poetCities.filter(row => row.poetname === "Trytaeus");
-    assert.equal(misspelt.length, 4);
-    // The poetId is correct (145), and popups display poetDetailName from
-    // poets.csv, so this is cosmetic — but calcBubbles sorts geographical
-    // imaginary poets by poetname, so a misspelling can misorder a list.
-    assert.ok(misspelt.every(row => id(row.poetId) === 145));
-    const tyrtaeus = raw.poets.find(p => id(p.poetId) === 145);
-    assert.ok(tyrtaeus);
-    assert.equal(tyrtaeus.poetname, "Tyrtaeus");
-  });
-
   test("BUG: two names carry stray whitespace", () => {
     const cityOffenders = raw.cities.filter(c => c.cityname !== c.cityname.trim());
     const poetOffenders = raw.poets.filter(p => p.poetname !== p.poetname.trim());
