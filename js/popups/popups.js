@@ -57,7 +57,7 @@ function createActivePopupHtml(data, bubble) {
 
   if (bornPoetCities.length > 0) {
     nativeHeader = `
-      <h5 style="color:${LYRIC_GREY}">${nativeTitle}</h2>
+      <h5 style="color:${LYRIC_GREY}">${nativeTitle}</h5>
       ${createNumberedListOfPoets(bornPoetCities.map(pc => getPoetDisplay(data, pc.poetId).detailName))}
     `;
     nativeDetails = `
@@ -68,7 +68,7 @@ function createActivePopupHtml(data, bubble) {
 
   if (otherPoetCities.length > 0) {
     nonNativeHeader = `
-      <h5 style="color:${LYRIC_GREY}">${nonNativeTitle}</h2>
+      <h5 style="color:${LYRIC_GREY}">${nonNativeTitle}</h5>
       ${createNumberedListOfPoets(otherPoetCities.map(pc => getPoetDisplay(data, pc.poetId).detailName))}
     `;
     nonNativeDetails = `
@@ -78,7 +78,7 @@ function createActivePopupHtml(data, bubble) {
   }
 
   return `
-    <h3 style="color:${LYRIC_GREY}">${cityname}</h2>
+    <h3 style="color:${LYRIC_GREY}">${cityname}</h3>
     ${nonNativeHeader}
     ${nativeHeader}
     <h4 style="color:${LYRIC_GREY}">DETAILS</h4>
@@ -130,7 +130,7 @@ function createDetailedGeoListOfPoets(poets, data) {
         <span style="color:${LYRIC_RED}">${idx + 1}</span>. ${poet.poetname}<br>
         Dates: ${getPoetDisplay(data, poet.poetId).dates}<br>
         ${poet.references.map(reference => renderReference(reference)).join("<br><br>")}
-      </p >
+      </p>
       `;
       })
       .join(" ")}
