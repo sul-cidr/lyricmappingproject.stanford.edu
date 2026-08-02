@@ -34,8 +34,6 @@ export function updateMap(map, data, state) {
     default:
       assertUnreachable(mapState, "unrecognized map mode");
   }
-  // axe-core is loaded globally by index.html, so accessibility can be checked
-  // from the devtools console at any point: await axe.run()
 }
 
 /** @param {LyricMap} map */
