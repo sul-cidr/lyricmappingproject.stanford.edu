@@ -137,7 +137,7 @@ function derive(csvs, lookups) {
     linesByActiveCityId: groupById(lines, line => line.activeCityId, identity),
     travelPoets: createTravelPoets(lines, lookups),
     travelCities: createTravelCities(lines),
-    regionsForInterface: createRegionsForInterface(csvs)
+    regionsForInterface: createRegionsForInterface(csvs, lines)
   };
 }
 
@@ -308,16 +308,11 @@ function createAlphabetizedListOfPoetsFromIds(poetIds, lookups) {
  * @returns {FilterOption[]}
  */
 function createGeoImaginaryPoets(csvs, lookups) {
-  // Aristotle (151) and Castorion (33) used to be listed here too. Both were
-  // removed from poets.csv in December 2023, so neither can appear in
-  // geopoetCities to be omitted from.
-  const poetIdsToOmit = [
-    4, // Cinesias
-    100, // Bacchylides
-    149 // Pindar
-  ];
-
-  const poetIds = new Set(csvs.geopoetCities.map(pc => pc.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
+  // Every poet with a reference the map can place; the rest would open on an
+  // empty map. Excludes Cinesias (#377), Pindar and Bacchylides (#326).
+  const poetIds = new Set(
+    csvs.geopoetCities.filter(pc => pc.cityId && lookups.citiesById[pc.cityId]).map(pc => pc.poetId)
+  );
 
   const geoImaginaryPoets = createAlphabetizedListOfPoetsFromIds(poetIds, lookups);
 
@@ -353,13 +348,7 @@ function putPoetIdAtEnd(array, poetId) {
  * @returns {FilterOption[]}
  */
 function createTravelPoets(lines, lookups) {
-  // why do we omit these guys?
-  const poetIdsToOmit = [
-    29, // Oeniades
-    38 // Aristonous
-  ];
-
-  const poetIds = new Set(lines.map(line => line.poetId).filter(poetId => !poetIdsToOmit.includes(poetId)));
+  const poetIds = new Set(lines.map(line => line.poetId));
   return createAlphabetizedListOfPoetsFromIds(poetIds, lookups);
 }
 
@@ -382,27 +371,28 @@ function createTravelCities(lines) {
 }
 
 /**
+ * The regions offered as travel filters: those a line actually runs to or from,
+ * less the six the 2015 control bar left out by hand.
  * @param {Csvs} csvs
+ * @param {Line[]} lines
  * @returns {FilterOption[]}
  */
-function createRegionsForInterface(csvs) {
+function createRegionsForInterface(csvs, lines) {
   const regionIdsToOmit = [
-    27, // Aeolis
-    21, // Asia
-    29, // Asia Minor islands
+    // Taken off the bar on 14 May 2015, with no reason recorded anywhere.
     13, // Cythera
     6, // Ionia
     10, // Italy
-    33, // Macedonia
-    16, // Mysia
-    25, // Phoenicia
-    23, // Phrygia
-    24, // Scythia
-    20, // Thrace
-    28 // Troad
+    // Postdate the bar and were never added to it, which strands their cities:
+    // a BUG test in tests/initializeData.test.js.
+    27, // Aeolis - Cyme
+    21, // Asia - Persia
+    29 // Asia Minor islands - Samos, Chios
   ];
+
+  const travelled = new Set(lines.flatMap(line => [line.bornCity.regionId, line.activeCity.regionId]));
   return csvs.regions
-    .filter(region => !regionIdsToOmit.includes(region.regionId))
+    .filter(region => travelled.has(region.regionId) && !regionIdsToOmit.includes(region.regionId))
     .map(region => ({ id: region.regionId, name: region.regionname }))
     .sort((a, b) => sortAlphabetically(a.name, b.name));
 }
@@ -511,6 +501,8 @@ function convertMixedGovIds(govId) {
  * @returns {FilterOption[]}
  */
 function createGenreIdsWithNames(lookups) {
+  // Neither is a genre: Diaskeue is a reworking of a text, and "Possibly lyric"
+  // is the hedge asked for in issues #169, #186 and #187.
   const genresToOmit = [
     1, // Diaskeue
     31 // Possibly lyric
