@@ -300,9 +300,10 @@ function createAlphabetizedListOfPoetsFromIds(poetIds, lookups) {
  * @returns {FilterOption[]}
  */
 function createGeoImaginaryPoets(csvs, lookups) {
+  // Aristotle (151) and Castorion (33) used to be listed here too. Both were
+  // removed from poets.csv in December 2023, so neither can appear in
+  // geopoetCities to be omitted from.
   const poetIdsToOmit = [
-    151, // Aristotle
-    33, // Castorion
     4, // Cinesias
     100, // Bacchylides
     149 // Pindar

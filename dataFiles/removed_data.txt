@@ -53,3 +53,28 @@ Troezen,Troezen,99,,37.483333,23.35,Peloponnese,9
 Sipylus,Sipylus,103,"(Lydian city near Smyrna). The location of this city is unknown. I'm basically just making this up -- ""imagineering"" it, as it were. In reality, the following coordinates are for Mount Sipylos, which is the best I could do.",38.5672198,27.454722,Lydia,14
 Aphidnae,Aphidnae,157,,38.2,23.833333,,
 Claros,Claros,226,http://pleiades.stoa.org/places/599719,38.0047324117,27.192987,,
+
+
+removed genres
+Rows whose poetId is in no poets.csv, so getGenres() returned nothing for them and
+they were dead. Aristotle and Castorion were among the poet stubs removed at the top
+of this file; Eunicus and Kinesias have never been in poets.csv at all, in any
+revision.
+
+Kinesias is archived as it stood, poetId and all, rather than repointed at Cinesias
+(poetId 4). Kinesias and Cinesias are both Κινησίας, and Pherecrates fr. 155 is
+about the Athenian dithyrambist the Suda entry on Cinesias also describes, so the
+two may well be one man. But nothing in this project ever said so: poetId 14 has
+never had a row in poets.csv. Where the project does hold that two names may be one
+poet it says so in the name and keeps both, as with Kydides (47) and "Cydias
+(Kydides?)" (106), which share Stefanis 1520 between them. Merging the two here
+would assert an identification the project has not made, so the row waits instead.
+genres_poetname,poetId,genre,genreId,source_work,source_workid,source_citation,source_greektext,source_translation,source_translator,source_notes,source_explicit,notes,source
+Aristotle,31,Elegy,3,Olympiodorus,,Olympiod. in Plat. Gorg. (p. 215 Westerink),"οὐ μόνον δὲ ἐγκώμιον ποιήσας αὐτοῦ ἐπαινεῖ αὐτόν, ἀλλὰ καὶ ἐν τοῖς ἐλεγείοις τοῖς πρὸς Εὔδημον αὐτὸν ἐπαινῶν Πλάτωνα ἐγκωμιάζει, γράφων οὕτως·","Not only does Aristotle praise Plato in the encomium he composed on him, but he also delivers an encomium on him in the elegiacs addressed to Eudemus when he is praising the latter;",Campbell,,yes,,
+Aristotle,31,Enkomion,4,Olympiodorus,,Olympiod. in Plat. Gorg. (p. 215 Westerink),"οὐ μόνον δὲ ἐγκώμιον ποιήσας αὐτοῦ ἐπαινεῖ αὐτόν, ἀλλὰ καὶ ἐν τοῖς ἐλεγείοις τοῖς πρὸς Εὔδημον αὐτὸν ἐπαινῶν Πλάτωνα ἐγκωμιάζει, γράφων οὕτως·","Not only does Aristotle praise Plato in the encomium he composed on him, but he also delivers an encomium on him in the elegiacs addressed to Eudemus when he is praising the latter;",Campbell,,yes,,
+Aristotle,31,Skolia,12,Athenaeus,,Athen. 15. 696a–697b,"τούτων λεχθέντων ὁ Δημόκριτος ἔφη· ‘ἀλλὰ μὴν καὶ τὸ ὑπὸ τοῦ πολυμαθεστάτου γραφὲν Ἀριστοτέλους εἰς Ἑρμείαν τὸν Ἀταρνέα οὐ παιάν ἐστιν, ὡς ὁ τὴν τῆς ἀσεβείας κατὰ τοῦ φιλοσόφου γραφὴν ἀπενεγκάμενος Δημόφιλος ἐξέδωκε (Bergk: εἰς αἰδωτε codd.) παρασκευασθεὶς ὑπ᾿ Εὐρυμέδοντος, ὡς ἀσεβοῦντος καὶ ᾄδοντος ἐν τοῖς συσσιτίοις ὁσημέραι εἰς Ἑρμείαν παιᾶνα. ὅτι δὲ παιᾶνος οὐδεμίαν ἔμφασιν παρέχει τὸ ᾆσμα ἀλλὰ τῶν σκολίων ἕν τι καὶ αὐτὸ εἶδός ἐστιν ἐξ αὐτῆς τῆς λέξεως φανερὸν ὑμῖν ποιήσω·","When these scolia had been recited, Democritus spoke: ‘What’s more, the poem written by the learned Aristotle for Hermeias of Atarneus is not a paean, as was claimed by Demophilus who, suborned by Eurymedon, brought a charge of impiety against the philosopher, alleging that he displayed impiety by singing a paean to Hermeias every day in the common dining-room. The song in fact shows none of the characteristics of a paean, but belongs to these scolia as a unique type. I shall give you clear proof from the text itself:",Campbell,,yes,,
+Aristotle,31,Paean,8,Suda,,Sud. A 3929,"ἐγεννήθη δὲ ἐν τῇ θ´ (i.e. 99th) Ὀλυμπιάδι καὶ ἀπέθανεν ἀκόνιτον πιὼν ἐν Χαλκίδι, διότι ἐκαλεῖτο πρὸς εὐθύνας ἐπειδὴ ἔγραψε παιᾶνα εἰς Ἑρμείαν τὸν εὐνοῦχον·",He was born in the 99th Olympiad (384/380 b.c.) and died in Chalcis after drinking aconite because he was charged with writing a paean for Hermeias the eunuch.,Campbell,,yes,,
+Eunicus,113,Elegy,3,,,,,,,,,,
+Kastorion,33,Unclassified melic,30,,,,,,,,,,
+Kastorion,33,Hymn,6,Athenaeus,,Ath. 10.455a,"τὸ δὲ Καστορίωνος τοῦ Σολέως, ὡς ὁ Κλέαρχός φησιν, εἰς τὸν Πᾶνα ποίημα τοιοῦτόν ἐστι...","According to Clearchus (fr. 88 Wehrli), Castorion of Soli’s poem in honor of Pan (SH 310) is composed in the following way.",Campbell,,no,,
+Kinesias,14,Dithyramb,2,Pherecrates,,Pherecr. fr. 155 = [Plut.] Mus. 30. 1141e-f,"Κινησίας δέ <μ᾿> ὁ κατάρατος Ἀττικός, / ἐξαρμονίους καμπὰς ποιῶν ἐν ταῖς στροφαῖς / ἀπολώλεχ᾿ οὕτως ὥστε τῆς ποιήσεως / τῶν διθυράμβων, καθάπερ ἐν ταῖς ἀσπίσιν, / ἀριστέρ᾿ αὐτοῦ φαίνεται τὰ δεξιά.","Cinesias on the other hand, that damned Athenian, has so damaged me with the exharmonic twists he makes within his strophes that just as in shields you can’t tell his right from his left when he composes his dithyrambs.",Campbell,,yes,,
