@@ -89,6 +89,58 @@ Athens, Isthmus follows Corinth, the sanctuary of Poseidon Petraios follows
 Larisa, Mt. Ptoios follows Akraiphia, Messenia follows Sparta after the
 Messenian Wars — and are the place to check before changing `city_politics.csv`.
 
+## Where the control bar lists came from
+
+Issue #373: four `*ToOmit` lists in `js/calcData/data.js`, twenty hardcoded ids,
+no reason given for any of them. Three of the four turned out not to be editorial
+decisions at all. The CartoDB control bars were hand-written HTML, one radio
+button per line, and v2 reproduces them by subtracting from the CSVs whatever
+those bars did not list. Set against the last version of the old map, the match
+is exact:
+
+    git show 4c3ed7d^:production/html/linemap.html      poets, small regions
+    git show 4c3ed7d^:production/html/bubblemap.html    genres
+    git show 4c3ed7d^:production/html/imaginary.html    geographical imaginary
+
+The poet lists were generated rather than typed — the SQL is still in
+`4c3ed7d^:queries/`, and `query to update poets on travel map.txt` is the
+ancestor of `createTravelPoets()`. The small region and genre bars were typed by
+hand, which is why only they had to be reproduced by subtraction.
+
+The one list that is not a reproduction is the geographical imaginary, where v2
+also drops Pindar. He was on the old bar, and his button showed nothing: all
+fifteen of his rows have a blank `cityId`, in the CartoDB data as in this one.
+Issue #130 had already settled that thinness is no reason to leave a poet out
+("any number of references gets you on there", closed "keep them"), so the
+standing rule is the narrower one Peponi applied to Melanippides and Scythinus —
+a poet who shows nothing when clicked comes off the list.
+
+Knowing all that, most of the ids went. Twenty are now eight, and the lists draw
+exactly what they drew before:
+
+- The travel list is gone. Both rulings had already been carried out in the data,
+  so it struck out two poets who could not appear anyway; the reasons are now
+  with the archived rows in `dataFiles/removed_data.txt`.
+- The geographical imaginary list is gone, replaced by the rule it was standing
+  in for — a poet is offered if any one of their references names a city the map
+  can place. Cinesias, Bacchylides and Pindar fail that today, and the work that
+  would change it is #377 and #326 rather than a decision about scope.
+- The small region list keeps six of thirteen. Seven regions are reached by no
+  travel line, which the same kind of rule now handles; the six that remain are
+  the ones a person has to argue for.
+- The genre list keeps both. Neither Diaskeue nor "Possibly lyric" is a genre,
+  and no rule can be asked that.
+
+Two things fell out of this that are worth knowing. Most of the regions above id
+18 exist to place what the geographical imaginary names rather than to be
+travelled to, which is issue #240's "This only matters for the imaginary map";
+but three of them — Aeolis, Asia and Asia Minor islands — hold a city the travel
+map draws, and no hand ever added them to the bar, so Cyme, Persia, Samos and
+Chios are in no small region a reader can select. Samos and Chios were covered
+until 14 May 2015, when region 8 stopped reading "Lesbos & other Asia Minor
+islands (Samos, Chios)" and became plain "Lesbos". That one is a live bug, and is
+asserted as such in `tests/initializeData.test.js`.
+
 ## Not restored
 
 The rest of what `4c3ed7d` deleted documents a map that no longer exists: the

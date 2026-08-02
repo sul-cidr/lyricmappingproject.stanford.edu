@@ -294,14 +294,6 @@ describe("travel lines", () => {
 });
 
 describe("control bar contents", () => {
-  test("Pindar and Bacchylides are excluded from the geographical imaginary", () => {
-    // Their geographical imaginary is a pilot of one poem each (Olympian 1 and
-    // Ode 17), so they are deliberately kept out of the poet list. See issue #326.
-    const names = data.geoImaginaryPoets.map(poet => poet.name);
-    assert.ok(!names.includes("Pindar"));
-    assert.ok(!names.includes("Bacchylides"));
-  });
-
   test("Sappho or Alcaeus sorts last, after the individually named poets", () => {
     const last = data.geoImaginaryPoets[data.geoImaginaryPoets.length - 1];
     assert.match(last.name, /Sappho/);
@@ -331,6 +323,75 @@ describe("control bar contents", () => {
     for (const { id: cityId } of data.travelCities) {
       assert.ok(data.citiesById[cityId], `control bar offers unknown cityId ${cityId}`);
     }
+  });
+});
+
+// Issue #373. These assert what the reasons in data.js claim, so that finishing
+// the underlying work fails a test rather than leaving a stale name behind.
+describe("what the control bar lists leave out", () => {
+  test("exactly three poets are held out of the geographical imaginary by unplaceable references", () => {
+    // Geocode Ode 17 or give Phthia a cityId and the poet appears here, which
+    // should fail until data.js loses the name.
+    const placeable = new Set(data.geopoetCities.filter(row => data.citiesById[row.cityId]).map(row => row.poetId));
+    const referenced = new Set(data.geopoetCities.map(row => row.poetId));
+    const listed = new Set(data.geoImaginaryPoets.map(poet => poet.id));
+
+    for (const poetId of placeable) {
+      assert.ok(
+        listed.has(poetId),
+        `${data.poetsById[poetId].poetname} has a reference the map can draw but is not offered`
+      );
+    }
+    assert.deepEqual(
+      [...referenced]
+        .filter(poetId => !listed.has(poetId))
+        .map(poetId => data.poetsById[poetId].poetname)
+        .sort(),
+      ["Bacchylides", "Cinesias", "Pindar"]
+    );
+  });
+
+  test("the two poets whose ids used to be struck out here are still off the travel map", () => {
+    // createTravelPoets() struck both out by id until that was found to be
+    // inert. Restoring either archived row puts them back: removed_data.txt.
+    for (const [poetId, name] of [
+      [29, "Oeniades"],
+      [38, "Aristonous"]
+    ]) {
+      assert.ok(
+        !data.lines.some(line => line.poetId === poetId),
+        `${name} travels again; see dataFiles/removed_data.txt before accepting that`
+      );
+    }
+    assert.equal(data.poetsById[38], undefined, "Aristonous is back in poets.csv");
+    assert.ok(
+      data.poetsWithUnknownTravel.some(poet => poet.id === 29),
+      "Oeniades kept his Athens row, so he belongs under poets of unknown travel"
+    );
+  });
+
+  test("every region still named in regionIdsToOmit is one the rule would otherwise offer", () => {
+    // Regions no line reaches are dropped by the rule, so a hand-written id only
+    // earns its place if its region holds a travel city. Seven did not.
+    const listed = new Set(data.regionsForInterface.map(region => region.id));
+    const travelled = new Set(data.lines.flatMap(line => [line.bornCity.regionId, line.activeCity.regionId]));
+    const omittedButTravelled = data.regions
+      .filter(region => !listed.has(region.regionId) && travelled.has(region.regionId))
+      .map(region => region.regionname)
+      .sort();
+    assert.deepEqual(omittedButTravelled, ["Aeolis", "Asia", "Asia Minor islands", "Cythera", "Ionia", "Italy"]);
+  });
+
+  test("the two omitted genres are still in the data, and no other genre is left out", () => {
+    // No rule can tell you these are not genres, so the ids stay. A renumbering
+    // in genres.csv would leave the filter matching nothing, silently.
+    const listed = new Set(data.genreIdsWithName.map(genre => genre.id));
+    const omitted = Object.keys(data.genresByGenreId)
+      .map(Number)
+      .filter(genreId => !listed.has(genreId))
+      .map(genreId => data.genresByGenreId[genreId])
+      .sort();
+    assert.deepEqual(omitted, ["Diaskeue", "Possibly lyric"]);
   });
 });
 
@@ -396,6 +457,46 @@ describe("known bugs: derived travel lines", () => {
     // so his Spartan origin still reaches the map via Sparta -> Messenia.
     const tyrtaeus = data.linesByPoetId[poetIdByName("Tyrtaeus")];
     assert.ok(tyrtaeus.some(l => l.bornCity.cityname === "Sparta" && l.activeCity.cityname !== "Sparta"));
+  });
+});
+
+describe("known bugs: the travel control bar", () => {
+  test("BUG: 18 travel cities are in a small region the bar does not offer", () => {
+    const regionIds = new Set(data.regions.map(region => region.regionId));
+    const listed = new Set(data.regionsForInterface.map(region => region.id));
+    const stranded = [
+      ...new Set(
+        data.lines
+          .flatMap(line => [line.bornCity, line.activeCity])
+          // Cities with no region at all are a separate and bigger gap: 46 of
+          // them, five on the travel map. Issue #240 asked about it and left it.
+          .filter(city => regionIds.has(city.regionId) && !listed.has(city.regionId))
+          .map(city => city.cityname)
+      )
+    ].sort();
+
+    // Fourteen of these were given up knowingly in 2015. Cyme, Persia, Samos and
+    // Chios were not; see createRegionsForInterface and notes/README.md.
+    assert.deepEqual(stranded, [
+      "Chios",
+      "Clazomenae",
+      "Colophon",
+      "Cyme",
+      "Cythera",
+      "Ephesus",
+      "Locri",
+      "Matauria",
+      "Metapontion",
+      "Miletus",
+      "Persia",
+      "Phocaea",
+      "Rhegium",
+      "Samos",
+      "Smyrna",
+      "Tarentum",
+      "Teos",
+      "Thurii"
+    ]);
   });
 });
 

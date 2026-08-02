@@ -6,12 +6,30 @@ Adespota,Adespota,152,,,,
 Castorion,Castorion,33,,,,
 
 removed poets_cities
+
+Aristonous's two rows are why he is not on the travel map, and the ruling behind
+them is "Aristonous : erase – travels nowhere" (notes/corrections-2015-12.md).
+The team disagreed with it on the record — issue #138, "He does travel: Athens
+and Delphi" — but what the map showed either way was nothing: he is dated
+350–300 BCE and the date slider stops at 400, which is what #138 was eventually
+closed on. Restoring these rows restores a poet no setting of the slider reaches.
+createTravelPoets() struck his poetId out by hand as well, until archiving the
+rows here made that redundant.
+
 Aristonous,38,Athens,2,performed,3,3,,,Inscription,,IG 12.5 444 80-1 = Parian Marble 67,"ἀφ' οὗ Ἀρ[ι]στ[όνους ὁ κιθαρωιδὸς ἐνίκησεν] Ἀθήνησιν, ἔτη ΗΔΔΔ𐅃, ἄρχοντος Ἀθήνησιν Ἀριστοκράτους.",It has been 135 years [=399/8 BCE] since Arist[onous the kitharode won] at Athens during the archonship of Aristocrates at Athens.,Driscoll,,yes
 Aristonous,38,Delphi,30,born,1,1,,,Plutarch,,Plut. Lys. 18.10,"ἐπεὶ μέντοι ὁ κιθαρῳδὸς Ἀριστόνους ἑξάκις Πύθια νενικηκὼς ἐπηγγέλλετο τῷ Λυσάνδρῳ φιλοφρονούμενος, ἂν νικήσῃ πάλιν, Λυσάνδρου κηρύξειν ἑαυτόν, “Ἦ δοῦλον;” εἶπεν.","However, when Aristonoüs the harper, who had been six times victor at the Pythian games, told Lysander in a patronizing way that if he should be victorious again, he would have himself proclaimed under Lysander’s name, “That is,” Lysander replied, “as my slave?”",,,yes
 Oenopas (Oinonas),78,Italy,,,1,1,,Assuming Oinopas = Oinonas,Athenaeus,,Ath. 1.20a,περὶ τὸ ἐξ Ἰταλίας Οἰνώα (sic),concerning Oinonas (sic) from Italy,Sansom,,
 Bacchylides,100,Ceos,46,,3,3,dotted,,Bacchylides inscription,,Bacchyl. 1 Title,<ΑΡΓΕΙΩΙ ΚΕΙΩΙ> <ΠΑΙΔΙ ΠΥΚΤΗΙ (?) ΙΣΘΜΙΑ>,"For Argeius of Ceos Boy Boxer, Isthmian Games",Campbell,,no
 
 looks like we didn't trust this oeniades data point
+
+This was the origin of his only journey, Thebes -> Athens, and the surviving
+Athens row carries the same doubt: "the poets master webpage says he is from
+Thebes, but it is not listed here (and I can't seem to find anything mentioning
+thebes with him)". With no birthplace left he is a poet of unknown travel, under
+places, which is where the old map had him too. Restoring this row puts him back
+on the travel map; createTravelPoets() no longer strikes his poetId out by hand.
+
 Oeniades,29,Thebes,,,1,1,,,Inscription,,"IG P2 3064, 3 + Hesperia 28, 1959, 275-277",Οἰνιάδην δὲ τὸν Τιμοθέου,Oiniades son of Timotheos,Sansom,,yes
 
 removed geographical_imaginary_group
