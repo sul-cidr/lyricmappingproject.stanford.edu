@@ -521,6 +521,41 @@ describe("hygiene", () => {
     assert.deepEqual(offenders, [], `unexpected whitespace in names:\n  ${offenders.join("\n  ")}`);
   });
 
+  test("no cell has been turned into a date by a spreadsheet", () => {
+    // Excel and Sheets read a bare `m-d` in a General cell as a date in the
+    // current year and write it back as `d-Mon`. That is how 105 line
+    // references in the geographical imaginary file — a fifth of its citations
+    // — came to read "2-Jan" where the editor had typed "1-2" (#385). They were
+    // printed to the page by renderReference() for as long as the file has been
+    // in git.
+    //
+    // The ranges that escaped are the proof of the mechanism: the 36 written
+    // with spaces were never date-shaped, and the four bare ones all start
+    // above 12, so no month matched. Writing a restored range as "1 - 2" keeps
+    // it in the majority style and, more usefully, keeps it immune the next
+    // time the file goes through a spreadsheet.
+    //
+    // Checked over every column of every file, because the next round-trip
+    // will not politely confine itself to this one.
+    const MONTHS = "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec";
+    const DATE_SHAPED = new RegExp(`^(\\d{1,2}-(${MONTHS})|(${MONTHS})-\\d{1,2})$`);
+    const offenders = [];
+    for (const [name, rows] of Object.entries(raw)) {
+      for (const row of rows) {
+        for (const [column, value] of Object.entries(row)) {
+          if (DATE_SHAPED.test(String(value ?? "").trim()))
+            offenders.push(`${name}.${column} = ${JSON.stringify(value)}`);
+        }
+      }
+    }
+    assert.deepEqual(
+      offenders,
+      [],
+      `a spreadsheet has rewritten these as dates; the month is the first number ` +
+        `that was typed and the day the second, so "2-Jan" restores to "1 - 2":\n  ${offenders.join("\n  ")}`
+    );
+  });
+
   test("every poet has dates", () => {
     // getDateFilterFn() is the only reader, and it compares against the min and
     // max derived from these rows. A poet with no dates is silently filtered off
