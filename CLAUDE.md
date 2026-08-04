@@ -20,6 +20,67 @@ It installs its own dependencies too, but downloads Chromium the first time, so
 it is slow on a fresh clone and is not part of `npm test`. Run it for changes to
 `js/renderMap/` or anything else that only shows up once Leaflet draws.
 
+## Screenshots in issues and pull requests
+
+A data bug a reader can see on the page is worth showing rather than only
+describing, and the picture has to come from the real application.
+`tests/browser/serve.js` serves the repository exactly as GitHub Pages does, so
+a throwaway Playwright script that imports it gets the actual site. To reach a
+particular popup, wrap the Leaflet factory in an init script —
+
+```js
+await page.addInitScript(() => {
+  let leaflet;
+  Object.defineProperty(window, "L", {
+    configurable: true,
+    get: () => leaflet,
+    set: v => {
+      leaflet = v;
+      const original = v.map;
+      v.map = (...args) => (window.__map = original(...args));
+    }
+  });
+});
+```
+
+— and then `map.eachLayer()` to find the layer whose popup content matches, and
+`layer.openPopup()`. That beats hunting for the right pixel to click. Leave the
+basemap tiles unstubbed here: the smoke test stubs them to stay hermetic, but a
+screenshot wants the map a reader actually sees.
+
+### Uploading them has no CLI
+
+`gh` cannot attach an image, and the endpoint that does rejects a personal
+access token — only a logged-in web session works. So this step needs the user:
+ask them to open any issue in the browser, start attaching a file, and copy the
+`POST https://github.com/upload/policies/assets` request out of the Network tab
+as cURL. The `Cookie` header and `authenticity_token` in it drive three calls:
+
+1. `POST https://github.com/upload/policies/assets` with `name`, `size`,
+   `content_type`, `authenticity_token` and `repository_id`, sending the cookie
+   plus `origin`, `referer` and `x-requested-with: XMLHttpRequest`. It returns
+   an S3 policy and the asset's eventual href.
+2. `POST` the returned `form` fields, plus the bytes as `file`, to `upload_url`.
+3. `PUT https://github.com{asset_upload_url}` with
+   `asset_upload_authenticity_token` to mark it uploaded. Skip this and the
+   asset exists but never renders.
+
+`asset.href` is then a `https://github.com/user-attachments/assets/<uuid>` URL,
+which is the form to use — it is hosted by GitHub, needs no branch, and does not
+put binaries in a repository that is also the published site. Embed it as
+`<img width= height= alt= src=>` with alt text saying what the picture shows.
+Downscale anything huge first (`sips -Z 1700`, and JPEG for photographic map
+shots) so the page stays quick.
+
+Delete the session file afterwards — it is a live login, not a token that can be
+scoped or revoked on its own.
+
+One more trap: `gh` may be authenticated as several accounts, and the default
+one may have no write access here, which surfaces as `Unauthorized: As an
+Enterprise Managed User`. Check `gh auth status` and prefix writes with
+`GH_TOKEN=$(gh auth token --user <account>)` rather than switching the global
+default.
+
 ## Don't run tsc by hand
 
 `npm run typecheck` installs before it checks, deliberately. Calling
