@@ -11,6 +11,7 @@ import { loadInitializedData, ALL_DATES } from "./helpers/loadData.js";
 import { calcPlacesPoetCities, calcGeoPoetCities } from "../js/renderMap/calcPoetCities.js";
 import { calculatePlacesBubbles, calculateGeoBubbles } from "../js/renderMap/calcBubbles.js";
 import { createTravelPopupHtml } from "../js/popups/travelPopups.js";
+import { createDetailedListOfPoets } from "../js/popups/popupsCommon.js";
 
 const { data } = loadInitializedData();
 
@@ -201,6 +202,39 @@ describe("citation credits", () => {
 
   test("a translation that has a translator still credits them", () => {
     assert.match(popupFor(bubbles, "Locri"), /Citation: O\. 10 Title: ".*" \(trans\. Race\)<br>/);
+  });
+});
+
+describe("the genre line", () => {
+  // genres.csv is one row per citation rather than per genre, so a poet
+  // attested in one genre by two sources has two rows. No poet does today —
+  // the only pair the data ever had was Kinesias 14 and Cinesias 4, and those
+  // are not merged — so the case is built here rather than found.
+  const cinesias = data.poets.find(poet => poet.poetDetailName === "Cinesias");
+  assert.ok(cinesias, "expected Cinesias in poets.csv");
+  const poetId = cinesias.poetId;
+
+  /**
+   * The same data with one poet's genre list doubled.
+   * @param {Genre[]} genres
+   * @returns {string}
+   */
+  function detailFor(genres) {
+    const doubled = { ...data, genresByPoetId: { ...data.genresByPoetId, [poetId]: genres } };
+    return createDetailedListOfPoets([{ poetId }], doubled);
+  }
+
+  test("a genre attested by two sources is named once", () => {
+    const [dithyramb] = data.genresByPoetId[poetId];
+    const html = detailFor([dithyramb, { ...dithyramb }]);
+    assert.match(html, /Genre: Dithyramb<br>/);
+    assert.doesNotMatch(html, /Dithyramb, Dithyramb/, "the genre is named twice");
+  });
+
+  test("distinct genres are all named, and pluralised", () => {
+    const [dithyramb] = data.genresByPoetId[poetId];
+    const html = detailFor([dithyramb, { ...dithyramb, genre: "Paean" }]);
+    assert.match(html, /Genres: Dithyramb, Paean<br>/);
   });
 });
 
